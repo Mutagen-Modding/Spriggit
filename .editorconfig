@@ -1,0 +1,17 @@
+[*]
+charset = utf-8
+end_of_line = crlf
+
+[*.cs]
+
+# CS4014: Task not awaited
+dotnet_diagnostic.CS4014.severity = error
+
+# CS1998: Async function does not contain await
+dotnet_diagnostic.CS1998.severity = silent
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = silent
+ 
+# CLASS0001: Seal classes that do not have any virtual or abstract methods, properties, events, or indexers
+dotnet_diagnostic.CLASS0001.severity = silent 

@@ -1,0 +1,89 @@
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="Autofac">
+      <Version>7.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="AutoFixture">
+      <Version>4.18.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="AutoFixture.AutoNSubstitute">
+      <Version>4.18.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="AutoFixture.Xunit2">
+      <Version>4.18.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageVersion Include="BenchmarkDotNet">
+      <Version>0.13.5</Version>
+    </PackageVersion>
+    <PackageVersion Include="DynamicData">
+      <Version>7.13.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="FluentAssertions">
+      <Version>6.10.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="GitInfo">
+      <Version>3.0.4</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="MahApps.Metro" Version="2.4.9" />
+    <PackageVersion Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk">
+      <Version>17.5.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Reactive.Testing" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageVersion Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageVersion>
+    <PackageVersion Include="Nito.AsyncEx.Interop.WaitHandles" Version="5.1.2" />
+    <PackageVersion Include="NuGetizer">
+      <Version>0.9.5</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="NSubstitute">
+      <Version>5.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI">
+      <Version>18.4.26</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+    <PackageVersion Include="ReactiveUI.Fody">
+      <Version>18.4.26</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.Testing">
+      <Version>18.4.26</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.WPF">
+      <Version>18.4.26</Version>
+    </PackageVersion>
+    <PackageVersion Include="System.IO.Abstractions">
+      <Version>19.2.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="System.IO.Abstractions.TestingHelpers">
+      <Version>19.2.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
+    <PackageVersion Include="System.Reactive" Version="5.0.0" />
+    <PackageVersion Include="Verify.DiffPlex">
+      <Version>2.2.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Verify.Xunit">
+      <Version>19.11.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+    <PackageVersion Include="xunit" Version="2.4.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
+    <PackageVersion Include="System.Buffers" Version="4.5.1" />
+    <PackageVersion Include="System.Memory" Version="4.5.5" />
+    <PackageVersion Include="System.Threading.Tasks" Version="4.3.0" />
+    <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+  </ItemGroup>
+</Project>
