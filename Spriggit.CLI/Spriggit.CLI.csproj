@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Noggog.CSharpExt" />
+        <PackageReference Include="CommandLineParser" />
+        <PackageReference Include="StrongInject" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
+    </ItemGroup>
+
+</Project>

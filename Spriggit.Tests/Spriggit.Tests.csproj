@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Noggog.Testing" />
+        <PackageReference Include="xunit" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
+    </ItemGroup>
+    
+</Project>

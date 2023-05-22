@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+      <RootNamespace>Spriggit.Serialization.Skyrim.Yaml</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Mutagen.Bethesda.Serialization" />
+        <PackageReference Include="Mutagen.Bethesda.Serialization.Yaml" />
+        <PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />
+        <PackageReference Include="Mutagen.Bethesda.Skyrim" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Customization.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="EntryPoint.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj" />
+    </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Exec Command="RD /S /Q &quot;%25USERPROFILE%25\.nuget\packages\spriggit.yaml.skyrim&quot;" Condition="!$([MSBuild]::IsOSUnixLike())" />
+    </Target>
+
+</Project>

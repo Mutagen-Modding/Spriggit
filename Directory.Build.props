@@ -1,7 +1,13 @@
 <Project>
  
   <PropertyGroup> 
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally> 
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup> 
   
   <ItemGroup> 

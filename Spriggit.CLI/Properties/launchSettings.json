@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Spriggit.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "serialize -i \"D:\\Games\\steamapps\\common\\Skyrim Special Edition\\Data\\Immersive Sounds - Compendium.esp\" -o \"C:\\Users\\Levia\\Downloads\\SpriggitOutput\" -g SkyrimSE -p Spriggit.Json"
+    }
+  }
+}
