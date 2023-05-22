@@ -25,11 +25,11 @@ public class GetDefaultEntryPoint
     
     private string PackageSuffix(FileName fileName)
     {
-        if (fileName.Extension.Equals("yaml", StringComparison.OrdinalIgnoreCase))
+        if (fileName.Extension.Equals(".yaml", StringComparison.OrdinalIgnoreCase))
         {
             return "Yaml";
         }
-        if (fileName.Extension.Equals("json", StringComparison.OrdinalIgnoreCase))
+        if (fileName.Extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
         {
             return "Json";
         }

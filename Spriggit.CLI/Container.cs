@@ -19,14 +19,17 @@ partial class Container : IContainer<SpriggitEngine>
     [Instance] private readonly IFileSystem _fileSystem;
     [Instance] private readonly IWorkDropoff? _workDropoff;
     [Instance] private readonly ICreateStream? _streamCreate;
+    [Instance] private readonly DebugState _debugState;
 
     public Container(
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff, 
-        ICreateStream? streamCreate)
+        ICreateStream? streamCreate,
+        DebugState debugState)
     {
         _fileSystem = fileSystem;
         _workDropoff = workDropoff;
         _streamCreate = streamCreate;
+        _debugState = debugState;
     }
 }

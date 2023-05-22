@@ -31,4 +31,9 @@ public class SerializeCommand
         HelpText = "Spriggit serialization nuget package version to use for conversion",
         Required = false)]
     public string PackageVersion { get; set; } = string.Empty;
+
+    [Option('d', "Debug",
+        HelpText = "Set up for debug mode, including resetting nuget caches",
+        Required = false)]
+    public bool Debug { get; set; }
 }
