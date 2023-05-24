@@ -1,12 +1,6 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Serialization.Utility;
 using Noggog;
-using NuGet.Common;
-using NuGet.Configuration;
-using NuGet.Packaging.Core;
-using NuGet.Protocol;
-using NuGet.Protocol.Core.Types;
-using NuGet.Versioning;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
@@ -14,13 +8,16 @@ namespace Spriggit.Engine;
 public class GetDefaultEntryPoint
 {
     private readonly IFileSystem _fileSystem;
-    private readonly ConstructEntryPoint _constructEntryPoint;
+    private readonly EntryPointCache _entryPointCache;
+    private readonly NugetDownloader _nugetDownloader;
 
     public GetDefaultEntryPoint(IFileSystem fileSystem,
-        ConstructEntryPoint constructEntryPoint)
+        EntryPointCache entryPointCache,
+        NugetDownloader nugetDownloader)
     {
         _fileSystem = fileSystem;
-        _constructEntryPoint = constructEntryPoint;
+        _entryPointCache = entryPointCache;
+        _nugetDownloader = nugetDownloader;
     }
     
     private string PackageSuffix(FileName fileName)
@@ -62,14 +59,14 @@ public class GetDefaultEntryPoint
     {
         var suffix = GetPackageStyleSuffix(spriggitPluginPath);
         var packageName = $"Spriggit.{suffix}.Skyrim";
-
-        var ret = await _constructEntryPoint.ConstructFor(packageName, packageVersion: null,
-            cancellationToken: CancellationToken.None);
+        var ident = await _nugetDownloader.GetIdentityFor(packageName, string.Empty, CancellationToken.None);
+        
+        var ret = await _entryPointCache.GetFor(ident);
         if (ret == null)
         {
             throw new NotSupportedException($"Could not get default entry point for {spriggitPluginPath}");
         }
 
-        return ret;
+        return ret.EntryPoint;
     }
 }

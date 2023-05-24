@@ -40,14 +40,18 @@ public class SpriggitEngine
             throw new NotSupportedException($"Could not locate entry point for: {meta}");
         }
 
-        await entryPt.Serialize(
+        await entryPt.EntryPoint.Serialize(
             bethesdaPluginPath,
             outputFolder,
             meta.Release,
             fileSystem: _fileSystem,
             workDropoff: _workDropoff,
             streamCreator: _createStream,
-            meta: meta.Source);
+            meta: new SpriggitSource()
+            {
+                PackageName = entryPt.Package.Id,
+                Version = entryPt.Package.Version.ToString()
+            });
     }
 
     public async Task Deserialize(
@@ -63,7 +67,7 @@ public class SpriggitEngine
             throw new NotSupportedException($"Could not locate entry point for: {meta}");
         }
         
-        var mod = await entryPt.Deserialize(
+        var mod = await entryPt.EntryPoint.Deserialize(
             spriggitPluginPath,
             workDropoff: _workDropoff,
             fileSystem: _fileSystem,

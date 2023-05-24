@@ -4,6 +4,7 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Newtonsoft;
 using Mutagen.Bethesda.Serialization.Streams;
+using Mutagen.Bethesda.Serialization.Utility;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using Noggog.WorkEngine;
@@ -45,8 +46,29 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
             streamCreator: streamCreator);
     }
 
-    public Task<SpriggitMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator)
+    private readonly static Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
+    
+    public async Task<SpriggitMeta?> TryGetMetaInfo(
+        string inputPath, IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem, ICreateStream? streamCreator)
     {
-        throw new NotImplementedException();
+        // ToDo
+        // Serialization should generate this
+        
+        fileSystem = fileSystem.GetOrDefault();
+        streamCreator ??= NormalFileStreamCreator.Instance;
+        SpriggitSource src = new();
+        SerializationHelper.ExtractMeta(
+            fileSystem: fileSystem,
+            modKeyPath: inputPath,
+            path: Path.Combine(inputPath, SerializationHelper.RecordDataFileName(ReaderKernel.ExpectedExtension)),
+            streamCreator: streamCreator,
+            kernel: ReaderKernel,
+            extraMeta: src,
+            metaReader: static (r, m, k, s) => Spriggit.Core.SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
+            modKey: out var modKey,
+            release: out var release);
+
+        return new SpriggitMeta(src, release);
     }
 }

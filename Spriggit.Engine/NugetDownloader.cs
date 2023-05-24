@@ -1,4 +1,6 @@
-﻿using Noggog;
+﻿using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins.Records;
+using Noggog;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.PackageManagement;
@@ -10,6 +12,7 @@ using NuGet.ProjectManagement;
 using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 using NuGet.Versioning;
+using Spriggit.Core;
 
 namespace Spriggit.Engine;
 
@@ -40,7 +43,21 @@ public class NugetDownloader
         }
     }
 
-    public async Task<PackageIdentity?> GetIdentityFor(string packageName, string? packageVersion, CancellationToken cancellationToken)
+    public async Task<PackageIdentity?> GetIdentityFor(SpriggitMeta meta, CancellationToken cancellationToken)
+    {
+        if (!meta.Source.PackageName.EndsWith($".{meta.Release.ToCategory()}"))
+        {
+            var releaseSpecific = await GetIdentityFor($"{meta.Source.PackageName}.{meta.Release.ToCategory()}", meta.Source.Version, cancellationToken);
+            if (releaseSpecific != null)
+            {
+                return releaseSpecific;
+            }
+        }
+
+        return await GetIdentityFor(meta.Source.PackageName, meta.Source.Version, cancellationToken);
+    }
+
+    public async Task<PackageIdentity?> GetIdentityFor(string packageName, string packageVersion, CancellationToken cancellationToken)
     {
         if (packageVersion.IsNullOrWhitespace())
         {

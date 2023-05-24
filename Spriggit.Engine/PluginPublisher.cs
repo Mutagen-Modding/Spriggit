@@ -16,15 +16,16 @@ public class PluginPublisher
         _frameworkDirLocator = frameworkDirLocator;
     }
     
-    public void Publish(DirectoryPath packageRepoDir, DirectoryPath outputDir)
+    public void Publish(DirectoryPath packageRepoDir, FileName pluginName, DirectoryPath outputDir)
     {
         // ToDo
         // Lean on dotnet SDK if it's installed
         
         // A basic naive publish attempt.  Just loops packages pulled in, and
         // copies in DLLs from the best approximated target framework
-        foreach (var packageDir in _fileSystem.Directory.EnumerateDirectories(packageRepoDir.Path))
+        foreach (var packageDir in _fileSystem.Directory.EnumerateDirectoryPaths(packageRepoDir.Path, includeSelf: false, recursive: false))
         {
+            if (packageDir.Name == pluginName) continue;
             var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir);
             if (frameworkDir == null) continue;
             if (outputDir == frameworkDir) continue;

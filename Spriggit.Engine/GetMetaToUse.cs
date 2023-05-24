@@ -11,18 +11,18 @@ public class GetMetaToUse
     private readonly IFileSystem _fileSystem;
     private readonly IWorkDropoff? _workDropoff;
     private readonly ICreateStream? _createStream;
-    private readonly EntryPointCache _entryPointCache;
+    private readonly GetDefaultEntryPoint _getDefaultEntryPoint;
 
     public GetMetaToUse(
-        EntryPointCache entryPointCache,
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff,
-        ICreateStream? createStream)
+        ICreateStream? createStream,
+        GetDefaultEntryPoint getDefaultEntryPoint)
     {
-        _entryPointCache = entryPointCache;
         _fileSystem = fileSystem;
         _workDropoff = workDropoff;
         _createStream = createStream;
+        _getDefaultEntryPoint = getDefaultEntryPoint;
     }
     
     private SpriggitSource ConvertToSource(
@@ -40,7 +40,7 @@ public class GetMetaToUse
         SpriggitSource? source,
         string spriggitPluginPath)
     {
-        var entryPt = await _entryPointCache.GetDefault(spriggitPluginPath);
+        var entryPt = await _getDefaultEntryPoint.Get(spriggitPluginPath);
         var sourceInfo = await entryPt.TryGetMetaInfo(
             spriggitPluginPath,
             _workDropoff, 
