@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Noggog.Autofac" />
+        <PackageReference Include="Noggog.SourceGenerators" />
+        <PackageReference Include="Noggog.CSharpExt.Windows" />
+        <PackageReference Include="Noggog.WPF" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.Enrichers.Thread" />
+        <PackageReference Include="Serilog.Extensions.Logging" />
+        <PackageReference Include="Serilog.Sinks.File" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Services\Startup.cs">
+            <CodeLanguage>cs</CodeLanguage>
+            <DefaultPackFolder>content</DefaultPackFolder>
+            <BuildAction>Compile</BuildAction>
+        </Compile>
+    </ItemGroup>
+
+</Project>
