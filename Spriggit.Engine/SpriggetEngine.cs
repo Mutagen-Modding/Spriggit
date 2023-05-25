@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
@@ -75,6 +76,9 @@ public class SpriggitEngine
         
         // ToDo
         // Pass in create stream?
-        mod.WriteToBinaryParallel(outputFile, fileSystem: _fileSystem);
+        mod.WriteToBinaryParallel(outputFile, fileSystem: _fileSystem, param: new BinaryWriteParameters()
+        {
+            ModKey = ModKeyOption.CorrectToPath
+        });
     }
 }
