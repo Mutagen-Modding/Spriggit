@@ -17,8 +17,4 @@
       <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj" />
     </ItemGroup>
 
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-        <Exec Command="RD /S /Q &quot;%25USERPROFILE%25\.nuget\packages\spriggit.json.skyrim&quot;" Condition="!$([MSBuild]::IsOSUnixLike())" />
-    </Target>
-
 </Project>
