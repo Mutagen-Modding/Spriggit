@@ -2,6 +2,8 @@
 using Autofac;
 using Noggog.Autofac;
 using Spriggit.UI.Services;
+using Spriggit.UI.Settings;
+using Spriggit.UI.ViewModels;
 
 namespace Spriggit.UI.Modules;
 
@@ -14,7 +16,9 @@ public class MainModule : Autofac.Module
         
         builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
             .InNamespacesOf(
-                typeof(Startup))
+                typeof(Startup),
+                typeof(SettingsSingleton),
+                typeof(MainVm))
             .AsImplementedInterfaces()
             .AsSelf()
             .SingleInstance();

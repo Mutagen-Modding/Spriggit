@@ -24,6 +24,79 @@
             <DefaultPackFolder>content</DefaultPackFolder>
             <BuildAction>Compile</BuildAction>
         </Compile>
+        <Compile Update="ViewModels\MainVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Views\AddNewListingView.xaml.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Views\ReposListingView.xaml.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Views\LinkListingView.xaml.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Views\MainWindow.xaml.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Views\WindowView.xaml.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="Settinigs\MainSettings.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\AddNewListingView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Page</BuildAction>
+      </Page>
+      <Page Update="Views\ReposListingView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Page</BuildAction>
+      </Page>
+      <Page Update="Views\LinkListingView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Page</BuildAction>
+      </Page>
+      <Page Update="Views\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Page</BuildAction>
+      </Page>
+      <Page Update="Views\WindowView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Page</BuildAction>
+      </Page>
     </ItemGroup>
 
 </Project>

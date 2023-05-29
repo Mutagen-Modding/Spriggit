@@ -61,7 +61,7 @@ public partial class App : Application
         startTime = startTime.Insert(2, "h");
         startTime = startTime.Insert(5, "m");
         startTime += "s";
-        var logFileName = $"{startDt:MM-dd-yyyy}_{startTime}";
+        var logFileName = $"{startDt:MM-dd-yyyy}_{startTime}.log";
 
         Serilog.Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()

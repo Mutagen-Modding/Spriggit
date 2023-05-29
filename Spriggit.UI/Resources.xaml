@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Color x:Key="OrangeYellow">#d9cc1e</Color>
+    <Color x:Key="Orange">#d9941e</Color>
+    <Color x:Key="DarkOrange">#4a3410</Color>
+    <Color x:Key="DarkBlue">#141728</Color>
+    <Color x:Key="DarkGreen">#252920</Color>
+    <Color x:Key="NeonGreen">#50de21</Color>
+    
+    <SolidColorBrush x:Key="OrangeYellowBrush" Color="{StaticResource OrangeYellow}" />
+    <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource Orange}" />
+    <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}" />
+    
+    <RadialGradientBrush x:Key="MainBackgroundGradient" Center="0.5,1" GradientOrigin="0.2,1" RadiusX="6.7" RadiusY="6.7">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Offset="0.0" Color="{StaticResource DarkBlue}" />
+            <GradientStop Offset="0.2" Color="{StaticResource DarkGreen}" />
+            <GradientStop Offset="0.5" Color="{StaticResource NeonGreen}" />
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+</ResourceDictionary>

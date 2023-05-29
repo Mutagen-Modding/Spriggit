@@ -1,0 +1,37 @@
+﻿<mah:MetroWindow x:Class="Spriggit.UI.MainWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:local="clr-namespace:Spriggit.UI"
+                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                     mc:Ignorable="d"
+                     RenderOptions.BitmapScalingMode="HighQuality"
+                     Background="{StaticResource MainBackgroundGradient}"
+                     SaveWindowPosition="True"
+                     UseLayoutRounding="True"
+                     WindowTitleBrush="#252920"
+                     NonActiveWindowTitleBrush="#252920"
+                     NonActiveBorderBrush="#444444"
+                     Title="Spriggit" Height="450" Width="800">
+    <Grid>
+        <Border BorderThickness="0,1,0,0">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="{StaticResource OrangeYellow}" />
+                    <GradientStop Offset="0.15" Color="{StaticResource Orange}" />
+                    <GradientStop Offset="0.7" Color="{StaticResource DarkOrange}" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+        </Border>
+        <local:WindowView />
+    </Grid>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button Command="{Binding OpenGlobalSettingsCommand}" MinWidth="50" >
+                <iconPacks:PackIconMaterial Kind="Cog" />
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+</mah:MetroWindow>
