@@ -17,13 +17,14 @@ public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings
     private ViewModel? _previous;
 
     public AddNewLinkVm(
+        LinkVm.InputFactory linkFactory,
         RepoListings reposListingVm,
         ActivePanelVm activePanelVm)
     {
         AddCommand = ReactiveCommand.Create(
             execute: () =>
             {
-                reposListingVm.Links.Add(new LinkVm(LinkInput));
+                reposListingVm.Links.Add(linkFactory(LinkInput));
                 activePanelVm.Focus(_previous);
 
                 var replacement = new LinkInputVm();

@@ -11,6 +11,8 @@ public class MainModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
+        builder.RegisterModule<EngineModule>();
+        
         builder.RegisterType<FileSystem>().As<IFileSystem>()
             .SingleInstance();
         

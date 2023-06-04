@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
     </PropertyGroup>
@@ -97,6 +97,10 @@
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Page</BuildAction>
       </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
     </ItemGroup>
 
 </Project>

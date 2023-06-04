@@ -36,6 +36,15 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <Style
+                x:Key="ItemTemplateStyle"
+                BasedOn="{StaticResource MahApps.Styles.ListBoxItem}"
+                TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="{x:Null}" />
+            </Style>
         </Grid.Resources>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -69,7 +78,10 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <ListBox x:Name="LinkBox" Grid.Row="1" Background="Transparent"  >
+        <ListBox x:Name="LinkBox" Grid.Row="1"
+                 Background="Transparent"
+                 ItemContainerStyle="{StaticResource ItemTemplateStyle}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:LinkListingView />

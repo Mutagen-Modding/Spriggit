@@ -6,11 +6,17 @@ namespace Spriggit.UI.ViewModels;
 
 public class RepoListings : ISaveMainSettings
 {
+    private readonly LinkVm.InputFactory _linkFactory;
     public ObservableCollection<LinkVm> Links { get; } = new();
+
+    public RepoListings(LinkVm.InputFactory linkFactory)
+    {
+        _linkFactory = linkFactory;
+    }
     
     public void ReadFrom(MainSettings settings)
     {
-        Links.SetTo(settings.Links.Select(x => new LinkVm(x)));
+        Links.SetTo(settings.Links.Select(x => _linkFactory(new LinkInputVm(x.GitPath, x.ModPath))));
     }
 
     public void SaveInto(MainSettings settings)

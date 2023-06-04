@@ -1,6 +1,10 @@
-﻿using DynamicData;
+﻿using System.IO;
+using System.Reactive.Linq;
+using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Noggog;
 using Noggog.WPF;
+using ReactiveUI;
 
 namespace Spriggit.UI.ViewModels;
 
@@ -23,5 +27,11 @@ public class LinkInputVm : ViewModel
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Master", ".esm"));
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Light Master", ".esl"));
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp"));
+    }
+
+    public LinkInputVm(string git, string mod)
+    {
+        GitFolderPicker.TargetPath = git;
+        ModPathPicker.TargetPath = mod;   
     }
 }
