@@ -10,30 +10,36 @@
       <Version>1.4.0</Version>
     </PackageVersion>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageVersion Include="Mutagen.Bethesda" Version="0.41.1.1-dev" />
-    <PackageVersion Include="Mutagen.Bethesda.Core" Version="0.41.1.1-dev" />
+    <PackageVersion Include="Mutagen.Bethesda" >
+      <Version>0.41.1.1-CI-20230616-234637</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Core">
+      <Version>0.41.1.1-CI-20230616-234637</Version>
+    </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization" Version="0.0.0.1-dev" />
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft" Version="0.0.0.1-dev" />
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator" Version="0.0.0.1-dev" />
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml" Version="0.0.0.1-dev" />
-    <PackageVersion Include="Mutagen.Bethesda.Skyrim" Version="0.41.1.1-dev" />
+    <PackageVersion Include="Mutagen.Bethesda.Skyrim">
+      <Version>0.41.1.1-CI-20230616-234637</Version>
+    </PackageVersion>
     <PackageVersion Include="Noggog.Autofac">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt.Windows">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Testing">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.WPF">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.SourceGenerators">
-      <Version>2.57.0.1-dev</Version>
+      <Version>2.58.0.1-CI-20230617-055601</Version>
     </PackageVersion>
     <PackageVersion Include="NuGet.Build.Tasks">
       <Version>6.5.0</Version>
