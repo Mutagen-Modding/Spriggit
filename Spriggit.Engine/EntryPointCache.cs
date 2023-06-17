@@ -27,7 +27,7 @@ public class EntryPointCache
         {
             if (!_metaToPackageIdentity.TryGetValue(meta, out identTask!))
             {
-                identTask = _nugetDownloader.GetIdentityFor(meta, CancellationToken.None);
+                identTask = _nugetDownloader.GetFirstIdentityFor(meta, CancellationToken.None);
                 _metaToPackageIdentity[meta] = identTask;
             }
         }

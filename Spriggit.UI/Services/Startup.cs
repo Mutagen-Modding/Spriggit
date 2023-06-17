@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Serilog;
 using Spriggit.UI.ViewModels;
+using Spriggit.UI.ViewModels.Singletons;
 
 namespace Spriggit.UI.Services;
 

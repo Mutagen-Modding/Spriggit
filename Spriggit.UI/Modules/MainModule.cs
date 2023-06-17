@@ -3,7 +3,8 @@ using Autofac;
 using Noggog.Autofac;
 using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
-using Spriggit.UI.ViewModels;
+using Spriggit.UI.ViewModels.Singletons;
+using Spriggit.UI.ViewModels.Transient;
 
 namespace Spriggit.UI.Modules;
 
@@ -24,5 +25,11 @@ public class MainModule : Autofac.Module
             .AsImplementedInterfaces()
             .AsSelf()
             .SingleInstance();
+        
+        builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
+            .InNamespacesOf(
+                typeof(LinkVm))
+            .AsImplementedInterfaces()
+            .AsSelf();
     }
 }

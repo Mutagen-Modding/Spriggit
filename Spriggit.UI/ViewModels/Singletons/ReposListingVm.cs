@@ -2,8 +2,9 @@
 using System.Windows.Input;
 using Noggog.WPF;
 using ReactiveUI;
+using Spriggit.UI.ViewModels.Transient;
 
-namespace Spriggit.UI.ViewModels;
+namespace Spriggit.UI.ViewModels.Singletons;
 
 public class ReposListingVm : ViewModel
 {

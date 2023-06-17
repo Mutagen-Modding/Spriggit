@@ -22,6 +22,9 @@ public partial class LinkListingView
                 .Select(x => x.IsNullOrWhitespace() ? string.Empty : Path.GetExtension(x))
                 .BindTo(this, x => x.LinkModExtensionBox.Text)
                 .DisposeWith(disp);
+            this.WhenAnyValue(x => x.ViewModel!.Input.ModPathPicker.TargetPath)
+                .BindTo(this, x => x.LinkModNameBox.ToolTip)
+                .DisposeWith(disp);
             this.WhenAnyValue(x => x.ViewModel!.Input.GitFolderPicker.TargetPath)
                 .Select(x =>
                 {
@@ -35,12 +38,15 @@ public partial class LinkListingView
                 .Select(x => x.IsNullOrWhitespace() ? "[No Path]" : Path.GetFileName(x))
                 .BindTo(this, x => x.LinkGitPathFolderNameBox.Text)
                 .DisposeWith(disp);
-
-            this.WhenAnyValue(x => x.ViewModel!.SyncToGitCommand)
-                .BindTo(this, x => x.SyncToGitButton.Command)
+            this.WhenAnyValue(x => x.ViewModel!.Input.GitFolderPicker.TargetPath)
+                .BindTo(this, x => x.LinkGitPathFolderNameBox.ToolTip)
                 .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.SyncToModCommand)
-                .BindTo(this, x => x.SyncToModButton.Command)
+
+            this.OneWayBind(ViewModel, x => x.SyncToGitCommand, x => x.SyncToGitButton.Command)
+                .DisposeWith(disp);
+            this.OneWayBind(ViewModel, x => x.SyncToModCommand, x => x.SyncToModButton.Command)
+                .DisposeWith(disp);
+            this.OneWayBind(ViewModel, x => x.EditSettingsCommand, x => x.SettingsButton.Command)
                 .DisposeWith(disp);
 
             this.WhenAnyValue(x => x.IsMouseOver)
@@ -48,11 +54,11 @@ public partial class LinkListingView
                 .BindTo(this, x => x.SettingsButton.Visibility)
                 .DisposeWith(disp);
             this.WhenAnyValue(x => x.IsMouseOver)
-                .Select(x => x ? Visibility.Visible : Visibility.Collapsed)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .BindTo(this, x => x.SyncToGitButton.Visibility)
                 .DisposeWith(disp);
             this.WhenAnyValue(x => x.IsMouseOver)
-                .Select(x => x ? Visibility.Visible : Visibility.Collapsed)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .BindTo(this, x => x.SyncToModButton.Visibility)
                 .DisposeWith(disp);
             this.WhenAnyValue(x => x.IsMouseOver)

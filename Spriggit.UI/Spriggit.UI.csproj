@@ -24,12 +24,7 @@
             <DefaultPackFolder>content</DefaultPackFolder>
             <BuildAction>Compile</BuildAction>
         </Compile>
-        <Compile Update="ViewModels\MainVm.cs">
-          <CodeLanguage>cs</CodeLanguage>
-          <DefaultPackFolder>content</DefaultPackFolder>
-          <BuildAction>Compile</BuildAction>
-        </Compile>
-        <Compile Update="Views\AddNewListingView.xaml.cs">
+        <Compile Update="Views\EditListingView.xaml.cs">
           <CodeLanguage>cs</CodeLanguage>
           <DefaultPackFolder>content</DefaultPackFolder>
           <BuildAction>Compile</BuildAction>
@@ -59,10 +54,55 @@
           <DefaultPackFolder>content</DefaultPackFolder>
           <BuildAction>Compile</BuildAction>
         </Compile>
+        <Compile Update="ViewModels\Singletons\MainVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\IEditLinkVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\AddNewLinkVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\RepoListings.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\EditLinkVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\ActivePanelVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Singletons\ReposListingVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Transient\LinkInputVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
+        <Compile Update="ViewModels\Transient\LinkVm.cs">
+          <CodeLanguage>cs</CodeLanguage>
+          <DefaultPackFolder>content</DefaultPackFolder>
+          <BuildAction>Compile</BuildAction>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <Page Update="Views\AddNewListingView.xaml">
+      <Page Update="Views\EditListingView.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>

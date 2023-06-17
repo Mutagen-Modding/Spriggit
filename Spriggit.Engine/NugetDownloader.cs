@@ -1,5 +1,4 @@
 ﻿using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using NuGet.Common;
 using NuGet.Configuration;
@@ -28,36 +27,39 @@ public class NugetDownloader
         _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
 
-    private NuGetVersion? GetFirstVersion(string? packageVersion, IEnumerable<NuGetVersion> versions)
+    private NuGetVersion? GetFirstStableVersion(IEnumerable<NuGetVersion> versions)
     {
-        if (packageVersion.IsNullOrWhitespace())
-        {
-            var ret = versions.FirstOrDefault(x => !x.IsPrerelease);
-            if (ret != null) return ret;
+        var ret = versions.FirstOrDefault(x => !x.IsPrerelease);
+        if (ret != null) return ret;
 
-            return versions.FirstOrDefault();
-        }
-        else
-        {
-            return NuGetVersion.Parse(packageVersion);
-        }
+        return versions.FirstOrDefault();
     }
 
-    public async Task<PackageIdentity?> GetIdentityFor(SpriggitMeta meta, CancellationToken cancellationToken)
+    private NuGetVersion? GetLatestVersion(IEnumerable<NuGetVersion> versions)
+    {
+        var ret = versions
+            .Where(x => !x.IsPrerelease)
+            .MaxBy(x => x.Version);
+        if (ret != null) return ret;
+
+        return versions.FirstOrDefault();
+    }
+
+    public async Task<PackageIdentity?> GetFirstIdentityFor(SpriggitMeta meta, CancellationToken cancellationToken)
     {
         if (!meta.Source.PackageName.EndsWith($".{meta.Release.ToCategory()}"))
         {
-            var releaseSpecific = await GetIdentityFor($"{meta.Source.PackageName}.{meta.Release.ToCategory()}", meta.Source.Version, cancellationToken);
+            var releaseSpecific = await GetFirstIdentityFor($"{meta.Source.PackageName}.{meta.Release.ToCategory()}", meta.Source.Version, cancellationToken);
             if (releaseSpecific != null)
             {
                 return releaseSpecific;
             }
         }
 
-        return await GetIdentityFor(meta.Source.PackageName, meta.Source.Version, cancellationToken);
+        return await GetFirstIdentityFor(meta.Source.PackageName, meta.Source.Version, cancellationToken);
     }
 
-    public async Task<PackageIdentity?> GetIdentityFor(string packageName, string packageVersion, CancellationToken cancellationToken)
+    public async Task<PackageIdentity?> GetFirstIdentityFor(string packageName, string packageVersion, CancellationToken cancellationToken)
     {
         if (packageVersion.IsNullOrWhitespace())
         {
@@ -70,7 +72,7 @@ public class NugetDownloader
                     _cache,
                     NullLogger.Instance,
                     cancellationToken);
-                var version = GetFirstVersion(packageVersion, versions);
+                var version = GetFirstStableVersion(versions);
                 if (version == null) continue;
 
                 return new PackageIdentity(packageName, version);
@@ -113,5 +115,35 @@ public class NugetDownloader
             identity, resolutionContext, projectContext, repos,
             Array.Empty<SourceRepository>(),  // This is a list of secondary source respositories, probably empty
             CancellationToken.None);
+    }
+    
+    public async Task<PackageIdentity?> GetLatestIdentity(
+        string packageName,
+        string? packageVersion,
+        CancellationToken cancellationToken)
+    {
+        if (packageVersion.IsNullOrWhitespace())
+        {
+            var repos = _provider.GetRepositories().ToArray();
+            foreach (var repository in repos)
+            {
+                FindPackageByIdResource resource = await repository.GetResourceAsync<FindPackageByIdResource>();
+                var versions = await resource.GetAllVersionsAsync(
+                    packageName,
+                    _cache,
+                    NullLogger.Instance,
+                    cancellationToken);
+                var version = GetLatestVersion(versions);
+                if (version == null) continue;
+
+                return new PackageIdentity(packageName, version);
+            }
+        }
+        else
+        {
+            return new PackageIdentity(packageName, NuGetVersion.Parse(packageVersion));
+        }
+
+        return null;
     }
 }

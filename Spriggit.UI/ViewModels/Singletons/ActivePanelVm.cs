@@ -1,7 +1,7 @@
 ﻿using Noggog.WPF;
 using ReactiveUI.Fody.Helpers;
 
-namespace Spriggit.UI.ViewModels;
+namespace Spriggit.UI.ViewModels.Singletons;
 
 public interface IActivatableVm
 {

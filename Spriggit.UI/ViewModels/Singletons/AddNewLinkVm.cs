@@ -5,14 +5,16 @@ using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
 using Spriggit.UI.Settings;
+using Spriggit.UI.ViewModels.Transient;
 
-namespace Spriggit.UI.ViewModels;
+namespace Spriggit.UI.ViewModels.Singletons;
 
-public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings
+public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings, IEditLinkVm
 {
     public LinkInputVm LinkInput { get; private set; } = new();
     
-    public ICommand AddCommand { get; }
+    public ICommand FinishCommand { get; }
+    public ICommand DiscardCommand { get; }
 
     private ViewModel? _previous;
 
@@ -21,21 +23,24 @@ public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings
         RepoListings reposListingVm,
         ActivePanelVm activePanelVm)
     {
-        AddCommand = ReactiveCommand.Create(
+        FinishCommand = ReactiveCommand.Create(
             execute: () =>
             {
                 reposListingVm.Links.Add(linkFactory(LinkInput));
                 activePanelVm.Focus(_previous);
 
                 var replacement = new LinkInputVm();
-                replacement.GitFolderPicker.TargetPath = LinkInput.GitFolderPicker.TargetPath;
+                replacement.CopyFrom(LinkInput);
                 replacement.ModPathPicker.TargetPath = GetModPathSaveString(LinkInput);
                 LinkInput = replacement;
             },
-            canExecute: Observable.CombineLatest(
-                this.WhenAnyValue(x => x.LinkInput.ModPathPicker.InError),
-                this.WhenAnyValue(x => x.LinkInput.GitFolderPicker.InError),
-                (m, g) => !m && !g));
+            canExecute: this.WhenAnyValue(x => x.LinkInput.InError)
+                .Select(x => !x));
+
+        DiscardCommand = ReactiveCommand.Create(() =>
+        {
+            activePanelVm.Focus(_previous);
+        });
     }
 
     public void Activate(ViewModel? previous)
@@ -45,14 +50,12 @@ public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings
 
     public void ReadFrom(MainSettings settings)
     {
-        LinkInput.GitFolderPicker.TargetPath = settings.AddNewLinkSettings.GitPath;
-        LinkInput.ModPathPicker.TargetPath = settings.AddNewLinkSettings.ModPath;
+        LinkInput.Absorb(settings.AddNewLinkSettings);
     }
 
     public void SaveInto(MainSettings settings)
     {
-        settings.AddNewLinkSettings.GitPath = LinkInput.GitFolderPicker.TargetPath;
-        settings.AddNewLinkSettings.ModPath = GetModPathSaveString(LinkInput);
+        settings.AddNewLinkSettings = LinkInput.ToSettings();
     }
 
     private string GetModPathSaveString(LinkInputVm inputVm)

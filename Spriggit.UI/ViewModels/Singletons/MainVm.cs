@@ -1,6 +1,6 @@
 ﻿using Noggog.WPF;
 
-namespace Spriggit.UI.ViewModels;
+namespace Spriggit.UI.ViewModels.Singletons;
 
 public class MainVm : ViewModel
 {

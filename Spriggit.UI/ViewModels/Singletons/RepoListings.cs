@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using Noggog;
 using Spriggit.UI.Settings;
+using Spriggit.UI.ViewModels.Transient;
 
-namespace Spriggit.UI.ViewModels;
+namespace Spriggit.UI.ViewModels.Singletons;
 
 public class RepoListings : ISaveMainSettings
 {
@@ -16,15 +17,13 @@ public class RepoListings : ISaveMainSettings
     
     public void ReadFrom(MainSettings settings)
     {
-        Links.SetTo(settings.Links.Select(x => _linkFactory(new LinkInputVm(x.GitPath, x.ModPath))));
+        Links.SetTo(settings.Links.Select(x => _linkFactory(new LinkInputVm(x))));
     }
 
     public void SaveInto(MainSettings settings)
     {
-        settings.Links = Links.Select(x => new LinkSettings()
-        {
-            GitPath = x.Input.GitFolderPicker.TargetPath,
-            ModPath = x.Input.ModPathPicker.TargetPath,
-        }).ToArray();
+        settings.Links = Links
+            .Select(x => x.Input.ToSettings())
+            .ToArray();
     }
 }
