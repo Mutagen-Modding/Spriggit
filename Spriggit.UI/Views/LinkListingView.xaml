@@ -16,7 +16,6 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Button Grid.Column="0" x:Name="SyncToModButton" Margin="4,0, 0, 0" Width="20" >
@@ -26,6 +25,7 @@
         </Button>
         
         <Grid Grid.Column="1" 
+              HorizontalAlignment="Left"
               Margin="5,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -33,39 +33,17 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" x:Name="LinkModNameBox"
                        TextTrimming="CharacterEllipsis"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Right" />
+                       VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" x:Name="LinkModExtensionBox"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center" />
         </Grid>
         
-        <Rectangle Grid.Column="2" x:Name="SeparationLine"
-                   Width="1" Fill="DimGray"
-                   HorizontalAlignment="Center" />
         <Button Grid.Column="2" x:Name="SettingsButton" Width="20" >
             <iconPacks:PackIconMaterial Kind="Cog" Padding="2" />
         </Button>
         
-        <Grid Grid.Column="3" 
-              Margin="5,2"
-              x:Name="GitPathGrid"
-              Background="Transparent"
-              HorizontalAlignment="Left">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" x:Name="LinkGitLeftPathBox"
-                       TextTrimming="CharacterEllipsis"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" x:Name="LinkGitPathFolderNameBox"
-                       TextTrimming="CharacterEllipsis"
-                       VerticalAlignment="Center" />
-        </Grid>
-        
-        <Button Grid.Column="4" x:Name="SyncToGitButton" Margin="0,0, 4, 0" Width="20" >
+        <Button Grid.Column="3" x:Name="SyncToGitButton" Margin="0,0, 4, 0" Width="20" >
             <iconPacks:PackIconPicolIcons Kind="ArrowFullRight"
                                           VerticalAlignment="Center"
                                           Padding="0,2" />

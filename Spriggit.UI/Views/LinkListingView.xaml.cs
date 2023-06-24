@@ -25,22 +25,6 @@ public partial class LinkListingView
             this.WhenAnyValue(x => x.ViewModel!.Input.ModPathPicker.TargetPath)
                 .BindTo(this, x => x.LinkModNameBox.ToolTip)
                 .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.Input.GitFolderPicker.TargetPath)
-                .Select(x =>
-                {
-                    var dirName = Path.GetDirectoryName(x);
-                    if (dirName == null) return string.Empty;
-                    return $"{dirName}{Path.DirectorySeparatorChar}";
-                })
-                .BindTo(this, x => x.LinkGitLeftPathBox.Text)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.Input.GitFolderPicker.TargetPath)
-                .Select(x => x.IsNullOrWhitespace() ? "[No Path]" : Path.GetFileName(x))
-                .BindTo(this, x => x.LinkGitPathFolderNameBox.Text)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.Input.GitFolderPicker.TargetPath)
-                .BindTo(this, x => x.LinkGitPathFolderNameBox.ToolTip)
-                .DisposeWith(disp);
 
             this.OneWayBind(ViewModel, x => x.SyncToGitCommand, x => x.SyncToGitButton.Command)
                 .DisposeWith(disp);
@@ -60,14 +44,6 @@ public partial class LinkListingView
             this.WhenAnyValue(x => x.IsMouseOver)
                 .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .BindTo(this, x => x.SyncToModButton.Visibility)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.IsMouseOver)
-                .Select(x => x ? Visibility.Hidden : Visibility.Visible)
-                .BindTo(this, x => x.SeparationLine.Visibility)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.GitPathGrid.IsMouseOver)
-                .Select(x => x ? 1d : 0.3d)
-                .BindTo(this, x => x.LinkGitLeftPathBox.Opacity)
                 .DisposeWith(disp);
         });
     }
