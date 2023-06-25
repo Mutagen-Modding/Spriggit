@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Windows.Input;
+using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
@@ -88,11 +89,19 @@ public class LinkVm : ViewModel
 
         SyncToModCommand = ReactiveCommand.Create(
             SyncToMod,
-            canRun);
+            Observable.CombineLatest(
+                canRun,
+                Input.GitFolderPicker.WhenAnyValue(x => x.Exists),
+                (r, e) => r && e),
+            outputScheduler: RxApp.TaskpoolScheduler);
 
         SyncToGitCommand = ReactiveCommand.Create(
             SyncToGit,
-            canRun);
+            Observable.CombineLatest(
+                canRun,
+                Input.ModPathPicker.WhenAnyValue(x => x.Exists),
+                (r, e) => r && e),
+            outputScheduler: RxApp.TaskpoolScheduler);
 
         EditSettingsCommand = ReactiveCommand.Create(OpenSettings);
     }
