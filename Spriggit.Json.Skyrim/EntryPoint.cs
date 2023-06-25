@@ -56,7 +56,10 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
         // Serialization should generate this
         
         fileSystem = fileSystem.GetOrDefault();
-        streamCreator ??= NormalFileStreamCreator.Instance;
+        if (streamCreator == null || streamCreator is NoPreferenceStreamCreator)
+        {
+            streamCreator = NormalFileStreamCreator.Instance;
+        }
         SpriggitSource src = new();
         SerializationHelper.ExtractMeta(
             fileSystem: fileSystem,
