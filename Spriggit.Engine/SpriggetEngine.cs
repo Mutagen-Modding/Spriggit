@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
-using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
 using Noggog.WorkEngine;
