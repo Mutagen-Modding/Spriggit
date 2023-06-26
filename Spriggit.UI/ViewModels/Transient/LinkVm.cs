@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
@@ -87,29 +88,34 @@ public class LinkVm : ViewModel
             .Switch()
             .ToProperty(this, nameof(MetaToUse));
 
-        SyncToModCommand = ReactiveCommand.Create(
-            SyncToMod,
+        SyncToModCommand = ReactiveCommand.CreateFromObservable(
+            () => WrapInThread(SyncToMod),
             Observable.CombineLatest(
                 canRun,
                 Input.GitFolderPicker.WhenAnyValue(x => x.Exists),
-                (r, e) => r && e),
-            outputScheduler: RxApp.TaskpoolScheduler);
+                (r, e) => r && e));
 
-        SyncToGitCommand = ReactiveCommand.Create(
-            SyncToGit,
+        SyncToGitCommand = ReactiveCommand.CreateFromObservable(
+            () => WrapInThread(SyncToGit),
             Observable.CombineLatest(
                 canRun,
                 Input.ModPathPicker.WhenAnyValue(x => x.Exists),
-                (r, e) => r && e),
-            outputScheduler: RxApp.TaskpoolScheduler);
+                (r, e) => r && e));
 
         EditSettingsCommand = ReactiveCommand.Create(OpenSettings);
+    }
+
+    private IObservable<Unit> WrapInThread(Func<Task> a)
+    {
+        return Observable.FromAsync(a)
+            .SubscribeOn(RxApp.TaskpoolScheduler);
     }
 
     private async Task SyncToGit()
     {
         try
         {
+            _logger.Information("Syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath, Input.GitFolderPicker.TargetPath);
             var meta = MetaToUse;
             if (meta.Failed)
             {
@@ -137,6 +143,7 @@ public class LinkVm : ViewModel
     {
         try
         {
+            _logger.Information("Syncing from Git to Mod. {GitPath} -> {ModPath}", Input.GitFolderPicker.TargetPath, Input.ModPathPicker.TargetPath);
             Syncing = true;
             await _engine.Deserialize(
                 spriggitPluginPath: Input.GitFolderPicker.TargetPath,
