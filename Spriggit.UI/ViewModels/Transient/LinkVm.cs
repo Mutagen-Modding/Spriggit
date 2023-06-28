@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
 using Noggog.WPF;
+using NSubstitute;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
@@ -23,8 +24,8 @@ public class LinkVm : ViewModel
     private readonly PackageInputQuery _packageInputQuery;
     public LinkInputVm Input { get; }
     
-    public ICommand SyncToGitCommand { get; }
-    public ICommand SyncToModCommand { get; }
+    public ReactiveCommand<Unit, Unit> SyncToGitCommand { get; }
+    public ReactiveCommand<Unit, Unit> SyncToModCommand { get; }
     public ICommand EditSettingsCommand { get; }
     
     [Reactive] public bool Syncing { get; private set; }
@@ -88,27 +89,41 @@ public class LinkVm : ViewModel
             .Switch()
             .ToProperty(this, nameof(MetaToUse));
 
-        SyncToModCommand = ReactiveCommand.CreateFromObservable(
-            () => WrapInThread(SyncToMod),
+        SyncToModCommand = ReactiveCommand.Create<Unit>(
+            execute: _ => { },
             Observable.CombineLatest(
                 canRun,
                 Input.GitFolderPicker.WhenAnyValue(x => x.Exists),
                 (r, e) => r && e));
+        WrapTranslation(
+            SyncToModCommand.EndingExecution(),
+            SyncToMod);
 
-        SyncToGitCommand = ReactiveCommand.CreateFromObservable(
-            () => WrapInThread(SyncToGit),
+        SyncToGitCommand = ReactiveCommand.Create<Unit>(
+            execute: _ => { },
             Observable.CombineLatest(
                 canRun,
                 Input.ModPathPicker.WhenAnyValue(x => x.Exists),
                 (r, e) => r && e));
+        WrapTranslation(
+            SyncToGitCommand.EndingExecution(),
+            SyncToGit);
 
         EditSettingsCommand = ReactiveCommand.Create(OpenSettings);
     }
 
-    private IObservable<Unit> WrapInThread(Func<Task> a)
+    private void WrapTranslation(IObservable<Unit> signal, Func<Task> toDo)
     {
-        return Observable.FromAsync(a)
-            .SubscribeOn(RxApp.TaskpoolScheduler);
+        signal
+            .WithLatestFrom(this.WhenAnyValue(x => x.Syncing), (_, x) => x)
+            .Where(x => !x)
+            .Do(_ => Syncing = true)
+            .ObserveOn(RxApp.TaskpoolScheduler)
+            .SelectTask(_ => toDo())
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Do(_ => Syncing = false)
+            .Subscribe()
+            .DisposeWith(this);
     }
 
     private async Task SyncToGit()
@@ -123,7 +138,6 @@ public class LinkVm : ViewModel
                 return;
             }
 
-            Syncing = true;
             await _engine.Serialize(
                 bethesdaPluginPath: Input.ModPathPicker.TargetPath,
                 outputFolder: Input.GitFolderPicker.TargetPath,
@@ -133,10 +147,6 @@ public class LinkVm : ViewModel
         {
             _logger.Error(e, "Error syncing to Git");
         }
-        finally
-        {
-            Syncing = false;
-        }
     }
     
     private async Task SyncToMod()
@@ -144,7 +154,6 @@ public class LinkVm : ViewModel
         try
         {
             _logger.Information("Syncing from Git to Mod. {GitPath} -> {ModPath}", Input.GitFolderPicker.TargetPath, Input.ModPathPicker.TargetPath);
-            Syncing = true;
             await _engine.Deserialize(
                 spriggitPluginPath: Input.GitFolderPicker.TargetPath,
                 outputFile: Input.ModPathPicker.TargetPath,
@@ -153,10 +162,6 @@ public class LinkVm : ViewModel
         catch (Exception e)
         {
             _logger.Error(e, "Error syncing to Mod");
-        }
-        finally
-        {
-            Syncing = false;
         }
     }
 
