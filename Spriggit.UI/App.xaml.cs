@@ -63,9 +63,16 @@ public partial class App : Application
         startTime += "s";
         var logFileName = $"{startDt:MM-dd-yyyy}_{startTime}.log";
 
+        var curLog = Path.Combine("logs", "Current.log");
+        if (File.Exists(curLog))
+        {
+            File.Delete(curLog);
+        }
+
         Serilog.Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine("logs", logFileName))
+            .WriteTo.File(curLog)
             .CreateLogger();
 
         return Serilog.Log.Logger;
