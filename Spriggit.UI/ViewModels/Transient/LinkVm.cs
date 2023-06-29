@@ -1,10 +1,8 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
 using Noggog.WPF;
-using NSubstitute;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
@@ -21,7 +19,6 @@ public class LinkVm : ViewModel
     private readonly SpriggitEngine _engine;
     private readonly ActivePanelVm _activePanelVm;
     private readonly EditLinkVm _editLinkVm;
-    private readonly PackageInputQuery _packageInputQuery;
     public LinkInputVm Input { get; }
     
     public ReactiveCommand<Unit, Unit> SyncToGitCommand { get; }
@@ -37,7 +34,7 @@ public class LinkVm : ViewModel
 
     private readonly ObservableAsPropertyHelper<GetResponse<SpriggitMeta>> _metaToUse;
     public GetResponse<SpriggitMeta> MetaToUse => _metaToUse.Value;
-
+    
     public LinkVm(
         ILogger logger,
         SpriggitEngine engine,
@@ -51,7 +48,6 @@ public class LinkVm : ViewModel
         _engine = engine;
         _activePanelVm = activePanelVm;
         _editLinkVm = editLinkVm;
-        _packageInputQuery = packageInputQuery;
         Input = input;
         _inError = Observable.CombineLatest(
                 Input.ModPathPicker.WhenAnyValue(x => x.InError),

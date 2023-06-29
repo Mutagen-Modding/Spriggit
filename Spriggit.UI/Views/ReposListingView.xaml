@@ -60,7 +60,7 @@
                 <ColumnDefinition Width="*" MinWidth="60" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" HorizontalContentAlignment="Left" Margin="5" >
+            <Button x:Name="SyncSelectedToModButton" Grid.Column="0" HorizontalContentAlignment="Left" Margin="5" >
                 <StackPanel Orientation="Horizontal" >
                     <iconPacks:PackIconFontAwesome Kind="FileSolid" VerticalAlignment="Center" />
                     <iconPacks:PackIconPicolIcons Kind="ArrowFullLeft"
@@ -74,7 +74,7 @@
             <Button Grid.Column="1" Content="+" Name="AddNewLinkButton" 
                     ToolTip="Add a new Spriggit sync"
                     FontSize="18" Margin="2" />
-            <Button Grid.Column="2" Margin="5" HorizontalContentAlignment="Right" >
+            <Button x:Name="SyncSelectedToGitButton" Grid.Column="2" Margin="5" HorizontalContentAlignment="Right" >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Sync to Git"
                                Style="{StaticResource TooltipBlock}" />
