@@ -12,9 +12,9 @@ Some things Git can help you do when developing your mod:
 - Be able to go back in time and view your mod exactly as it was at any point in history
 - Stamp your mod with version tags, letting you see how it looked at any one from the past
 - Easily experiment on side branches without worrying your stable setup
-- Share your work on Github, allowing people to see your mods development progress
-- Collaborate easily, by allowing others to contribute to your mod via Pull Requests (just like coders do)
-- More easily merge the work of multiple developers 
+- Share your work on Github, allowing people to see your mod's development progress
+- Collaborate easily, by allowing others to contribute to your mod via Pull Requests
+- More easily merge the work of multiple developers with Git Merge technology
 
 # The Workflow:
 ## An Individual Modder
