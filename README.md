@@ -17,8 +17,6 @@ Some things Git can help you do when developing your mod:
 - More easily merge the work of multiple developers 
 
 # The Workflow:
-Spriggit helps facilitate a workflow that coders will be very familiar with
-
 ## An Individual Modder
 - Create a Git Repository to hold your mod
 - Create a Bethesda plugin with existing normal tools of choice
@@ -44,9 +42,11 @@ Other modders, whether on your team or just helpful people out in the world can 
 Spriggit comes with a Command Line Interface that can be used to convert from Betheseda Plugins to Git Repositories, and back.
 
 This would use Spriggit to convert from a SkyrimSE mod to Yaml, and put it in your Git Repository.
+
 `.\Path\To\Spriggit.CLI.exe serialize --InputPath "C:\Games\steamapps\common\Skyrim Special Edition\Data\SomeMod.esp" --OutputPath "C:\MyGitRepository\SomeMod.esp" --GameRelease SkyrimSE --PackageName Spriggit.Yaml`
 
 And this would convert it back and overwrite the original mod file.
+
 `.\Path\To\Spriggit.CLI.exe deserialize --InputPath "C:\Users\Levia\Downloads\SpriggitOutput\SomeMod.esp" --OutputPath "C:\MyGitRepository\SomeMod.esp"`
 
 # Spriggit UI
@@ -55,9 +55,11 @@ In development, and should be released soon.   Will be a convenient UI to help c
 # Spriggit Translation Packages
 Spriggit uses [Mutagen](https://github.com/Mutagen-Modding/Mutagen) systems under the hood, and leans on the [Mutagen.Bethesda.Serialization](https://github.com/Mutagen-Modding/Mutagen.Bethesda.Serialization) library to convert to/from Yaml and Json.
 
-One of the features of [Mutagen.Bethesda.Serialization](https://github.com/Mutagen-Modding/Mutagen.Bethesda.Serialization) is that it allows for customization, whether that's changing names, or file structures.  Spriggit allows users to translate with these customizations,
-allowing the files as they exist in Git to look differently.   However, these customizations must live as a Nuget package on Nuget.org, so that future users looking to convert from Git back to Bethesda Plugins will always be able to locate the customizations that were used, 
-and so be able to convert back.  When you use Spriggit, you will have to specify with Translation Package you want to use, and that will be marked in the files so users can locate it later.
+One of the features of [Mutagen.Bethesda.Serialization](https://github.com/Mutagen-Modding/Mutagen.Bethesda.Serialization) is that it allows for customization of naming, file structure, and other similar things.  
+
+Spriggit allows users to translate with these customizations, allowing the files as they exist in Git to look differently.   However, it restricts that these customizations must live as a Nuget package on Nuget.org, so that future users looking to convert from Git back to Bethesda Plugins will always be able to locate the customizations that were used, and so be able to convert back.
+
+When you use Spriggit, you will have to specify with Translation Package you want to use, and that will be marked in the files so users can locate it later.
 
 More documentation will follow on how to upload your own customization package to Nuget so that it can be used by Spriggit.    For now, two packages exist "built in":
 - `Spriggit.Yaml`
