@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda.Serialization.Streams;
 using Noggog.WorkEngine;
+using Serilog;
 using Spriggit.Engine;
 using StrongInject;
 
@@ -20,16 +21,19 @@ partial class Container : IContainer<SpriggitEngine>
     [Instance] private readonly IWorkDropoff? _workDropoff;
     [Instance] private readonly ICreateStream? _streamCreate;
     [Instance] private readonly DebugState _debugState;
+    [Instance] private readonly ILogger _logger;
 
     public Container(
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff, 
         ICreateStream? streamCreate,
-        DebugState debugState)
+        DebugState debugState,
+        ILogger logger)
     {
         _fileSystem = fileSystem;
         _workDropoff = workDropoff;
         _streamCreate = streamCreate;
         _debugState = debugState;
+        _logger = logger;
     }
 }

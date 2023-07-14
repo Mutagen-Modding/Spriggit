@@ -1,5 +1,6 @@
-﻿using Mutagen.Bethesda.Plugins.Records;
+﻿using Noggog;
 using NuGet.Packaging.Core;
+using Serilog;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
@@ -11,13 +12,16 @@ public class EntryPointCache
     private readonly Dictionary<PackageIdentity, Task<EngineEntryPoint?>> _packageIdentityToEntryPt = new();
     private readonly ConstructEntryPoint _constructEntryPoint;
     private readonly NugetDownloader _nugetDownloader;
+    private readonly ILogger _logger;
 
     public EntryPointCache(
         ConstructEntryPoint constructEntryPoint,
-        NugetDownloader nugetDownloader)
+        NugetDownloader nugetDownloader,
+        ILogger logger)
     {
         _constructEntryPoint = constructEntryPoint;
         _nugetDownloader = nugetDownloader;
+        _logger = logger;
     }
 
     public async Task<EngineEntryPoint?> GetFor(SpriggitMeta meta, CancellationToken cancel)
@@ -27,12 +31,18 @@ public class EntryPointCache
         {
             if (!_metaToPackageIdentity.TryGetValue(meta, out identTask!))
             {
-                identTask = _nugetDownloader.GetFirstIdentityFor(meta, cancel);
+                identTask = Task.Run(async () =>
+                {
+                    _logger.Information("Getting first identity for {Meta}", meta);
+                    var ret = await _nugetDownloader.GetFirstIdentityFor(meta, CancellationToken.None);
+                    _logger.Information("Cached first identity for {Meta}: {Ident}", meta, ret);
+                    return ret;
+                });
                 _metaToPackageIdentity[meta] = identTask;
             }
         }
 
-        var ident = await identTask;
+        var ident = await identTask.WithCancellation(cancel);
         if (ident == null) return null;
         return await GetFor(ident, cancel);
     }
@@ -45,11 +55,17 @@ public class EntryPointCache
         {
             if (!_packageIdentityToEntryPt.TryGetValue(ident, out entryPt!))
             {
-                entryPt = _constructEntryPoint.ConstructFor(ident, cancel);
+                entryPt = Task.Run(async () =>
+                {
+                    _logger.Information("Constructing entry point for {Ident}", ident);
+                    var ret = await _constructEntryPoint.ConstructFor(ident, CancellationToken.None);
+                    _logger.Information("Cached entry point for {Ident}", ident);
+                    return ret;
+                });
                 _packageIdentityToEntryPt[ident] = entryPt;
             }
         }
 
-        return await entryPt;
+        return await entryPt.WithCancellation(cancel);
     }
 }

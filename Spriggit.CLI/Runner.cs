@@ -10,7 +10,7 @@ public class Runner
 {
     private Container GetContainer(DebugState debugState)
     {
-        return new Container(new FileSystem(), null, null, debugState);
+        return new Container(new FileSystem(), null, null, debugState, LoggerSetup.Logger);
     }
     
     public async Task<int> Run(DeserializeCommand deserializeCommand)

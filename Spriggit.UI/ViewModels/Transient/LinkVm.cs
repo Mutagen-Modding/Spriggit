@@ -204,6 +204,8 @@ public class LinkVm : ViewModel
         }
         catch (OperationCanceledException)
         {
+            _logger.Information("Cancelled syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,
+                Input.GitFolderPicker.TargetPath);
         }
         catch (Exception e)
         {
@@ -225,6 +227,7 @@ public class LinkVm : ViewModel
         }
         catch (OperationCanceledException)
         {
+            _logger.Information("Cancelled syncing from Git to Mod. {GitPath} -> {ModPath}", Input.GitFolderPicker.TargetPath, Input.ModPathPicker.TargetPath);
         }
         catch (Exception e)
         {
