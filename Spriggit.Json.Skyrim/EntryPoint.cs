@@ -1,7 +1,6 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Newtonsoft;
 using Mutagen.Bethesda.Serialization.Streams;
 using Mutagen.Bethesda.Serialization.Utility;
@@ -21,36 +20,41 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
-        SpriggitSource meta)
+        SpriggitSource meta,
+        CancellationToken cancel)
     {
-        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, release.ToSkyrimRelease());
+        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, SkyrimRelease.SkyrimSE);
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,
             dir,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: streamCreator,
-            extraMeta: meta);
+            extraMeta: meta,
+            cancel: cancel);
     }
 
     public async Task<ISkyrimMod> Deserialize(
         string inputPath,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
-        ICreateStream? streamCreator)
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
         return await MutagenJsonConverter.Instance.Deserialize(
             inputPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
-            streamCreator: streamCreator);
+            streamCreator: streamCreator,
+            cancel: cancel);
     }
 
-    private readonly static Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
+    private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
     
     public async Task<SpriggitMeta?> TryGetMetaInfo(
         string inputPath, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator)
+        IFileSystem? fileSystem, ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
         // ToDo
         // Serialization should generate this
@@ -70,7 +74,8 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
             extraMeta: src,
             metaReader: static (r, m, k, s) => Spriggit.Core.SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
             modKey: out var modKey,
-            release: out var release);
+            release: out var release,
+            cancel: cancel);
 
         return new SpriggitMeta(src, release);
     }

@@ -20,24 +20,24 @@ public class EntryPointCache
         _nugetDownloader = nugetDownloader;
     }
 
-    public async Task<EngineEntryPoint?> GetFor(SpriggitMeta meta)
+    public async Task<EngineEntryPoint?> GetFor(SpriggitMeta meta, CancellationToken cancel)
     {
         Task<PackageIdentity?> identTask;
         lock (_lock)
         {
             if (!_metaToPackageIdentity.TryGetValue(meta, out identTask!))
             {
-                identTask = _nugetDownloader.GetFirstIdentityFor(meta, CancellationToken.None);
+                identTask = _nugetDownloader.GetFirstIdentityFor(meta, cancel);
                 _metaToPackageIdentity[meta] = identTask;
             }
         }
 
         var ident = await identTask;
         if (ident == null) return null;
-        return await GetFor(ident);
+        return await GetFor(ident, cancel);
     }
 
-    public async Task<EngineEntryPoint?> GetFor(PackageIdentity? ident)
+    public async Task<EngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)
     {
         if (ident == null) return null;
         Task<EngineEntryPoint?> entryPt;
@@ -45,7 +45,7 @@ public class EntryPointCache
         {
             if (!_packageIdentityToEntryPt.TryGetValue(ident, out entryPt!))
             {
-                entryPt = _constructEntryPoint.ConstructFor(ident, CancellationToken.None);
+                entryPt = _constructEntryPoint.ConstructFor(ident, cancel);
                 _packageIdentityToEntryPt[ident] = entryPt;
             }
         }

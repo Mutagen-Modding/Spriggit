@@ -86,7 +86,7 @@ public class NugetDownloader
         return null;
     }
 
-    public async Task RestoreFor(PackageIdentity identity, DirectoryPath packagesPath, CancellationToken cancellationToken)
+    public async Task RestoreFor(PackageIdentity identity, DirectoryPath packagesPath, CancellationToken cancel)
     {
         FolderNuGetProject project = new FolderNuGetProject(packagesPath);
 
@@ -114,7 +114,7 @@ public class NugetDownloader
         await packageManager.InstallPackageAsync(packageManager.PackagesFolderNuGetProject,
             identity, resolutionContext, projectContext, repos,
             Array.Empty<SourceRepository>(),  // This is a list of secondary source respositories, probably empty
-            CancellationToken.None);
+            cancel);
     }
     
     public async Task<PackageIdentity?> GetLatestIdentity(

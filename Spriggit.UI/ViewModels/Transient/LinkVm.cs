@@ -1,5 +1,7 @@
 ﻿using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Windows.Input;
 using Noggog;
 using Noggog.WPF;
@@ -23,9 +25,22 @@ public class LinkVm : ViewModel
     
     public ReactiveCommand<Unit, Unit> SyncToGitCommand { get; }
     public ReactiveCommand<Unit, Unit> SyncToModCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelSyncToGitCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelSyncToModCommand { get; }
     public ICommand EditSettingsCommand { get; }
+
+    private readonly ObservableAsPropertyHelper<bool> _syncing;
+    public bool Syncing => _syncing.Value;
+
+    public enum SyncState
+    {
+        None,
+        Mod,
+        Git,
+        Cancelling
+    }
     
-    [Reactive] public bool Syncing { get; private set; }
+    [Reactive] public SyncState State { get; private set; }
 
     private readonly ObservableAsPropertyHelper<bool> _inError;
     public bool InError => _inError.Value;
@@ -54,6 +69,9 @@ public class LinkVm : ViewModel
                 Input.GitFolderPicker.WhenAnyValue(x => x.InError),
                 (m, g) => m && g)
             .ToProperty(this, nameof(InError));
+        _syncing = this.WhenAnyValue(x => x.State)
+            .Select(x => x != SyncState.None)
+            .ToProperty(this, nameof(Syncing));
 
         var canRun = Observable.CombineLatest(
             this.WhenAnyValue(x => x.InError),
@@ -90,9 +108,16 @@ public class LinkVm : ViewModel
             Observable.CombineLatest(
                 canRun,
                 Input.GitFolderPicker.WhenAnyValue(x => x.Exists),
-                (r, e) => r && e));
+                (r, e) => r && e)
+                .ObserveOnGui());
+        CancelSyncToModCommand = ReactiveCommand.Create(
+            () => { },
+            canExecute: this.WhenAnyValue(x => x.State).Select(x => x == SyncState.Mod)
+                .ObserveOnGui());
         WrapTranslation(
             SyncToModCommand.EndingExecution(),
+            CancelSyncToModCommand.EndingExecution(),
+            SyncState.Mod,
             SyncToMod);
 
         SyncToGitCommand = ReactiveCommand.Create<Unit>(
@@ -100,33 +125,68 @@ public class LinkVm : ViewModel
             Observable.CombineLatest(
                 canRun,
                 Input.ModPathPicker.WhenAnyValue(x => x.Exists),
-                (r, e) => r && e));
+                (r, e) => r && e)
+                .ObserveOnGui());
+        CancelSyncToGitCommand = ReactiveCommand.Create(
+            () => { },
+            canExecute: this.WhenAnyValue(x => x.State).Select(x => x == SyncState.Git)
+                .ObserveOnGui());
         WrapTranslation(
             SyncToGitCommand.EndingExecution(),
+            CancelSyncToGitCommand.EndingExecution(),
+            SyncState.Git,
             SyncToGit);
 
         EditSettingsCommand = ReactiveCommand.Create(OpenSettings);
     }
 
-    private void WrapTranslation(IObservable<Unit> signal, Func<Task> toDo)
+    private void WrapTranslation(
+        IObservable<Unit> signal,
+        IObservable<Unit> cancel,
+        SyncState state,
+        Func<CancellationToken, Task> toDo)
     {
         signal
             .WithLatestFrom(this.WhenAnyValue(x => x.Syncing), (_, x) => x)
             .Where(x => !x)
-            .Do(_ => Syncing = true)
+            .Do(_ => State = state)
             .ObserveOn(RxApp.TaskpoolScheduler)
-            .SelectTask(_ => toDo())
+            .Select(_ =>
+            {
+                return Observable.Create<Unit>(async (o) =>
+                {
+                    try
+                    {
+                        CancellationTokenSource cancelSource = new();
+                        using var cancelDisp = cancel.Subscribe(x =>
+                        {
+                            State = SyncState.Cancelling;
+                            cancelSource.Cancel();
+                        });
+                        await toDo(cancelSource.Token);
+                    }
+                    finally
+                    {
+                        State = SyncState.None;
+                        o.OnCompleted();
+                    }
+                    
+                    return Disposable.Empty;
+                });
+            })
+            .Switch()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Do(_ => Syncing = false)
+            .Do(_ => State = SyncState.None)
             .Subscribe()
             .DisposeWith(this);
     }
 
-    private async Task SyncToGit()
+    private async Task SyncToGit(CancellationToken cancel)
     {
         try
         {
-            _logger.Information("Syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath, Input.GitFolderPicker.TargetPath);
+            _logger.Information("Syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,
+                Input.GitFolderPicker.TargetPath);
             var meta = MetaToUse;
             if (meta.Failed)
             {
@@ -137,7 +197,13 @@ public class LinkVm : ViewModel
             await _engine.Serialize(
                 bethesdaPluginPath: Input.ModPathPicker.TargetPath,
                 outputFolder: Input.GitFolderPicker.TargetPath,
-                meta: meta.Value);
+                meta: meta.Value,
+                cancel);
+            _logger.Information("Finished syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,
+                Input.GitFolderPicker.TargetPath);
+        }
+        catch (OperationCanceledException)
+        {
         }
         catch (Exception e)
         {
@@ -145,7 +211,7 @@ public class LinkVm : ViewModel
         }
     }
     
-    private async Task SyncToMod()
+    private async Task SyncToMod(CancellationToken cancel)
     {
         try
         {
@@ -153,7 +219,12 @@ public class LinkVm : ViewModel
             await _engine.Deserialize(
                 spriggitPluginPath: Input.GitFolderPicker.TargetPath,
                 outputFile: Input.ModPathPicker.TargetPath,
-                source: null);
+                source: null,
+                cancel: cancel);
+            _logger.Information("Finished syncing from Git to Mod. {GitPath} -> {ModPath}", Input.GitFolderPicker.TargetPath, Input.ModPathPicker.TargetPath);
+        }
+        catch (OperationCanceledException)
+        {
         }
         catch (Exception e)
         {

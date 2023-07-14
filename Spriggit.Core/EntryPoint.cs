@@ -19,13 +19,15 @@ public interface IEntryPoint<TMod, TModGetter> : IEntryPoint
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
-        SpriggitSource meta);
+        SpriggitSource meta,
+        CancellationToken cancel);
 
     public Task<TMod> Deserialize(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
-        ICreateStream? streamCreator);
+        ICreateStream? streamCreator,
+        CancellationToken cancel);
 }
 
 public interface IEntryPoint
@@ -34,5 +36,6 @@ public interface IEntryPoint
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
-        ICreateStream? streamCreator);
+        ICreateStream? streamCreator,
+        CancellationToken cancel);
 }

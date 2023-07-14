@@ -32,9 +32,10 @@ public class SpriggitEngine
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
-        SpriggitMeta meta)
+        SpriggitMeta meta,
+        CancellationToken cancel)
     {
-        var entryPt = await _entryPointCache.GetFor(meta);
+        var entryPt = await _entryPointCache.GetFor(meta, cancel);
         if (entryPt == null)
         {
             throw new NotSupportedException($"Could not locate entry point for: {meta}");
@@ -51,27 +52,34 @@ public class SpriggitEngine
             {
                 PackageName = entryPt.Package.Id,
                 Version = entryPt.Package.Version.ToString()
-            });
+            },
+            cancel: cancel);
     }
 
     public async Task Deserialize(
         string spriggitPluginPath, 
         FilePath outputFile,
-        SpriggitSource? source)
+        SpriggitSource? source,
+        CancellationToken cancel)
     {
-        var meta = await _getMetaToUse.Get(source, spriggitPluginPath);
+        var meta = await _getMetaToUse.Get(source, spriggitPluginPath, cancel);
         
-        var entryPt = await _entryPointCache.GetFor(meta);
+        var entryPt = await _entryPointCache.GetFor(meta, cancel);
         if (entryPt == null)
         {
             throw new NotSupportedException($"Could not locate entry point for: {meta}");
         }
         
+        cancel.ThrowIfCancellationRequested();
+        
         var mod = await entryPt.EntryPoint.Deserialize(
             spriggitPluginPath,
             workDropoff: _workDropoff,
             fileSystem: _fileSystem,
-            streamCreator: _createStream);
+            streamCreator: _createStream,
+            cancel: cancel);
+        
+        cancel.ThrowIfCancellationRequested();
         
         // ToDo
         // Pass in create stream?

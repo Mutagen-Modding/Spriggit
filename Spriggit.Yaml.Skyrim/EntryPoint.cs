@@ -19,7 +19,8 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
-        SpriggitSource meta)
+        SpriggitSource meta,
+        CancellationToken cancel)
     {
         using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, release.ToSkyrimRelease());
         await MutagenYamlConverter.Instance.Serialize(
@@ -28,23 +29,31 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: streamCreator,
-            extraMeta: meta);
+            extraMeta: meta,
+            cancel: cancel);
     }
  
     public async Task<ISkyrimMod> Deserialize(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
-        ICreateStream? streamCreator)
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
         return await MutagenYamlConverter.Instance.Deserialize(
             inputPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
-            streamCreator: streamCreator);
+            streamCreator: streamCreator,
+            cancel: cancel);
     }
 
-    public Task<SpriggitMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator)
+    public Task<SpriggitMeta?> TryGetMetaInfo(
+        string inputPath,
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
         throw new NotImplementedException();
     }

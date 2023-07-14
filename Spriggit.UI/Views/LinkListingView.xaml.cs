@@ -26,24 +26,45 @@ public partial class LinkListingView
                 .BindTo(this, x => x.LinkModNameBox.ToolTip)
                 .DisposeWith(disp);
 
-            this.OneWayBind(ViewModel, x => x.SyncToGitCommand, x => x.SyncToGitButton.Command)
-                .DisposeWith(disp);
-            this.OneWayBind(ViewModel, x => x.SyncToModCommand, x => x.SyncToModButton.Command)
-                .DisposeWith(disp);
             this.OneWayBind(ViewModel, x => x.EditSettingsCommand, x => x.SettingsButton.Command)
                 .DisposeWith(disp);
+            
+            this.OneWayBind(ViewModel, x => x.SyncToModCommand, x => x.SyncToModButton.Command)
+                .DisposeWith(disp);
+            this.WhenAnyValue(x => x.ViewModel!.SyncToModCommand.CanExecute)
+                .Switch()
+                .CombineLatest(this.WhenAnyValue(x => x.IsMouseOver),
+                    (canExecute, mouseOver) => canExecute && mouseOver)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
+                .BindTo(this, x => x.SyncToModButton.Visibility);
+            this.OneWayBind(ViewModel, x => x.SyncToGitCommand, x => x.SyncToGitButton.Command)
+                .DisposeWith(disp);
+            this.WhenAnyValue(x => x.ViewModel!.SyncToGitCommand.CanExecute)
+                .Switch()
+                .CombineLatest(this.WhenAnyValue(x => x.IsMouseOver),
+                    (canExecute, mouseOver) => canExecute && mouseOver)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
+                .BindTo(this, x => x.SyncToGitButton.Visibility);
+            this.OneWayBind(ViewModel, x => x.CancelSyncToGitCommand, x => x.CancelSyncToGitButton.Command)
+                .DisposeWith(disp);
+            this.WhenAnyValue(x => x.ViewModel!.CancelSyncToGitCommand.CanExecute)
+                .Switch()
+                .CombineLatest(this.WhenAnyValue(x => x.IsMouseOver),
+                    (canExecute, mouseOver) => canExecute && mouseOver)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
+                .BindTo(this, x => x.CancelSyncToGitButton.Visibility);
+            this.OneWayBind(ViewModel, x => x.CancelSyncToModCommand, x => x.CancelSyncToModButton.Command)
+                .DisposeWith(disp);
+            this.WhenAnyValue(x => x.ViewModel!.CancelSyncToModCommand.CanExecute)
+                .Switch()
+                .CombineLatest(this.WhenAnyValue(x => x.IsMouseOver),
+                    (canExecute, mouseOver) => canExecute && mouseOver)
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
+                .BindTo(this, x => x.CancelSyncToModButton.Visibility);
 
             this.WhenAnyValue(x => x.IsMouseOver)
                 .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .BindTo(this, x => x.SettingsButton.Visibility)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.IsMouseOver)
-                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
-                .BindTo(this, x => x.SyncToGitButton.Visibility)
-                .DisposeWith(disp);
-            this.WhenAnyValue(x => x.IsMouseOver)
-                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
-                .BindTo(this, x => x.SyncToModButton.Visibility)
                 .DisposeWith(disp);
         });
     }

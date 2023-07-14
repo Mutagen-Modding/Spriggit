@@ -33,7 +33,8 @@ public class Runner
             .Deserialize(
                 spriggitPluginPath: deserializeCommand.InputPath,
                 outputFile: deserializeCommand.OutputPath,
-                source: source);
+                source: source,
+                cancel: CancellationToken.None);
         return 0;
     }
 
@@ -53,7 +54,8 @@ public class Runner
                         PackageName = serializeCommand.PackageName,
                         Version = serializeCommand.PackageVersion,
                     },
-                    serializeCommand.GameRelease)); 
+                    serializeCommand.GameRelease),
+                cancel: CancellationToken.None); 
         return 0;
     }
 }

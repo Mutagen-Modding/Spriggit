@@ -22,17 +22,20 @@ public class EntryPointWrapper : IEntryPoint<IMod, IModGetter>
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
-        SpriggitSource meta);
+        SpriggitSource meta,
+        CancellationToken cancel);
     private delegate Task<IMod> DeserializeDelegate(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, 
-        ICreateStream? streamCreator);
+        ICreateStream? streamCreator,
+        CancellationToken cancel);
     private delegate Task<SpriggitMeta?> DeserializeSpriggitSourceDelegate(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, 
-        ICreateStream? streamCreator);
+        ICreateStream? streamCreator,
+        CancellationToken cancel);
     
     private EntryPointWrapper(
         SerializeDelegate serializeDelegate,
@@ -49,32 +52,41 @@ public class EntryPointWrapper : IEntryPoint<IMod, IModGetter>
         where TModGetter : class, IModGetter
     {
         return new EntryPointWrapper(
-            async (m, d, r, w, f, s, meta) => await entryPoint.Serialize(m, d, r, w, f, s, meta),
-            async (i, w, f, s) => await entryPoint.Deserialize(i, w, f, s),
-            async (i, w, f, s) => await entryPoint.TryGetMetaInfo(i, w, f, s));
+            async (m, d, r, w, f, s, meta, c) => await entryPoint.Serialize(m, d, r, w, f, s, meta, c),
+            async (i, w, f, s, c) => await entryPoint.Deserialize(i, w, f, s, c),
+            async (i, w, f, s, c) => await entryPoint.TryGetMetaInfo(i, w, f, s, c));
     }
 
     public async Task Serialize(
         ModPath modPath, 
         DirectoryPath dir,
         GameRelease release,
-        IWorkDropoff? workDropoff, IFileSystem? fileSystem,
-        ICreateStream? streamCreator, SpriggitSource meta)
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator,
+        SpriggitSource meta,
+        CancellationToken cancel)
     {
-        await _serializeDelegate(modPath, dir, release, workDropoff, fileSystem, streamCreator, meta);
+        await _serializeDelegate(modPath, dir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
     }
 
     public async Task<IMod> Deserialize(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
-        ICreateStream? streamCreator)
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
-        return await _deserializeDelegate(inputPath, workDropoff, fileSystem, streamCreator);
+        return await _deserializeDelegate(inputPath, workDropoff, fileSystem, streamCreator, cancel);
     }
 
-    public async Task<SpriggitMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator)
+    public async Task<SpriggitMeta?> TryGetMetaInfo(
+        string inputPath,
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
-        return await _spriggitSourceDelegate(inputPath, workDropoff, fileSystem, streamCreator);
+        return await _spriggitSourceDelegate(inputPath, workDropoff, fileSystem, streamCreator, cancel);
     }
 }

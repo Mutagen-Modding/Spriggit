@@ -38,14 +38,16 @@ public class GetMetaToUse
     
     public async Task<SpriggitMeta> Get(
         SpriggitSource? source,
-        string spriggitPluginPath)
+        string spriggitPluginPath,
+        CancellationToken cancel)
     {
-        var entryPt = await _getDefaultEntryPoint.Get(spriggitPluginPath);
+        var entryPt = await _getDefaultEntryPoint.Get(spriggitPluginPath, cancel);
         var sourceInfo = await entryPt.TryGetMetaInfo(
             spriggitPluginPath,
             _workDropoff, 
             _fileSystem, 
-            _createStream);
+            _createStream,
+            cancel);
         if (sourceInfo == null)
         {
             throw new DataException($"Could not locate source info from {spriggitPluginPath}");

@@ -42,8 +42,15 @@ public class ConstructEntryPoint
         {
             _fileSystem.Directory.DeleteEntireFolder(rootDir.Dir, deleteFolderItself: false);
         }
-        
-        await _nugetDownloader.RestoreFor(ident, rootDir.Dir, cancellationToken);
+
+        try
+        {
+            await _nugetDownloader.RestoreFor(ident, rootDir.Dir, cancellationToken);
+        }
+        catch (InvalidOperationException)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+        }
 
         var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir.Dir, $"{ident}"));
         if (frameworkDir == null) return null;
