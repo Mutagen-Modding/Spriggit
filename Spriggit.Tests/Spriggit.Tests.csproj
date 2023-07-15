@@ -2,6 +2,7 @@
     
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Mutagen.Bethesda.Testing" />
         <PackageReference Include="Noggog.Testing" />
         <PackageReference Include="xunit" />
     </ItemGroup>
