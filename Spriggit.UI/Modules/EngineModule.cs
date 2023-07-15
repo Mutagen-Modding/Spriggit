@@ -6,7 +6,7 @@ using Spriggit.Engine;
 
 namespace Spriggit.UI.Modules;
 
-public class EngineModule: Autofac.Module
+public class EngineModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
