@@ -1,7 +1,6 @@
 ﻿using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Windows.Input;
 using Noggog;
 using Noggog.WPF;
@@ -57,6 +56,7 @@ public class LinkVm : ViewModel
         EditLinkVm editLinkVm,
         LinkInputVm input,
         PackageInputQuery packageInputQuery,
+        EntryPointCache entryPointCache,
         LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {
         _logger = logger;
@@ -138,6 +138,17 @@ public class LinkVm : ViewModel
             SyncToGit);
 
         EditSettingsCommand = ReactiveCommand.Create(OpenSettings);
+        
+        // Pre-cache entry points
+        this.WhenAnyValue(x => x.MetaToUse)
+            .Subscribe(async m =>
+            {
+                if (m.Succeeded)
+                {
+                    await entryPointCache.GetFor(m.Value, CancellationToken.None);
+                }
+            })
+            .DisposeWith(this);
     }
 
     private void WrapTranslation(
