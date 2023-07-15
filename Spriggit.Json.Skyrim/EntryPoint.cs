@@ -23,7 +23,8 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
         SpriggitSource meta,
         CancellationToken cancel)
     {
-        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, SkyrimRelease.SkyrimSE);
+        fileSystem = fileSystem.GetOrDefault();
+        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, SkyrimRelease.SkyrimSE, fileSystem: fileSystem);
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,
             dir,
