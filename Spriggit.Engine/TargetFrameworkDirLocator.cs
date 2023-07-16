@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using Mutagen.Bethesda.Plugins.Exceptions;
 using Noggog;
 
 namespace Spriggit.Engine;
@@ -42,6 +41,7 @@ public class TargetFrameworkDirLocator : IComparer<DirectoryPath>
         out int number,
         out bool windows)
     {
+        var orig = span;
         if (span.StartsWith("standard"))
         {
             number = default;
@@ -74,7 +74,7 @@ public class TargetFrameworkDirLocator : IComparer<DirectoryPath>
         if (!char.IsNumber(span[0])
             || !double.TryParse(span, out var d))
         {
-            throw new MalformedDataException();
+            throw new ArgumentException(nameof(span), $"Could not parse framework type for {orig.ToString()}");
         }
 
         number = (int)d;

@@ -1,7 +1,5 @@
 using System.IO.Abstractions;
 using McMaster.NETCore.Plugins;
-using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
 using NuGet.Packaging.Core;

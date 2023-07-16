@@ -8,7 +8,6 @@
     <PackageReference Include="NuGet.Build.Tasks" />
     <PackageReference Include="NuGet.PackageManagement" />
     <PackageReference Include="NuGet.Protocol" />
-    <PackageReference Include="Mutagen.Bethesda.Serialization" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
 </Project>
