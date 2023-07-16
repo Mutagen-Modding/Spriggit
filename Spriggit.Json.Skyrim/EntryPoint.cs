@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Serialization.Newtonsoft;
 using Mutagen.Bethesda.Serialization.Utility;
 using Mutagen.Bethesda.Skyrim;
@@ -11,7 +12,7 @@ using Spriggit.Core;
 
 namespace Spriggit.Serialization.Skyrim.Json;
 
-public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
+public class EntryPoint : IEntryPoint
 {
     public async Task Serialize(
         ModPath modPath, 
@@ -35,19 +36,24 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
             cancel: cancel);
     }
 
-    public async Task<ISkyrimMod> Deserialize(
+    public async Task Deserialize(
         string inputPath,
+        string outputPath,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        return await MutagenJsonConverter.Instance.Deserialize(
+        var mod = await MutagenJsonConverter.Instance.Deserialize(
             inputPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
+        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: new BinaryWriteParameters()
+        {
+            ModKey = ModKeyOption.CorrectToPath
+        });
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();

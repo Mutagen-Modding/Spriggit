@@ -7,7 +7,7 @@ using Noggog.WorkEngine;
 
 namespace Spriggit.Core;
 
-public interface IEntryPoint<TMod, TModGetter> : IEntryPoint
+public interface IEntryPoint
 {
     public Task Serialize(
         ModPath modPath,
@@ -19,16 +19,14 @@ public interface IEntryPoint<TMod, TModGetter> : IEntryPoint
         SpriggitSource meta,
         CancellationToken cancel);
 
-    public Task<TMod> Deserialize(
+    public Task Deserialize(
         string inputPath,
+        string outputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         CancellationToken cancel);
-}
-
-public interface IEntryPoint
-{
+    
     public Task<SpriggitMeta?> TryGetMetaInfo(
         string inputPath,
         IWorkDropoff? workDropoff,

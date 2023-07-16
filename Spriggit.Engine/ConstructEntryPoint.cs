@@ -59,7 +59,7 @@ public class ConstructEntryPoint
 
         var loader = PluginLoader.CreateFromAssemblyFile(
             assemblyFile: Path.Combine(frameworkDir, $"{ident.Id}.dll"),
-            sharedTypes: new [] { typeof(IEntryPoint<,>), typeof(IEntryPoint) });
+            sharedTypes: new [] { typeof(IEntryPoint) });
 
         var entryPt = loader.LoadDefaultAssembly().GetTypes()
             .FirstOrDefault(t => typeof(IEntryPoint).IsAssignableFrom(t) && !t.IsAbstract);
@@ -68,8 +68,6 @@ public class ConstructEntryPoint
         var ret = Activator.CreateInstance(entryPt) as IEntryPoint;
         if (ret == null) return null;
         
-        return new EngineEntryPoint(
-            EntryPointWrapper.Wrap((dynamic)ret),
-            ident);
+        return new EngineEntryPoint(ret, ident);
     }
 }

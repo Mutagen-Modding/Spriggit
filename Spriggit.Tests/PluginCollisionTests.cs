@@ -57,6 +57,7 @@ GameRelease: SkyrimSE";
 
         await yamlEntry!.EntryPoint.Deserialize(
             modFolder,
+            Path.Combine(existingOutputDir, "ModKey.esp"),
             workDropoff: null,
             fileSystem: fileSystem,
             streamCreator: null,

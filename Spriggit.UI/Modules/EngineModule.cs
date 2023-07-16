@@ -13,7 +13,6 @@ public class EngineModule : Autofac.Module
         builder.RegisterAssemblyTypes(typeof(SpriggitEngine).Assembly)
             .InNamespacesOf(
                 typeof(SpriggitEngine))
-            .Except<EntryPointWrapper>()
             .AsImplementedInterfaces()
             .AsSelf()
             .SingleInstance();

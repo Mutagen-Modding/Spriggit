@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Serialization.Yaml;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
@@ -10,7 +11,7 @@ using Spriggit.Core;
 
 namespace Spriggit.Serialization.Skyrim.Yaml;
 
-public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
+public class EntryPoint : IEntryPoint
 {
     public async Task Serialize(
         ModPath modPath, 
@@ -34,19 +35,24 @@ public class EntryPoint : IEntryPoint<ISkyrimMod, ISkyrimModGetter>
             cancel: cancel);
     }
  
-    public async Task<ISkyrimMod> Deserialize(
+    public async Task Deserialize(
         string inputPath,
+        string outputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        return await MutagenYamlConverter.Instance.Deserialize(
+        var mod = await MutagenYamlConverter.Instance.Deserialize(
             inputPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
+        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: new BinaryWriteParameters()
+        {
+            ModKey = ModKeyOption.CorrectToPath
+        });
     }
 
     public Task<SpriggitMeta?> TryGetMetaInfo(

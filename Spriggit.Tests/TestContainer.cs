@@ -23,7 +23,6 @@ public class TestModule : Autofac.Module
         builder.RegisterAssemblyTypes(typeof(SpriggitEngine).Assembly)
             .InNamespacesOf(
                 typeof(SpriggitEngine))
-            .Except<EntryPointWrapper>()
             .AsImplementedInterfaces()
             .AsSelf()
             .SingleInstance();
@@ -31,14 +30,9 @@ public class TestModule : Autofac.Module
         builder.RegisterType<NoPreferenceStreamCreator>().AsImplementedInterfaces();
         builder.RegisterType<NoPreferenceWorkDropoff>().AsImplementedInterfaces();
         
-        builder.RegisterType<FileSystem>().As<IFileSystem>()
+        builder.RegisterInstance(_fileSystem).As<IFileSystem>()
             .SingleInstance();
 
         builder.RegisterInstance(Logger.None).As<ILogger>();
     }
-}
-
-public class TestContainer
-{
-    
 }

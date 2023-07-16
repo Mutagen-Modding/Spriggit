@@ -72,20 +72,12 @@ public class SpriggitEngine
         
         cancel.ThrowIfCancellationRequested();
         
-        var mod = await entryPt.EntryPoint.Deserialize(
+        await entryPt.EntryPoint.Deserialize(
             spriggitPluginPath,
+            outputFile,
             workDropoff: _workDropoff,
             fileSystem: _fileSystem,
             streamCreator: _createStream,
             cancel: cancel);
-        
-        cancel.ThrowIfCancellationRequested();
-        
-        // ToDo
-        // Pass in create stream?
-        mod.WriteToBinaryParallel(outputFile, fileSystem: _fileSystem, param: new BinaryWriteParameters()
-        {
-            ModKey = ModKeyOption.CorrectToPath
-        });
     }
 }
