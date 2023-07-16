@@ -1,7 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
@@ -9,8 +8,6 @@ using Noggog.WorkEngine;
 namespace Spriggit.Core;
 
 public interface IEntryPoint<TMod, TModGetter> : IEntryPoint
-    where TMod : class, TModGetter, IMod
-    where TModGetter : class, IModGetter
 {
     public Task Serialize(
         ModPath modPath,

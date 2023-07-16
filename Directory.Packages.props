@@ -16,6 +16,9 @@
     <PackageVersion Include="Mutagen.Bethesda.Core">
       <Version>[0.41.1.1-nightly-20230712-102825]</Version>
     </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Kernel">
+      <Version>[0.41.1.1-nightly-20230712-102825]</Version>
+    </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization" Version="0.0.0.1-zdev" />
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft" Version="0.0.0.1-zdev" />
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator" Version="0.0.0.1-zdev" />
