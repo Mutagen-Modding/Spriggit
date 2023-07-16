@@ -2,8 +2,8 @@
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
-using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
+using Noggog.IO;
 using Noggog.WorkEngine;
 
 namespace Spriggit.Core;

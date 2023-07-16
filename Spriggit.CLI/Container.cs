@@ -1,5 +1,5 @@
 ﻿using System.IO.Abstractions;
-using Mutagen.Bethesda.Serialization.Streams;
+using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine;

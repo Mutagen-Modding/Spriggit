@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.IO.Abstractions;
-using Mutagen.Bethesda.Serialization.Streams;
+using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 

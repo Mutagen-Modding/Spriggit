@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Mutagen.Bethesda.Serialization" />
         <PackageReference Include="Noggog.CSharpExt" />
         <PackageReference Include="Mutagen.Bethesda.Core" />
         <PackageReference Include="NuGet.Versioning" />

@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using Mutagen.Bethesda.Serialization.Streams;
 using Noggog.Autofac;
+using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Engine;
 

@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Autofac;
-using Mutagen.Bethesda.Serialization.Streams;
 using Noggog.Autofac;
+using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Serilog.Core;

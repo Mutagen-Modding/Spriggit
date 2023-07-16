@@ -1,7 +1,7 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
-using Mutagen.Bethesda.Serialization.Streams;
 using Noggog;
+using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 
