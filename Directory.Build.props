@@ -25,7 +25,7 @@
 		  DependsOnTargets="GitVersion"
 		  Returns="$(PackageVersion)">
     <PropertyGroup>
-      <DevLabel Condition="$(GitCommits) != '0'">.1-dev</DevLabel>
+      <DevLabel Condition="$(GitCommits) != '0'">.1-zdev</DevLabel>
       <AssemblyDevLabel Condition="$(GitCommits) != '0'">.1</AssemblyDevLabel>
       <AssemblyVersion>$(GitBaseVersionMajor).$(GitBaseVersionMinor).$(GitBaseVersionPatch)$(AssemblyDevLabel)</AssemblyVersion>
       <FileVersion>$(GitBaseVersionMajor).$(GitBaseVersionMinor).$(GitBaseVersionPatch)$(AssemblyDevLabel)</FileVersion>

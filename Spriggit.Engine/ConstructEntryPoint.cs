@@ -36,7 +36,7 @@ public class ConstructEntryPoint
             deleteAfter: false, 
             fileSystem: _fileSystem);
         
-        if (_debugState.ClearNugetSources || ident.Version.OriginalVersion.EndsWith("-dev"))
+        if (_debugState.ClearNugetSources || ident.Version.OriginalVersion.EndsWith("-zdev"))
         {
             _fileSystem.Directory.DeleteEntireFolder(rootDir.Dir, deleteFolderItself: false);
         }

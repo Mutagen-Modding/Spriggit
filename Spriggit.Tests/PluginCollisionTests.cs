@@ -25,12 +25,12 @@ public class PluginCollisionTests
         var c = cont.Resolve<EntryPointCache>();
         var jsonSrc = new SpriggitSource()
         {
-            Version = "0.0.0.1-dev",
+            Version = "0.0.0.1-zdev",
             PackageName = "Spriggit.Json.Skyrim"
         };
         var yamlSrc = new SpriggitSource()
         {
-            Version = "0.0.0.1-dev",
+            Version = "0.0.0.1-zdev",
             PackageName = "Spriggit.Yaml.Skyrim"
         };
         var jsonEntry = await c.GetFor(new SpriggitMeta(
@@ -46,7 +46,7 @@ public class PluginCollisionTests
 
         var metaContent = @"SpriggitSource:
   PackageName: Spriggit.Yaml.Skyrim
-  Version: 0.0.0.1-dev
+  Version: 0.0.0.1-zdev
 ModKey: ModKey.esp
 GameRelease: SkyrimSE";
 
