@@ -43,7 +43,7 @@ Other modders, whether on your team or just helpful people out in the world can 
 Json or Yaml formatting is currently supported.
 
 Here is a snippet of what a record file might look like if Yaml output is used:
-```
+```yaml
 FormKey: 087835:Skyrim.esm
 EditorID: JewelryNecklaceGoldGems
 ObjectBounds:
