@@ -49,9 +49,7 @@ EditorID: JewelryNecklaceGoldGems
 ObjectBounds:
   First: -3, -9, 0
   Second: 3, 9, 1
-Name:
-  TargetLanguage: English
-  Value: Gold Jeweled Necklace
+Name: Gold Jeweled Necklace
 WorldModel:
   Male:
     Model:
@@ -65,9 +63,7 @@ Keywords:
 - 08F95A:Skyrim.esm
 - 0A8664:Skyrim.esm
 - 10CD0A:Skyrim.esm
-Description:
-  TargetLanguage: English
-  Value: ''
+Description: n''
 Armature:
 - 09171F:Skyrim.esm
 Value: 485
