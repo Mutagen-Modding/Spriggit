@@ -63,7 +63,6 @@ Keywords:
 - 08F95A:Skyrim.esm
 - 0A8664:Skyrim.esm
 - 10CD0A:Skyrim.esm
-Description: ''
 Armature:
 - 09171F:Skyrim.esm
 Value: 485
