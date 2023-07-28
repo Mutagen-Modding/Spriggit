@@ -5,6 +5,8 @@
         <PackageReference Include="Mutagen.Bethesda.Testing" />
         <PackageReference Include="Noggog.Testing" />
         <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.console" />
+        <PackageReference Include="xunit.runner.visualstudio" />
     </ItemGroup>
     
     <ItemGroup>
