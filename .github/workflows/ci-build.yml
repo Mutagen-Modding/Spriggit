@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - dev
+      - release
+      - prerelease
+    paths-ignore:
+      - 'docs/**'
+      - 'mkdocs.yml'
+  pull_request:
+    branches:
+      - dev
+      - release
+      - prerelease
+    paths-ignore:
+      - 'docs/**'
+      - 'mkdocs.yml'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+          
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        dotnet clean Spriggit.sln -c Release && dotnet nuget locals all --clear
+        dotnet restore Spriggit.sln
+    - name: Build
+      run: dotnet build Spriggit.sln -c Release --no-restore /p:GeneratePackageOnBuild=false
+    - name: Test
+      run: dotnet test Spriggit.sln -c Release --no-build
