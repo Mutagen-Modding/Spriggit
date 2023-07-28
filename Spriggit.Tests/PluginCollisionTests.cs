@@ -2,8 +2,7 @@
 using Autofac;
 using FluentAssertions;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Testing.AutoData;
-using Noggog;
+using Noggog.IO;
 using Spriggit.Core;
 using Spriggit.Engine;
 using Xunit;
@@ -12,13 +11,11 @@ namespace Spriggit.Tests;
 
 public class PluginCollisionTests
 {
-    [Theory, MutagenAutoData]
-    public async Task LoquiCollision(
-        IFileSystem fileSystem,
-        DirectoryPath existingFolder,
-        DirectoryPath existingOutputDir,
-        TestModule testModule)
+    [Fact]
+    public async Task LoquiCollision()
     {
+        var fileSystem = new FileSystem();
+        var testModule = new TestModule(fileSystem);
         var builder = new ContainerBuilder();
         builder.RegisterModule(testModule);
         var cont = builder.Build();
@@ -49,6 +46,12 @@ public class PluginCollisionTests
   Version: 0.0.0.1-zdev
 ModKey: ModKey.esp
 GameRelease: SkyrimSE";
+
+        using var tempDir = TempFolder.Factory();
+        var existingFolder = Path.Combine(tempDir.Dir, "SomeFolder");
+        fileSystem.Directory.CreateDirectory(existingFolder);
+        var existingOutputDir = Path.Combine(tempDir.Dir, "OutputFolder");
+        fileSystem.Directory.CreateDirectory(existingOutputDir);
 
         var modFolder = Path.Combine(existingFolder, "ModKey.esp");
         fileSystem.Directory.CreateDirectory(modFolder);
