@@ -35,10 +35,7 @@ public class SpriggitEngine
         CancellationToken cancel)
     {
         var entryPt = await _entryPointCache.GetFor(meta, cancel);
-        if (entryPt == null)
-        {
-            throw new NotSupportedException($"Could not locate entry point for: {meta}");
-        }
+        if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         await entryPt.EntryPoint.Serialize(
             bethesdaPluginPath,
@@ -64,11 +61,8 @@ public class SpriggitEngine
         var meta = await _getMetaToUse.Get(source, spriggitPluginPath, cancel);
         
         var entryPt = await _entryPointCache.GetFor(meta, cancel);
-        if (entryPt == null)
-        {
-            throw new NotSupportedException($"Could not locate entry point for: {meta}");
-        }
-        
+        if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
+
         cancel.ThrowIfCancellationRequested();
         
         await entryPt.EntryPoint.Deserialize(

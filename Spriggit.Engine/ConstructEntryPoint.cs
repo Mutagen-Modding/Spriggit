@@ -63,9 +63,7 @@ public class ConstructEntryPoint
             .FirstOrDefault(t => typeof(IEntryPoint).IsAssignableFrom(t) && !t.IsAbstract);
         if (entryPt == null) return null;
 
-        var ret = Activator.CreateInstance(entryPt) as IEntryPoint;
-        if (ret == null) return null;
-        
-        return new EngineEntryPoint(ret, ident);
+        var instance = Activator.CreateInstance(entryPt);
+        return instance is IEntryPoint ret ? new EngineEntryPoint(ret, ident) : null;
     }
 }

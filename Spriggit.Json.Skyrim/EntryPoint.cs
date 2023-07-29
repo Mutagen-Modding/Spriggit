@@ -56,21 +56,21 @@ public class EntryPoint : IEntryPoint
         });
     }
 
-    private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
+    private static readonly NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
     
     public async Task<SpriggitMeta?> TryGetMetaInfo(
-        string inputPath, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator,
+        string inputPath, 
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem, 
+        ICreateStream? streamCreator,
         CancellationToken cancel)
     {
         // ToDo
         // Serialization should generate this
         
         fileSystem = fileSystem.GetOrDefault();
-        if (streamCreator == null || streamCreator is NoPreferenceStreamCreator)
-        {
-            streamCreator = NormalFileStreamCreator.Instance;
-        }
+        if (streamCreator is null or NoPreferenceStreamCreator) streamCreator = NormalFileStreamCreator.Instance;
+        
         SpriggitSource src = new();
         SerializationHelper.ExtractMeta(
             fileSystem: fileSystem,
@@ -79,7 +79,7 @@ public class EntryPoint : IEntryPoint
             streamCreator: streamCreator,
             kernel: ReaderKernel,
             extraMeta: src,
-            metaReader: static (r, m, k, s) => Spriggit.Core.SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
+            metaReader: static (r, m, k, s) => SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
             modKey: out var modKey,
             release: out var release,
             cancel: cancel);

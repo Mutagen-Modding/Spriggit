@@ -29,11 +29,7 @@ public class GetMetaToUse
         string packageName,
         string packageVersion)
     {
-        return new SpriggitSource()
-        {
-            Version = packageVersion,
-            PackageName = packageName
-        };
+        return new SpriggitSource() { Version = packageVersion, PackageName = packageName };
     }
     
     public async Task<SpriggitMeta> Get(
@@ -48,19 +44,11 @@ public class GetMetaToUse
             _fileSystem, 
             _createStream,
             cancel);
-        if (sourceInfo == null)
-        {
-            throw new DataException($"Could not locate source info from {spriggitPluginPath}");
-        }
+        
+        if (sourceInfo == null) throw new DataException($"Could not locate source info from {spriggitPluginPath}");
 
-        if (source != null)
-        {
-            return sourceInfo with
-            {
-                Source = source
-            };
-        }
-
+        if (source != null) return sourceInfo with { Source = source };
+        
         return sourceInfo;
     }
 }

@@ -20,7 +20,7 @@ public class GetDefaultEntryPoint
         _nugetDownloader = nugetDownloader;
     }
     
-    private string PackageSuffix(FileName fileName)
+    private static string PackageSuffix(FileName fileName)
     {
         if (fileName.Extension.Equals(".yaml", StringComparison.OrdinalIgnoreCase))
         {
@@ -59,14 +59,11 @@ public class GetDefaultEntryPoint
     {
         var suffix = GetPackageStyleSuffix(spriggitPluginPath);
         var packageName = $"Spriggit.{suffix}.Skyrim";
-        var ident = await _nugetDownloader.GetFirstIdentityFor(packageName, string.Empty, cancel);
+        var ident = await _nugetDownloader.GetFirstIdentityFor(
+            packageName: packageName, packageVersion: string.Empty, cancellationToken: cancel);
         
-        var ret = await _entryPointCache.GetFor(ident, cancel);
-        if (ret == null)
-        {
-            throw new NotSupportedException($"Could not get default entry point for {spriggitPluginPath}");
-        }
-
-        return ret.EntryPoint;
+        var entryPoint = await _entryPointCache.GetFor(ident, cancel);
+        return entryPoint != null ? entryPoint.EntryPoint 
+            : throw new NotSupportedException($"Could not get default entry point for {spriggitPluginPath}");
     }
 }

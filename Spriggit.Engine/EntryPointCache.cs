@@ -43,8 +43,7 @@ public class EntryPointCache
         }
 
         var ident = await identTask.WithCancellation(cancel);
-        if (ident == null) return null;
-        return await GetFor(ident, cancel);
+        return ident != null ? await GetFor(ident, cancel) : null;
     }
 
     public async Task<EngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)
