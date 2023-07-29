@@ -11,7 +11,7 @@ namespace Spriggit.Tests;
 
 public class PluginCollisionTests
 {
-    [Fact(Skip = true)]
+    [Fact(Skip = "Used to reproduce a bug")]
     public async Task LoquiCollision()
     {
         var fileSystem = new FileSystem();
