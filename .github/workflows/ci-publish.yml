@@ -14,7 +14,7 @@ on:
 
 jobs:
   activity-short-circuit:
-    runs-on: window-latest
+    runs-on: windows-latest
     outputs:
       same_sha: ${{ steps.check.outputs.same_sha }}
     steps:
@@ -42,7 +42,7 @@ jobs:
   build-test:
     needs: activity-short-circuit
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: window-latest
+    runs-on: windows-latest
           
     steps:
     - uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
   build-test-push:
     needs: [build-test, activity-short-circuit]
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: window-latest
+    runs-on: windows-latest
     steps:
     - name: Get timestamp
       uses: 1466587594/get-current-time@v1
@@ -87,7 +87,7 @@ jobs:
   update-nightly:
     needs: [build-test-push, activity-short-circuit]
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: window-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
       with:
