@@ -6,14 +6,14 @@ using Spriggit.Engine;
 
 namespace Spriggit.CLI;
 
-public class Runner
+public static class Runner
 {
-    private Container GetContainer(DebugState debugState)
+    private static Container GetContainer(DebugState debugState)
     {
         return new Container(new FileSystem(), null, null, debugState, LoggerSetup.Logger);
     }
     
-    public async Task<int> Run(DeserializeCommand deserializeCommand)
+    public static async Task<int> Run(DeserializeCommand deserializeCommand)
     {
         SpriggitSource? source = null;
         if (!deserializeCommand.PackageName.IsNullOrWhitespace() ||
@@ -25,10 +25,7 @@ public class Runner
                 Version = deserializeCommand.PackageVersion,
             };
         }
-        await GetContainer(new()
-            {
-                ClearNugetSources = deserializeCommand.Debug
-            })
+        await GetContainer(new DebugState { ClearNugetSources = deserializeCommand.Debug })
             .Resolve().Value
             .Deserialize(
                 spriggitPluginPath: deserializeCommand.InputPath,
@@ -38,12 +35,9 @@ public class Runner
         return 0;
     }
 
-    public async Task<int> Run(SerializeCommand serializeCommand)
+    public static async Task<int> Run(SerializeCommand serializeCommand)
     {
-        await GetContainer(new()
-            {
-                ClearNugetSources = serializeCommand.Debug
-            })
+        await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug })
             .Resolve().Value
             .Serialize(
                 bethesdaPluginPath: serializeCommand.InputPath,

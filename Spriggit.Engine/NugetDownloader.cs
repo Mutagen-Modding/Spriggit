@@ -27,7 +27,7 @@ public class NugetDownloader
         _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
 
-    private NuGetVersion? GetFirstStableVersion(IEnumerable<NuGetVersion> versions)
+    private static NuGetVersion? GetFirstStableVersion(IEnumerable<NuGetVersion> versions)
     {
         var ret = versions.FirstOrDefault(x => !x.IsPrerelease);
         if (ret != null) return ret;
@@ -35,7 +35,7 @@ public class NugetDownloader
         return versions.FirstOrDefault();
     }
 
-    private NuGetVersion? GetLatestVersion(IEnumerable<NuGetVersion> versions)
+    private static NuGetVersion? GetLatestVersion(IEnumerable<NuGetVersion> versions)
     {
         var ret = versions
             .Where(x => !x.IsPrerelease)
@@ -113,7 +113,7 @@ public class NugetDownloader
         var repos = _provider.GetRepositories().ToArray();
         await packageManager.InstallPackageAsync(packageManager.PackagesFolderNuGetProject,
             identity, resolutionContext, projectContext, repos,
-            Array.Empty<SourceRepository>(),  // This is a list of secondary source respositories, probably empty
+            Array.Empty<SourceRepository>(),  // This is a list of secondary source repositories, probably empty
             cancel);
     }
     
