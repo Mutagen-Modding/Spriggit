@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>Spriggit.Serialization.Oblivion.Yaml</RootNamespace>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mutagen.Bethesda.Serialization" />
+		<PackageReference Include="Mutagen.Bethesda.Serialization.Yaml" />
+		<PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />
+		<PackageReference Include="Mutagen.Bethesda.Oblivion" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
+	</ItemGroup>
+
+</Project>

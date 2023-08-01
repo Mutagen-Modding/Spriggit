@@ -18,13 +18,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.CLI", "Spriggit.CL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Tests", "Spriggit.Tests\Spriggit.Tests.csproj", "{B9FDF9CB-EC20-43BC-BC69-9A04B07D9DD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Json.Skyrim", "Spriggit.Json.Skyrim\Spriggit.Json.Skyrim.csproj", "{9A0F5227-2D90-45A3-B2E5-018096A04EF6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Skyrim", "Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj", "{8F9DD66D-F191-4221-98D0-0659293A442D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Engine", "Spriggit.Engine\Spriggit.Engine.csproj", "{D1FE94AE-ED7F-4CD8-920B-791CAC9DEC1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.UI", "Spriggit.UI\Spriggit.UI.csproj", "{3D0F2999-8E79-4CAC-9804-971EFC6EDA21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Translation Packages", "Translation Packages", "{DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Json.Oblivion", "Translation Packages\Spriggit.Json.Oblivion\Spriggit.Json.Oblivion.csproj", "{F3F72F7B-1857-431C-979F-EBC337C27795}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Json.Skyrim", "Translation Packages\Spriggit.Json.Skyrim\Spriggit.Json.Skyrim.csproj", "{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Oblivion", "Translation Packages\Spriggit.Yaml.Oblivion\Spriggit.Yaml.Oblivion.csproj", "{C387347A-133F-42F7-960E-17C7A17245F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Skyrim", "Translation Packages\Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj", "{A429D3A9-3455-486E-ABD6-95F552203D39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,14 +54,6 @@ Global
 		{B9FDF9CB-EC20-43BC-BC69-9A04B07D9DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FDF9CB-EC20-43BC-BC69-9A04B07D9DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9FDF9CB-EC20-43BC-BC69-9A04B07D9DD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A0F5227-2D90-45A3-B2E5-018096A04EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A0F5227-2D90-45A3-B2E5-018096A04EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A0F5227-2D90-45A3-B2E5-018096A04EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A0F5227-2D90-45A3-B2E5-018096A04EF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F9DD66D-F191-4221-98D0-0659293A442D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F9DD66D-F191-4221-98D0-0659293A442D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F9DD66D-F191-4221-98D0-0659293A442D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F9DD66D-F191-4221-98D0-0659293A442D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1FE94AE-ED7F-4CD8-920B-791CAC9DEC1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1FE94AE-ED7F-4CD8-920B-791CAC9DEC1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1FE94AE-ED7F-4CD8-920B-791CAC9DEC1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,5 +62,27 @@ Global
 		{3D0F2999-8E79-4CAC-9804-971EFC6EDA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D0F2999-8E79-4CAC-9804-971EFC6EDA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D0F2999-8E79-4CAC-9804-971EFC6EDA21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3F72F7B-1857-431C-979F-EBC337C27795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3F72F7B-1857-431C-979F-EBC337C27795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3F72F7B-1857-431C-979F-EBC337C27795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3F72F7B-1857-431C-979F-EBC337C27795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C387347A-133F-42F7-960E-17C7A17245F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C387347A-133F-42F7-960E-17C7A17245F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C387347A-133F-42F7-960E-17C7A17245F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C387347A-133F-42F7-960E-17C7A17245F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A429D3A9-3455-486E-ABD6-95F552203D39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A429D3A9-3455-486E-ABD6-95F552203D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A429D3A9-3455-486E-ABD6-95F552203D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A429D3A9-3455-486E-ABD6-95F552203D39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F3F72F7B-1857-431C-979F-EBC337C27795} = {DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}
+		{45CDEB94-26BC-4B22-B9E3-EB94D59A5E06} = {DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}
+		{C387347A-133F-42F7-960E-17C7A17245F7} = {DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}
+		{A429D3A9-3455-486E-ABD6-95F552203D39} = {DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}
 	EndGlobalSection
 EndGlobal

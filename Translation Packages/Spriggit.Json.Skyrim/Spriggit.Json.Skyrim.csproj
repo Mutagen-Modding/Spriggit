@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj" />
+      <ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
     </ItemGroup>
 
 </Project>
