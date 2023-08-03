@@ -2,6 +2,7 @@ using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Serialization.Utility;
 using Mutagen.Bethesda.Serialization.Yaml;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
@@ -51,17 +52,40 @@ public class EntryPoint : IEntryPoint
             cancel: cancel);
         mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: new BinaryWriteParameters()
         {
-            ModKey = ModKeyOption.CorrectToPath
+            ModKey = ModKeyOption.NoCheck
         });
     }
 
-    public Task<SpriggitMeta?> TryGetMetaInfo(
+    private static readonly Mutagen.Bethesda.Serialization.Yaml.YamlSerializationReaderKernel ReaderKernel = new();
+
+    public async Task<SpriggitMeta?> TryGetMetaInfo(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        throw new NotImplementedException();
+        // ToDo
+        // Serialization should generate this
+        
+        fileSystem = fileSystem.GetOrDefault();
+        if (streamCreator == null || streamCreator is NoPreferenceStreamCreator)
+        {
+            streamCreator = NormalFileStreamCreator.Instance;
+        }
+        SpriggitSource src = new();
+        SerializationHelper.ExtractMeta(
+            fileSystem: fileSystem,
+            modKeyPath: inputPath,
+            path: Path.Combine(inputPath, SerializationHelper.RecordDataFileName(ReaderKernel.ExpectedExtension)),
+            streamCreator: streamCreator,
+            kernel: ReaderKernel,
+            extraMeta: src,
+            metaReader: static (r, m, k, s) => Spriggit.Core.SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
+            modKey: out var modKey,
+            release: out var release,
+            cancel: cancel);
+
+        return new SpriggitMeta(src, release);
     }
 }

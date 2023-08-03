@@ -52,7 +52,7 @@ public class EntryPoint : IEntryPoint
             cancel: cancel);
         mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: new BinaryWriteParameters()
         {
-            ModKey = ModKeyOption.CorrectToPath
+            ModKey = ModKeyOption.NoCheck
         });
     }
 
