@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+Spriggit.CLI/Properties/launchSettings.json
