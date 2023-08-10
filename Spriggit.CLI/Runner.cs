@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Noggog;
+using Noggog.WorkEngine;
 using Spriggit.CLI.Commands;
 using Spriggit.Core;
 using Spriggit.Engine;
@@ -8,9 +9,29 @@ namespace Spriggit.CLI;
 
 public static class Runner
 {
-    private static Container GetContainer(DebugState debugState)
+    private static IWorkDropoff GetWorkDropoff(int? threads)
     {
-        return new Container(new FileSystem(), null, null, debugState, LoggerSetup.Logger);
+        if (threads == null || threads >= byte.MaxValue)
+        {
+            return new ParallelWorkDropoff();
+        }
+        
+        if (threads <= 1)
+        {
+            return new InlineWorkDropoff();
+        }
+
+        throw new NotImplementedException("Specific desired threads not yet implemented.");
+        // This setup throws a stackoverflow.  Need to research/improve
+        var workDropoff = new WorkDropoff();
+        var worker = new WorkConsumer(new NumWorkThreadsConstant(threads), workDropoff);
+        worker.Start();
+        return workDropoff;
+    }
+    
+    private static Container GetContainer(DebugState debugState, byte? numThreads)
+    {
+        return new Container(new FileSystem(), GetWorkDropoff(numThreads), null, debugState, LoggerSetup.Logger);
     }
     
     public static async Task<int> Run(DeserializeCommand deserializeCommand)
@@ -25,7 +46,7 @@ public static class Runner
                 Version = deserializeCommand.PackageVersion,
             };
         }
-        await GetContainer(new DebugState { ClearNugetSources = deserializeCommand.Debug })
+        await GetContainer(new DebugState { ClearNugetSources = deserializeCommand.Debug }, deserializeCommand.Threads)
             .Resolve().Value
             .Deserialize(
                 spriggitPluginPath: deserializeCommand.InputPath,
@@ -37,7 +58,7 @@ public static class Runner
 
     public static async Task<int> Run(SerializeCommand serializeCommand)
     {
-        await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug })
+        await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug }, serializeCommand.Threads)
             .Resolve().Value
             .Serialize(
                 bethesdaPluginPath: serializeCommand.InputPath,

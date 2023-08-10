@@ -32,6 +32,11 @@ public class SerializeCommand
         Required = false)]
     public string PackageVersion { get; set; } = string.Empty;
 
+    [Option('t', "Threads",
+        HelpText = "Maximum number of threads to use",
+        Required = false)]
+    public byte? Threads { get; set; }
+
     [Option('d', "Debug",
         HelpText = "Set up for debug mode, including resetting nuget caches",
         Required = false)]
