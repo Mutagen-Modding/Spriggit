@@ -4,6 +4,7 @@
 		<RootNamespace>Spriggit.Serialization.Oblivion.Yaml</RootNamespace>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IsPackable>true</IsPackable>
+        <RootNamespace>Spriggit.Yaml.Oblivion</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

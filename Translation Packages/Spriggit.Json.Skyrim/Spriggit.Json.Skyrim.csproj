@@ -4,6 +4,7 @@
       <RootNamespace>Spriggit.Serialization.Skyrim.Json</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
+        <RootNamespace>Spriggit.Json.Skyrim</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

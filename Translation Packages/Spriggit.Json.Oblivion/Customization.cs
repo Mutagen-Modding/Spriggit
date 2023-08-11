@@ -1,6 +1,6 @@
 ﻿using Mutagen.Bethesda.Serialization.Customizations;
 
-namespace Spriggit.Serialization.Oblivion.Json;
+namespace Spriggit.Json.Oblivion;
 
 public class Customization : ICustomize
 {

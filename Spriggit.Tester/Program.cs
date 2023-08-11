@@ -2,7 +2,7 @@ using Mutagen.Bethesda;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
-using Spriggit.Serialization.Skyrim.Yaml;
+using Spriggit.Yaml.Skyrim;
 
 var ep = new EntryPoint();
 using var tmp = TempFolder.FactoryByPath(@"C:\Users\Levia\Documents\SpriggitTests", deleteAfter: false);

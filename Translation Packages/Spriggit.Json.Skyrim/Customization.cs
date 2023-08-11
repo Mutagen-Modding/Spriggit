@@ -1,6 +1,6 @@
 ﻿using Mutagen.Bethesda.Serialization.Customizations;
 
-namespace Spriggit.Serialization.Skyrim.Json;
+namespace Spriggit.Json.Skyrim;
 
 public class Customization : ICustomize
 {

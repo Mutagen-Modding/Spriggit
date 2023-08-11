@@ -10,7 +10,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 
-namespace Spriggit.Serialization.Skyrim.Json;
+namespace Spriggit.Json.Skyrim;
 
 public class EntryPoint : IEntryPoint
 {

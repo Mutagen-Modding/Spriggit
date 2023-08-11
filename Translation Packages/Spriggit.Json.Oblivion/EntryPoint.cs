@@ -10,7 +10,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 
-namespace Spriggit.Serialization.Oblivion.Json;
+namespace Spriggit.Json.Oblivion;
 
 public class EntryPoint : IEntryPoint
 {
