@@ -87,7 +87,7 @@ jobs:
   update-nightly:
     needs: [build-test-push, activity-short-circuit]
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
