@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>Spriggit.Serialization.Skyrim.Yaml</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <RootNamespace>Spriggit.Yaml.Skyrim</RootNamespace>
