@@ -1,9 +1,12 @@
 ﻿using System.IO;
 using System.Windows;
 using Autofac;
+using CommandLine;
 using Microsoft.VisualBasic.Logging;
 using Noggog.IO;
 using Serilog;
+using Spriggit.CLI;
+using Spriggit.CLI.Commands;
 using Spriggit.UI.Services;
 
 namespace Spriggit.UI;
@@ -16,7 +19,9 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-            
+
+        if (RunCommandLineIfAppropriate(e)) return;
+
         var singleApp = new SingletonApplicationEnforcer("Spriggit");
 
         if (!singleApp.IsFirstApplication)
@@ -50,6 +55,30 @@ public partial class App : Application
         }
             
         window.Show();
+    }
+
+    private static bool RunCommandLineIfAppropriate(StartupEventArgs e)
+    {
+        var isCommandLine = new Parser((s) =>
+            {
+                s.IgnoreUnknownArguments = true;
+            }).ParseArguments(e.Args, typeof(DeserializeCommand), typeof(SerializeCommand))
+            .MapResult(
+                (DeserializeCommand _) => true,
+                (SerializeCommand _) => true,
+                _ => false);
+
+        if (isCommandLine)
+        {
+            Parser.Default.ParseArguments(e.Args, typeof(DeserializeCommand), typeof(SerializeCommand))
+                .MapResult(
+                    async (DeserializeCommand deserialize) => await Runner.Run(deserialize),
+                    async (SerializeCommand serialize) => await Runner.Run(serialize),
+                    async _ => -1).Wait();
+            return true;
+        }
+
+        return false;
     }
 
     private static ILogger GetLogger()
