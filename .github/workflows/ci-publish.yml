@@ -71,18 +71,18 @@ jobs:
         fetch-depth: 0
     - name: Install dependencies
       run: |
-        dotnet clean -c Release && dotnet nuget locals all --clear
-        dotnet restore
+        dotnet clean Spriggit.sln -c Release && dotnet nuget locals all --clear
+        dotnet restore Spriggit.sln
     - name: Build
-      run: dotnet build -c Release --no-restore /p:GeneratePackageOnBuild=false
+      run: dotnet build Spriggit.sln -c Release --no-restore /p:GeneratePackageOnBuild=false
     - name: Pack Preview
       if: ${{ success() && (github.event.inputs.is_release_event != 'true' || github.ref != 'refs/heads/release') }}
       run: |
-        dotnet pack -c Release --no-build --no-restore -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
+        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
     - name: Pack Release
       if: ${{ success() && github.event.inputs.is_release_event == 'true' && github.ref == 'refs/heads/release' }}
       run: | 
-        dotnet pack -c Release --no-build --no-restore -o out
+        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out
   
   update-nightly:
     needs: [build-test-push, activity-short-circuit]
