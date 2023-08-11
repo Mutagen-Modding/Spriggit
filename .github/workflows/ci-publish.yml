@@ -78,11 +78,11 @@ jobs:
     - name: Pack Preview
       if: ${{ success() && (github.event.inputs.is_release_event != 'true' || github.ref != 'refs/heads/release') }}
       run: |
-        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
+        dotnet pack Spriggit.sln -c Release -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
     - name: Pack Release
       if: ${{ success() && github.event.inputs.is_release_event == 'true' && github.ref == 'refs/heads/release' }}
       run: | 
-        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out
+        dotnet pack Spriggit.sln -c Release -o out
   
   update-nightly:
     needs: [build-test-push, activity-short-circuit]
