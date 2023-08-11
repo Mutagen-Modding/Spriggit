@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Translation Packages\Spriggit.Json.Skyrim\Spriggit.Json.Skyrim.csproj" />
+      <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj" />
+    </ItemGroup>
+
+</Project>

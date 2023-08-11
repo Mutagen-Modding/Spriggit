@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Oblivion", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Skyrim", "Translation Packages\Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj", "{A429D3A9-3455-486E-ABD6-95F552203D39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Tester", "Spriggit.Tester\Spriggit.Tester.csproj", "{B12BF0B8-8EE6-4151-90D4-DA45F9E83A82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{A429D3A9-3455-486E-ABD6-95F552203D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A429D3A9-3455-486E-ABD6-95F552203D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A429D3A9-3455-486E-ABD6-95F552203D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12BF0B8-8EE6-4151-90D4-DA45F9E83A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12BF0B8-8EE6-4151-90D4-DA45F9E83A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12BF0B8-8EE6-4151-90D4-DA45F9E83A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12BF0B8-8EE6-4151-90D4-DA45F9E83A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F3F72F7B-1857-431C-979F-EBC337C27795} = {DCBFCD4D-ACDC-46CC-A84B-2E0B22923476}
