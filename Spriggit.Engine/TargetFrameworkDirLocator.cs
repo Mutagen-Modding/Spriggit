@@ -1,29 +1,42 @@
 ﻿using System.IO.Abstractions;
 using Noggog;
+using Serilog;
 
 namespace Spriggit.Engine;
 
 public class TargetFrameworkDirLocator : IComparer<DirectoryPath>
 {
     private readonly IFileSystem _fileSystem;
+    private readonly ILogger _logger;
 
-    public TargetFrameworkDirLocator(IFileSystem fileSystem)
+    public TargetFrameworkDirLocator(IFileSystem fileSystem, ILogger logger)
     {
         _fileSystem = fileSystem;
+        _logger = logger;
     }
     
     public DirectoryPath? GetTargetFrameworkDir(DirectoryPath packageDir)
     {
+        _logger.Information("Getting target framework directory");
         var libDir = Path.Combine(packageDir.Path, "lib");
-        if (!_fileSystem.Directory.Exists(libDir)) return null;
+        if (!_fileSystem.Directory.Exists(libDir))
+        {
+            _logger.Information("Could not locate framework directory");
+            return null;
+        }
         
         var firstFrameworkDir = _fileSystem.Directory
             .EnumerateDirectories(libDir)
             .OrderByDescending(x => x, this)
             .FirstOrDefault();
 
-        if (firstFrameworkDir == null) return null;
+        if (firstFrameworkDir == null)
+        {
+            _logger.Information("Could not locate framework directory");
+            return null;
+        }
 
+        _logger.Information("Framework directory located: {Path}", firstFrameworkDir);
         return firstFrameworkDir;
     }
 

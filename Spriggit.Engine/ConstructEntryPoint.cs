@@ -35,34 +35,21 @@ public class ConstructEntryPoint
 
     public async Task<EngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
     {
-        using var rootDir = TempFolder.FactoryByAddedPath(
-            Path.Combine("Spriggit", "Sources", ident.ToString()), 
-            deleteAfter: false, 
-            fileSystem: _fileSystem);
+        var rootDir = new DirectoryPath(Path.Combine(Path.GetTempPath(), "Spriggit", "Sources", ident.ToString()));
         
-        if (_debugState.ClearNugetSources || ident.Version.OriginalVersion.EndsWith("-zdev"))
+        if (_debugState.ClearNugetSources && rootDir.CheckExists())
         {
-            _logger.Information("In debug mode.  Deleting entire folder {Path}", rootDir.Dir);
-            _fileSystem.Directory.DeleteEntireFolder(rootDir.Dir, deleteFolderItself: false);
+            _logger.Information("In debug mode.  Deleting entire folder {Path}", rootDir);
+            _fileSystem.Directory.DeleteEntireFolder(rootDir, deleteFolderItself: true);
         }
 
-        try
+        if (!rootDir.CheckExists())
         {
-            _logger.Information("Restoring for {Identifier} at {Path}", ident, rootDir.Dir);
-            await _nugetDownloader.RestoreFor(ident, rootDir.Dir, cancellationToken);
-        }
-        catch (InvalidOperationException)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
+            await PreparePluginFolder(ident, cancellationToken, rootDir);
         }
 
-        _logger.Information("Getting target framework directory");
-        var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir.Dir, $"{ident}"));
+        var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir, $"{ident}"));
         if (frameworkDir == null) return null;
-        _logger.Information("Framework directory located: {Path}", frameworkDir);
-        
-        _logger.Information("Publishing {Root} into framework directory {Path} for {Identifier}", rootDir.Dir, frameworkDir, ident);
-        _pluginPublisher.Publish(rootDir.Dir, ident.ToString(), frameworkDir.Value);
 
         var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
         _logger.Information("Loading plugin: {Path}", assemblyFile);
@@ -82,5 +69,36 @@ public class ConstructEntryPoint
         _logger.Information("Creating entry point object");
         var instance = Activator.CreateInstance(entryPt);
         return instance is IEntryPoint ret ? new EngineEntryPoint(ret, ident) : null;
+    }
+
+    private async Task PreparePluginFolder(PackageIdentity ident, CancellationToken cancellationToken, DirectoryPath targetDir)
+    {
+        try
+        {
+            using var rootDir = TempFolder.Factory();
+            try
+            {
+                _logger.Information("Restoring for {Identifier} at {Path}", ident, rootDir.Dir);
+                await _nugetDownloader.RestoreFor(ident, rootDir.Dir, cancellationToken);
+            }
+            catch (InvalidOperationException)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir.Dir, $"{ident}"));
+            if (frameworkDir == null) return;
+
+            _logger.Information("Publishing {Root} into framework directory {Path} for {Identifier}", rootDir.Dir, frameworkDir,
+                ident);
+            _pluginPublisher.Publish(rootDir.Dir, ident.ToString(), frameworkDir.Value);
+            Directory.CreateDirectory(Path.GetDirectoryName(targetDir)!);
+            Directory.Move(rootDir.Dir, targetDir);
+        }
+        catch (Exception)
+        {
+            targetDir.DeleteEntireFolder();
+            throw;
+        }
     }
 }
