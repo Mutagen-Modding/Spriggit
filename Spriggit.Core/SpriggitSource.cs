@@ -1,4 +1,6 @@
-﻿namespace Spriggit.Core;
+﻿using Noggog;
+
+namespace Spriggit.Core;
 
 public class SpriggitSource
 {
@@ -7,6 +9,13 @@ public class SpriggitSource
 
     public override string ToString()
     {
-        return $"{PackageName}{Version}";
+        if (Version.IsNullOrEmpty())
+        {
+            return PackageName;
+        }
+        else
+        {
+            return $"{PackageName}.{Version}";
+        }
     }
 }
