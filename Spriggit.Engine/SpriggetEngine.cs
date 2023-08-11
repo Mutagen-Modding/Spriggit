@@ -1,16 +1,10 @@
 using System.IO.Abstractions;
-using System.Reactive.Linq;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
-
-public class NumWorkThreadsConstant(int? numThreads) : INumWorkThreadsController
-{
-    public IObservable<int?> NumDesiredThreads => Observable.Return(numThreads);
-}
 
 public class SpriggitEngine(
     IFileSystem fileSystem,
