@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+using System.Reflection;
 using McMaster.NETCore.Plugins;
 using Noggog;
 using Noggog.IO;
@@ -57,18 +59,33 @@ public class ConstructEntryPoint
             assemblyFile: assemblyFile,
             sharedTypes: new [] { typeof(IEntryPoint) });
 
-        _logger.Information("Finding entry point type");
-        var entryPt = loader.LoadDefaultAssembly().GetTypes()
-            .FirstOrDefault(t => typeof(IEntryPoint).IsAssignableFrom(t) && !t.IsAbstract);
-        if (entryPt == null)
-        {
-            _logger.Information("Could not find entry point");
-            return null;
-        }
+        _logger.Information("Retrieving default assembly");
+        var defAssembly = loader.LoadDefaultAssembly();
+        
+        if (!LocateEntryPointType(defAssembly, out var entryPt)) return null;
 
         _logger.Information("Creating entry point object");
         var instance = Activator.CreateInstance(entryPt);
         return instance is IEntryPoint ret ? new EngineEntryPoint(ret, ident) : null;
+    }
+
+    private bool LocateEntryPointType(Assembly assembly, [MaybeNullWhen(false)] out Type entryPt)
+    {
+        _logger.Information("Finding entry point type");
+        _logger.Information("Looking for typically named entry point classes");
+        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(","))}.EntryPoint";
+        entryPt = assembly.GetType(name);
+        if (entryPt != null) return true;
+        _logger.Information("Iterating through all classes to find entry point");
+        entryPt = assembly.GetTypes()
+            .FirstOrDefault(t => typeof(IEntryPoint).IsAssignableFrom(t) && !t.IsAbstract);
+        if (entryPt == null)
+        {
+            _logger.Information("Could not find entry point");
+            return false;
+        }
+
+        return true;
     }
 
     private async Task PreparePluginFolder(PackageIdentity ident, CancellationToken cancellationToken, DirectoryPath targetDir)
