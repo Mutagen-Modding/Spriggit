@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System.IO.Abstractions;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
+using Serilog;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
@@ -11,6 +13,7 @@ public class SpriggitEngine(
     IWorkDropoff? workDropoff,
     ICreateStream? createStream,
     EntryPointCache entryPointCache,
+    ILogger logger,
     GetMetaToUse getMetaToUse)
 {
     public async Task Serialize(
@@ -19,9 +22,11 @@ public class SpriggitEngine(
         SpriggitMeta meta,
         CancellationToken cancel)
     {
+        logger.Information("Getting entry point for {Meta}", meta);
         var entryPt = await entryPointCache.GetFor(meta, cancel);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
+        logger.Information("Starting to serialize");
         await entryPt.EntryPoint.Serialize(
             bethesdaPluginPath,
             outputFolder,
@@ -35,6 +40,7 @@ public class SpriggitEngine(
                 Version = entryPt.Package.Version.ToString()
             },
             cancel: cancel);
+        logger.Information("Finished serializing");
     }
 
     public async Task Deserialize(
@@ -43,13 +49,16 @@ public class SpriggitEngine(
         SpriggitSource? source,
         CancellationToken cancel)
     {
+        logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel);
         
+        logger.Information("Getting entry point for {Meta}", meta);
         var entryPt = await entryPointCache.GetFor(meta, cancel);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         cancel.ThrowIfCancellationRequested();
         
+        logger.Information("Starting to deserialize");
         await entryPt.EntryPoint.Deserialize(
             spriggitPluginPath,
             outputFile,
@@ -57,5 +66,6 @@ public class SpriggitEngine(
             fileSystem: fileSystem,
             streamCreator: createStream,
             cancel: cancel);
+        logger.Information("Finished deserializing");
     }
 }

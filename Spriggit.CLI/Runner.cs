@@ -36,6 +36,7 @@ public static class Runner
     
     public static async Task<int> Run(DeserializeCommand deserializeCommand)
     {
+        LoggerSetup.Logger.Information("Command to deserialize");
         SpriggitSource? source = null;
         if (!deserializeCommand.PackageName.IsNullOrWhitespace() ||
             !deserializeCommand.PackageVersion.IsNullOrWhitespace())
@@ -58,6 +59,7 @@ public static class Runner
 
     public static async Task<int> Run(SerializeCommand serializeCommand)
     {
+        LoggerSetup.Logger.Information("Command to serialize");
         await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug }, serializeCommand.Threads)
             .Resolve().Value
             .Serialize(

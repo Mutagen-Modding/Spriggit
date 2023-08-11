@@ -9,6 +9,8 @@ public static class LoggerSetup
     static LoggerSetup()
     {
         Logger = new LoggerConfiguration()
+            .WriteTo.Console(outputTemplate:
+                "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
     }
 }
