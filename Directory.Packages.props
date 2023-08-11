@@ -20,16 +20,16 @@
       <Version>[0.41.1.1-nightly-20230730-191771]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization" >
-      <Version>[0.0.0.1-zdev]</Version>
+      <Version>[0.0.0.1-nightly-20230811-044393]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft" >
-      <Version>[0.0.0.1-zdev]</Version>
+      <Version>[0.0.0.1-nightly-20230811-044393]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator" Version="[nightly-20230728-041434]" >
-      <Version>[0.0.0.1-zdev]</Version>
+      <Version>[0.0.0.1-nightly-20230811-044393]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml" >
-      <Version>[0.0.0.1-zdev]</Version>
+      <Version>[0.0.0.1-nightly-20230811-044393]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Skyrim">
       <Version>[0.41.1.1-nightly-20230730-191771]</Version>
@@ -44,22 +44,22 @@
       <Version>[0.41.1.1-nightly-20230730-191771]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Autofac">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt.Windows">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Testing">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.WPF">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.SourceGenerators">
-      <Version>[2.59.0.1-nightly-20230716-054653]</Version>
+      <Version>[2.59.0.1-nightly-20230811-032099]</Version>
     </PackageVersion>
     <PackageVersion Include="NuGet.Build.Tasks">
       <Version>6.5.0</Version>
