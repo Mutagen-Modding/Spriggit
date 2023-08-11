@@ -12,17 +12,20 @@ using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 using NuGet.Versioning;
 using Spriggit.Core;
+using ILogger = Serilog.ILogger;
 
 namespace Spriggit.Engine;
 
 public class NugetDownloader
 {
+    private readonly ILogger _logger;
     private readonly SourceCacheContext _cache = new();
     private readonly ISettings _settings;
     private readonly SourceRepositoryProvider _provider;
     
-    public NugetDownloader()
+    public NugetDownloader(ILogger logger)
     {
+        _logger = logger;
         _settings = Settings.LoadDefaultSettings(root: null);
         _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
@@ -63,6 +66,7 @@ public class NugetDownloader
     {
         if (packageVersion.IsNullOrWhitespace())
         {
+            _logger.Information("No version specified.  Checking NuGet repositories for latest version");
             var repos = _provider.GetRepositories().ToArray();
             foreach (var repository in repos)
             {
