@@ -25,6 +25,7 @@ jobs:
       - name: Get Activity Short Circuit
         id: check
         run: |
+          echo "Event name: ${{ github.event_name }}"
           git branch -a
           git fetch origin nightly:nightly
           head_sha=$(git rev-parse --verify HEAD)
