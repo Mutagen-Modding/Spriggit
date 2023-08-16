@@ -30,7 +30,7 @@ jobs:
           git fetch origin nightly:nightly
           head_sha=$(git rev-parse --verify HEAD)
           nightly_sha=$(git rev-parse --verify nightly)
-          if [[ "$head_sha" == "$nightly_sha" ]]; then
+          if [[ "$head_sha" == "$nightly_sha" && ${{ github.event_name }} != "release" ]]; then
               same_sha=true;
           else
               same_sha=false;
@@ -43,18 +43,33 @@ jobs:
   build-test:
     needs: activity-short-circuit
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        sln:
+          - Spriggit.sln
+          - Spriggit.Linux.sln
+        exclude:
+          - os: ubuntu-latest
+            sln: Spriggit.sln
+          - os: macos-latest
+            sln: Spriggit.sln
+          - os: windows-latest
+            sln: Spriggit.Linux.sln
           
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
-        dotnet clean -c Release && dotnet nuget locals all --clear
+        dotnet clean ${{ matrix.sln }} -c Release && dotnet nuget locals all --clear
         dotnet restore
     - name: Build
-      run: dotnet build -c Release --no-restore
+      run: dotnet build ${{ matrix.sln }} -c Release --no-restore
     - name: Test
-      run: dotnet test -c Release --no-build
+      run: dotnet test ${{ matrix.sln }} -c Release --no-build
 
 
   build-test-push:
@@ -77,11 +92,11 @@ jobs:
     - name: Build
       run: dotnet build Spriggit.sln -c Release --no-restore /p:GeneratePackageOnBuild=false
     - name: Pack Preview
-      if: ${{ success() && (github.event.inputs.is_release_event != 'true' || github.ref != 'refs/heads/release') }}
+      if: ${{ success() && (github.event.release.prerelease || github.event_name != 'release') }}
       run: |
         dotnet pack Spriggit.sln -c Release -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
     - name: Pack Release
-      if: ${{ success() && github.event.inputs.is_release_event == 'true' && github.ref == 'refs/heads/release' }}
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: | 
         dotnet pack Spriggit.sln -c Release -o out
   
