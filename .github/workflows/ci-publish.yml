@@ -56,7 +56,7 @@ jobs:
           - os: ubuntu-latest
             sln: Spriggit.sln
           - os: macos-latest
-            sln: Spriggit.sln
+            sln: Spriggit.sln 
           - os: windows-latest
             sln: Spriggit.Linux.sln
           
@@ -105,7 +105,7 @@ jobs:
     - name: Archive Release
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.UI/bin/Release/net7.0-windows/publish/* Spriggit.zip
+        powershell Compress-Archive Spriggit.UI/bin/Release/net7.0-windows/win-x64/publish/* Spriggit.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
