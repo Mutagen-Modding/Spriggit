@@ -101,7 +101,10 @@ jobs:
         dotnet pack Spriggit.sln -c Release -o out
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
-      run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
+      run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true 
+    - name: Pack CLI
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
     - name: Archive Release
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
