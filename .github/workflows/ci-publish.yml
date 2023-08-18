@@ -105,15 +105,26 @@ jobs:
     - name: Pack CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
-    - name: Archive Release
+    - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
         powershell Compress-Archive Spriggit.UI/bin/Release/net7.0-windows/win-x64/publish/* Spriggit.zip
+    - name: Archive GUI
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      run: |
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0-windows/win-x64/publish/* Spriggit.CLI.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
       with:
         file: Spriggit.zip
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.event.release.tag_name }}
+    - name: Publish CLI to Github
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      uses: svenstaro/upload-release-action@v2
+      with:
+        file: Spriggit.CLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
     - name: Publish to Nuget.org
