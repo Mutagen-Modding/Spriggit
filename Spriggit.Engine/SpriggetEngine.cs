@@ -26,7 +26,7 @@ public class SpriggitEngine(
         var entryPt = await entryPointCache.GetFor(meta, cancel);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
-        logger.Information("Starting to serialize");
+        logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output}", bethesdaPluginPath, outputFolder);
         await entryPt.EntryPoint.Serialize(
             bethesdaPluginPath,
             outputFolder,
