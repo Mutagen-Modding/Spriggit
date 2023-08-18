@@ -1,4 +1,4 @@
-﻿using Noggog;
+using Noggog;
 using NuGet.Packaging.Core;
 using Serilog;
 using Spriggit.Core;
@@ -35,6 +35,11 @@ public class EntryPointCache
                 {
                     _logger.Information("Getting first identity for {Meta}", meta);
                     var ret = await _nugetDownloader.GetFirstIdentityFor(meta, CancellationToken.None);
+                    if (ret == null)
+                    {
+                        _logger.Information("Could not get identity for {Meta}", meta);
+                        return null;
+                    }
                     _logger.Information("Cached first identity for {Meta}: {Ident}", meta, ret);
                     return ret;
                 });
