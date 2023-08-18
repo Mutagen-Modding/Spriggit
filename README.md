@@ -3,7 +3,7 @@ A tool to facilitate converting Bethesda plugin files to a text based format tha
 
 The goal is to help modders store their files in a versioning system that allows them to easily iterate in the same way that programmers do with their code.   
 
-![https://youtu.be/VgJaCaZSh98](https://i.imgur.com/ATjXyFT.png)
+[![Spriggit Demo](https://i.imgur.com/ATjXyFT.png)](https://youtu.be/VgJaCaZSh98)
 
 # Reasons to Use Git for Mods
 Git is an extremely powerful versioning and iteration tool that almost all programmers use when working.  It's what powers the world of coding to be able to iterate new code quickly and collaborate easily.  
