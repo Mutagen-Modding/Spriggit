@@ -30,14 +30,6 @@ public class NugetDownloader
         _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
 
-    private static NuGetVersion? GetFirstStableVersion(IEnumerable<NuGetVersion> versions)
-    {
-        var ret = versions.FirstOrDefault(x => !x.IsPrerelease);
-        if (ret != null) return ret;
-
-        return versions.FirstOrDefault();
-    }
-
     private static NuGetVersion? GetLatestVersion(IEnumerable<NuGetVersion> versions)
     {
         var ret = versions
@@ -76,7 +68,7 @@ public class NugetDownloader
                     _cache,
                     NullLogger.Instance,
                     cancellationToken);
-                var version = GetFirstStableVersion(versions);
+                var version = GetLatestVersion(versions);
                 if (version == null) continue;
 
                 return new PackageIdentity(packageName, version);
