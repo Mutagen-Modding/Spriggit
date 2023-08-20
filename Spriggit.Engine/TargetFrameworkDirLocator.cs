@@ -17,7 +17,7 @@ public class TargetFrameworkDirLocator : IComparer<DirectoryPath>
     
     public DirectoryPath? GetTargetFrameworkDir(DirectoryPath packageDir)
     {
-        _logger.Information("Getting target framework directory");
+        _logger.Information("Getting target framework directory for {Dir}", packageDir);
         var libDir = Path.Combine(packageDir.Path, "lib");
         if (!_fileSystem.Directory.Exists(libDir))
         {
