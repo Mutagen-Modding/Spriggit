@@ -20,7 +20,11 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        if (RunCommandLineIfAppropriate(e)) return;
+        if (RunCommandLineIfAppropriate(e))
+        {
+            Application.Current.Shutdown();
+            return;
+        }
 
         var singleApp = new SingletonApplicationEnforcer("Spriggit");
 
@@ -70,11 +74,11 @@ public partial class App : Application
 
         if (isCommandLine)
         {
-            Parser.Default.ParseArguments(e.Args, typeof(DeserializeCommand), typeof(SerializeCommand))
+            Task.Run(() => Parser.Default.ParseArguments(e.Args, typeof(DeserializeCommand), typeof(SerializeCommand))
                 .MapResult(
                     async (DeserializeCommand deserialize) => await Runner.Run(deserialize),
                     async (SerializeCommand serialize) => await Runner.Run(serialize),
-                    async _ => -1).Wait();
+                    async _ => -1)).Wait();
             return true;
         }
 
