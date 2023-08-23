@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+    <ItemGroup>
+        <PackageReference Include="Noggog.CSharpExt" />
+        <PackageReference Include="CommandLineParser" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="StrongInject" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="LoggerSetup.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="Runner.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="Container.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+    </ItemGroup>
+</Project>

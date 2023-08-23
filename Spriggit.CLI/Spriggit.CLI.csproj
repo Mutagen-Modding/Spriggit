@@ -4,13 +4,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Noggog.CSharpExt" />
-        <PackageReference Include="CommandLineParser" />
-        <PackageReference Include="StrongInject" />
-        <PackageReference Include="Serilog.Sinks.Console" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\Spriggit.CLI.Lib\Spriggit.CLI.Lib.csproj" />
       <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
     </ItemGroup>
 
