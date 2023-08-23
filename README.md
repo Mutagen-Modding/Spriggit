@@ -89,8 +89,15 @@ Some/Folder/
 
 This folder structure helps organize git diffs to be more meaningful.  If a new record is added, then this will be seen as a new file.   If a record is modified, it will be a modified file.   Similar to wanting to avoid having a program's code be in one large monolith file, having smaller bite sized files helps navigate and digest changes being made.
 
-# Spriggit CLI
-Spriggit comes with a Command Line Interface that can be used to convert from Betheseda Plugins to Git Repositories, and back.
+# Installation
+## Spriggit UI
+This is a self-contained WPF application, which can only run on Windows.  You can add links between a mod file and where it should be translated to, and then sync back and forth with one click.
+
+![image](https://github.com/Mutagen-Modding/Spriggit/assets/24981326/d6b0fed7-e989-4ecf-9dd3-738cc6985787)
+![image](https://github.com/Mutagen-Modding/Spriggit/assets/24981326/2112dc04-9171-47ff-b32c-f30e4ea0a117)
+
+## Spriggit CLI
+Spriggit comes with a Command Line Interface that can be used to convert from Betheseda Plugins to Git Repositories, and back.   Note that the UI can also accept these CLI commands, and so this variant is meant for linux machines that cannot handle the UI.   It is not self contained, so it might complain about needing a specific .NET runtime downloaded.
 
 This would use Spriggit to convert from a SkyrimSE mod to Yaml, and put it in your Git Repository.
 
@@ -99,9 +106,6 @@ This would use Spriggit to convert from a SkyrimSE mod to Yaml, and put it in yo
 And this would convert it back and overwrite the original mod file.
 
 `.\Path\To\Spriggit.CLI.exe deserialize --InputPath "C:\Users\Levia\Downloads\SpriggitOutput\SomeMod.esp" --OutputPath "C:\MyGitRepository\SomeMod.esp"`
-
-# Spriggit UI
-[ToDo]
 
 # Spriggit Translation Packages
 The logic for actually doing the translation to/from an esp is not housed or packaged directly with the CLI or UI.   Rather, the logic exists in NuGet packages that are downloaded and then used to do the translation.
