@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Spriggit.UI.Settings;
 using Spriggit.UI.ViewModels.Singletons;
 
 namespace Spriggit.UI;
@@ -34,7 +35,12 @@ public partial class EditListingView
                 .DisposeWith(disp);
             this.WhenAnyValue(x => x.ViewModel)
                 .Select(x => x is EditLinkVm ? "Apply" : "Add")
-                .BindTo(this, x => x.AddButton.Content);
+                .BindTo(this, x => x.AddButton.Content)
+                .DisposeWith(disp);
+            this.Bind(ViewModel, x => x.LinkInput.SourceCategory, x => x.TabControl.SelectedIndex,
+                    x => (int)x,
+                    x => (LinkSourceCategory)x)
+                .DisposeWith(disp);
         });
     }
 }
