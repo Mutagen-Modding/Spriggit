@@ -2,7 +2,7 @@
 
 public enum LinkSourceCategory
 {
-    Json,
     Yaml,
+    Json,
     Custom,
 }

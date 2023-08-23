@@ -60,9 +60,9 @@
                 BorderBrush="{StaticResource GrayBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="5">
-            <TabControl>
-                <TabItem Header="Json" />
+            <TabControl x:Name="TabControl">
                 <TabItem Header="Yaml" />
+                <TabItem Header="Json" />
                 <TabItem Header="Custom">
                     <Grid Margin="5" >
                         <Grid.ColumnDefinitions>
