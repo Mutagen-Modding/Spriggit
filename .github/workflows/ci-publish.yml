@@ -124,7 +124,7 @@ jobs:
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
       with:
-        file: Spriggit.CLI.zip
+        file: Spriggit Linux CLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
     - name: Publish to Nuget.org
