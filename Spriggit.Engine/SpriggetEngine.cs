@@ -13,15 +13,26 @@ public class SpriggitEngine(
     IWorkDropoff? workDropoff,
     ICreateStream? createStream,
     EntryPointCache entryPointCache,
+    SpriggitMetaLocator spriggitMetaLocator,
     ILogger logger,
     GetMetaToUse getMetaToUse)
 {
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
-        SpriggitMeta meta,
+        SpriggitMeta? meta,
         CancellationToken cancel)
     {
+        if (meta == null)
+        {
+            meta = spriggitMetaLocator.Locate(outputFolder);
+        }
+
+        if (meta == null)
+        {
+            throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a .spriggit file present, or specify at least GameRelease and PackageName");
+        }
+        
         logger.Information("Getting entry point for {Meta}", meta);
         var entryPt = await entryPointCache.GetFor(meta, cancel);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");

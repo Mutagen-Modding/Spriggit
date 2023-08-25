@@ -14,6 +14,7 @@ namespace Spriggit.CLI;
 [Register(typeof(GetDefaultEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(PluginPublisher))]
+[Register(typeof(SpriggitMetaLocator))]
 [Register(typeof(TargetFrameworkDirLocator))]
 partial class Container : IContainer<SpriggitEngine>
 {

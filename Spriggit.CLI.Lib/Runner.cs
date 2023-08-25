@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using Noggog;
 using Noggog.WorkEngine;
 using Spriggit.CLI.Commands;
@@ -60,18 +60,29 @@ public static class Runner
     public static async Task<int> Run(SerializeCommand serializeCommand)
     {
         LoggerSetup.Logger.Information("Command to serialize");
+
+        SpriggitMeta? meta;
+        if (serializeCommand.GameRelease == null || serializeCommand.PackageName.IsNullOrWhitespace())
+        {
+            meta = null;
+        }
+        else
+        {
+            meta = new SpriggitMeta(
+                new SpriggitSource()
+                {
+                    PackageName = serializeCommand.PackageName,
+                    Version = serializeCommand.PackageVersion
+                },
+                Release: serializeCommand.GameRelease.Value);
+        }
+        
         await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug }, serializeCommand.Threads)
             .Resolve().Value
             .Serialize(
                 bethesdaPluginPath: serializeCommand.InputPath,
                 outputFolder: serializeCommand.OutputPath,
-                meta: new SpriggitMeta(
-                    new SpriggitSource()
-                    {
-                        PackageName = serializeCommand.PackageName,
-                        Version = serializeCommand.PackageVersion,
-                    },
-                    serializeCommand.GameRelease),
+                meta: meta,
                 cancel: CancellationToken.None); 
         return 0;
     }

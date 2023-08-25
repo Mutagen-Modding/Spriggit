@@ -19,12 +19,12 @@ public class SerializeCommand
     
     [Option('g', "GameRelease",
         HelpText = "Game release that the plugin is related to",
-        Required = true)]
-    public GameRelease GameRelease { get; set; }
+        Required = false)]
+    public GameRelease? GameRelease { get; set; }
 
     [Option('p', "PackageName",
         HelpText = "Spriggit serialization nuget package to use for conversion",
-        Required = true)]
+        Required = false)]
     public string PackageName { get; set; } = string.Empty;
 
     [Option('v', "PackageVersion",
