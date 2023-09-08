@@ -27,7 +27,7 @@ public interface IEntryPoint
         ICreateStream? streamCreator,
         CancellationToken cancel);
     
-    public Task<SpriggitMeta?> TryGetMetaInfo(
+    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(
         string inputPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,

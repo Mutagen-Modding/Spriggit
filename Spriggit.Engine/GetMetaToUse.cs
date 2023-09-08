@@ -47,8 +47,8 @@ public class GetMetaToUse
         
         if (sourceInfo == null) throw new DataException($"Could not locate source info from {spriggitPluginPath}");
 
-        if (source != null) return sourceInfo with { Source = source };
-        
-        return sourceInfo;
+        return new SpriggitMeta(
+            Source: source ?? sourceInfo.Source,
+            Release: sourceInfo.Release);
     }
 }

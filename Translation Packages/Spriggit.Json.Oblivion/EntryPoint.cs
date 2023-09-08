@@ -58,7 +58,7 @@ public class EntryPoint : IEntryPoint
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
     
-    public async Task<SpriggitMeta?> TryGetMetaInfo(
+    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(
         string inputPath, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator,
         CancellationToken cancel)
@@ -84,6 +84,6 @@ public class EntryPoint : IEntryPoint
             release: out var release,
             cancel: cancel);
 
-        return new SpriggitMeta(src, release);
+        return new SpriggitEmbeddedMeta(src, release, modKey);
     }
 }
