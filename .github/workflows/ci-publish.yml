@@ -102,17 +102,24 @@ jobs:
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true 
-    - name: Pack CLI
+    - name: Pack Linux CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r linux-x64 -p:PublishSingleFile=True --self-contained True
+    - name: Pack CLI
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r win-x64 -p:PublishSingleFile=True --self-contained True
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
         powershell Compress-Archive Spriggit.UI/bin/Release/net7.0-windows/win-x64/publish/* Spriggit.zip
+    - name: Archive Linux CLI
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      run: |
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0/publish/linux-x64/* SpriggitLinuxCLI.zip
     - name: Archive CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0/publish/* SpriggitLinuxCLI.zip
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0/publish/win-x64/* SpriggitCLI.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
@@ -120,7 +127,7 @@ jobs:
         file: Spriggit.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
-    - name: Publish CLI to Github
+    - name: Publish Linux CLI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
       with:
