@@ -134,6 +134,13 @@ jobs:
         file: SpriggitLinuxCLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
+    - name: Publish CLI to Github
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      uses: svenstaro/upload-release-action@v2
+      with:
+        file: SpriggitCLI.zip
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.event.release.tag_name }}
     - name: Publish to Nuget.org
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
   
