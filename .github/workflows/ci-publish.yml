@@ -104,7 +104,7 @@ jobs:
       run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true 
     - name: Pack CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
-      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release
+      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r linux-x64 -p:PublishSingleFile=True --self-contained True
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
