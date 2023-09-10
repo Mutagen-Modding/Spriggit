@@ -6,10 +6,10 @@ namespace Spriggit.CLI.Commands;
 [Verb("deserialize", HelpText = "Converts a mod from its text based representation to a binary Bethesda plugin")]
 public class DeserializeCommand
 {
-    [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin as its text representation")]
+    [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin as its text representation", Required = true)]
     public string InputPath { get; set; } = string.Empty;
     
-    [Option('o', "OutputPath", HelpText = "File export mod as its Bethesda plugin representation")]
+    [Option('o', "OutputPath", HelpText = "File export mod as its Bethesda plugin representation", Required = true)]
     public FilePath OutputPath { get; set; } = string.Empty;
 
     [Option('p', "PackageName",
