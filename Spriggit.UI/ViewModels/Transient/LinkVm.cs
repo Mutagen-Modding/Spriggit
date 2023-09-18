@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -204,7 +205,7 @@ public class LinkVm : ViewModel
             if (meta.Failed)
             {
                 _logger.Error("Could not sync to Git {Reason}", meta.Reason);
-                MessageBox.Show("Could not sync \"" + Input.ModPathPicker.TargetPath + "\" to Git: " + meta.Reason, "Could not sync to Git", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Could not sync \"" + Path.GetFileName(Input.ModPathPicker.TargetPath) + "\" to Git: " + meta.Reason, "Could not sync to Git", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -224,7 +225,7 @@ public class LinkVm : ViewModel
         catch (Exception e)
         {
             _logger.Error(e, "Error syncing to Git");
-            MessageBox.Show("Error syncing \"" + Input.ModPathPicker.TargetPath + "\" to Git: " + e.Message, "Error syncing to Git", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Error syncing \"" + Path.GetFileName(Input.ModPathPicker.TargetPath) + "\" to Git: " + e.Message, "Error syncing to Git", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
     
@@ -247,7 +248,7 @@ public class LinkVm : ViewModel
         catch (Exception e)
         {
             _logger.Error(e, "Error syncing to Mod");
-            MessageBox.Show("Error syncing \"" + Input.GitFolderPicker.TargetPath + "\" to Mod: " + e.Message, "Error syncing to Mod", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Error syncing \"" + Path.GetFileName(Input.GitFolderPicker.TargetPath) + "\" to Mod: " + e.Message, "Error syncing to Mod", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
