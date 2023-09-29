@@ -68,6 +68,13 @@ public class SpriggitEngine(
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         cancel.ThrowIfCancellationRequested();
+
+        var dir = outputFile.Directory;
+        if (dir != null)
+        {
+            logger.Information("Creating directory {Dir}", dir);
+            fileSystem.Directory.CreateDirectory(dir);
+        }
         
         logger.Information("Starting to deserialize");
         await entryPt.EntryPoint.Deserialize(
