@@ -38,6 +38,13 @@ public static class Runner
     {
         LoggerSetup.Logger.Information("Command to deserialize");
         SpriggitSource? source = null;
+
+        if (deserializeCommand.PackageName.IsNullOrWhitespace() !=
+            deserializeCommand.PackageVersion.IsNullOrWhitespace())
+        {
+            throw new ArgumentException("Cannot specify only PackageName or PackageVersion.");
+        }
+        
         if (!deserializeCommand.PackageName.IsNullOrWhitespace() ||
             !deserializeCommand.PackageVersion.IsNullOrWhitespace())
         {
