@@ -50,10 +50,7 @@ public class EntryPoint : IEntryPoint
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
-        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: new BinaryWriteParameters()
-        {
-            ModKey = ModKeyOption.NoCheck
-        });
+        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: IEntryPoint.NoCheckWriteParameters);
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
