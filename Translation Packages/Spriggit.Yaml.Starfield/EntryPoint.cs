@@ -14,6 +14,19 @@ namespace Spriggit.Yaml.Starfield;
 
 public class EntryPoint : IEntryPoint
 {
+    protected static readonly BinaryWriteParameters NoCheckWriteParameters = new()
+    {
+        ModKey = ModKeyOption.NoCheck,
+        MastersListContent = MastersListContentOption.NoCheck,
+        RecordCount = RecordCountOption.NoCheck,
+        MastersListOrdering = MastersListOrderingOption.NoCheck,
+        NextFormID = NextFormIDOption.NoCheck,
+        FormIDUniqueness = FormIDUniquenessOption.NoCheck,
+        MasterFlag = MasterFlagOption.NoCheck,
+        LightMasterLimit = LightMasterLimitOption.NoCheck,
+        CleanNulls = false
+    };
+
     public async Task Serialize(
         ModPath modPath, 
         DirectoryPath dir,
@@ -50,7 +63,7 @@ public class EntryPoint : IEntryPoint
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
-        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: IEntryPoint.NoCheckWriteParameters);
+        mod.WriteToBinaryParallel(outputPath, fileSystem: fileSystem, param: NoCheckWriteParameters);
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Yaml.YamlSerializationReaderKernel ReaderKernel = new();
