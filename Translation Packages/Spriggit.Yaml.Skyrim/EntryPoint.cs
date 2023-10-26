@@ -23,7 +23,7 @@ public class EntryPoint : IEntryPoint
         NextFormID = NextFormIDOption.NoCheck,
         FormIDUniqueness = FormIDUniquenessOption.NoCheck,
         MasterFlag = MasterFlagOption.NoCheck,
-        LightMasterLimit = LightMasterLimitOption.NoCheck,
+        LightLimit = LightLimitOption.NoCheck,
         CleanNulls = false
     };
     

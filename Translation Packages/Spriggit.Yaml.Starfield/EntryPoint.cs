@@ -23,7 +23,7 @@ public class EntryPoint : IEntryPoint
         NextFormID = NextFormIDOption.NoCheck,
         FormIDUniqueness = FormIDUniquenessOption.NoCheck,
         MasterFlag = MasterFlagOption.NoCheck,
-        LightMasterLimit = LightMasterLimitOption.NoCheck,
+        LightLimit = LightLimitOption.NoCheck,
         CleanNulls = false
     };
 
@@ -38,7 +38,7 @@ public class EntryPoint : IEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = StarfieldMod.CreateFromBinaryOverlay(modPath, fileSystem: fileSystem);
+        using var modGetter = StarfieldMod.CreateFromBinaryOverlay(modPath, StarfieldRelease.Starfield, fileSystem: fileSystem);
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             dir,
