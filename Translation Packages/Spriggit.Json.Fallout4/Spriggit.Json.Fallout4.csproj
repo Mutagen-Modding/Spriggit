@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
+		<RootNamespace>Spriggit.Json.Fallout4</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mutagen.Bethesda.Serialization" />
+		<PackageReference Include="Mutagen.Bethesda.Serialization.Newtonsoft" />
+		<PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />
+		<PackageReference Include="Mutagen.Bethesda.Fallout4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="EntryPoint.cs">
+			<CodeLanguage>cs</CodeLanguage>
+			<DefaultPackFolder>content</DefaultPackFolder>
+			<BuildAction>Compile</BuildAction>
+		</Compile>
+	</ItemGroup>
+
+</Project>
