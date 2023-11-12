@@ -1,4 +1,5 @@
-﻿using System.Windows;
+using System.Globalization;
+using System.Windows;
 using Serilog;
 using Spriggit.UI.ViewModels;
 using Spriggit.UI.ViewModels.Singletons;
@@ -32,6 +33,9 @@ public class Startup
     
     public void Initialize()
     {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             var ex = e.ExceptionObject as Exception;
