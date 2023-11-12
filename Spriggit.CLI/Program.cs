@@ -2,6 +2,8 @@
 using Spriggit.CLI;
 using Spriggit.CLI.Commands;
 
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+
 return await Parser.Default.ParseArguments(args, typeof(DeserializeCommand), typeof(SerializeCommand))
     .MapResult(
         async (DeserializeCommand deserialize) => await Runner.Run(deserialize),
