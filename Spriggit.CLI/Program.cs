@@ -1,6 +1,10 @@
-﻿using CommandLine;
+﻿using System.Globalization;
+using CommandLine;
 using Spriggit.CLI;
 using Spriggit.CLI.Commands;
+
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
 return await Parser.Default.ParseArguments(args, typeof(DeserializeCommand), typeof(SerializeCommand))
     .MapResult(
