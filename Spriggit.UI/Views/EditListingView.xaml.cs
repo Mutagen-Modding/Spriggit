@@ -23,11 +23,9 @@ public partial class EditListingView
             this.WhenAnyValue(x => x.ViewModel!.LinkInput.GitFolderPicker)
                 .BindTo(this, x => x.GitFolderPicker.PickerVM)
                 .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.LinkInput.PackageName)
-                .BindTo(this, x => x.SpriggitPackageBox.Text)
+            this.Bind(ViewModel, x => x.LinkInput.PackageName, x => x.SpriggitPackageBox.Text)
                 .DisposeWith(disp);
-            this.WhenAnyValue(x => x.ViewModel!.LinkInput.Version)
-                .BindTo(this, x => x.SpriggitVersionBox.Text)
+            this.Bind(ViewModel, x => x.LinkInput.Version, x => x.SpriggitVersionBox.Text)
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.FinishCommand, x => x.AddButton.Command)
                 .DisposeWith(disp);

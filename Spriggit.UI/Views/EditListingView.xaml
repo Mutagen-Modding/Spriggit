@@ -79,6 +79,7 @@
                                    Margin="0,0,0,5"
                                    FontSize="14" FontWeight="Bold" />
                         <TextBox Grid.Row="1" Grid.Column="0" x:Name="SpriggitPackageBox"
+                                 Text="{Binding LinkInput.PackageName}"
                                  mah:TextBoxHelper.Watermark="Default package" />
                         <TextBlock Grid.Row="0" Grid.Column="2" 
                                    Text="Version"
@@ -86,6 +87,7 @@
                                    FontSize="14" FontWeight="Bold" />
                         <TextBox Grid.Row="1" Grid.Column="2"
                                   x:Name="SpriggitVersionBox"
+                                  Text="{Binding LinkInput.Version}"
                                   mah:TextBoxHelper.Watermark="Latest version"/>
                     </Grid>
                 </TabItem>

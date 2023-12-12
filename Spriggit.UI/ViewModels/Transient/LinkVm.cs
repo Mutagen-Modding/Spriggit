@@ -83,11 +83,11 @@ public class LinkVm : ViewModel
         _metaToUse = this.WhenAnyValue(
                 x => x.Input.SourceCategory,
                 x => x.Input.Release,
-                x => x.Input.Version,
-                x => x.Input.PackageName)
+                x => x.Input.PackageName,
+                x => x.Input.Version)
             .Select(async x =>
             {
-                var package = linkSourceCategoryToPackageName.GetPackageName(x.Item1, x.Item2, x.Item4);
+                var package = linkSourceCategoryToPackageName.GetPackageName(x.Item1, x.Item2, x.Item3);
                 if (package.Failed) return package.BubbleFailure<SpriggitMeta>();
                     
                 var vers = await packageInputQuery.GetVersionToUse(x.Item1, x.Item2, x.Item3, x.Item4,
