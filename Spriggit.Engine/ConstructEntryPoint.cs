@@ -2,8 +2,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Reflection;
 using McMaster.NETCore.Plugins;
+using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins;
 using Noggog;
 using Noggog.IO;
+using Noggog.WorkEngine;
 using NuGet.Packaging.Core;
 using Serilog;
 using Spriggit.Core;
@@ -57,7 +60,21 @@ public class ConstructEntryPoint
         _logger.Information("Loading plugin: {Path}", assemblyFile);
         var loader = PluginLoader.CreateFromAssemblyFile(
             assemblyFile: assemblyFile,
-            sharedTypes: new [] { typeof(IEntryPoint) });
+            sharedTypes: new []
+            {
+                typeof(IEntryPoint),
+                typeof(ICreateStream),
+                typeof(SpriggitSource),
+                typeof(IWorkDropoff),
+                typeof(CancellationToken),
+                typeof(GameRelease),
+                typeof(ModPath),
+                typeof(DirectoryPath),
+                typeof(IFileSystem),
+                typeof(FilePath),
+                typeof(ModKey),
+                typeof(IModKeyed),
+            });
 
         _logger.Information("Retrieving default assembly");
         var defAssembly = loader.LoadDefaultAssembly();
@@ -65,8 +82,10 @@ public class ConstructEntryPoint
         if (!LocateEntryPointType(defAssembly, out var entryPt)) return null;
 
         _logger.Information("Creating entry point object");
-        var instance = Activator.CreateInstance(entryPt);
-        return instance is IEntryPoint ret ? new EngineEntryPoint(ret, ident) : null;
+        var assemblyEntryPointInstance = Activator.CreateInstance(entryPt);
+        if (assemblyEntryPointInstance == null) return null;
+        var wrappedInstance = new DynamicEntryPoint(assemblyEntryPointInstance);
+        return new EngineEntryPoint(wrappedInstance, ident);
     }
 
     private bool LocateEntryPointType(Assembly assembly, [MaybeNullWhen(false)] out Type entryPt)
