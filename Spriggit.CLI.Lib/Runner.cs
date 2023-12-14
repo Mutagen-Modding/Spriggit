@@ -70,6 +70,11 @@ public static class Runner
         SpriggitMeta? meta;
         if (serializeCommand.GameRelease == null || serializeCommand.PackageName.IsNullOrWhitespace())
         {
+            if (serializeCommand.PackageVersion != null)
+            {
+                throw new ArgumentException(
+                    "Cannot specify version without also specifying GameRelease and PackageName");
+            }
             meta = null;
         }
         else
