@@ -16,7 +16,7 @@ public class EntryPoint : IEntryPoint
 {
     protected static readonly BinaryWriteParameters NoCheckWriteParameters = new()
     {
-        ModKey = ModKeyOption.NoCheck,
+        ModKey = ModKeyOption.CorrectToPath,
         MastersListContent = MastersListContentOption.NoCheck,
         RecordCount = RecordCountOption.NoCheck,
         MastersListOrdering = MastersListOrderingOption.NoCheck,
