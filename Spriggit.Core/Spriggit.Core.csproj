@@ -3,7 +3,6 @@
     <ItemGroup>
         <PackageReference Include="Noggog.CSharpExt" />
         <PackageReference Include="Mutagen.Bethesda.Kernel" />
-        <PackageReference Include="NuGet.Versioning" />
     </ItemGroup>
 
 </Project>
