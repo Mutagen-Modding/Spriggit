@@ -60,8 +60,16 @@ public class NugetDownloader
         {
             _logger.Information("No version specified.  Checking NuGet repositories for latest version");
             var repos = _provider.GetRepositories().ToArray();
+
+            if (repos.Length == 0)
+            {
+                _logger.Warning($"There were no nuget repositories listed!");
+                return null;
+            }
+            
             foreach (var repository in repos)
             {
+                _logger.Information($"  Looking in repo {repository}");
                 FindPackageByIdResource resource = await repository.GetResourceAsync<FindPackageByIdResource>();
                 var versions = await resource.GetAllVersionsAsync(
                     packageName,
