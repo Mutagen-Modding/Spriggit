@@ -16,6 +16,7 @@ namespace Spriggit.CLI;
 [Register(typeof(PluginPublisher))]
 [Register(typeof(SpriggitMetaLocator))]
 [Register(typeof(TargetFrameworkDirLocator))]
+[Register(typeof(CurrentVersionsProvider))]
 partial class Container : IContainer<SpriggitEngine>
 {
     [Instance] private readonly IFileSystem _fileSystem;

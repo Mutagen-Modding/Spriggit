@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO.Abstractions;
 using Noggog;
 using Noggog.IO;
@@ -15,7 +14,8 @@ public class SpriggitEngine(
     EntryPointCache entryPointCache,
     SpriggitMetaLocator spriggitMetaLocator,
     ILogger logger,
-    GetMetaToUse getMetaToUse)
+    GetMetaToUse getMetaToUse,
+    CurrentVersionsProvider CurrentVersionsProvider)
 {
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
@@ -23,6 +23,8 @@ public class SpriggitEngine(
         SpriggitMeta? meta,
         CancellationToken cancel)
     {
+        logger.Information("Spriggit version {Version}", CurrentVersionsProvider.SpriggitVersion);
+        
         if (meta == null)
         {
             meta = spriggitMetaLocator.Locate(outputFolder);
@@ -60,6 +62,8 @@ public class SpriggitEngine(
         SpriggitSource? source,
         CancellationToken cancel)
     {
+        logger.Information("Spriggit version {Version}", CurrentVersionsProvider.SpriggitVersion);
+        
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel);
         

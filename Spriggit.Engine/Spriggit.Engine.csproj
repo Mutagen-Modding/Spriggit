@@ -4,6 +4,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="McMaster.NETCore.Plugins" />
+    <PackageReference Include="Noggog.SourceGenerators" />
     <PackageReference Include="Noggog.Testing" />
     <PackageReference Include="NuGet.Build.Tasks" />
     <PackageReference Include="NuGet.PackageManagement" />
