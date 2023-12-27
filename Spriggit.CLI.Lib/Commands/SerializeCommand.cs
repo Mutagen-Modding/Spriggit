@@ -4,7 +4,7 @@ using Noggog;
 
 namespace Spriggit.CLI.Commands;
 
-[Verb("serialize", HelpText = "Converts a binary Bethesda plugin to a text based representation")]
+[Verb("serialize", aliases: new[] { "convert-from-plugin" }, HelpText = "Converts a binary Bethesda plugin to a text based representation")]
 public class SerializeCommand
 {
     [Option('i', "InputPath", 

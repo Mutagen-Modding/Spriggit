@@ -3,7 +3,7 @@ using Noggog;
 
 namespace Spriggit.CLI.Commands;
 
-[Verb("deserialize", HelpText = "Converts a mod from its text based representation to a binary Bethesda plugin")]
+[Verb("deserialize", aliases: new[] { "create-plugin", "convert-to-plugin" }, HelpText = "Converts a mod from its text based representation to a binary Bethesda plugin")]
 public class DeserializeCommand
 {
     [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin as its text representation", Required = true)]
