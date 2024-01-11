@@ -37,7 +37,7 @@ public class EntryPointCache
                     var ret = await _nugetDownloader.GetFirstIdentityFor(meta, CancellationToken.None);
                     if (ret == null)
                     {
-                        _logger.Information("Could not get identity for {Meta}", meta);
+                        _logger.Warning("Could not get identity for {Meta}", meta);
                         return null;
                     }
                     _logger.Information("Cached first identity for {Meta}: {Ident}", meta, ret);
@@ -63,7 +63,14 @@ public class EntryPointCache
                 {
                     _logger.Information("Constructing entry point for {Ident}", ident);
                     var ret = await _constructEntryPoint.ConstructFor(ident, CancellationToken.None);
-                    _logger.Information("Cached entry point for {Ident}", ident);
+                    if (ret != null)
+                    {
+                        _logger.Information("Cached entry point for {Ident}", ident);
+                    }
+                    else
+                    {
+                        _logger.Warning("Cached NULL entry point for {Ident}", ident);
+                    }
                     return ret;
                 });
                 _packageIdentityToEntryPt[ident] = entryPt;
