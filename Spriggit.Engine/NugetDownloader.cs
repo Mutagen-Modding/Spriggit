@@ -1,6 +1,5 @@
 ﻿using Mutagen.Bethesda;
 using Noggog;
-using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.PackageManagement;
 using NuGet.Packaging;
@@ -19,6 +18,7 @@ namespace Spriggit.Engine;
 public class NugetDownloader
 {
     private readonly ILogger _logger;
+    private readonly NuGet.Common.ILogger _nugetLogger;
     private readonly SourceCacheContext _cache = new();
     private readonly ISettings _settings;
     private readonly SourceRepositoryProvider _provider;
@@ -26,6 +26,7 @@ public class NugetDownloader
     public NugetDownloader(ILogger logger)
     {
         _logger = logger;
+        _nugetLogger = new NugetLoggerWrap(logger);
         _settings = Settings.LoadDefaultSettings(root: null);
         _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
@@ -74,7 +75,7 @@ public class NugetDownloader
                 var versions = await resource.GetAllVersionsAsync(
                     packageName,
                     _cache,
-                    NullLogger.Instance,
+                    _nugetLogger,
                     cancellationToken);
                 var version = GetLatestVersion(versions);
                 if (version == null) continue;
@@ -103,14 +104,14 @@ public class NugetDownloader
         ResolutionContext resolutionContext = new ResolutionContext(
             DependencyBehavior.Lowest, allowPrereleaseVersions, allowUnlisted, VersionConstraints.None);
 
-        var clientPolicyContext = ClientPolicyContext.GetClientPolicy(_settings, NullLogger.Instance);
-        INuGetProjectContext projectContext = new ConsoleProjectContext(NullLogger.Instance)
+        var clientPolicyContext = ClientPolicyContext.GetClientPolicy(_settings, _nugetLogger);
+        INuGetProjectContext projectContext = new ConsoleProjectContext(_nugetLogger)
         {
             PackageExtractionContext = new PackageExtractionContext(
                 PackageSaveMode.Defaultv3,
                 PackageExtractionBehavior.XmlDocFileSaveMode,
                 clientPolicyContext,
-                NullLogger.Instance
+                _nugetLogger
             )
         };
         
@@ -135,7 +136,7 @@ public class NugetDownloader
                 var versions = await resource.GetAllVersionsAsync(
                     packageName,
                     _cache,
-                    NullLogger.Instance,
+                    _nugetLogger,
                     cancellationToken);
                 var version = GetLatestVersion(versions);
                 if (version == null) continue;
