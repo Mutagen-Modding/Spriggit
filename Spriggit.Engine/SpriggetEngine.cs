@@ -39,7 +39,7 @@ public class SpriggitEngine(
         var entryPt = await entryPointCache.GetFor(meta, cancel);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
-        logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output}", bethesdaPluginPath, outputFolder);
+        logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
         await entryPt.EntryPoint.Serialize(
             bethesdaPluginPath,
             outputFolder,
@@ -53,7 +53,7 @@ public class SpriggitEngine(
                 Version = entryPt.Package.Version.ToString()
             },
             cancel: cancel);
-        logger.Information("Finished serializing");
+        logger.Information("Finished serializing from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
     }
 
     public async Task Deserialize(
@@ -80,7 +80,7 @@ public class SpriggitEngine(
             fileSystem.Directory.CreateDirectory(dir);
         }
         
-        logger.Information("Starting to deserialize");
+        logger.Information("Starting to deserialize from {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
         await entryPt.EntryPoint.Deserialize(
             spriggitPluginPath,
             outputFile,
@@ -88,6 +88,6 @@ public class SpriggitEngine(
             fileSystem: fileSystem,
             streamCreator: createStream,
             cancel: cancel);
-        logger.Information("Finished deserializing");
+        logger.Information("Finished deserializing with {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
     }
 }
