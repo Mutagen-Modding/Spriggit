@@ -5,13 +5,12 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
-using Spriggit.Core;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 
 namespace Spriggit.Tests.SpotTests;
 
-public class CellTest
+public class CellTest : SpotTestBase
 {
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task CellTraversals(
@@ -73,19 +72,7 @@ public class CellTest
             }
         });
         
-        var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
-        fileSystem.Directory.CreateDirectory(dataFolder);
-        mod.WriteToBinaryParallel(modPath, fileSystem: fileSystem);
-        await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Starfield",
-                Version = "Test"
-            }, CancellationToken.None);
-        var modPath2 = Path.Combine(dataFolder, otherModKey.ToString());
-        await entryPoint.Deserialize(spriggitFolder, modPath2, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, CancellationToken.None);
-        var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield, fileSystem: fileSystem);
+        var reimport = await PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
         reimport.Cells.First().SubBlocks.First().Cells.First().Traversals!.Count.Should().Be(traversals.Count);
     }
 }
