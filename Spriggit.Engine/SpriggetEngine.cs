@@ -40,7 +40,7 @@ public class SpriggitEngine(
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
-        await entryPt.EntryPoint.Serialize(
+        await entryPt.Serialize(
             bethesdaPluginPath,
             outputFolder,
             meta.Release,
@@ -81,7 +81,7 @@ public class SpriggitEngine(
         }
         
         logger.Information("Starting to deserialize from {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
-        await entryPt.EntryPoint.Deserialize(
+        await entryPt.Deserialize(
             spriggitPluginPath,
             outputFile,
             workDropoff: workDropoff,

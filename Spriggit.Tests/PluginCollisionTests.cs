@@ -58,7 +58,7 @@ GameRelease: SkyrimSE";
         var modFile = Path.Combine(modFolder, "RecordData.yaml");
         await fileSystem.File.WriteAllTextAsync(modFile, metaContent);
 
-        await yamlEntry!.EntryPoint.Deserialize(
+        await yamlEntry!.Deserialize(
             modFolder,
             Path.Combine(existingOutputDir, "ModKey.esp"),
             workDropoff: null,

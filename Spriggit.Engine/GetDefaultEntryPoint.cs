@@ -55,7 +55,7 @@ public class GetDefaultEntryPoint
         throw new FileNotFoundException($"Could not find expected meta file at {spriggitPluginPath}");
     }
     
-    public async Task<IEntryPoint> Get(string spriggitPluginPath, CancellationToken cancel)
+    public async Task<EngineEntryPoint> Get(string spriggitPluginPath, CancellationToken cancel)
     {
         var suffix = GetPackageStyleSuffix(spriggitPluginPath);
         var packageName = $"Spriggit.{suffix}.Skyrim";
@@ -63,7 +63,11 @@ public class GetDefaultEntryPoint
             packageName: packageName, packageVersion: string.Empty, cancellationToken: cancel);
         
         var entryPoint = await _entryPointCache.GetFor(ident, cancel);
-        return entryPoint != null ? entryPoint.EntryPoint 
-            : throw new NotSupportedException($"Could not get default entry point for {spriggitPluginPath}");
+        if (entryPoint == null)
+        {
+            throw new NotSupportedException($"Could not get default entry point for {spriggitPluginPath}");
+        }
+
+        return entryPoint;
     }
 }
