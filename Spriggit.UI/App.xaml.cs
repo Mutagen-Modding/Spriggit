@@ -103,7 +103,7 @@ public partial class App : Application
         }
 
         Serilog.Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .WriteTo.File(Path.Combine("logs", logFileName))
             .WriteTo.File(curLog)
             .CreateLogger();
