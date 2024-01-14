@@ -15,12 +15,12 @@ public class NugetLoggerWrap : NuGet.Common.ILogger
 
     public void LogDebug(string data)
     {
-        _logger.Information(data);
+        _logger.Debug(data);
     }
 
     public void LogVerbose(string data)
     {
-        _logger.Information(data);
+        _logger.Debug(data);
     }
 
     public void LogInformation(string data)
