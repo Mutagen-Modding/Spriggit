@@ -12,7 +12,7 @@ using Spriggit.Core;
 
 namespace Spriggit.Yaml.Skyrim;
 
-public class EntryPoint : IEntryPoint
+public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
 {
     protected static readonly BinaryWriteParameters NoCheckWriteParameters = new()
     {
@@ -75,9 +75,6 @@ public class EntryPoint : IEntryPoint
         ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        // ToDo
-        // Serialization should generate this
-        
         fileSystem = fileSystem.GetOrDefault();
         if (streamCreator == null || streamCreator is NoPreferenceStreamCreator)
         {
@@ -97,5 +94,44 @@ public class EntryPoint : IEntryPoint
             cancel: cancel);
 
         return new SpriggitEmbeddedMeta(src, release, modKey);
+    }
+
+    public async Task Serialize(string modPath, string outputDir, int release, string packageName, string version,
+        CancellationToken cancel)
+    {
+        await Serialize(
+            modPath: new ModPath(modPath),
+            dir: outputDir,
+            release: (GameRelease)release,
+            workDropoff: null,
+            fileSystem: null,
+            streamCreator: null,
+            meta: new SpriggitSource()
+            {
+                PackageName = packageName,
+                Version = version
+            },
+            cancel: cancel);
+    }
+
+    public Task Deserialize(string inputPath, string outputPath, CancellationToken cancel)
+    {
+        return Deserialize(
+            inputPath: inputPath,
+            outputPath: outputPath,
+            workDropoff: null,
+            fileSystem: null,
+            streamCreator: null,
+            cancel: cancel);
+    }
+
+    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, CancellationToken cancel)
+    {
+        return TryGetMetaInfo(
+            inputPath, 
+            workDropoff: null, 
+            fileSystem: null, 
+            streamCreator: null, 
+            cancel: cancel);
     }
 }

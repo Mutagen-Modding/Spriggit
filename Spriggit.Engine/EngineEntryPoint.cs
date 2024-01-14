@@ -11,32 +11,74 @@ namespace Spriggit.Engine;
 
 public class EngineEntryPoint : IEntryPoint
 {
-    private readonly IEntryPoint _entryPoint;
+    private readonly ISimplisticEntryPoint? _simplisticEntryPoint;
+    private readonly IEntryPoint? _entryPoint;
     public PackageIdentity Package { get; }
 
     public EngineEntryPoint(
-        IEntryPoint entryPoint,
+        IEntryPoint? entryPoint,
+        ISimplisticEntryPoint? simplisticEntryPoint,
         PackageIdentity package)
     {
+        _simplisticEntryPoint = simplisticEntryPoint;
         _entryPoint = entryPoint;
         Package = package;
     }
 
-    public Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
+    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
-        return _entryPoint.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+        if (_entryPoint != null)
+        {
+            await _entryPoint.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+        }
+        else if (_simplisticEntryPoint != null)
+        {
+            await _simplisticEntryPoint.Serialize(
+                modPath: modPath,
+                outputDir: outputDir,
+                release: (int)release,
+                packageName: meta.PackageName,
+                version: meta.Version,
+                cancel);
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
+    public async Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
-        return _entryPoint.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+        if (_entryPoint != null)
+        {
+            await _entryPoint.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+        }
+        else if (_simplisticEntryPoint != null)
+        {
+            await _simplisticEntryPoint.Deserialize(inputPath: inputPath, outputPath: outputPath, cancel: cancel);
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
+    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        return _entryPoint.TryGetMetaInfo(inputPath, workDropoff, fileSystem, streamCreator, cancel);
+        if (_entryPoint != null)
+        {
+            return await _entryPoint.TryGetMetaInfo(inputPath, workDropoff, fileSystem, streamCreator, cancel);
+        }
+        else if (_simplisticEntryPoint != null)
+        {
+            return await _simplisticEntryPoint.TryGetMetaInfo(inputPath: inputPath, cancel: cancel);
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
 }
