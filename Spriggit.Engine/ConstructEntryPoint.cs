@@ -56,35 +56,65 @@ public class ConstructEntryPoint
         var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir, $"{ident}"));
         if (frameworkDir == null) return null;
 
-        var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
-        _logger.Information("Loading plugin: {Path}", assemblyFile);
-        var loader = PluginLoader.CreateFromAssemblyFile(
-            assemblyFile: assemblyFile,
-            sharedTypes: new []
-            {
-                typeof(IEntryPoint),
-                typeof(ISimplisticEntryPoint),
-                typeof(ICreateStream),
-                typeof(SpriggitSource),
-                typeof(IWorkDropoff),
-                typeof(CancellationToken),
-                typeof(GameRelease),
-                typeof(ModPath),
-                typeof(DirectoryPath),
-                typeof(IFileSystem),
-                typeof(FilePath),
-                typeof(ModKey),
-                typeof(IModKeyed),
-            });
-
-        _logger.Information("Retrieving default assembly");
-        var defAssembly = loader.LoadDefaultAssembly();
-
-        IEntryPoint? entryPoint = GetEntryPointFromAssembly(defAssembly);
+        IEntryPoint? entryPoint = null;
+        Assembly? defAssembly = null;
         ISimplisticEntryPoint? simplisticEntryPoint = null;
-        if (entryPoint != null)
+        try
         {
+            var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
+            _logger.Information("Loading plugin: {Path}", assemblyFile);
+            var loader = PluginLoader.CreateFromAssemblyFile(
+                assemblyFile: assemblyFile,
+                sharedTypes: new []
+                {
+                    typeof(IEntryPoint),
+                    typeof(ISimplisticEntryPoint),
+                    typeof(ICreateStream),
+                    typeof(SpriggitSource),
+                    typeof(SpriggitEmbeddedMeta),
+                    typeof(IWorkDropoff),
+                    typeof(CancellationToken),
+                    typeof(GameRelease),
+                    typeof(ModPath),
+                    typeof(DirectoryPath),
+                    typeof(IFileSystem),
+                    typeof(FilePath),
+                    typeof(ModKey),
+                    typeof(IModKeyed),
+                });
+
+            _logger.Information("Retrieving default assembly");
+            defAssembly = loader.LoadDefaultAssembly();
+            entryPoint = GetEntryPointFromAssembly(defAssembly);
+        }
+        catch (Exception e)
+        {
+            _logger.Warning(e, "Error loading IEntryPoint from assembly file");
+        }
+
+        try
+        {
+            if (defAssembly == null)
+            {
+                var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
+                _logger.Information("Loading plugin: {Path}", assemblyFile);
+                var loader = PluginLoader.CreateFromAssemblyFile(
+                    assemblyFile: assemblyFile,
+                    sharedTypes: new []
+                    {
+                        typeof(ISimplisticEntryPoint),
+                        typeof(SpriggitSource),
+                        typeof(SpriggitEmbeddedMeta),
+                    });
+
+                _logger.Information("Retrieving default assembly");
+                defAssembly = loader.LoadDefaultAssembly();
+            }
             simplisticEntryPoint = GetSimplisticEntryPointFromAssembly(defAssembly);
+        }
+        catch (Exception e)
+        {
+            _logger.Warning(e, "Error loading ISimplisticEntryPoint from assembly file");
         }
 
         if (entryPoint == null && simplisticEntryPoint == null)
@@ -164,8 +194,9 @@ public class ConstructEntryPoint
                 _logger.Information("Restoring for {Identifier} at {Path}", ident, rootDir.Dir);
                 await _nugetDownloader.RestoreFor(ident, rootDir.Dir, cancellationToken);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                _logger.Information("Issue restoring for {Ident} in {RootDir}",ident, rootDir.Dir);
                 cancellationToken.ThrowIfCancellationRequested();
             }
 

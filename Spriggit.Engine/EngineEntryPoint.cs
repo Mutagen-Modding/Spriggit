@@ -53,9 +53,17 @@ public class EngineEntryPoint : IEntryPoint
     {
         if (_entryPoint != null)
         {
-            await _entryPoint.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+            try
+            {
+                await _entryPoint.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+                return;
+            }
+            catch (ArgumentException)
+            {
+            }
         }
-        else if (_simplisticEntryPoint != null)
+        
+        if (_simplisticEntryPoint != null)
         {
             await _simplisticEntryPoint.Deserialize(inputPath: inputPath, outputPath: outputPath, cancel: cancel);
         }
