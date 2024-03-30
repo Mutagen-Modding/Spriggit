@@ -9,6 +9,7 @@
     <PackageVersion Include="McMaster.NETCore.Plugins">
       <Version>1.4.0</Version>
     </PackageVersion>
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Mutagen.Bethesda">
       <Version>[0.43.3]</Version>

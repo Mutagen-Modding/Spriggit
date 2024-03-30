@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
@@ -17,6 +17,7 @@ namespace Spriggit.CLI;
 [Register(typeof(SpriggitMetaLocator))]
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(CurrentVersionsProvider))]
+[Register(typeof(ConstructAssemblyLoadedEntryPoint))]
 partial class Container : IContainer<SpriggitEngine>
 {
     [Instance] private readonly IFileSystem _fileSystem;
