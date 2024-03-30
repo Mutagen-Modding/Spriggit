@@ -85,6 +85,19 @@
     <PackageVersion Include="NuGet.Versioning">
       <Version>6.7.0</Version>
     </PackageVersion>
+	  <PackageVersion Include="ReactiveUI">
+		  <Version>19.5.41</Version>
+	  </PackageVersion>
+	  <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+	  <PackageVersion Include="ReactiveUI.Fody">
+		  <Version>19.5.41</Version>
+	  </PackageVersion>
+	  <PackageVersion Include="ReactiveUI.Testing">
+		  <Version>19.5.41</Version>
+	  </PackageVersion>
+	  <PackageVersion Include="ReactiveUI.WPF">
+		  <Version>19.5.41</Version>
+	  </PackageVersion>
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
