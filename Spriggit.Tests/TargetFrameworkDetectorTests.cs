@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using FluentAssertions;
 using Noggog;
 using Noggog.Testing.AutoFixture;
@@ -15,7 +15,7 @@ public class TargetFrameworkDetectorTests
         DirectoryPath existingDir,
         TargetFrameworkDirLocator sut)
     {
-        sut.GetTargetFrameworkDir(existingDir).Should().BeNull();
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().BeNull();
     }
     
     [Theory, DefaultAutoData]
@@ -26,9 +26,9 @@ public class TargetFrameworkDetectorTests
     {
         var someFramework = new DirectoryPath(Path.Combine(existingDir, "lib", "netstandard2.0"));
         fileSystem.Directory.CreateDirectory(someFramework);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(someFramework);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(someFramework);
     }
-    
+
     [Theory, DefaultAutoData]
     public void LatestNet(
         IFileSystem fileSystem,
@@ -39,9 +39,22 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(five);
         var six = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(six);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(six);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(six);
     }
-    
+
+    [Theory, DefaultAutoData]
+    public void PreferTargetFramework(
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        TargetFrameworkDirLocator sut)
+    {
+        var five = new DirectoryPath(Path.Combine(existingDir, "lib", "net5.0"));
+        fileSystem.Directory.CreateDirectory(five);
+        var six = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
+        fileSystem.Directory.CreateDirectory(six);
+        sut.GetTargetFrameworkDir(existingDir, "net5.0").Should().Be(five);
+    }
+
     [Theory, DefaultAutoData]
     public void NetOverFramework(
         IFileSystem fileSystem,
@@ -52,7 +65,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var net = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(net);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
     }
     
     [Theory, DefaultAutoData]
@@ -65,7 +78,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var standard = new DirectoryPath(Path.Combine(existingDir, "lib", "netstandard2.0"));
         fileSystem.Directory.CreateDirectory(standard);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(standard);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(standard);
     }
     
     [Theory, DefaultAutoData]
@@ -78,7 +91,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var net = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(net);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
     }
     
     [Theory, DefaultAutoData]
@@ -91,7 +104,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(net);
         var windows = new DirectoryPath(Path.Combine(existingDir, "lib", "net7.0-windows"));
         fileSystem.Directory.CreateDirectory(windows);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
     }
     
     [Theory, DefaultAutoData]
@@ -104,6 +117,6 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var unknown = new DirectoryPath(Path.Combine(existingDir, "lib", "MonoAndroid10"));
         fileSystem.Directory.CreateDirectory(unknown);
-        sut.GetTargetFrameworkDir(existingDir).Should().Be(framework);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(framework);
     }
 }

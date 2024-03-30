@@ -15,6 +15,7 @@ public class ConstructEntryPoint
     private readonly TargetFrameworkDirLocator _frameworkDirLocator;
     private readonly DebugState _debugState;
     private readonly ConstructAssemblyLoadedEntryPoint _constructAssemblyLoadedEntryPoint;
+    private readonly GetFrameworkType _getFrameworkType;
 
     public ConstructEntryPoint(
         IFileSystem fileSystem,
@@ -23,7 +24,8 @@ public class ConstructEntryPoint
         PluginPublisher pluginPublisher,
         TargetFrameworkDirLocator frameworkDirLocator,
         DebugState debugState,
-        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint)
+        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint,
+        GetFrameworkType getFrameworkType)
     {
         _fileSystem = fileSystem;
         _logger = logger;
@@ -32,6 +34,7 @@ public class ConstructEntryPoint
         _frameworkDirLocator = frameworkDirLocator;
         _debugState = debugState;
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
+        _getFrameworkType = getFrameworkType;
     }
 
     public async Task<IEngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
@@ -49,7 +52,29 @@ public class ConstructEntryPoint
             await PreparePluginFolder(ident, cancellationToken, rootDir);
         }
 
-        var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir, $"{ident}"));
+        var packageDir = Path.Combine(rootDir, $"{ident}");
+        var libDir = Path.Combine(packageDir, "lib");
+
+        _logger.Information("Finding target framework for {Dir}", libDir);
+
+        var targetFrameworkDir = _fileSystem.Directory
+            .EnumerateDirectories(libDir)
+            .OrderByDescending(x => x, new FrameworkLocatorComparer(_getFrameworkType, null))
+            .FirstOrDefault();
+
+        if (targetFrameworkDir == null)
+        {
+            throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
+        }
+
+        var targetFramework = Path.GetFileName(targetFrameworkDir);
+
+        if (targetFramework == null)
+        {
+            throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
+        }
+
+        var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
         if (frameworkDir == null) return null;
 
         return _constructAssemblyLoadedEntryPoint.GetEntryPoint(frameworkDir.Value, ident);
@@ -71,12 +96,34 @@ public class ConstructEntryPoint
                 cancellationToken.ThrowIfCancellationRequested();
             }
 
-            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(Path.Combine(rootDir.Dir, $"{ident}"));
+            var packageDir = Path.Combine(rootDir.Dir, $"{ident}");
+            var libDir = Path.Combine(packageDir, "lib");
+
+            _logger.Information("Finding target framework for {Dir}", libDir);
+
+            var targetFrameworkDir = _fileSystem.Directory
+                .EnumerateDirectories(libDir)
+                .OrderByDescending(x => x, new FrameworkLocatorComparer(_getFrameworkType, null))
+                .FirstOrDefault();
+
+            if (targetFrameworkDir == null)
+            {
+                throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
+            }
+
+            var targetFramework = Path.GetFileName(targetFrameworkDir);
+
+            if (targetFramework == null)
+            {
+                throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
+            }
+
+            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
             if (frameworkDir == null) return;
 
             _logger.Information("Publishing {Root} into framework directory {Path} for {Identifier}", rootDir.Dir, frameworkDir,
                 ident);
-            _pluginPublisher.Publish(rootDir.Dir, ident.ToString(), frameworkDir.Value);
+            _pluginPublisher.Publish(rootDir.Dir, ident.ToString(), frameworkDir.Value, targetFramework);
             Directory.CreateDirectory(Path.GetDirectoryName(targetDir)!);
             Directory.Move(rootDir.Dir, targetDir);
         }

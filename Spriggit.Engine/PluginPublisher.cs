@@ -16,7 +16,11 @@ public class PluginPublisher
         _frameworkDirLocator = frameworkDirLocator;
     }
     
-    public void Publish(DirectoryPath packageRepoDir, FileName pluginName, DirectoryPath outputDir)
+    public void Publish(
+        DirectoryPath packageRepoDir,
+        FileName pluginName,
+        DirectoryPath outputDir,
+        string targetFramework)
     {
         // ToDo
         // Lean on dotnet SDK if it's installed
@@ -26,7 +30,7 @@ public class PluginPublisher
         foreach (var packageDir in _fileSystem.Directory.EnumerateDirectoryPaths(packageRepoDir.Path, includeSelf: false, recursive: false))
         {
             if (packageDir.Name == pluginName) continue;
-            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir);
+            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
             if (frameworkDir == null) continue;
             if (outputDir == frameworkDir) continue;
             _fileSystem.Directory.DeepCopy(frameworkDir.Value, outputDir, overwrite: true);
