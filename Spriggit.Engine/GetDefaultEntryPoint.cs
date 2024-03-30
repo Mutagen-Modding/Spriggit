@@ -55,7 +55,7 @@ public class GetDefaultEntryPoint
         throw new FileNotFoundException($"Could not find expected meta file at {spriggitPluginPath}");
     }
     
-    public async Task<EngineEntryPoint> Get(string spriggitPluginPath, CancellationToken cancel)
+    public async Task<IEntryPoint> Get(string spriggitPluginPath, CancellationToken cancel)
     {
         var suffix = GetPackageStyleSuffix(spriggitPluginPath);
         var packageName = $"Spriggit.{suffix}.Skyrim";

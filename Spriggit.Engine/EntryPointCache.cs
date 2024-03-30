@@ -9,7 +9,7 @@ public class EntryPointCache
 {
     private readonly object _lock = new();
     private readonly Dictionary<SpriggitMeta, Task<PackageIdentity?>> _metaToPackageIdentity = new();
-    private readonly Dictionary<PackageIdentity, Task<EngineEntryPoint?>> _packageIdentityToEntryPt = new();
+    private readonly Dictionary<PackageIdentity, Task<IEngineEntryPoint?>> _packageIdentityToEntryPt = new();
     private readonly ConstructEntryPoint _constructEntryPoint;
     private readonly NugetDownloader _nugetDownloader;
     private readonly ILogger _logger;
@@ -24,7 +24,7 @@ public class EntryPointCache
         _logger = logger;
     }
 
-    public async Task<EngineEntryPoint?> GetFor(SpriggitMeta meta, CancellationToken cancel)
+    public async Task<IEngineEntryPoint?> GetFor(SpriggitMeta meta, CancellationToken cancel)
     {
         Task<PackageIdentity?> identTask;
         lock (_lock)
@@ -51,10 +51,10 @@ public class EntryPointCache
         return ident != null ? await GetFor(ident, cancel) : null;
     }
 
-    public async Task<EngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)
+    public async Task<IEngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)
     {
         if (ident == null) return null;
-        Task<EngineEntryPoint?> entryPt;
+        Task<IEngineEntryPoint?> entryPt;
         lock (_lock)
         {
             if (!_packageIdentityToEntryPt.TryGetValue(ident, out entryPt!))

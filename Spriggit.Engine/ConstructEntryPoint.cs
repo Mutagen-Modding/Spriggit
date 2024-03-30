@@ -38,7 +38,7 @@ public class ConstructEntryPoint
         _debugState = debugState;
     }
 
-    public async Task<EngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
+    public async Task<IEngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
     {
         var rootDir = new DirectoryPath(Path.Combine(Path.GetTempPath(), "Spriggit", "Sources", ident.ToString()));
         
@@ -122,7 +122,7 @@ public class ConstructEntryPoint
             return null;
         }
         
-        return new EngineEntryPoint(
+        return new AssemblyLoadedEntryPoint(
             entryPoint,
             simplisticEntryPoint,
             ident);
