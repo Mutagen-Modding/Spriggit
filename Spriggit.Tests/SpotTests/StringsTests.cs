@@ -14,7 +14,7 @@ namespace Spriggit.Tests.SpotTests;
 
 public class StringsTests
 {
-    [Theory(Skip = "Translated string needs update in Mutagen"), MutagenModAutoData(GameRelease.Starfield)]
+    [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task DifferentModKeyStrings(
         IFileSystem fileSystem,
         StarfieldMod mod,
