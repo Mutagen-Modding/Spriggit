@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using Noggog;
-using Noggog.IO;
 using NuGet.Packaging.Core;
 using Serilog;
 
@@ -13,24 +12,24 @@ public class ConstructEntryPoint
     private readonly PreparePluginFolder _preparePluginFolder;
     private readonly TargetFrameworkDirLocator _frameworkDirLocator;
     private readonly DebugState _debugState;
+    private readonly FindTargetFramework _findTargetFramework;
     private readonly ConstructAssemblyLoadedEntryPoint _constructAssemblyLoadedEntryPoint;
-    private readonly GetFrameworkType _getFrameworkType;
 
     public ConstructEntryPoint(
         ILogger logger,
         PreparePluginFolder preparePluginFolder,
         TargetFrameworkDirLocator frameworkDirLocator,
         DebugState debugState,
-        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint,
-        GetFrameworkType getFrameworkType)
+        FindTargetFramework findTargetFramework,
+        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint)
     {
         _fileSystem = IFileSystemExt.DefaultFilesystem;
         _logger = logger;
         _preparePluginFolder = preparePluginFolder;
         _frameworkDirLocator = frameworkDirLocator;
         _debugState = debugState;
+        _findTargetFramework = findTargetFramework;
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
-        _getFrameworkType = getFrameworkType;
     }
 
     public async Task<IEngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
@@ -49,27 +48,8 @@ public class ConstructEntryPoint
         }
 
         var packageDir = Path.Combine(rootDir, $"{ident}");
-        var libDir = Path.Combine(packageDir, "lib");
 
-        _logger.Information("Finding target framework for {Dir}", libDir);
-
-        var targetFrameworkDir = _fileSystem.Directory
-            .EnumerateDirectories(libDir)
-            .Select(x => x)
-            .OrderByDescending(x => x, new FrameworkLocatorComparer(_getFrameworkType, null))
-            .FirstOrDefault();
-
-        if (targetFrameworkDir == null)
-        {
-            throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
-        }
-
-        var targetFramework = Path.GetFileName(targetFrameworkDir);
-
-        if (targetFramework == null)
-        {
-            throw new DirectoryNotFoundException($"Could not find target framework directory within {libDir}");
-        }
+        var targetFramework = _findTargetFramework.FindTargetFrameworkWithin(packageDir);
 
         var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
         if (frameworkDir == null) return null;
