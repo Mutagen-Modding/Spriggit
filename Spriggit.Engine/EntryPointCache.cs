@@ -12,15 +12,18 @@ public class EntryPointCache
     private readonly Dictionary<PackageIdentity, Task<IEngineEntryPoint?>> _packageIdentityToEntryPt = new();
     private readonly ConstructEntryPoint _constructEntryPoint;
     private readonly NugetDownloader _nugetDownloader;
+    private readonly SpriggitTempSourcesProvider _tempSourcesProvider;
     private readonly ILogger _logger;
 
     public EntryPointCache(
         ConstructEntryPoint constructEntryPoint,
         NugetDownloader nugetDownloader,
+        SpriggitTempSourcesProvider tempSourcesProvider,
         ILogger logger)
     {
         _constructEntryPoint = constructEntryPoint;
         _nugetDownloader = nugetDownloader;
+        _tempSourcesProvider = tempSourcesProvider;
         _logger = logger;
     }
 
@@ -62,7 +65,10 @@ public class EntryPointCache
                 entryPt = Task.Run(async () =>
                 {
                     _logger.Information("Constructing entry point for {Ident}", ident);
-                    var ret = await _constructEntryPoint.ConstructFor(ident, CancellationToken.None);
+                    var ret = await _constructEntryPoint.ConstructFor(
+                        _tempSourcesProvider.SpriggitSourcesPath,
+                        ident, 
+                        CancellationToken.None);
                     if (ret != null)
                     {
                         _logger.Information("Cached entry point for {Ident}", ident);

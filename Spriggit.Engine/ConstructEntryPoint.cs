@@ -32,9 +32,12 @@ public class ConstructEntryPoint
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
     }
 
-    public async Task<IEngineEntryPoint?> ConstructFor(PackageIdentity ident, CancellationToken cancellationToken)
+    public async Task<IEngineEntryPoint?> ConstructFor(
+        DirectoryPath sourcesPath,
+        PackageIdentity ident, 
+        CancellationToken cancellationToken)
     {
-        var rootDir = new DirectoryPath(Path.Combine(Path.GetTempPath(), "Spriggit", "Sources", ident.ToString()));
+        var rootDir = new DirectoryPath(Path.Combine(sourcesPath, ident.ToString()));
         
         if (_debugState.ClearNugetSources && rootDir.CheckExists())
         {
