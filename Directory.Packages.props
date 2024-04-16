@@ -12,13 +12,13 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Mutagen.Bethesda">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Core">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Kernel">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization">
       <Version>[1.16]</Version>
@@ -33,37 +33,37 @@
       <Version>[1.16]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Starfield">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Testing">
-      <Version>[0.43.3]</Version>
+      <Version>[0.44.1-pr01]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Autofac">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt.Windows">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Testing">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.WPF">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.SourceGenerators">
-      <Version>[2.64]</Version>
+      <Version>[2.65.0-nightly-20240413-211475]</Version>
     </PackageVersion>
     <PackageVersion Include="NuGet.Build.Tasks">
       <Version>6.9.1</Version>

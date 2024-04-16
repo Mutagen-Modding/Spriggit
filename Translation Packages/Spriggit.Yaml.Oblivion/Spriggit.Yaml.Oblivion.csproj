@@ -7,6 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+        <PackageReference Include="Noggog.CSharpExt" />
+        <PackageReference Include="Mutagen.Bethesda.Core" />
+        <PackageReference Include="Mutagen.Bethesda.Oblivion" />
 		<PackageReference Include="Mutagen.Bethesda.Serialization" />
 		<PackageReference Include="Mutagen.Bethesda.Serialization.Yaml" />
 		<PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />

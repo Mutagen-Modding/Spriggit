@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Noggog.CSharpExt" />
+        <PackageReference Include="Mutagen.Bethesda.Core" />
+        <PackageReference Include="Mutagen.Bethesda.Oblivion" />
         <PackageReference Include="Mutagen.Bethesda.Serialization" />
         <PackageReference Include="Mutagen.Bethesda.Serialization.Newtonsoft" />
         <PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />
-        <PackageReference Include="Mutagen.Bethesda.Oblivion" />
     </ItemGroup>
 
     <ItemGroup>
