@@ -21,21 +21,31 @@ public class ConstructEntryPoint
         TargetFrameworkDirLocator frameworkDirLocator,
         DebugState debugState,
         FindTargetFramework findTargetFramework,
-        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint)
+        ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint,
+        IFileSystem fileSystem)
     {
-        _fileSystem = IFileSystemExt.DefaultFilesystem;
         _logger = logger;
         _preparePluginFolder = preparePluginFolder;
         _frameworkDirLocator = frameworkDirLocator;
         _debugState = debugState;
         _findTargetFramework = findTargetFramework;
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
+        _fileSystem = fileSystem;
     }
 
-    public async Task<IEngineEntryPoint?> ConstructFor(
+    public Task<IEngineEntryPoint?> ConstructFor(
+        DirectoryPath sourcesPath,
+        PackageIdentity ident,
+        CancellationToken cancellationToken)
+    {
+        return ConstructFor(sourcesPath, ident, cancellationToken, true);
+    }
+
+    private async Task<IEngineEntryPoint?> ConstructFor(
         DirectoryPath sourcesPath,
         PackageIdentity ident, 
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        bool shouldRetry)
     {
         var rootDir = new DirectoryPath(Path.Combine(sourcesPath, ident.ToString()));
         
@@ -47,16 +57,49 @@ public class ConstructEntryPoint
 
         if (!rootDir.CheckExists())
         {
-            await _preparePluginFolder.Prepare(ident, cancellationToken, rootDir);
+            try
+            {
+                await _preparePluginFolder.Prepare(ident, cancellationToken, rootDir);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Error preparing plugin folder");
+                return null;
+            }
+            shouldRetry = false;
         }
 
-        var packageDir = Path.Combine(rootDir, $"{ident}");
+        IEngineEntryPoint? ret;
+        try
+        {
+            var packageDir = Path.Combine(rootDir, $"{ident}");
 
-        var targetFramework = _findTargetFramework.FindTargetFrameworkWithin(packageDir);
+            var targetFramework = _findTargetFramework.FindTargetFrameworkWithin(packageDir);
 
-        var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
-        if (frameworkDir == null) return null;
+            var frameworkDir = _frameworkDirLocator.GetTargetFrameworkDir(packageDir, targetFramework);
+            if (frameworkDir != null)
+            {
+                ret = _constructAssemblyLoadedEntryPoint.GetEntryPoint(frameworkDir.Value, ident);
+            }
+            else
+            {
+                ret = null;
+            }
+        }
+        catch (Exception e)
+        when (shouldRetry)
+        {
+            ret = null;
+            _logger.Warning("Error when constructing entry point.  Retrying: {Exception}", e);
+        }
 
-        return _constructAssemblyLoadedEntryPoint.GetEntryPoint(frameworkDir.Value, ident);
+        if (ret == null && shouldRetry)
+        {
+            _logger.Information("Error constructing entry point.  Deleting entire folder and then retrying {Path}", rootDir);
+            _fileSystem.Directory.DeleteEntireFolder(rootDir, deleteFolderItself: true);
+            return await ConstructFor(sourcesPath, ident, cancellationToken, false);
+        }
+
+        return ret;
     }
 }

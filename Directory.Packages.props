@@ -12,40 +12,40 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Mutagen.Bethesda">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Core">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Kernel">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization">
-      <Version>[1.16]</Version>
+      <Version>[1.17]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
-      <Version>[1.16]</Version>
+      <Version>[1.17]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
-      <Version>[1.16]</Version>
+      <Version>[1.17]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
-      <Version>[1.16]</Version>
+      <Version>[1.17]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Starfield">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Testing">
-      <Version>[0.44.1-pr01]</Version>
+      <Version>[0.44.0-nightly-20240416-100906]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.Autofac">
       <Version>[2.65.0-nightly-20240413-211475]</Version>
