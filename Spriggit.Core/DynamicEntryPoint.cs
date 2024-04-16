@@ -76,4 +76,12 @@ public class DynamicEntryPoint : IEntryPoint
             (GameRelease)(int)dynamicRet.Release,
             ModKey.FromNameAndExtension(dynamicRet.ModKey.ToString()));
     }
+
+    public void Dispose()
+    {
+        if (_wrappedEndPoint is IDisposable disp)
+        {
+            disp.Dispose();
+        }
+    }
 }

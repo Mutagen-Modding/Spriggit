@@ -6,11 +6,13 @@ using Noggog;
 using NuGet.Packaging.Core;
 using Spriggit.Core;
 using System.IO.Abstractions;
+using System.Reactive.Disposables;
 
 namespace Spriggit.Engine;
 
 public class AssemblyLoadedEntryPoint : IEngineEntryPoint
 {
+    private readonly CompositeDisposable _disposable;
     private readonly ISimplisticEntryPoint? _simplisticEntryPoint;
     private readonly IEntryPoint? _entryPoint;
     public PackageIdentity Package { get; }
@@ -18,8 +20,10 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
     public AssemblyLoadedEntryPoint(
         IEntryPoint? entryPoint,
         ISimplisticEntryPoint? simplisticEntryPoint,
-        PackageIdentity package)
+        PackageIdentity package,
+        CompositeDisposable disposable)
     {
+        _disposable = disposable;
         _simplisticEntryPoint = simplisticEntryPoint;
         _entryPoint = entryPoint;
         Package = package;
@@ -88,5 +92,10 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         {
             throw new NotImplementedException();
         }
+    }
+
+    public void Dispose()
+    {
+        _disposable.Dispose();
     }
 }

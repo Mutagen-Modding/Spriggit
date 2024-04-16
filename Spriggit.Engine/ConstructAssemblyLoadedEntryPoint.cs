@@ -9,6 +9,7 @@ using System.IO.Abstractions;
 using System.Reflection;
 using NuGet.Packaging.Core;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Disposables;
 using Serilog;
 
 namespace Spriggit.Engine;
@@ -24,6 +25,7 @@ public class ConstructAssemblyLoadedEntryPoint
 
     public IEngineEntryPoint? GetEntryPoint(DirectoryPath frameworkDir, PackageIdentity ident)
     {
+        CompositeDisposable disposable = new();
         IEntryPoint? entryPoint = null;
         Assembly? defAssembly = null;
         ISimplisticEntryPoint? simplisticEntryPoint = null;
@@ -50,6 +52,7 @@ public class ConstructAssemblyLoadedEntryPoint
                     typeof(ModKey),
                     typeof(IModKeyed),
                 });
+            disposable.Add(loader);
 
             _logger.Information("Retrieving default assembly");
             defAssembly = loader.LoadDefaultAssembly();
@@ -74,6 +77,7 @@ public class ConstructAssemblyLoadedEntryPoint
                         typeof(SpriggitSource),
                         typeof(SpriggitEmbeddedMeta),
                     });
+                disposable.Add(loader);
 
                 _logger.Information("Retrieving default assembly");
                 defAssembly = loader.LoadDefaultAssembly();
@@ -93,7 +97,8 @@ public class ConstructAssemblyLoadedEntryPoint
         return new AssemblyLoadedEntryPoint(
             entryPoint,
             simplisticEntryPoint,
-            ident);
+            ident,
+            disposable);
     }
 
     private IEntryPoint? GetEntryPointFromAssembly(Assembly defAssembly)
