@@ -41,9 +41,7 @@ public class LinkInputVm : ViewModel
 
     public LinkInputVm()
     {
-        ModPathPicker.Filters.Add(new CommonFileDialogFilter("Master", ".esm"));
-        ModPathPicker.Filters.Add(new CommonFileDialogFilter("Light Master", ".esl"));
-        ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp"));
+        ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp,.esl,.esm"));
 
         _inError = Observable.CombineLatest(
                 this.WhenAnyValue(x => x.ModPathPicker.InError),
