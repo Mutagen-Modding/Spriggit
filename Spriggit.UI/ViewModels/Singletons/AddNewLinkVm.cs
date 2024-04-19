@@ -11,7 +11,7 @@ namespace Spriggit.UI.ViewModels.Singletons;
 
 public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings, IEditLinkVm
 {
-    public LinkInputVm LinkInput { get; private set; } = new();
+    public LinkInputVm LinkInput { get; private set; }
     
     public ICommand FinishCommand { get; }
     public ICommand DiscardCommand { get; }
@@ -19,17 +19,19 @@ public class AddNewLinkVm : ViewModel, IActivatableVm, ISaveMainSettings, IEditL
     private ViewModel? _previous;
 
     public AddNewLinkVm(
+        LinkInputVm.Factory inputFactory,
         LinkVm.InputFactory linkFactory,
         RepoListings reposListingVm,
         ActivePanelVm activePanelVm)
     {
+        LinkInput = inputFactory();
         FinishCommand = ReactiveCommand.Create(
             execute: () =>
             {
                 reposListingVm.Links.Add(linkFactory(LinkInput));
                 activePanelVm.Focus(_previous);
 
-                var replacement = new LinkInputVm();
+                var replacement = inputFactory();
                 replacement.CopyFrom(LinkInput);
                 replacement.ModPathPicker.TargetPath = GetModPathSaveString(LinkInput);
                 LinkInput = replacement;

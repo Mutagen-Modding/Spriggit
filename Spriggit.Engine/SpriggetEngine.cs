@@ -27,7 +27,7 @@ public class SpriggitEngine(
         
         if (meta == null)
         {
-            meta = spriggitMetaLocator.Locate(outputFolder);
+            meta = spriggitMetaLocator.LocateAndParse(outputFolder);
         }
 
         if (meta == null)

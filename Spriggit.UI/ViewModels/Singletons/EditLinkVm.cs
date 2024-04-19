@@ -4,15 +4,16 @@ using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Spriggit.Engine;
 using Spriggit.UI.ViewModels.Transient;
 
 namespace Spriggit.UI.ViewModels.Singletons;
 
 public class EditLinkVm : ViewModel, IActivatableVm, IEditLinkVm
 {
-    private readonly LinkInputVm _empty = new();
+    private readonly LinkInputVm _empty;
     
-    public LinkInputVm LinkInput { get; private set; } = new();
+    public LinkInputVm LinkInput { get; private set; }
     
     private ViewModel? _previous;
     
@@ -20,9 +21,13 @@ public class EditLinkVm : ViewModel, IActivatableVm, IEditLinkVm
     public ICommand DiscardCommand { get; }
 
     [Reactive] public LinkInputVm? Target { get; set; }
-
-    public EditLinkVm(ActivePanelVm activePanelVm)
+    
+    public EditLinkVm(
+        LinkInputVm.Factory inputFactory,
+        ActivePanelVm activePanelVm)
     {
+        _empty = inputFactory();
+        LinkInput = inputFactory();
         FinishCommand = ReactiveCommand.Create(
             execute: () =>
             {

@@ -15,12 +15,12 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" /> 
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Game Release"
                        VerticalAlignment="Bottom"
                        Margin="5" FontSize="14" FontWeight="Bold" />
-            <Button Grid.Column="1" 
+            <Button Grid.Column="1"
                     x:Name="CancelButton"
                     Margin="0,0,5,0"
                     VerticalAlignment="Bottom"
@@ -42,7 +42,7 @@
                 </iconPacks:PackIconFontAwesome>
             </Button>
         </Grid>
-        <ComboBox x:Name="GameReleaseCombo" Margin="5" >
+        <ComboBox x:Name="GameReleaseCombo" Margin="5">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
@@ -60,40 +60,60 @@
                 BorderBrush="{StaticResource GrayBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="5">
-            <TabControl x:Name="TabControl">
-                <TabItem Header="Yaml" />
-                <TabItem Header="Json" />
-                <TabItem Header="Custom">
-                    <Grid Margin="5" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="5" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Text="Package"
-                                   Margin="0,0,0,5"
-                                   FontSize="14" FontWeight="Bold" />
-                        <TextBox Grid.Row="1" Grid.Column="0" x:Name="SpriggitPackageBox"
-                                 Text="{Binding LinkInput.PackageName}"
-                                 mah:TextBoxHelper.Watermark="Default package" />
-                        <TextBlock Grid.Row="0" Grid.Column="2" 
-                                   Text="Version"
-                                   Margin="0,0,0,5"
-                                   FontSize="14" FontWeight="Bold" />
-                        <TextBox Grid.Row="1" Grid.Column="2"
-                                  x:Name="SpriggitVersionBox"
-                                  Text="{Binding LinkInput.Version}"
-                                  mah:TextBoxHelper.Watermark="Latest version"/>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+            <StackPanel Orientation="Vertical">
+                <Border x:Name="VersioningPane"
+                        CornerRadius="6"  >
+                    <StackPanel Orientation="Vertical" >
+                        <TabControl x:Name="TabControl">
+                            <TabItem Header="Yaml">
+                            </TabItem>
+                            <TabItem Header="Json">
+                            </TabItem>
+                            <TabItem Header="Custom">
+                            </TabItem>
+                        </TabControl>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,5,8">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock x:Name="PackageTextBlock"
+                                           Text="Package"
+                                           Margin="5,0,0,5"
+                                           FontSize="14" FontWeight="Bold" />
+                                <TextBox x:Name="SpriggitPackageBox"
+                                         Text="{Binding LinkInput.PackageName}"
+                                         Width="110"
+                                         Margin="0,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock x:Name="VersionBlock"
+                                           Text="Version"
+                                           Margin="5,0,0,5"
+                                           FontSize="14" FontWeight="Bold" />
+                                <TextBox x:Name="SpriggitVersionBox"
+                                         Text="{Binding LinkInput.Version}"
+                                         Width="110"
+                                         mah:TextBoxHelper.Watermark="Latest version" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <StackPanel Orientation="Horizontal" x:Name="SpriggitConfigActivePane" Margin="5,0,0,8">
+                    <TextBlock Text="Controlled by .spriggit config" />
+                    <Button x:Name="GoToSpriggitConfigFolderButton" Margin="5,0,0,0">
+                        <iconPacks:FontAwesome Kind="FolderSolid" />
+                    </Button>
+                    <Button x:Name="EditSpriggitConfigButton" Margin="5,0,0,0">
+                        <iconPacks:Zondicons Kind="EditPencil" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" x:Name="CreateSpriggitConfigPane" Margin="5,0,0,8">
+                    <TextBlock Text="Create .spriggit config" />
+                    <Button x:Name="CreateSpriggitConfigButton" Margin="5,0,0,0">
+                        <iconPacks:ForkAwesome Kind="PlusCircle" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
         </Border>
         <Button x:Name="AddButton" HorizontalAlignment="Right" MinWidth="80"
-                Margin="5"/>
+                Margin="5" />
     </StackPanel>
 </wpf:NoggogUserControl>

@@ -20,7 +20,7 @@ public class SpriggitMetaLocator
         _fileSystem = fileSystem;
     }
 
-    private FilePath? GetSpriggitConfigFile(DirectoryPath? outputFolder)
+    public FilePath? LocateSpriggitConfigFile(DirectoryPath? outputFolder)
     {
         while (_fileSystem.Directory.Exists(outputFolder))
         {
@@ -37,13 +37,18 @@ public class SpriggitMetaLocator
         return null;
     }
     
-    public SpriggitMeta? Locate(DirectoryPath outputFolder)
+    public SpriggitMeta? LocateAndParse(DirectoryPath outputFolder)
     {
-        var config = GetSpriggitConfigFile(outputFolder);
-        if (config == null) return null;
+        var config = LocateSpriggitConfigFile(outputFolder);
+        return Parse(config);
+    }
+    
+    public SpriggitMeta? Parse(FilePath? path)
+    {
+        if (path == null) return null;
         try
         {
-            var meta = JsonConvert.DeserializeObject<SpriggitMetaSerialize>(_fileSystem.File.ReadAllText(config.Value));
+            var meta = JsonConvert.DeserializeObject<SpriggitMetaSerialize>(_fileSystem.File.ReadAllText(path.Value));
             if (meta == null || meta.PackageName.IsNullOrWhitespace() || meta.Release == null)
             {
                 return null;
@@ -60,7 +65,7 @@ public class SpriggitMetaLocator
         }
         catch (Exception e)
         {
-            _logger.Error(e, "Error reading spriggit config: {ConfigPath}", config.Value);
+            _logger.Error(e, "Error reading spriggit config: {ConfigPath}", path.Value);
             Console.WriteLine(e);
             throw;
         }

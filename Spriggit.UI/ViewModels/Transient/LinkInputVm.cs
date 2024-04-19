@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Mutagen.Bethesda;
@@ -7,6 +8,8 @@ using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Spriggit.Engine;
+using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
 
 namespace Spriggit.UI.ViewModels.Transient;
@@ -39,7 +42,17 @@ public class LinkInputVm : ViewModel
     private readonly ObservableAsPropertyHelper<bool> _inError;
     public bool InError => _inError.Value;
 
-    public LinkInputVm()
+    public delegate LinkInputVm Factory();
+
+    private readonly ObservableAsPropertyHelper<FilePath?> _spriggitConfigPath;
+    public FilePath? SpriggitConfigPath => _spriggitConfigPath.Value;
+    
+    public ICommand OpenSpriggitConfigFolderCommand { get; }
+    public ICommand OpenSpriggitConfigCommand { get; }
+
+    public LinkInputVm(
+        INavigateTo navigateTo,
+        SpriggitMetaLocator locator)
     {
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp,.esl,.esm"));
 
@@ -48,22 +61,61 @@ public class LinkInputVm : ViewModel
                 this.WhenAnyValue(x => x.GitFolderPicker.InError),
                 (m, g) => m || g)
             .ToProperty(this, nameof(InError));
-    }
 
-    public LinkInputVm(LinkSettings settings)
-        : this()
-    {
-        Absorb(settings);
+        _spriggitConfigPath = this.WhenAnyValue(x => x.GitFolderPicker.TargetPath)
+            .Select(path =>
+            {
+                return locator.LocateSpriggitConfigFile(path);
+            })
+            .ToProperty(this, nameof(SpriggitConfigPath));
+
+        var spriggitConfig = this.WhenAnyValue(x => x.SpriggitConfigPath)
+            .ObserveOn(RxApp.TaskpoolScheduler)
+            .Select(path =>
+            {
+                return locator.Parse(path);
+            })
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Replay(1)
+            .RefCount();
+
+        spriggitConfig
+            .NotNull()
+            .Subscribe(x =>
+            {
+                PackageName = x.Source.PackageName;
+                Version = x.Source.Version;
+                Release = x.Release;
+            });
+
+        OpenSpriggitConfigCommand = ReactiveCommand.Create(
+            canExecute: this.WhenAnyValue(x => x.SpriggitConfigPath)
+                .Select(x => x != null),
+            execute: () =>
+            {
+                if (!SpriggitConfigPath.HasValue) return;
+                navigateTo.Navigate(SpriggitConfigPath.Value);
+            });
+        OpenSpriggitConfigFolderCommand = ReactiveCommand.Create(
+            canExecute: this.WhenAnyValue(x => x.SpriggitConfigPath)
+                .Select(x => x != null),
+            execute: () =>
+            {
+                if (SpriggitConfigPath?.Directory == null) return;
+                navigateTo.Navigate(SpriggitConfigPath.Value.Directory);
+            });
     }
 
     public void Absorb(LinkSettings settings)
     {
-        GitFolderPicker.TargetPath = settings.GitPath;
         ModPathPicker.TargetPath = settings.ModPath;
         PackageName = settings.SpriggitPackageName;
         Version = settings.SpriggitPackageVersion;
         SourceCategory = settings.SourceCategory;
         Release = settings.GameRelease;
+        
+        // Needs to go last to drive config reading
+        GitFolderPicker.TargetPath = settings.GitPath;
     }
 
     public LinkSettings ToSettings()
