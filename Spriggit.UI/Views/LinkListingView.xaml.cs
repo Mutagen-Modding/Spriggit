@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using Noggog;
+using Noggog.WPF;
 using ReactiveUI;
 
 namespace Spriggit.UI;
@@ -65,6 +66,11 @@ public partial class LinkListingView
             this.WhenAnyValue(x => x.IsMouseOver)
                 .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .BindTo(this, x => x.SettingsButton.Visibility)
+                .DisposeWith(disp);
+
+            // ContextMenu
+            this.WhenAnyValue(x => x.ViewModel!.DeleteCommand)
+                .BindTo(this, x => x.DeleteContextMenuButton.Command)
                 .DisposeWith(disp);
         });
     }

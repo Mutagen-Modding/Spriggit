@@ -28,6 +28,7 @@ public class LinkVm : ViewModel
     public ReactiveCommand<Unit, Unit> SyncToModCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelSyncToGitCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelSyncToModCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
     public ICommand EditSettingsCommand { get; }
 
     private readonly ObservableAsPropertyHelper<bool> _syncing;
@@ -59,6 +60,7 @@ public class LinkVm : ViewModel
         LinkInputVm input,
         PackageInputQuery packageInputQuery,
         EntryPointCache entryPointCache,
+        RepoListings repoListings,
         LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {
         _logger = logger;
@@ -151,6 +153,12 @@ public class LinkVm : ViewModel
                 }
             })
             .DisposeWith(this);
+
+        DeleteCommand = ReactiveCommand.Create(() =>
+        {
+            repoListings.Links.Remove(this);
+            this.Dispose();
+        });
     }
 
     private void WrapTranslation(

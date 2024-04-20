@@ -12,6 +12,11 @@
                        mc:Ignorable="d"
                        d:DesignHeight="300" d:DesignWidth="300">
     <Border>
+        <Border.ContextMenu>
+            <ContextMenu>
+                <MenuItem x:Name="DeleteContextMenuButton" Header="Delete" />
+            </ContextMenu>
+        </Border.ContextMenu>
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" >
