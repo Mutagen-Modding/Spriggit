@@ -15,7 +15,8 @@ public class SpriggitEngine(
     SpriggitMetaLocator spriggitMetaLocator,
     ILogger logger,
     GetMetaToUse getMetaToUse,
-    CurrentVersionsProvider CurrentVersionsProvider)
+    SerializeBlocker serializeBlocker,
+    CurrentVersionsProvider currentVersionsProvider)
 {
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
@@ -23,7 +24,9 @@ public class SpriggitEngine(
         SpriggitMeta? meta,
         CancellationToken cancel)
     {
-        logger.Information("Spriggit version {Version}", CurrentVersionsProvider.SpriggitVersion);
+        logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
+        
+        serializeBlocker.CheckAndBlock(outputFolder);
         
         if (meta == null)
         {
@@ -62,7 +65,7 @@ public class SpriggitEngine(
         SpriggitSource? source,
         CancellationToken cancel)
     {
-        logger.Information("Spriggit version {Version}", CurrentVersionsProvider.SpriggitVersion);
+        logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
         
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel);

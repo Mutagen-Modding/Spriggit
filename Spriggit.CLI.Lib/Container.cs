@@ -21,6 +21,7 @@ namespace Spriggit.CLI;
 [Register(typeof(GetFrameworkType))]
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(FindTargetFramework))]
+[Register(typeof(SerializeBlocker))]
 [Register(typeof(SpriggitTempSourcesProvider))]
 partial class Container : IContainer<SpriggitEngine>
 {
