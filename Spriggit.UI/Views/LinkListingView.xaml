@@ -11,53 +11,84 @@
                        xmlns:transient="clr-namespace:Spriggit.UI.ViewModels.Transient"
                        mc:Ignorable="d"
                        d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Transparent" >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" x:Name="SyncToModButton" Margin="4,0, 0, 0" Width="20" >
-            <iconPacks:PackIconPicolIcons Kind="ArrowFullLeft"
-                                          VerticalAlignment="Center"
-                                          Padding="0,2" />
-        </Button>
-        <Button Grid.Column="0" x:Name="CancelSyncToModButton" Margin="4,0, 0, 0" Width="20" Visibility="Hidden" >
-            <iconPacks:PackIconMaterialDesign Kind="Close"
-                                              VerticalAlignment="Center"
-                                              Padding="0,2" />
-        </Button>
-        
-        <Grid Grid.Column="1" 
-              HorizontalAlignment="Left"
-              Margin="5,2">
+    <Border>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" >
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0" Color="#00696969" />
+                            <GradientStop Offset="0.5" Color="#66696969" />
+                            <GradientStop Offset="1" Color="#00696969" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderThickness" Value="0,1,0,0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}" Value="True" >
+                        <Setter Property="BorderThickness" Value="0,1,0,1" />
+                        <Setter Property="BorderBrush" >
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="-.15" Color="#00077507" />
+                                    <GradientStop Offset="0.5" Color="{StaticResource Green}" />
+                                    <GradientStop Offset="1.15" Color="#00077507" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid Background="Transparent">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" x:Name="LinkModNameBox"
-                       TextTrimming="CharacterEllipsis"
-                       VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" x:Name="LinkModExtensionBox"
-                       TextTrimming="CharacterEllipsis"
-                       VerticalAlignment="Center" />
-        </Grid>
-        
-        <Button Grid.Column="2" x:Name="SettingsButton" Width="20" >
-            <iconPacks:PackIconMaterial Kind="Cog" Padding="2" />
-        </Button>
-        
-        <Button Grid.Column="3" x:Name="SyncToGitButton" Margin="0,0, 4, 0" Width="20" >
-            <iconPacks:PackIconPicolIcons Kind="ArrowFullRight"
-                                          VerticalAlignment="Center"
-                                          Padding="0,2" />
-        </Button>
-        
-        <Button Grid.Column="3" x:Name="CancelSyncToGitButton" Margin="0,0, 4, 0" Width="20" Visibility="Hidden" >
-            <iconPacks:PackIconMaterialDesign Kind="Close"
+            <Button Grid.Column="0" x:Name="SyncToModButton" Margin="4,0, 0, 0" Width="20">
+                <iconPacks:PackIconPicolIcons Kind="ArrowFullLeft"
                                               VerticalAlignment="Center"
                                               Padding="0,2" />
-        </Button>
-    </Grid>
+            </Button>
+            <Button Grid.Column="0" x:Name="CancelSyncToModButton" Margin="4,0, 0, 0" Width="20" Visibility="Hidden">
+                <iconPacks:PackIconMaterialDesign Kind="Close"
+                                                  VerticalAlignment="Center"
+                                                  Padding="0,2" />
+            </Button>
+
+            <Grid Grid.Column="1"
+                  HorizontalAlignment="Left"
+                  Margin="5,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" x:Name="LinkModNameBox"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" x:Name="LinkModExtensionBox"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center" />
+            </Grid>
+
+            <Button Grid.Column="2" x:Name="SettingsButton" Width="20">
+                <iconPacks:PackIconMaterial Kind="Cog" Padding="2" />
+            </Button>
+
+            <Button Grid.Column="3" x:Name="SyncToGitButton" Margin="0,0, 4, 0" Width="20">
+                <iconPacks:PackIconPicolIcons Kind="ArrowFullRight"
+                                              VerticalAlignment="Center"
+                                              Padding="0,2" />
+            </Button>
+
+            <Button Grid.Column="3" x:Name="CancelSyncToGitButton" Margin="0,0, 4, 0" Width="20" Visibility="Hidden">
+                <iconPacks:PackIconMaterialDesign Kind="Close"
+                                                  VerticalAlignment="Center"
+                                                  Padding="0,2" />
+            </Button>
+        </Grid>
+    </Border>
 </wpf:NoggogUserControl>

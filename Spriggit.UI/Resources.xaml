@@ -6,6 +6,7 @@
     <Color x:Key="Orange">#d9941e</Color>
     <Color x:Key="DarkOrange">#4a3410</Color>
     <Color x:Key="DarkBlue">#141728</Color>
+    <Color x:Key="Green">#077507</Color>
     <Color x:Key="DarkGreen">#252920</Color>
     <Color x:Key="NeonGreen">#50de21</Color>
     <Color x:Key="TransparentGrayBackground">#18000000</Color>
@@ -14,6 +15,7 @@
     
     <SolidColorBrush x:Key="OrangeYellowBrush" Color="{StaticResource OrangeYellow}" />
     <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource Orange}" />
+    <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource Green}" />
     <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}" />
     <SolidColorBrush x:Key="TransparentGrayBackgroundBrush" Color="{StaticResource TransparentGrayBackground}" />
     <SolidColorBrush x:Key="GrayBorderBrush" Color="{StaticResource GrayBorder}" />
