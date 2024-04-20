@@ -12,36 +12,9 @@
                        mc:Ignorable="d"
                        d:DesignHeight="400" d:DesignWidth="300">
     <StackPanel Orientation="Vertical" Margin="5">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Game Release"
-                       VerticalAlignment="Bottom"
-                       Margin="5" FontSize="14" FontWeight="Bold" />
-            <Button Grid.Column="1"
-                    x:Name="CancelButton"
-                    Margin="0,0,5,0"
-                    VerticalAlignment="Bottom"
-                    ToolTip="Cancel and Discard">
-                <iconPacks:PackIconFontAwesome
-                    Width="25"
-                    Height="25"
-                    Kind="BackspaceSolid">
-                    <iconPacks:PackIconFontAwesome.Style>
-                        <Style TargetType="iconPacks:PackIconFontAwesome">
-                            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.Gray5}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CancelButton}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource SalmonBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </iconPacks:PackIconFontAwesome.Style>
-                </iconPacks:PackIconFontAwesome>
-            </Button>
-        </Grid>
+        <TextBlock Grid.Column="0" Text="Game Release"
+                   VerticalAlignment="Bottom"
+                   Margin="5" FontSize="14" FontWeight="Bold" />
         <ComboBox x:Name="GameReleaseCombo" Margin="5">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -113,7 +86,72 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-        <Button x:Name="AddButton" HorizontalAlignment="Right" MinWidth="80"
-                Margin="5" />
+        <Grid Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                    x:Name="CancelButton"
+                    HorizontalContentAlignment="Stretch">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconFontAwesome Grid.Column="0"
+                            Margin="15,0,10,15"
+                            VerticalAlignment="Center"
+                            Kind="ArrowLeftSolid" />
+                        <TextBlock Grid.Column="1"
+                            Margin="0,-2,0,0"
+                            VerticalAlignment="Top"
+                            FontSize="14"
+                            Text="Cancel">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=CancelButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </Button>
+                <Button Grid.Column="1"
+                    x:Name="AcceptButton"
+                    HorizontalContentAlignment="Stretch">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconFontAwesome Grid.Column="1"
+                            Margin="10,0,15,15"
+                            VerticalAlignment="Center"
+                            Kind="CheckSolid" />
+                        <TextBlock Grid.Column="0" x:Name="AddButtonText"
+                            Margin="0,-2,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            FontSize="14"
+                            Text="Confirm">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=AcceptButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </Button>
+        </Grid>
     </StackPanel>
 </wpf:NoggogUserControl>

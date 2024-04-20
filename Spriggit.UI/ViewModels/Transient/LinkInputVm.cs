@@ -1,13 +1,19 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using DynamicData;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Mutagen.Bethesda;
 using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Serilog;
+using Spriggit.Core;
 using Spriggit.Engine;
 using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
@@ -16,6 +22,8 @@ namespace Spriggit.UI.ViewModels.Transient;
 
 public class LinkInputVm : ViewModel
 {
+    private readonly WriteSpriggitConfig _writeSpriggitConfig;
+
     public PathPickerVM ModPathPicker { get; } = new()
     {
         ExistCheckOption = PathPickerVM.CheckOptions.On,
@@ -49,11 +57,18 @@ public class LinkInputVm : ViewModel
     
     public ICommand OpenSpriggitConfigFolderCommand { get; }
     public ICommand OpenSpriggitConfigCommand { get; }
+    public ICommand CreateSpriggitConfigCommand { get; }
+
+    private readonly Subject<Unit> _refreshSpriggitConfig = new();
 
     public LinkInputVm(
+        ILogger logger,
         INavigateTo navigateTo,
-        SpriggitMetaLocator locator)
+        WriteSpriggitConfig writeSpriggitConfig,
+        SpriggitMetaLocator locator,
+        LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {
+        _writeSpriggitConfig = writeSpriggitConfig;
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp,.esl,.esm"));
 
         _inError = Observable.CombineLatest(
@@ -63,6 +78,7 @@ public class LinkInputVm : ViewModel
             .ToProperty(this, nameof(InError));
 
         _spriggitConfigPath = this.WhenAnyValue(x => x.GitFolderPicker.TargetPath)
+            .ReplayMostRecent(_refreshSpriggitConfig)
             .Select(path =>
             {
                 return locator.LocateSpriggitConfigFile(path);
@@ -103,6 +119,41 @@ public class LinkInputVm : ViewModel
             {
                 if (SpriggitConfigPath?.Directory == null) return;
                 navigateTo.Navigate(SpriggitConfigPath.Value.Directory);
+            });
+        CreateSpriggitConfigCommand = ReactiveCommand.Create(
+            canExecute: this.WhenAnyValue(x => x.SpriggitConfigPath)
+                .Select(x => x == null),
+            execute: () =>
+            {
+                var package = linkSourceCategoryToPackageName.GetPackageName(SourceCategory, Release, PackageName);
+                if (package.Failed)
+                {
+                    logger.Warning("Could not get package name {SourceCategory}, {Release}, {PackageName}",
+                        SourceCategory, Release, PackageName);
+                    return;
+                }
+                
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "Spriggit Config file|*.spriggit";
+                dialog.Title = "Save a .spriggit file";
+                dialog.FileName = $".spriggit";
+                dialog.InitialDirectory = System.IO.Path.GetDirectoryName(GitFolderPicker.TargetPath) ?? "";
+                dialog.ShowDialog();
+
+                if (dialog.FileName == "") return;
+                
+                _writeSpriggitConfig.Write(
+                    dialog.FileName,
+                    new SpriggitMeta(
+                        new SpriggitSource()
+                        {
+                            PackageName = PackageName,
+                            Version = Version
+                        },
+                        Release),
+                    IFileSystemExt.DefaultFilesystem);
+                
+                _refreshSpriggitConfig.OnNext(Unit.Default);
             });
     }
 

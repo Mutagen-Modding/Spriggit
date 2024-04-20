@@ -30,7 +30,7 @@ public partial class EditListingView
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.LinkInput.Version, x => x.SpriggitVersionBox.Text)
                 .DisposeWith(disp);
-            this.Bind(ViewModel, x => x.FinishCommand, x => x.AddButton.Command)
+            this.Bind(ViewModel, x => x.FinishCommand, x => x.AcceptButton.Command)
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.DiscardCommand, x => x.CancelButton.Command)
                 .DisposeWith(disp);
@@ -38,9 +38,11 @@ public partial class EditListingView
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.LinkInput.OpenSpriggitConfigFolderCommand, x => x.GoToSpriggitConfigFolderButton.Command)
                 .DisposeWith(disp);
+            this.Bind(ViewModel, x => x.LinkInput.CreateSpriggitConfigCommand, x => x.CreateSpriggitConfigButton.Command)
+                .DisposeWith(disp);
             this.WhenAnyValue(x => x.ViewModel)
                 .Select(x => x is EditLinkVm ? "Apply" : "Add")
-                .BindTo(this, x => x.AddButton.Content)
+                .BindTo(this, x => x.AddButtonText.Text)
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.LinkInput.SourceCategory, x => x.TabControl.SelectedIndex,
                     x => (int)x,
