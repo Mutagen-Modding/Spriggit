@@ -4,6 +4,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="McMaster.NETCore.Plugins" />
+    <PackageReference Include="Mutagen.Bethesda.Core" />
     <PackageReference Include="Noggog.SourceGenerators" />
     <PackageReference Include="Noggog.Testing" />
     <PackageReference Include="NuGet.Build.Tasks" />

@@ -72,7 +72,7 @@ public class CellTest : SpotTestBase
             }
         });
         
-        var reimport = await PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
+        var reimport = await TestUtil.PassThroughStarfield(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
         reimport.Cells.First().SubBlocks.First().Cells.First().Traversals!.Count.Should().Be(traversals.Count);
     }
 }
