@@ -18,12 +18,12 @@
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Compile</BuildAction>
       </Compile>
-      <Compile Update="Runner.cs">
+      <Compile Update="EngineRunner.cs">
         <CodeLanguage>cs</CodeLanguage>
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Compile</BuildAction>
       </Compile>
-      <Compile Update="Container.cs">
+      <Compile Update="EngineContainer.cs">
         <CodeLanguage>cs</CodeLanguage>
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Compile</BuildAction>

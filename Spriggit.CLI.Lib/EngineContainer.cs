@@ -23,7 +23,7 @@ namespace Spriggit.CLI;
 [Register(typeof(FindTargetFramework))]
 [Register(typeof(SerializeBlocker))]
 [Register(typeof(SpriggitTempSourcesProvider))]
-partial class Container : IContainer<SpriggitEngine>
+partial class EngineContainer : IContainer<SpriggitEngine>
 {
     [Instance] private readonly IFileSystem _fileSystem;
     [Instance] private readonly IWorkDropoff? _workDropoff;
@@ -31,7 +31,7 @@ partial class Container : IContainer<SpriggitEngine>
     [Instance] private readonly DebugState _debugState;
     [Instance] private readonly ILogger _logger;
 
-    public Container(
+    public EngineContainer(
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff, 
         ICreateStream? streamCreate,

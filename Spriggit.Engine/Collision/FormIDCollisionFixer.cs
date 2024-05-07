@@ -1,7 +1,8 @@
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
+using System.Reflection;
 using LibGit2Sharp;
+using Loqui;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
@@ -13,23 +14,55 @@ public class FormIDCollisionFixer
 {
     private readonly IFileSystem _fileSystem;
     private readonly FormIDReassigner _reassigner;
+    private readonly EntryPointCache _entryPointCache;
+    private readonly GetMetaToUse _getMetaToUse;
+    private readonly GitFolderLocator _gitFolderLocator;
     private readonly FormIDCollisionDetector _detector;
 
     public FormIDCollisionFixer(
         IFileSystem fileSystem,
         FormIDReassigner reassigner,
+        EntryPointCache entryPointCache,
+        GetMetaToUse getMetaToUse,
+        GitFolderLocator gitFolderLocator,
         FormIDCollisionDetector detector)
     {
         _fileSystem = fileSystem;
         _reassigner = reassigner;
+        _entryPointCache = entryPointCache;
+        _getMetaToUse = getMetaToUse;
+        _gitFolderLocator = gitFolderLocator;
         _detector = detector;
     }
 
-    public async Task DetectAndFix<TMod, TModGetter>(
+    public async Task DetectAndFix(
+        DirectoryPath spriggitModPath)
+    {
+        var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
+        var entryPoint = await _entryPointCache.GetFor(meta, CancellationToken.None);
+        var typeStr = $"Mutagen.Bethesda.{meta.Release.ToCategory()}.{meta.Release.ToCategory()}Mod";
+        var regis = LoquiRegistration.GetRegisterByFullName(typeStr);
+        if (regis == null)
+        {
+            throw new Exception($"No loqui registration found for {typeStr}");
+        }
+
+        foreach (var m in this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
+        {
+            
+        }
+        var method = this.GetType().GetMethod("DetectAndFixInternal", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var genMethod = method.MakeGenericMethod(new Type[] { regis.SetterType, regis.GetterType });
+        genMethod.Invoke(this, new object?[]
+        {
+            entryPoint,
+            spriggitModPath,
+        });
+    }
+
+    internal async Task DetectAndFixInternal<TMod, TModGetter>(
         IEntryPoint entryPoint,
-        DirectoryPath gitRootPath,
-        DirectoryPath spriggitModPath,
-        Signature fixSignature)
+        DirectoryPath spriggitModPath)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
     {
@@ -74,6 +107,8 @@ public class FormIDCollisionFixer
             .Select(x => x.ToFormLinkInformation())
             .ToArray();
 
+        var gitRootPath = _gitFolderLocator.Get(spriggitModPath);
+
         var repo = new LibGit2Sharp.Repository(gitRootPath);
         if (repo == null)
         {
@@ -84,6 +119,8 @@ public class FormIDCollisionFixer
         {
             throw new Exception("Git repository had no commits at HEAD");
         }
+
+        var fixSignature = repo.Head.Tip.Author;
         
         var parents = repo.Head.Commits.First().Parents
             .ToArray();
@@ -94,7 +131,7 @@ public class FormIDCollisionFixer
         }
         
         var origBranch = repo.Head;
-        var branch = repo.CreateBranch("Spriggit-Merge-Fix", parents[0]);
+        var branch = repo.CreateBranch($"Spriggit-Merge-Fix-{origBranch.Tip.Sha.Substring(0, 6)}", parents[0]);
         Commands.Checkout(repo, branch);
 
         await entryPoint.Deserialize(
@@ -130,6 +167,8 @@ public class FormIDCollisionFixer
 
         Commands.Checkout(repo, origBranch);
         repo.Merge(branch, fixSignature);
+        
+        repo.Branches.Remove(branch);
         
         FilePath newMergedModPath = Path.Combine(tmp.Dir, "MergedNew", meta.ModKey.FileName);
         newMergedModPath.Directory?.Create(_fileSystem);

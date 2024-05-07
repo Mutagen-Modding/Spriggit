@@ -76,8 +76,8 @@ public partial class App : Application
         {
             Task.Run(() => Parser.Default.ParseArguments(e.Args, typeof(DeserializeCommand), typeof(SerializeCommand))
                 .MapResult(
-                    async (DeserializeCommand deserialize) => await Runner.Run(deserialize),
-                    async (SerializeCommand serialize) => await Runner.Run(serialize),
+                    async (DeserializeCommand deserialize) => await EngineRunner.Run(deserialize),
+                    async (SerializeCommand serialize) => await EngineRunner.Run(serialize),
                     async _ => -1)).Wait();
             return true;
         }

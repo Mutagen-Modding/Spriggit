@@ -44,13 +44,9 @@ public class FormIDCollisionFixerTests
             },
             CancellationToken.None);
         
-        var signature = new Signature("me", "someone@gmail.com", DateTimeOffset.Now);
-
-        await sut.DetectAndFix<IStarfieldMod, IStarfieldModGetter>(
+        await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
             entryPoint,
-            gitRootPath: gitRootPath,
-            spriggitModPath: spriggitModPath,
-            fixSignature: signature);
+            spriggitModPath: spriggitModPath);
 
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder2);
@@ -79,7 +75,7 @@ public class FormIDCollisionFixerTests
             PackageName = "Spriggit.Yaml.Starfield",
             Version = "Test"
         };
-        using var tmp = TempFolder.FactoryByAddedPath("FormIdCollisionFixer");
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"));
         tmp.Dir.DeleteEntireFolder();
         
         var modFolder = Path.Combine(tmp.Dir, "ModFolder");
@@ -148,11 +144,9 @@ public class FormIDCollisionFixerTests
         // Merge
         repo.Merge(lhs, signature, new MergeOptions());
 
-        await sut.DetectAndFix<IStarfieldMod, IStarfieldModGetter>(
+        await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
             entryPoint,
-            gitRootPath: repoPath,
-            spriggitModPath: spriggitModPath,
-            fixSignature: signature);
+            spriggitModPath: spriggitModPath);
         
         var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);

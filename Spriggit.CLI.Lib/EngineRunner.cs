@@ -7,7 +7,7 @@ using Spriggit.Engine;
 
 namespace Spriggit.CLI;
 
-public static class Runner
+public static class EngineRunner
 {
     private static IWorkDropoff GetWorkDropoff(int? threads)
     {
@@ -29,9 +29,9 @@ public static class Runner
         return workDropoff;
     }
     
-    private static Container GetContainer(DebugState debugState, byte? numThreads)
+    private static EngineContainer GetContainer(DebugState debugState, byte? numThreads)
     {
-        return new Container(new FileSystem(), GetWorkDropoff(numThreads), null, debugState, LoggerSetup.Logger);
+        return new EngineContainer(new FileSystem(), GetWorkDropoff(numThreads), null, debugState, LoggerSetup.Logger);
     }
     
     public static async Task<int> Run(DeserializeCommand deserializeCommand)
