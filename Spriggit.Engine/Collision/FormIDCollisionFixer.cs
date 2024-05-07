@@ -12,13 +12,16 @@ namespace Spriggit.Engine.Collision;
 public class FormIDCollisionFixer
 {
     private readonly IFileSystem _fileSystem;
+    private readonly FormIDReassigner _reassigner;
     private readonly FormIDCollisionDetector _detector;
 
     public FormIDCollisionFixer(
         IFileSystem fileSystem,
+        FormIDReassigner reassigner,
         FormIDCollisionDetector detector)
     {
         _fileSystem = fileSystem;
+        _reassigner = reassigner;
         _detector = detector;
     }
 
@@ -48,6 +51,18 @@ public class FormIDCollisionFixer
         var collisions = _detector.LocateCollisions(mergedMod);
         if (collisions.Count == 0) return;
 
+        foreach (var coll in collisions)
+        {
+            if (coll.Value.Count != 2)
+            {
+                throw new Exception($"Collision detected with not exactly two participants: {string.Join(", ", coll.Value)}");
+            }
+        }
+
+        var toReassign = collisions.SelectMany(x => x.Value.Skip(1))
+            .Select(x => x.ToFormLinkInformation())
+            .ToArray();
+
         var repo = new LibGit2Sharp.Repository(gitRootPath);
         if (repo == null)
         {
@@ -69,6 +84,13 @@ public class FormIDCollisionFixer
 
         var branch = repo.CreateBranch("Spriggit-Merge-Fix", parents[0]);
         Commands.Checkout(repo, branch);
+
+        var branchMod = ModInstantiator<TMod>.Importer(mergedModPath, release, fileSystem: _fileSystem);
+
+        _reassigner.Reassign<TMod, TModGetter>(
+            branchMod, 
+            () => mergedMod.GetNextFormKey(),
+            toReassign);
 
         //
         // var cache = mergedMod.ToMutableLinkCache<TMod, TModGetter>();
