@@ -47,7 +47,6 @@ public class FormIDCollisionFixerTests
         var signature = new Signature("me", "someone@gmail.com", DateTimeOffset.Now);
 
         await sut.DetectAndFix<IStarfieldMod, IStarfieldModGetter>(
-            modKey, GameRelease.Starfield,
             entryPoint,
             gitRootPath: gitRootPath,
             spriggitModPath: spriggitModPath,
@@ -150,7 +149,6 @@ public class FormIDCollisionFixerTests
         repo.Merge(lhs, signature, new MergeOptions());
 
         await sut.DetectAndFix<IStarfieldMod, IStarfieldModGetter>(
-            mod.ModKey, GameRelease.Starfield,
             entryPoint,
             gitRootPath: repoPath,
             spriggitModPath: spriggitModPath,

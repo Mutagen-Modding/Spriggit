@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
@@ -26,8 +26,6 @@ public class FormIDCollisionFixer
     }
 
     public async Task DetectAndFix<TMod, TModGetter>(
-        ModKey modKey,
-        GameRelease release,
         IEntryPoint entryPoint,
         DirectoryPath gitRootPath,
         DirectoryPath spriggitModPath,
@@ -36,22 +34,6 @@ public class FormIDCollisionFixer
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
     {
         using var tmp = TempFolder.Factory(fileSystem: _fileSystem);
-
-        FilePath origMergedModPath = Path.Combine(tmp.Dir, "MergedOrig", modKey.FileName);
-        origMergedModPath.Directory?.Create(_fileSystem);
-
-        await entryPoint.Deserialize(
-            spriggitModPath,
-            origMergedModPath,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, release, fileSystem: _fileSystem);
-        
-        var collisions = _detector.LocateCollisions(origMergedMod);
-        if (collisions.Count == 0) return;
 
         var meta = await entryPoint.TryGetMetaInfo(
             spriggitModPath,
@@ -63,6 +45,22 @@ public class FormIDCollisionFixer
         {
             throw new Exception("Could not locate target meta");
         }
+
+        FilePath origMergedModPath = Path.Combine(tmp.Dir, "MergedOrig", meta.ModKey.FileName);
+        origMergedModPath.Directory?.Create(_fileSystem);
+
+        await entryPoint.Deserialize(
+            spriggitModPath,
+            origMergedModPath,
+            workDropoff: null,
+            fileSystem: _fileSystem,
+            streamCreator: null,
+            cancel: CancellationToken.None);
+
+        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
+        
+        var collisions = _detector.LocateCollisions(origMergedMod);
+        if (collisions.Count == 0) return;
 
         foreach (var coll in collisions)
         {
@@ -107,7 +105,7 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, release, fileSystem: _fileSystem);
+        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
 
         _reassigner.Reassign<TMod, TModGetter>(
             branchMod, 
@@ -119,7 +117,7 @@ public class FormIDCollisionFixer
         await entryPoint.Serialize(
             origMergedModPath.Path,
             spriggitModPath,
-            release,
+            meta.Release,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,
@@ -133,7 +131,7 @@ public class FormIDCollisionFixer
         Commands.Checkout(repo, origBranch);
         repo.Merge(branch, fixSignature);
         
-        FilePath newMergedModPath = Path.Combine(tmp.Dir, "MergedNew", modKey.FileName);
+        FilePath newMergedModPath = Path.Combine(tmp.Dir, "MergedNew", meta.ModKey.FileName);
         newMergedModPath.Directory?.Create(_fileSystem);
 
         await entryPoint.Deserialize(
@@ -144,7 +142,7 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, release, fileSystem: _fileSystem);
+        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
 
         var newCollisions = _detector.LocateCollisions(newMergedMod);
         if (newCollisions.Count != 0)
