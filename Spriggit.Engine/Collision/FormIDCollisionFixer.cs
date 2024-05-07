@@ -30,36 +30,49 @@ public class FormIDCollisionFixer
         GameRelease release,
         IEntryPoint entryPoint,
         DirectoryPath gitRootPath,
-        DirectoryPath spriggitModPath)
+        DirectoryPath spriggitModPath,
+        Signature fixSignature)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
     {
         using var tmp = TempFolder.Factory(fileSystem: _fileSystem);
 
-        var mergedModPath = Path.Combine(tmp.Dir, modKey.FileName);
+        FilePath origMergedModPath = Path.Combine(tmp.Dir, "MergedOrig", modKey.FileName);
+        origMergedModPath.Directory?.Create(_fileSystem);
 
         await entryPoint.Deserialize(
             spriggitModPath,
-            mergedModPath,
+            origMergedModPath,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var mergedMod = ModInstantiator<TMod>.Importer(mergedModPath, release, fileSystem: _fileSystem);
+        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, release, fileSystem: _fileSystem);
         
-        var collisions = _detector.LocateCollisions(mergedMod);
+        var collisions = _detector.LocateCollisions(origMergedMod);
         if (collisions.Count == 0) return;
+
+        var meta = await entryPoint.TryGetMetaInfo(
+            spriggitModPath,
+            workDropoff: null,
+            fileSystem: _fileSystem,
+            streamCreator: null,
+            cancel: CancellationToken.None);
+        if (meta == null)
+        {
+            throw new Exception("Could not locate target meta");
+        }
 
         foreach (var coll in collisions)
         {
             if (coll.Value.Count != 2)
             {
-                throw new Exception($"Collision detected with not exactly two participants: {string.Join(", ", coll.Value)}");
+                throw new Exception($"Collision detected with not exactly two participants: {string.Join(", ", coll.Value.Take(50))}");
             }
         }
 
-        var toReassign = collisions.SelectMany(x => x.Value.Skip(1))
+        var toReassign = collisions.SelectMany(x => x.Value)
             .Select(x => x.ToFormLinkInformation())
             .ToArray();
 
@@ -81,33 +94,62 @@ public class FormIDCollisionFixer
         {
             throw new Exception("Git did not have a merge commit at HEAD");
         }
-
+        
+        var origBranch = repo.Head;
         var branch = repo.CreateBranch("Spriggit-Merge-Fix", parents[0]);
         Commands.Checkout(repo, branch);
 
-        var branchMod = ModInstantiator<TMod>.Importer(mergedModPath, release, fileSystem: _fileSystem);
+        await entryPoint.Deserialize(
+            spriggitModPath,
+            origMergedModPath,
+            workDropoff: null,
+            fileSystem: _fileSystem,
+            streamCreator: null,
+            cancel: CancellationToken.None);
+
+        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, release, fileSystem: _fileSystem);
 
         _reassigner.Reassign<TMod, TModGetter>(
             branchMod, 
-            () => mergedMod.GetNextFormKey(),
+            () => origMergedMod.GetNextFormKey(),
             toReassign);
+        
+        branchMod.WriteToBinary(origMergedModPath.Path);
+        
+        await entryPoint.Serialize(
+            origMergedModPath.Path,
+            spriggitModPath,
+            release,
+            workDropoff: null,
+            fileSystem: _fileSystem,
+            streamCreator: null,
+            meta: meta.Source,
+            cancel: CancellationToken.None);
 
-        //
-        // var cache = mergedMod.ToMutableLinkCache<TMod, TModGetter>();
-        //
-        // var remapping = new Dictionary<FormKey, FormKey>();
-        //
-        // foreach (var collList in collisions)
-        // {
-        //     if (collList.Value.Count == 0) continue;
-        //
-        //     foreach (var other in collList.Value.Skip(1))
-        //     {
-        //         var context = cache.ResolveContext(other.FormKey, other.GetType());
-        //         mod.Remove(other.FormKey, other.GetType());
-        //         var newRec = context.DuplicateIntoAsNewRecord(mod);
-        //         remapping[]
-        //     }
-        // }
+        Commands.Checkout(repo, branch);
+        Commands.Stage(repo, Path.Combine(spriggitModPath, "*"));
+        repo.Commit("FormID Collision Fix", fixSignature, fixSignature, new CommitOptions());
+
+        Commands.Checkout(repo, origBranch);
+        repo.Merge(branch, fixSignature);
+        
+        FilePath newMergedModPath = Path.Combine(tmp.Dir, "MergedNew", modKey.FileName);
+        newMergedModPath.Directory?.Create(_fileSystem);
+
+        await entryPoint.Deserialize(
+            spriggitModPath,
+            newMergedModPath,
+            workDropoff: null,
+            fileSystem: _fileSystem,
+            streamCreator: null,
+            cancel: CancellationToken.None);
+
+        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, release, fileSystem: _fileSystem);
+
+        var newCollisions = _detector.LocateCollisions(newMergedMod);
+        if (newCollisions.Count != 0)
+        {
+            throw new Exception($"Fix still had collided FormIDs.  Leaving in a bad state");
+        }
     }
 }

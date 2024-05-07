@@ -43,12 +43,15 @@ public class FormIDCollisionFixerTests
                 Version = "Test"
             },
             CancellationToken.None);
+        
+        var signature = new Signature("me", "someone@gmail.com", DateTimeOffset.Now);
 
         await sut.DetectAndFix<IStarfieldMod, IStarfieldModGetter>(
             modKey, GameRelease.Starfield,
             entryPoint,
             gitRootPath: gitRootPath,
-            spriggitModPath: spriggitModPath);
+            spriggitModPath: spriggitModPath,
+            fixSignature: signature);
 
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder2);
@@ -150,7 +153,8 @@ public class FormIDCollisionFixerTests
             mod.ModKey, GameRelease.Starfield,
             entryPoint,
             gitRootPath: repoPath,
-            spriggitModPath: spriggitModPath);
+            spriggitModPath: spriggitModPath,
+            fixSignature: signature);
         //
         // var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         // Directory.CreateDirectory(modFolder2);
