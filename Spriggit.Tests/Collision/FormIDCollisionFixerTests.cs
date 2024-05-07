@@ -155,20 +155,25 @@ public class FormIDCollisionFixerTests
             gitRootPath: repoPath,
             spriggitModPath: spriggitModPath,
             fixSignature: signature);
-        //
-        // var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
-        // Directory.CreateDirectory(modFolder2);
-        // await entryPoint.Deserialize(
-        //     inputPath: spriggitModPath,
-        //     outputPath: modPath2,
-        //     fileSystem: null,
-        //     workDropoff: null,
-        //     streamCreator: null,
-        //     cancel: CancellationToken.None);
-        //
-        // var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield);
-        // reimport.EnumerateMajorRecords().Should().HaveCount(2);
-        // reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
-        // reimport.Weapons.First().FormKey.Should().Be(weap.FormKey);
+        
+        var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
+        var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
+        Directory.CreateDirectory(modFolder2);
+        await entryPoint.Deserialize(
+            inputPath: spriggitModPath,
+            outputPath: modPath2,
+            fileSystem: null,
+            workDropoff: null,
+            streamCreator: null,
+            cancel: CancellationToken.None);
+        
+        var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield);
+        reimport.EnumerateMajorRecords().Should().HaveCount(3);
+        reimport.Armors.Select(x => x.FormKey)
+            .Should().Equal(armor.FormKey);
+        reimport.Npcs.Count.Should().Be(1);
+        reimport.Weapons.Count.Should().Be(1);
+        reimport.Npcs.First().FormKey.Should()
+            .NotBe(reimport.Weapons.First().FormKey);
     }
 }
