@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Strings;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
@@ -21,9 +22,11 @@ public class SpriggitEngine(
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
-        SpriggitMeta? meta,
-        CancellationToken cancel)
+        SpriggitMeta? meta = default,
+        CancellationToken? cancel = default)
     {
+        cancel ??= CancellationToken.None;
+        
         logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
         
         serializeBlocker.CheckAndBlock(outputFolder);
@@ -39,7 +42,7 @@ public class SpriggitEngine(
         }
         
         logger.Information("Getting entry point for {Meta}", meta);
-        var entryPt = await entryPointCache.GetFor(meta, cancel);
+        var entryPt = await entryPointCache.GetFor(meta, cancel.Value);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
@@ -55,26 +58,28 @@ public class SpriggitEngine(
                 PackageName = entryPt.Package.Id,
                 Version = entryPt.Package.Version.ToString()
             },
-            cancel: cancel);
+            cancel: cancel.Value);
         logger.Information("Finished serializing from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
     }
 
     public async Task Deserialize(
         string spriggitPluginPath, 
         FilePath outputFile,
-        SpriggitSource? source,
-        CancellationToken cancel)
+        SpriggitSource? source = default,
+        CancellationToken? cancel = default)
     {
+        cancel ??= CancellationToken.None;
+        
         logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
         
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
-        var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel);
+        var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel.Value);
         
         logger.Information("Getting entry point for {Meta}", meta);
-        var entryPt = await entryPointCache.GetFor(meta, cancel);
+        var entryPt = await entryPointCache.GetFor(meta, cancel.Value);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
-        cancel.ThrowIfCancellationRequested();
+        cancel.Value.ThrowIfCancellationRequested();
 
         var dir = outputFile.Directory;
         if (dir != null)
@@ -90,7 +95,7 @@ public class SpriggitEngine(
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,
-            cancel: cancel);
+            cancel: cancel.Value);
         logger.Information("Finished deserializing with {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
     }
 }
