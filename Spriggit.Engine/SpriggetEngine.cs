@@ -80,22 +80,32 @@ public class SpriggitEngine(
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
         cancel.Value.ThrowIfCancellationRequested();
-
-        var dir = outputFile.Directory;
-        if (dir != null)
-        {
-            logger.Information("Creating directory {Dir}", dir);
-            fileSystem.Directory.CreateDirectory(dir);
-        }
         
-        logger.Information("Starting to deserialize from {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("Spriggit", "Translations", Path.GetRandomFileName()));
+
+        string tempOutput = Path.Combine(tmp.Dir, Path.GetFileName(outputFile));
+        
+        logger.Information("Starting to deserialize from {BethesdaPluginPath} to temp output {Output} with {Meta}", 
+            spriggitPluginPath, tempOutput, meta);
         await entryPt.Deserialize(
             spriggitPluginPath,
-            outputFile,
+            tempOutput,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,
             cancel: cancel.Value);
-        logger.Information("Finished deserializing with {BethesdaPluginPath} to {Output} with {Meta}", spriggitPluginPath, outputFile, meta);
+        logger.Information("Finished deserializing with {BethesdaPluginPath} to temp output {Output} with {Meta}", 
+            spriggitPluginPath, tempOutput, meta);
+    
+        var dir = outputFile.Directory;
+        if (dir != null)
+        {
+            logger.Information("Creating output directory {Dir}", dir);
+            fileSystem.Directory.CreateDirectory(dir);
+        }
+
+        logger.Information("Moving file to final output {Output}", outputFile);
+        File.Move(tempOutput, outputFile, overwrite: true);
+        logger.Information("Moved file to final output {Output}", outputFile);
     }
 }
