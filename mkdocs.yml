@@ -55,3 +55,6 @@ nav:
   - Overview: index.md
   - Workflow: workflow.md
   - Output: output.md
+  - Installlation: installation.md
+  - Command Line Interface: cli.md
+  - Translation Packages: translation-packages.md

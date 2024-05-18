@@ -36,6 +36,8 @@ Weight: 0.5
 
 This file is more palatable to Git and can support diff tools and similar functionality.
 
+![File Changes](images/Spriggit-File-Changes.png)
+
 ## Mods are Split into Folders
 Rather than having one large file of all of a mod's data, Spriggit splits a mod into a folder of files.
 
@@ -49,5 +51,7 @@ Some/Dedicated/Mod/Folder/  -  A folder dedicated to storing Spriggit content fo
    Npcs/                    -  Folder for all the weapons
       Goblin.yaml           -  File dedicated to the Goblin's data
 ```
+
+![File Structure](images/Spriggit-file-structure.png){ align=right width="450" }
 
 This folder structure helps organize git diffs to be more meaningful.  If a new record is added, then this will be seen as a new file.   If a record is modified, it will be a modified file.   Similar to wanting to avoid having a program's code be in one large monolith file, having smaller bite sized files helps navigate and digest changes being made.

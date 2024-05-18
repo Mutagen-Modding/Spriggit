@@ -4,14 +4,17 @@ Spriggit is a tool to facilitate converting Bethesda plugin files to a text base
 
 The goal is to help modders store their files in a versioning system that allows them to easily iterate in the same way that programmers do with their code.
 
+![Git Flow](images/gitflow.png){ align=right width="350" }
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VgJaCaZSh98?si=5n6UIDiYBGZ-ba_U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Reasons to Use Git for Mods
+
+![File Structure](images/Spriggit-file-structure.png){ align=right width="350" }
+
 Git is an extremely powerful versioning and iteration tool that almost all programmers use when working.  It's what powers the world of coding to be able to iterate new code quickly and collaborate easily.  
 
 Some things Git can help you do when developing your mod:
-
-![Git Flow](/images/gitflow.png)
 
 - Keep track of the many versions of your mod, without resorting to Dropbox folder hell.
 - Create a living "changelog" as you work
@@ -21,3 +24,8 @@ Some things Git can help you do when developing your mod:
 - Share your work on Github, allowing people to see your mod's development progress
 - Collaborate easily, by allowing others to contribute to your mod via Pull Requests
 - More easily merge the work of multiple developers with Git Merge technology
+
+![File Changes](images/Spriggit-File-Changes.png){ align=right width="450" }
+![Git Tree](images/Spiggit-git-tree.png){ align=right width="700" }
+
+
