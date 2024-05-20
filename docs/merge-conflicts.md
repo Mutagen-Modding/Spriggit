@@ -22,5 +22,16 @@ Spriggit comes with tooling to detect and fix these FormID collisions.  It is re
 
 [:octicons-arrow-right-24: CLI Command](cli.md#formid-collision-fixing)
 
+This tool fixes the FormID collisions by modifying one of the records involved in the collision to have a new FormID, and also rerouting any reference to it within the mod to point to that new record.
+
+Here is an example of some work being done in parallel, where one side added an Npc, and the other a Weapon, both of which would have claimed the same FormID:
+
+![FormID Collision](images/formid-conflict-tree.png)
+
+After running the tool, an extra commit adjusting one of the records has been added and merged in to de-collide the records:
+
+![Fixed FormID Collision](images/formid-conflict-tree-fixed.png)
+
 !!! bug "Two Collisions Maximum"
     The logic that Spriggit contains to handle FormID conflicts can only handle two records with a single FormID.  As such, collisions need to be handled immediately after each Git merge.
+	
