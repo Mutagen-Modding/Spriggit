@@ -75,7 +75,7 @@ public class FormIDCollisionFixerTests
             PackageName = "Spriggit.Yaml.Starfield",
             Version = "Test"
         };
-        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"));
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false);
         tmp.Dir.DeleteEntireFolder();
         
         var modFolder = Path.Combine(tmp.Dir, "ModFolder");
