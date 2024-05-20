@@ -38,7 +38,11 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = Fallout4Mod.CreateFromBinaryOverlay(modPath, release.ToFallout4Release(), fileSystem: fileSystem);
+        using var modGetter = Fallout4Mod.CreateFromBinaryOverlay(
+            modPath, 
+            release.ToFallout4Release(), 
+            fileSystem: fileSystem,
+            throwOnUnknownSubrecord: true);
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             dir,

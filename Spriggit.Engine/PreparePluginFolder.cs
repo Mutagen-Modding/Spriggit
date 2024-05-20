@@ -42,7 +42,7 @@ public class PreparePluginFolder
             }
             catch (InvalidOperationException ex)
             {
-                _logger.Information("Issue restoring for {Ident} in {RootDir}",ident, rootDir.Dir);
+                _logger.Error(ex, "Issue restoring for {Ident} in {RootDir}",ident, rootDir.Dir);
                 cancellationToken.ThrowIfCancellationRequested();
             }
 

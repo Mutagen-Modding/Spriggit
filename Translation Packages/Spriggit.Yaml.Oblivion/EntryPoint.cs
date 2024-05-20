@@ -38,7 +38,10 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = OblivionMod.CreateFromBinaryOverlay(modPath, fileSystem: fileSystem);
+        using var modGetter = OblivionMod.CreateFromBinaryOverlay(
+            modPath, 
+            fileSystem: fileSystem,
+            throwOnUnknownSubrecord: true);
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             dir,

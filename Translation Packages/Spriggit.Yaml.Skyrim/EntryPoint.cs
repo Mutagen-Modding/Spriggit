@@ -38,7 +38,11 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(modPath, release.ToSkyrimRelease(), fileSystem: fileSystem);
+        using var modGetter = SkyrimMod.CreateFromBinaryOverlay(
+            modPath, 
+            release.ToSkyrimRelease(),
+            fileSystem: fileSystem,
+            throwOnUnknownSubrecord: true);
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             dir,

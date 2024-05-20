@@ -38,7 +38,11 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = StarfieldMod.CreateFromBinaryOverlay(modPath, StarfieldRelease.Starfield, fileSystem: fileSystem);
+        using var modGetter = StarfieldMod.CreateFromBinaryOverlay(
+            modPath, 
+            StarfieldRelease.Starfield,
+            fileSystem: fileSystem,
+            throwOnUnknownSubrecord: true);
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,
             dir,
