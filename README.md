@@ -5,6 +5,8 @@ The goal is to help modders store their files in a versioning system that allows
 
 [![Spriggit Demo](https://i.imgur.com/ATjXyFT.png)](https://youtu.be/VgJaCaZSh98)
 
+Check out the [![Documentation](https://i.imgur.com/DGoSrNg.png)](https://mutagen-modding.github.io/Spriggit/) [Official Documentation](https://mutagen-modding.github.io/Spriggit/) for more detailed explainations of Spriggit, and more typical use cases and examples.
+
 # Reasons to Use Git for Mods
 Git is an extremely powerful versioning and iteration tool that almost all programmers use when working.  It's what powers the world of coding to be able to iterate new code quickly and collaborate easily.  
 
@@ -141,3 +143,5 @@ More documentation will follow on how to upload your own customization package t
 - `Spriggit.Json.[GameName]`
 
 These are what will be used to do any translations, unless the user specifies the name of a customization package they wish to use instead.
+
+Check out the [![Documentation](https://i.imgur.com/DGoSrNg.png)](https://mutagen-modding.github.io/Spriggit/) [Official Documentation](https://mutagen-modding.github.io/Spriggit/) for more detailed explainations of Spriggit, and more typical use cases and examples.
