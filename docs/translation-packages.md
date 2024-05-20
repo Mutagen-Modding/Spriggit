@@ -25,6 +25,7 @@ Spriggit uses [Mutagen](https://github.com/Mutagen-Modding/Mutagen) systems unde
 One of the features of [Mutagen.Bethesda.Serialization](https://github.com/Mutagen-Modding/Mutagen.Bethesda.Serialization) is that it allows for customization of naming, file structure, and other similar things.   If you utilize this to make your own customization, you will need to upload the results to nuget.org for people to grab and use.
 
 More documentation will follow on how to upload your own customization package to Nuget so that it can be used by Spriggit.    For now, two packages exist "built in":
+
 - `Spriggit.Yaml.[GameName]`
 - `Spriggit.Json.[GameName]`
 
