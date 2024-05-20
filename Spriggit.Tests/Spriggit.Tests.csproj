@@ -1,18 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="Mutagen.Bethesda.Starfield" />
-        <PackageReference Include="Mutagen.Bethesda.Testing" />
-        <PackageReference Include="Noggog.Testing" />
-        <PackageReference Include="xunit" />
-        <PackageReference Include="xunit.runner.console" />
-        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Mutagen.Bethesda.Starfield"/>
+        <PackageReference Include="Mutagen.Bethesda.Testing"/>
+        <PackageReference Include="Noggog.Testing"/>
+        <PackageReference Include="xunit"/>
+        <PackageReference Include="xunit.runner.console"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
     </ItemGroup>
     
-    <ItemGroup>
-      <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
-      <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj" />
-    </ItemGroup>
-    
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>OS_WINDOWS</DefineConstants>
+    </PropertyGroup>
 </Project>

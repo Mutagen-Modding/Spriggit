@@ -3,7 +3,6 @@ using FluentAssertions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -18,6 +17,7 @@ namespace Spriggit.Tests.Collision;
 
 public class FormIDCollisionFixerTests
 {
+#if OS_WINDOWS
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task NothingToFix(
         IFileSystem fileSystem,
@@ -168,4 +168,5 @@ public class FormIDCollisionFixerTests
         reimport.Npcs.First().FormKey.Should()
             .NotBe(reimport.Weapons.First().FormKey);
     }
+#endif
 }
