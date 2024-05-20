@@ -6,19 +6,19 @@ namespace Spriggit.CLI.Commands;
 [Verb("deserialize", aliases: new[] { "create-plugin", "convert-to-plugin" }, HelpText = "Converts a mod from its text based representation to a binary Bethesda plugin")]
 public class DeserializeCommand
 {
-    [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin as its text representation", Required = true)]
+    [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin folder as its Spriggit text representation", Required = true)]
     public string InputPath { get; set; } = string.Empty;
     
-    [Option('o', "OutputPath", HelpText = "File export mod as its Bethesda plugin representation", Required = true)]
+    [Option('o', "OutputPath", HelpText = "Path to export the mod as its Bethesda plugin representation", Required = true)]
     public FilePath OutputPath { get; set; } = string.Empty;
 
     [Option('p', "PackageName",
-        HelpText = "Spriggit serialization nuget package to use for conversion",
+        HelpText = "Spriggit serialization nuget package to use for conversion.  Leave blank to auto detect",
         Required = false)]
     public string PackageName { get; set; } = string.Empty;
 
     [Option('v', "PackageVersion",
-        HelpText = "Spriggit serialization nuget package version to use for conversion",
+        HelpText = "Spriggit serialization nuget package version to use for conversion.  Leave blank to auto detect",
         Required = false)]
     public string PackageVersion { get; set; } = string.Empty;
 

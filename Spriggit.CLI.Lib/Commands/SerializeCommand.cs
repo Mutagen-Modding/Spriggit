@@ -13,7 +13,7 @@ public class SerializeCommand
     public FilePath InputPath { get; set; } = string.Empty;
     
     [Option('o', "OutputPath",
-        HelpText = "Folder to export mod as its text representation",
+        HelpText = "Dedicated folder to export mod as its text representation",
         Required = true)]
     public DirectoryPath OutputPath { get; set; } = string.Empty;
     
@@ -23,7 +23,7 @@ public class SerializeCommand
     public GameRelease? GameRelease { get; set; }
 
     [Option('p', "PackageName",
-        HelpText = "Spriggit serialization nuget package to use for conversion",
+        HelpText = "Spriggit serialization nuget package name to use for conversion",
         Required = false)]
     public string PackageName { get; set; } = string.Empty;
 
