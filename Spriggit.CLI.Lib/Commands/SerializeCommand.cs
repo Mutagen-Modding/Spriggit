@@ -41,4 +41,9 @@ public class SerializeCommand
         HelpText = "Set up for debug mode, including resetting nuget caches",
         Required = false)]
     public bool Debug { get; set; }
+
+    [Option('m', "ModKey",
+        HelpText = "ModKey override.  If left blank, file name will be used",
+        Required = false)]
+    public string? ModKey { get; set; }
 }

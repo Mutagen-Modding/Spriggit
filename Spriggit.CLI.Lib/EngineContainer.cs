@@ -24,6 +24,7 @@ namespace Spriggit.CLI;
 [Register(typeof(SerializeBlocker))]
 [Register(typeof(PluginBackupCreator))]
 [Register(typeof(SpriggitTempSourcesProvider))]
+[Register(typeof(SpriggitEmbeddedMetaPersister))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
 partial class EngineContainer : IContainer<SpriggitEngine>
 {

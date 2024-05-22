@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.IO.Abstractions;
+using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
@@ -12,39 +13,39 @@ public class GetMetaToUse
     private readonly IWorkDropoff? _workDropoff;
     private readonly ICreateStream? _createStream;
     private readonly GetDefaultEntryPoint _getDefaultEntryPoint;
+    private readonly SpriggitEmbeddedMetaPersister _embeddedMetaPersister;
 
     public GetMetaToUse(
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff,
         ICreateStream? createStream,
-        GetDefaultEntryPoint getDefaultEntryPoint)
+        GetDefaultEntryPoint getDefaultEntryPoint,
+        SpriggitEmbeddedMetaPersister embeddedMetaPersister)
     {
         _fileSystem = fileSystem;
         _workDropoff = workDropoff;
         _createStream = createStream;
         _getDefaultEntryPoint = getDefaultEntryPoint;
-    }
-    
-    private SpriggitSource ConvertToSource(
-        string packageName,
-        string packageVersion)
-    {
-        return new SpriggitSource() { Version = packageVersion, PackageName = packageName };
+        _embeddedMetaPersister = embeddedMetaPersister;
     }
     
     public async Task<SpriggitMeta> Get(
         SpriggitSource? source,
-        string spriggitPluginPath,
+        DirectoryPath spriggitPluginPath,
         CancellationToken cancel)
     {
-        var entryPt = await _getDefaultEntryPoint.Get(spriggitPluginPath, cancel);
-        var sourceInfo = await entryPt.TryGetMetaInfo(
-            spriggitPluginPath,
-            _workDropoff, 
-            _fileSystem, 
-            _createStream,
-            cancel);
-        
+        var sourceInfo = _embeddedMetaPersister.TryParseEmbeddedMeta(spriggitPluginPath);
+
+        if (sourceInfo == null)
+        {
+            var entryPt = await _getDefaultEntryPoint.Get(spriggitPluginPath, cancel);
+            sourceInfo = await entryPt.TryGetMetaInfo(
+                spriggitPluginPath,
+                _workDropoff, 
+                _fileSystem, 
+                _createStream,
+                cancel);
+        }
         if (sourceInfo == null) throw new DataException($"Could not locate source info from {spriggitPluginPath}");
 
         return new SpriggitMeta(

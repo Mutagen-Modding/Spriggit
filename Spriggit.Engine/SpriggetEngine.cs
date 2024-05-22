@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Strings;
 using Noggog;
 using Noggog.IO;
@@ -18,10 +19,11 @@ public class SpriggitEngine(
     GetMetaToUse getMetaToUse,
     SerializeBlocker serializeBlocker,
     CurrentVersionsProvider currentVersionsProvider,
+    SpriggitEmbeddedMetaPersister metaPersister,
     PluginBackupCreator pluginBackupCreator)
 {
     public async Task Serialize(
-        FilePath bethesdaPluginPath, 
+        ModPath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
         SpriggitMeta? meta = default,
         CancellationToken? cancel = default)
@@ -46,6 +48,12 @@ public class SpriggitEngine(
         var entryPt = await entryPointCache.GetFor(meta, cancel.Value);
         if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
 
+        var source = new SpriggitSource()
+        {
+            PackageName = entryPt.Package.Id,
+            Version = entryPt.Package.Version.ToString()
+        };
+        
         logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
         await entryPt.Serialize(
             bethesdaPluginPath,
@@ -54,12 +62,14 @@ public class SpriggitEngine(
             fileSystem: fileSystem,
             workDropoff: workDropoff,
             streamCreator: createStream,
-            meta: new SpriggitSource()
-            {
-                PackageName = entryPt.Package.Id,
-                Version = entryPt.Package.Version.ToString()
-            },
+            meta: source,
             cancel: cancel.Value);
+        metaPersister.Persist(
+            outputFolder, 
+            new SpriggitEmbeddedMeta(
+                source,
+                meta.Release,
+                bethesdaPluginPath.ModKey));
         logger.Information("Finished serializing from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
     }
 

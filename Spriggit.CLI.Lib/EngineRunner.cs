@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins;
 using Noggog;
 using Noggog.WorkEngine;
 using Spriggit.CLI.Commands;
@@ -88,11 +89,23 @@ public static class EngineRunner
                 },
                 Release: serializeCommand.GameRelease.Value);
         }
+
+        ModPath modPath;
+        if (serializeCommand.ModKey.IsNullOrWhitespace())
+        {
+            modPath = serializeCommand.InputPath;
+        }
+        else
+        {
+            modPath = new ModPath(
+                ModKey.FromNameAndExtension(serializeCommand.ModKey),
+                serializeCommand.InputPath);
+        }
         
         await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug }, serializeCommand.Threads)
             .Resolve().Value
             .Serialize(
-                bethesdaPluginPath: serializeCommand.InputPath,
+                bethesdaPluginPath: modPath,
                 outputFolder: serializeCommand.OutputPath,
                 meta: meta,
                 cancel: CancellationToken.None); 
