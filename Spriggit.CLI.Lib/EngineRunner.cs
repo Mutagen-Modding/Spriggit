@@ -59,6 +59,7 @@ public static class EngineRunner
                 spriggitPluginPath: deserializeCommand.InputPath,
                 outputFile: deserializeCommand.OutputPath,
                 source: source,
+                backupDays: deserializeCommand.BackupDays,
                 cancel: CancellationToken.None);
         return 0;
     }

@@ -245,6 +245,7 @@ public class LinkVm : ViewModel
                 spriggitPluginPath: Input.GitFolderPicker.TargetPath,
                 outputFile: Input.ModPathPicker.TargetPath,
                 source: null,
+                backupDays: 30,
                 cancel: cancel);
             _logger.Information("Finished syncing from Git to Mod. {GitPath} -> {ModPath}", Input.GitFolderPicker.TargetPath, Input.ModPathPicker.TargetPath);
         }

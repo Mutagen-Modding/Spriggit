@@ -17,7 +17,8 @@ public class SpriggitEngine(
     ILogger logger,
     GetMetaToUse getMetaToUse,
     SerializeBlocker serializeBlocker,
-    CurrentVersionsProvider currentVersionsProvider)
+    CurrentVersionsProvider currentVersionsProvider,
+    PluginBackupCreator pluginBackupCreator)
 {
     public async Task Serialize(
         FilePath bethesdaPluginPath, 
@@ -65,6 +66,7 @@ public class SpriggitEngine(
     public async Task Deserialize(
         string spriggitPluginPath, 
         FilePath outputFile,
+        uint backupDays,
         SpriggitSource? source = default,
         CancellationToken? cancel = default)
     {
@@ -85,6 +87,8 @@ public class SpriggitEngine(
 
         string tempOutput = Path.Combine(tmp.Dir, Path.GetFileName(outputFile));
         
+        pluginBackupCreator.Backup(outputFile, backupDays: backupDays);
+
         logger.Information("Starting to deserialize from {BethesdaPluginPath} to temp output {Output} with {Meta}", 
             spriggitPluginPath, tempOutput, meta);
         await entryPt.Deserialize(

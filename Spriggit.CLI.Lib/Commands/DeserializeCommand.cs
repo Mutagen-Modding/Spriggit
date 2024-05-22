@@ -31,4 +31,9 @@ public class DeserializeCommand
         HelpText = "Set up for debug mode, including resetting nuget caches",
         Required = false)]
     public bool Debug { get; set; }
+
+    [Option('b', "BackupDays",
+        HelpText = "Days to keep backup plugins in the temp folder",
+        Required = false)]
+    public uint BackupDays { get; set; } = 30;
 }
