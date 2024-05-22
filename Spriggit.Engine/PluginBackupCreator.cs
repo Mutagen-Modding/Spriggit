@@ -50,8 +50,7 @@ public class PluginBackupCreator
 
         Clean(tempDirForMod.Dir, backupDays);
 
-        var shortCircuitPath = ShouldShortCircuit(path, tempDirForMod.Dir);
-        if (shortCircuitPath != null) return shortCircuitPath;
+        if (ShouldShortCircuit(path, tempDirForMod.Dir, out var shortCircuitPath)) return shortCircuitPath;
         
         return MakeBackup(path, tempDirForMod);
     }
@@ -66,10 +65,17 @@ public class PluginBackupCreator
         return backupPath;
     }
 
-    private FilePath? ShouldShortCircuit(
+    private bool ShouldShortCircuit(
         FilePath sourcePath,
-        DirectoryPath backupDir)
+        DirectoryPath backupDir,
+        out FilePath? shortCircuitPath)
     {
+        if (!_fileSystem.File.Exists(sourcePath))
+        {
+            shortCircuitPath = default;
+            return true;
+        }
+        
         foreach (var specificBackup in backupDir
                      .EnumerateDirectories(includeSelf: false, recursive: false, _fileSystem)
                      .OrderBy(d =>
@@ -83,18 +89,25 @@ public class PluginBackupCreator
                      }))
         {
             var path = Path.Combine(specificBackup, sourcePath.Name);
-            if (!_fileSystem.File.Exists(path)) return null;
+            if (!_fileSystem.File.Exists(path))
+            {
+                shortCircuitPath = default;
+                return false;
+            }
             if (FilesAreEqual(path, sourcePath))
             {
-                return path;
+                shortCircuitPath = path;
+                return true;
             }
             else
             {
-                return null;
+                shortCircuitPath = default;
+                return false;
             }
         }
 
-        return null;
+        shortCircuitPath = default;
+        return false;
     }
     
     // https://stackoverflow.com/questions/1358510/how-to-compare-2-files-fast-using-net

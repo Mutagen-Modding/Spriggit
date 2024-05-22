@@ -27,7 +27,7 @@ public class PluginBackupCreatorTests
     }
     
     [Theory, MutagenAutoData]
-    public void NoBackup(
+    public void NoBackupDesired(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
         FilePath existingModFile,
@@ -37,6 +37,18 @@ public class PluginBackupCreatorTests
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
         var backupPath = sut.Backup(existingModFile, 0);
+        backupPath.Should().BeNull();
+    }
+    
+    [Theory, MutagenAutoData]
+    public void NoFileNoBackup(
+        [Frozen] IProvideCurrentTime currentTime,
+        IFileSystem fileSystem,
+        FilePath modFile,
+        PluginBackupCreator sut)
+    {
+        currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
+        var backupPath = sut.Backup(modFile, 25);
         backupPath.Should().BeNull();
     }
     
