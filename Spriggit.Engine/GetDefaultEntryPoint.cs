@@ -60,7 +60,7 @@ public class GetDefaultEntryPoint
         var suffix = GetPackageStyleSuffix(spriggitPluginPath);
         var packageName = $"Spriggit.{suffix}.Skyrim";
         var ident = await _nugetDownloader.GetFirstIdentityFor(
-            packageName: packageName, packageVersion: string.Empty, cancellationToken: cancel);
+            packageName: packageName, packageVersion: "0.20", cancellationToken: cancel);
         
         var entryPoint = await _entryPointCache.GetFor(ident, cancel);
         if (entryPoint == null)
