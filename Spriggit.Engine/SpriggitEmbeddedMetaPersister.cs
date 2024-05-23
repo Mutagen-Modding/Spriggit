@@ -42,6 +42,7 @@ public class SpriggitEmbeddedMetaPersister
     public SpriggitEmbeddedMeta? TryParseEmbeddedMeta(DirectoryPath spriggitFolder)
     {
         var path = Path.Combine(spriggitFolder, FileName);
+        if (!_fileSystem.File.Exists(path)) return null;
         var str = _fileSystem.File.ReadAllText(path);
         var embedded = JsonConvert.DeserializeObject<SpriggitEmbeddedMetaSerialize>(str, JsonSettings);
         if (embedded == null
