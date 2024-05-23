@@ -33,7 +33,7 @@ public class DeserializeCommand
     public bool Debug { get; set; }
 
     [Option('b', "BackupDays",
-        HelpText = "Days to keep backup plugins in the temp folder",
+        HelpText = "Days to keep backup plugins in the temp folder (default 30)",
         Required = false)]
     public uint BackupDays { get; set; } = 30;
 }
