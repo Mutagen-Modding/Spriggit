@@ -13,7 +13,6 @@
         <PackageReference Include="Mutagen.Bethesda.Serialization" />
         <PackageReference Include="Mutagen.Bethesda.Serialization.Yaml" />
         <PackageReference Include="Mutagen.Bethesda.Serialization.SourceGenerator" />
-        <PackageReference Include="Mutagen.Bethesda.Fallout4" />
     </ItemGroup>
 
     <ItemGroup>
