@@ -55,9 +55,11 @@ nav:
   - Overview: index.md
   - Workflow: workflow.md
   - Output: output.md
-  - Installlation: installation.md
+  - Installation: installation.md
   - Command Line Interface: cli.md
   - .spriggit File: spriggit-file.md
   - Translation Packages: translation-packages.md
   - Merge Conflicts: merge-conflicts.md
-  - Backups: backups.md
+  - Troubleshooting: 
+    - Backups: backups.md
+    - Unexpected Records: unexpected-records.md
