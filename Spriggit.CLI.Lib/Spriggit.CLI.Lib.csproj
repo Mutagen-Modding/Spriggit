@@ -12,21 +12,4 @@
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="LoggerSetup.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="EngineRunner.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="EngineContainer.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-    </ItemGroup>
 </Project>

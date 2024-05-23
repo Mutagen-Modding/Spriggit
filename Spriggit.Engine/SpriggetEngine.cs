@@ -25,6 +25,7 @@ public class SpriggitEngine(
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
+        IEngineEntryPoint? entryPt = default,
         SpriggitMeta? meta = default,
         CancellationToken? cancel = default)
     {
@@ -43,10 +44,13 @@ public class SpriggitEngine(
         {
             throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a .spriggit file present, or specify at least GameRelease and PackageName");
         }
-        
-        logger.Information("Getting entry point for {Meta}", meta);
-        var entryPt = await entryPointCache.GetFor(meta, cancel.Value);
-        if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
+
+        if (entryPt == null)
+        {
+            logger.Information("Getting entry point for {Meta}", meta);
+            entryPt = await entryPointCache.GetFor(meta, cancel.Value);
+            if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
+        }
 
         var source = new SpriggitSource()
         {
@@ -77,6 +81,7 @@ public class SpriggitEngine(
         string spriggitPluginPath, 
         FilePath outputFile,
         uint backupDays,
+        IEngineEntryPoint? entryPt = default,
         SpriggitSource? source = default,
         CancellationToken? cancel = default)
     {
@@ -86,10 +91,13 @@ public class SpriggitEngine(
         
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel.Value);
-        
-        logger.Information("Getting entry point for {Meta}", meta);
-        var entryPt = await entryPointCache.GetFor(meta, cancel.Value);
-        if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
+
+        if (entryPt == null)
+        {
+            logger.Information("Getting entry point for {Meta}", meta);
+            entryPt = await entryPointCache.GetFor(meta, cancel.Value);
+            if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
+        }
 
         cancel.Value.ThrowIfCancellationRequested();
         

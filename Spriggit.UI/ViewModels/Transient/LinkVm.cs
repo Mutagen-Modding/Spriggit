@@ -221,7 +221,7 @@ public class LinkVm : ViewModel
                 bethesdaPluginPath: Input.ModPathPicker.TargetPath,
                 outputFolder: Input.GitFolderPicker.TargetPath,
                 meta: meta.Value,
-                cancel);
+                cancel: cancel);
             _logger.Information("Finished syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,
                 Input.GitFolderPicker.TargetPath);
         }

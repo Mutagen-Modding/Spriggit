@@ -1,9 +1,7 @@
 using System.IO.Abstractions;
-using Mutagen.Bethesda.Plugins;
-using Noggog;
 using Noggog.WorkEngine;
 using Spriggit.CLI.Commands;
-using Spriggit.Core;
+using Spriggit.CLI.Lib;
 using Spriggit.Engine;
 
 namespace Spriggit.CLI;
@@ -35,78 +33,38 @@ public static class EngineRunner
         return new EngineContainer(new FileSystem(), GetWorkDropoff(numThreads), null, debugState, LoggerSetup.Logger);
     }
     
-    public static async Task<int> Run(DeserializeCommand deserializeCommand)
+    public static async Task<int> Run(DeserializeCommand deserializeCommand, IEngineEntryPoint? entryPoint)
     {
         LoggerSetup.Logger.Information("Command to deserialize");
-        SpriggitSource? source = null;
 
-        if (!deserializeCommand.PackageVersion.IsNullOrWhitespace() && deserializeCommand.PackageName.IsNullOrWhitespace())
-        {
-            throw new ArgumentException("Cannot specify PackageVersion without PackageName.");
-        }
+        var source = SerializeCommandMetaExtractor.ExtractSpriggitSource(deserializeCommand);
         
-        if (!deserializeCommand.PackageName.IsNullOrWhitespace() ||
-            !deserializeCommand.PackageVersion.IsNullOrWhitespace())
-        {
-            source = new SpriggitSource()
-            {
-                PackageName = deserializeCommand.PackageName,
-                Version = deserializeCommand.PackageVersion,
-            };
-        }
         await GetContainer(new DebugState { ClearNugetSources = deserializeCommand.Debug }, deserializeCommand.Threads)
             .Resolve().Value
             .Deserialize(
                 spriggitPluginPath: deserializeCommand.InputPath,
                 outputFile: deserializeCommand.OutputPath,
                 source: source,
+                entryPt: entryPoint,
                 backupDays: deserializeCommand.BackupDays,
                 cancel: CancellationToken.None);
         return 0;
     }
 
-    public static async Task<int> Run(SerializeCommand serializeCommand)
+    public static async Task<int> Run(SerializeCommand serializeCommand, IEngineEntryPoint? entryPoint)
     {
         LoggerSetup.Logger.Information("Command to serialize");
 
-        SpriggitMeta? meta;
-        if (serializeCommand.GameRelease == null || serializeCommand.PackageName.IsNullOrWhitespace())
-        {
-            if (serializeCommand.PackageVersion != null)
-            {
-                throw new ArgumentException(
-                    "Cannot specify version without also specifying GameRelease and PackageName");
-            }
-            meta = null;
-        }
-        else
-        {
-            meta = new SpriggitMeta(
-                new SpriggitSource()
-                {
-                    PackageName = serializeCommand.PackageName,
-                    Version = serializeCommand.PackageVersion
-                },
-                Release: serializeCommand.GameRelease.Value);
-        }
+        var meta = SerializeCommandMetaExtractor.ExtractSpriggitMeta(serializeCommand);
 
-        ModPath modPath;
-        if (serializeCommand.ModKey.IsNullOrWhitespace())
-        {
-            modPath = serializeCommand.InputPath;
-        }
-        else
-        {
-            modPath = new ModPath(
-                ModKey.FromNameAndExtension(serializeCommand.ModKey),
-                serializeCommand.InputPath);
-        }
-        
+        var modPath = SerializeCommandMetaExtractor.ExtractModPath(serializeCommand);
+
         await GetContainer(new DebugState { ClearNugetSources = serializeCommand.Debug }, serializeCommand.Threads)
             .Resolve().Value
             .Serialize(
                 bethesdaPluginPath: modPath,
                 outputFolder: serializeCommand.OutputPath,
+                entryPt: entryPoint,
                 meta: meta,
                 cancel: CancellationToken.None); 
         return 0;
