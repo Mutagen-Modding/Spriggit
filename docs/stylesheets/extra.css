@@ -1,14 +1,14 @@
 :root {
-  --md-primary-fg-color:        #372773;
-  --md-accent-fg-color:         #fa7376;
+  --md-primary-fg-color:        #077507;
+  --md-accent-fg-color:         #d9941e;
 }
 
 .md-sidebar__inner {
-  --md-typeset-a-color: #fa7376;
+  --md-typeset-a-color: #d9941e;
 }
 
 .md-content {
-  --md-typeset-a-color: #09bfdd;
+  --md-typeset-a-color: #d9c61e;
 }
 
 [data-md-color-scheme="slate"] {
