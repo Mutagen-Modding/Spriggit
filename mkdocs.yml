@@ -63,3 +63,4 @@ nav:
   - Troubleshooting: 
     - Backups: backups.md
     - Unexpected Records: unexpected-records.md
+    - Backwards Compatibility With Alpha Versions: alpha-backwards-compatibility.md
