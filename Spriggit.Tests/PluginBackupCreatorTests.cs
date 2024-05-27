@@ -1,6 +1,9 @@
 ﻿using System.IO.Abstractions;
 using AutoFixture.Xunit2;
 using FluentAssertions;
+using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Skyrim;
+using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using NSubstitute;
@@ -24,6 +27,39 @@ public class PluginBackupCreatorTests
         var backupPath = sut.Backup(existingModFile, 1);
         backupPath.Should().NotBeNull();
         fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+    }
+    
+    [Theory, MutagenModAutoData]
+    public void StringsFiles(
+        [Frozen] IProvideCurrentTime currentTime,
+        SkyrimMod mod,
+        Npc npc,
+        string name,
+        string french,
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        PluginBackupCreator sut)
+    {
+        currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
+        mod.UsingLocalization = true;
+        npc.Name ??= new(Language.English, name);
+        npc.Name.Set(Language.French, french);
+        ModPath modFile = Path.Combine(existingDir, mod.ModKey.FileName);
+        fileSystem.Directory.CreateDirectory(modFile.Path.Directory!);
+        mod.WriteToBinaryParallel(modFile, fileSystem: fileSystem);
+        
+        var backupPath = sut.Backup(modFile, 1);
+        backupPath.Should().NotBeNull();
+        fileSystem.File.Exists(backupPath).Should().BeTrue();
+        var backupFolder = backupPath!.Value.Directory!;
+        var stringsFolder = Path.Combine(backupFolder, "Strings");
+        fileSystem.Directory.Exists(stringsFolder).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.STRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.DLSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.ILSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.STRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.DLSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.ILSTRINGS")).Should().BeTrue();
     }
     
     [Theory, MutagenAutoData]
