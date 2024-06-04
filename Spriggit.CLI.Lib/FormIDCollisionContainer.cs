@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Mutagen.Bethesda.Plugins.Records.Mapping;
 using Noggog.IO;
 using Noggog.WorkEngine;

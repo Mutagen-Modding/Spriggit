@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
@@ -25,6 +26,8 @@ namespace Spriggit.CLI;
 [Register(typeof(PluginBackupCreator))]
 [Register(typeof(SpriggitTempSourcesProvider))]
 [Register(typeof(SpriggitEmbeddedMetaPersister))]
+[Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
+[Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
 partial class EngineContainer : IContainer<SpriggitEngine>
 {

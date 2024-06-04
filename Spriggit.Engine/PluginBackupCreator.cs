@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog;
 using Noggog.IO;
-using Noggog.Utility;
 
 namespace Spriggit.Engine;
 
@@ -10,14 +11,17 @@ public class PluginBackupCreator
 {
     private readonly IProvideCurrentTime _currentTime;
     private readonly IFileSystem _fileSystem;
+    private readonly IModFilesMover _modFilesMover;
     private const string DateFormat = "MM-dd-yy hh-mm-ss-fff";
 
     public PluginBackupCreator(
         IProvideCurrentTime currentTime,
-        IFileSystem fileSystem)
+        IFileSystem fileSystem,
+        IModFilesMover modFilesMover)
     {
         _currentTime = currentTime;
         _fileSystem = fileSystem;
+        _modFilesMover = modFilesMover;
     }
     
     private void Clean(DirectoryPath path, uint backupDays)
@@ -38,7 +42,7 @@ public class PluginBackupCreator
         }
     }
     
-    public FilePath? Backup(FilePath path, uint backupDays)
+    public DirectoryPath? Backup(FilePath path, uint backupDays)
     {
         if (backupDays == 0) return null;
 
@@ -50,19 +54,18 @@ public class PluginBackupCreator
 
         Clean(tempDirForMod.Dir, backupDays);
 
-        if (ShouldShortCircuit(path, tempDirForMod.Dir, out var shortCircuitPath)) return shortCircuitPath;
+        if (ShouldShortCircuit(path, tempDirForMod.Dir, out var shortCircuitPath)) return shortCircuitPath?.Directory;
         
         return MakeBackup(path, tempDirForMod);
     }
 
-    private FilePath? MakeBackup(FilePath path, TempFolder temp)
+    private DirectoryPath MakeBackup(ModPath path, TempFolder temp)
     {
         var dt = _currentTime.Now;
         var dir = new DirectoryPath(Path.Combine(temp.Dir, dt.ToString(DateFormat)));
         dir.Create(_fileSystem);
-        var backupPath = Path.Combine(dir, path.Name);
-        _fileSystem.File.Copy(path, backupPath);
-        return backupPath;
+        _modFilesMover.MoveModTo(path, dir, overwrite: false);
+        return dir;
     }
 
     private bool ShouldShortCircuit(

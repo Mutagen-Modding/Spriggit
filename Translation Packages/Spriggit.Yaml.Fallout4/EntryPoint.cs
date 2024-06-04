@@ -23,7 +23,7 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         NextFormID = NextFormIDOption.NoCheck,
         FormIDUniqueness = FormIDUniquenessOption.NoCheck,
         MasterFlag = MasterFlagOption.NoCheck,
-        LightLimit = LightLimitOption.NoCheck,
+        FormIDCompaction = FormIDCompactionOption.NoCheck,
         CleanNulls = false
     };
 
