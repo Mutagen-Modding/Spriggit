@@ -65,7 +65,7 @@ public class PluginBackupCreatorTests
         npc.Name.Set(Language.French, french);
         ModPath modFile = Path.Combine(existingDir, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFile.Path.Directory!);
-        mod.WriteToBinaryParallel(modFile, fileSystem: fileSystem);
+        mod.WriteToBinary(modFile, fileSystem: fileSystem);
         
         var backupPath = sut.Sut.Backup(modFile, 1);
         backupPath.Should().NotBeNull();

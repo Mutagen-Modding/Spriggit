@@ -25,7 +25,7 @@ public class EndpointTests
     {
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
-        mod.WriteToBinaryParallel(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, fileSystem: fileSystem);
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {
@@ -62,7 +62,7 @@ public class EndpointTests
             fileSystem.Directory.CreateDirectory(dataFolder);
             fileSystem.Directory.CreateDirectory(dataFolder2);
             var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
-            mod.WriteToBinaryParallel(modPath, fileSystem: fileSystem);
+            mod.WriteToBinary(modPath, fileSystem: fileSystem);
             await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
                 streamCreator: null, new SpriggitSource()
                 {
@@ -115,7 +115,7 @@ public class EndpointTests
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
         fileSystem.Directory.CreateDirectory(dataFolder2);
-        mod.WriteToBinaryParallel(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, fileSystem: fileSystem);
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {

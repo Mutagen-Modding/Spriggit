@@ -31,7 +31,7 @@ public class TestUtil
     {
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
-        mod.WriteToBinaryParallel(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, fileSystem: fileSystem);
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {
