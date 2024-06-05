@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Strings;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
@@ -20,7 +20,8 @@ public class SpriggitEngine(
     SerializeBlocker serializeBlocker,
     CurrentVersionsProvider currentVersionsProvider,
     SpriggitEmbeddedMetaPersister metaPersister,
-    PluginBackupCreator pluginBackupCreator)
+    PluginBackupCreator pluginBackupCreator,
+    IModFilesMover modFilesMover)
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
@@ -127,7 +128,7 @@ public class SpriggitEngine(
         }
 
         logger.Information("Moving file to final output {Output}", outputFile);
-        File.Move(tempOutput, outputFile, overwrite: true);
+        modFilesMover.MoveModTo(tempOutput, outputFile.Directory!.Value, overwrite: true);
         logger.Information("Moved file to final output {Output}", outputFile);
     }
 }
