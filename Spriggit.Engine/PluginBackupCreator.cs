@@ -42,12 +42,12 @@ public class PluginBackupCreator
         }
     }
     
-    public DirectoryPath? Backup(FilePath path, uint backupDays)
+    public DirectoryPath? Backup(ModPath path, uint backupDays)
     {
         if (backupDays == 0) return null;
 
         using var tempDirForMod = TempFolder.FactoryByAddedPath(
-            Path.Combine("Spriggit", "Backups", path.Name), 
+            Path.Combine("Spriggit", "Backups", path.Path.Name), 
             deleteAfter: false,
             deleteBefore: false, 
             fileSystem: _fileSystem);
@@ -64,7 +64,7 @@ public class PluginBackupCreator
         var dt = _currentTime.Now;
         var dir = new DirectoryPath(Path.Combine(temp.Dir, dt.ToString(DateFormat)));
         dir.Create(_fileSystem);
-        _modFilesMover.MoveModTo(path, dir, overwrite: false);
+        _modFilesMover.CopyModTo(path, dir, overwrite: false);
         return dir;
     }
 

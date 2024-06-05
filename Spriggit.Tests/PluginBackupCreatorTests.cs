@@ -2,6 +2,7 @@
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
@@ -14,19 +15,37 @@ namespace Spriggit.Tests;
 
 public class PluginBackupCreatorTests
 {
+    public class Bootstrap
+    {
+        public PluginBackupCreator Sut { get; }
+
+        public Bootstrap(
+            IFileSystem fileSystem,
+            IProvideCurrentTime provideCurrentTime)
+        {
+            this.Sut = new PluginBackupCreator(
+                provideCurrentTime,
+                fileSystem,
+                new ModFilesMover(
+                    fileSystem,
+                    new AssociatedFilesLocator(
+                        fileSystem)));
+        }
+    }
+    
     [Theory, MutagenAutoData]
     public void Typical(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
-        var backupPath = sut.Backup(existingModFile, 1);
+        var backupPath = sut.Sut.Backup(existingModFile, 1);
         backupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
     }
     
     [Theory, MutagenModAutoData]
@@ -38,7 +57,7 @@ public class PluginBackupCreatorTests
         string french,
         IFileSystem fileSystem,
         DirectoryPath existingDir,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         mod.UsingLocalization = true;
@@ -48,31 +67,30 @@ public class PluginBackupCreatorTests
         fileSystem.Directory.CreateDirectory(modFile.Path.Directory!);
         mod.WriteToBinaryParallel(modFile, fileSystem: fileSystem);
         
-        var backupPath = sut.Backup(modFile, 1);
+        var backupPath = sut.Sut.Backup(modFile, 1);
         backupPath.Should().NotBeNull();
-        fileSystem.File.Exists(backupPath).Should().BeTrue();
-        var backupFolder = backupPath!.Value.Directory!;
-        var stringsFolder = Path.Combine(backupFolder, "Strings");
+        fileSystem.File.Exists(Path.Combine(backupPath!, modFile.ModKey.FileName)).Should().BeTrue();
+        var stringsFolder = Path.Combine(backupPath!, "Strings");
         fileSystem.Directory.Exists(stringsFolder).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.STRINGS")).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.DLSTRINGS")).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_English.ILSTRINGS")).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.STRINGS")).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.DLSTRINGS")).Should().BeTrue();
-        fileSystem.File.Exists(Path.Combine($"{mod.ModKey.FileName}_French.ILSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_English.STRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_English.DLSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_English.ILSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_French.STRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_French.DLSTRINGS")).Should().BeTrue();
+        fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_French.ILSTRINGS")).Should().BeTrue();
     }
     
     [Theory, MutagenAutoData]
     public void NoBackupDesired(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
-        var backupPath = sut.Backup(existingModFile, 0);
+        var backupPath = sut.Sut.Backup(existingModFile, 0);
         backupPath.Should().BeNull();
     }
     
@@ -80,11 +98,11 @@ public class PluginBackupCreatorTests
     public void NoFileNoBackup(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath modFile,
-        PluginBackupCreator sut)
+        ModPath modFile,
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
-        var backupPath = sut.Backup(modFile, 25);
+        var backupPath = sut.Sut.Backup(modFile, 25);
         backupPath.Should().BeNull();
     }
     
@@ -92,17 +110,17 @@ public class PluginBackupCreatorTests
     public void DoesNotSaveUnchangedContent(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
-        var backupPath = sut.Backup(existingModFile, 1);
+        var backupPath = sut.Sut.Backup(existingModFile, 1);
         backupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 15));
-        var secondBackupPath = sut.Backup(existingModFile, 1);
+        var secondBackupPath = sut.Sut.Backup(existingModFile, 1);
         backupPath.Should().Be(secondBackupPath);
     }
 
@@ -110,84 +128,84 @@ public class PluginBackupCreatorTests
     public void OtherBackupRemains(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
-        FilePath existingOtherModFile,
+        ModPath existingOtherModFile,
         string otherModContents,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
         fileSystem.File.WriteAllText(existingOtherModFile, otherModContents);
-        var otherBackupPath = sut.Backup(existingOtherModFile, 1);
-        var backupPath = sut.Backup(existingModFile, 1);
+        var otherBackupPath = sut.Sut.Backup(existingOtherModFile, 1);
+        var backupPath = sut.Sut.Backup(existingModFile, 1);
         backupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
         otherBackupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(otherBackupPath!).Should().Be(otherModContents);
+        fileSystem.File.ReadAllText(Path.Combine(otherBackupPath!, existingOtherModFile.ModKey.FileName)).Should().Be(otherModContents);
     }
     
     [Theory, MutagenAutoData]
     public async Task ExistingBackupRemains(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
         string modContents2,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 12));
         fileSystem.File.WriteAllText(existingModFile, modContents);
-        var backupPath = sut.Backup(existingModFile, 1);
+        var backupPath = sut.Sut.Backup(existingModFile, 1);
         currentTime.Now.Returns(new DateTime(2024, 5, 20, 6, 7, 14));
         fileSystem.File.WriteAllText(existingModFile, modContents2);
-        var backupPath2 = sut.Backup(existingModFile, 2);
+        var backupPath2 = sut.Sut.Backup(existingModFile, 2);
         backupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
         backupPath2.Should().NotBeNull();
-        fileSystem.File.ReadAllText(backupPath2!).Should().Be(modContents2);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath2!, existingModFile.ModKey.FileName)).Should().Be(modContents2);
     }
     
     [Theory, MutagenAutoData]
     public void CleanBackup(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
+        ModPath existingModFile,
         string modContents,
         string modContents2,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20));
         fileSystem.File.WriteAllText(existingModFile, modContents);
-        var oldBackupPath = sut.Backup(existingModFile, 4);
+        var oldBackupPath = sut.Sut.Backup(existingModFile, 4);
         oldBackupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(oldBackupPath!).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(oldBackupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
         fileSystem.File.WriteAllText(existingModFile, modContents);
         currentTime.Now.Returns(new DateTime(2024, 5, 25));
-        var backupPath = sut.Backup(existingModFile, 4);
-        fileSystem.File.Exists(oldBackupPath!).Should().BeFalse();
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
+        var backupPath = sut.Sut.Backup(existingModFile, 4);
+        fileSystem.File.Exists(Path.Combine(oldBackupPath!, existingModFile.ModKey.FileName)).Should().BeFalse();
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
     }
     
     [Theory, MutagenAutoData]
     public void CleanupOnlyAffectsTargetFile(
         [Frozen] IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
-        FilePath existingModFile,
-        FilePath otherExistingModFile,
+        ModPath existingModFile,
+        ModPath otherExistingModFile,
         string modContents,
         string otherModContents,
-        PluginBackupCreator sut)
+        Bootstrap sut)
     {
         currentTime.Now.Returns(new DateTime(2024, 5, 20));
         fileSystem.File.WriteAllText(otherExistingModFile, otherModContents);
-        var otherOldBackupPath = sut.Backup(otherExistingModFile, 4);
+        var otherOldBackupPath = sut.Sut.Backup(otherExistingModFile, 4);
         otherOldBackupPath.Should().NotBeNull();
-        fileSystem.File.ReadAllText(otherOldBackupPath!).Should().Be(otherModContents);
+        fileSystem.File.ReadAllText(Path.Combine(otherOldBackupPath!, otherExistingModFile.ModKey.FileName)).Should().Be(otherModContents);
         fileSystem.File.WriteAllText(existingModFile, modContents);
         currentTime.Now.Returns(new DateTime(2024, 5, 25));
-        var backupPath = sut.Backup(existingModFile, 4);
-        fileSystem.File.ReadAllText(backupPath!).Should().Be(modContents);
-        fileSystem.File.ReadAllText(otherOldBackupPath!).Should().Be(otherModContents);
+        var backupPath = sut.Sut.Backup(existingModFile, 4);
+        fileSystem.File.ReadAllText(Path.Combine(backupPath!, existingModFile.ModKey.FileName)).Should().Be(modContents);
+        fileSystem.File.ReadAllText(Path.Combine(otherOldBackupPath!, otherExistingModFile.ModKey.FileName)).Should().Be(otherModContents);
     }
 }
