@@ -4,21 +4,25 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog;
 using Noggog.IO;
+using Serilog;
 
 namespace Spriggit.Engine;
 
 public class PluginBackupCreator
 {
+    private readonly ILogger _logger;
     private readonly IProvideCurrentTime _currentTime;
     private readonly IFileSystem _fileSystem;
     private readonly IModFilesMover _modFilesMover;
     private const string DateFormat = "MM-dd-yy HH-mm-ss-fff";
 
     public PluginBackupCreator(
+        ILogger logger,
         IProvideCurrentTime currentTime,
         IFileSystem fileSystem,
         IModFilesMover modFilesMover)
     {
+        _logger = logger;
         _currentTime = currentTime;
         _fileSystem = fileSystem;
         _modFilesMover = modFilesMover;
@@ -37,6 +41,7 @@ public class PluginBackupCreator
             var diff = now - dt.Date;
             if (diff > maxDiff)
             {
+                _logger.Information("Deleting expired backup folder {Name}", backupDir.Name);
                 backupDir.DeleteEntireFolder(deleteFolderItself: true, fileSystem: _fileSystem);
             }
         }
@@ -54,7 +59,18 @@ public class PluginBackupCreator
 
         Clean(tempDirForMod.Dir, backupDays);
 
-        if (ShouldShortCircuit(path, tempDirForMod.Dir, out var shortCircuitPath)) return shortCircuitPath?.Directory;
+        if (ShouldShortCircuit(path, tempDirForMod.Dir, out var shortCircuitPath))
+        {
+            if (shortCircuitPath == null)
+            {
+                _logger.Information("Not backing up, as target mod did not exist: {Path}", path);
+            }
+            else
+            {
+                _logger.Information("Short circuiting backup, as {Name} had the same content", shortCircuitPath.Value.Name);
+            }
+            return shortCircuitPath?.Directory;
+        }
         
         return MakeBackup(path, tempDirForMod);
     }
@@ -63,6 +79,7 @@ public class PluginBackupCreator
     {
         var dt = _currentTime.Now;
         var dir = new DirectoryPath(Path.Combine(temp.Dir, dt.ToString(DateFormat)));
+        _logger.Information("Making backup of {Path} in {Output}", path, dir);
         dir.Create(_fileSystem);
         _modFilesMover.CopyModTo(path, dir, overwrite: false);
         return dir;

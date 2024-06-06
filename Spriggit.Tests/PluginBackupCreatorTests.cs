@@ -8,6 +8,7 @@ using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using NSubstitute;
+using Serilog;
 using Spriggit.Engine;
 using Xunit;
 
@@ -24,6 +25,7 @@ public class PluginBackupCreatorTests
             IProvideCurrentTime provideCurrentTime)
         {
             this.Sut = new PluginBackupCreator(
+                Substitute.For<ILogger>(),
                 provideCurrentTime,
                 fileSystem,
                 new ModFilesMover(
