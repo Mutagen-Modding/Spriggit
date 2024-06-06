@@ -12,7 +12,7 @@ public class PluginBackupCreator
     private readonly IProvideCurrentTime _currentTime;
     private readonly IFileSystem _fileSystem;
     private readonly IModFilesMover _modFilesMover;
-    private const string DateFormat = "MM-dd-yy hh-mm-ss-fff";
+    private const string DateFormat = "MM-dd-yy HH-mm-ss-fff";
 
     public PluginBackupCreator(
         IProvideCurrentTime currentTime,
@@ -81,7 +81,7 @@ public class PluginBackupCreator
         
         foreach (var specificBackup in backupDir
                      .EnumerateDirectories(includeSelf: false, recursive: false, _fileSystem)
-                     .OrderBy(d =>
+                     .OrderByDescending(d =>
                      {
                          if (DateTime.TryParseExact(d.Name, DateFormat, null, DateTimeStyles.None, out var dt))
                          {
