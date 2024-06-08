@@ -2,7 +2,7 @@
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 
-namespace Spriggit.Engine.Collision;
+namespace Spriggit.Engine.Merge;
 
 public class FormIDCollisionDetector
 {

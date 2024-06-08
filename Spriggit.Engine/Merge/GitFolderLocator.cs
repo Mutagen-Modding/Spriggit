@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Noggog;
 
-namespace Spriggit.Engine.Collision;
+namespace Spriggit.Engine.Merge;
 
 public class GitFolderLocator
 {

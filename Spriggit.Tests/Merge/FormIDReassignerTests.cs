@@ -3,10 +3,10 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
-using Spriggit.Engine.Collision;
+using Spriggit.Engine.Merge;
 using Xunit;
 
-namespace Spriggit.Tests.Collision;
+namespace Spriggit.Tests.Merge;
 
 public class FormIDReassignerTests
 {

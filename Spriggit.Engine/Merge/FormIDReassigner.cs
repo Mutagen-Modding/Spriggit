@@ -2,7 +2,7 @@
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 
-namespace Spriggit.Engine.Collision;
+namespace Spriggit.Engine.Merge;
 
 public class FormIDReassigner
 {

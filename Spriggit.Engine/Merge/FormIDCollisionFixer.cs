@@ -8,7 +8,7 @@ using Noggog;
 using Noggog.IO;
 using Spriggit.Core;
 
-namespace Spriggit.Engine.Collision;
+namespace Spriggit.Engine.Merge;
 
 public class FormIDCollisionFixer
 {

@@ -9,11 +9,11 @@ using Noggog;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Spriggit.Core;
-using Spriggit.Engine.Collision;
+using Spriggit.Engine.Merge;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 
-namespace Spriggit.Tests.Collision;
+namespace Spriggit.Tests.Merge;
 
 public class FormIDCollisionFixerTests
 {

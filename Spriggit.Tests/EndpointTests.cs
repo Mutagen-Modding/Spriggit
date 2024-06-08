@@ -6,12 +6,14 @@ using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Noggog.Testing.FileSystem;
 using Spriggit.Core;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 
 namespace Spriggit.Tests;
 
+[Collection("Sequential")]
 public class EndpointTests
 {
     [Theory]

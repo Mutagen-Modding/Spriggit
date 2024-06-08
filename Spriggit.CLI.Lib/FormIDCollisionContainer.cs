@@ -5,7 +5,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine;
-using Spriggit.Engine.Collision;
+using Spriggit.Engine.Merge;
 using StrongInject;
 
 namespace Spriggit.CLI;

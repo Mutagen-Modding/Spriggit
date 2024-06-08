@@ -14,6 +14,7 @@ using Xunit;
 
 namespace Spriggit.Tests;
 
+[Collection("Sequential")]
 public class PluginBackupCreatorTests
 {
     public class Bootstrap
