@@ -1,4 +1,4 @@
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using System.Reflection;
 using LibGit2Sharp;
 using Loqui;
@@ -40,6 +40,11 @@ public class FormIDCollisionFixer
     {
         var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
         var entryPoint = await _entryPointCache.GetFor(meta, CancellationToken.None);
+        if (entryPoint == null)
+        {
+            throw new NullReferenceException($"Could not construct entry point for {meta}");
+        }
+        
         var typeStr = $"Mutagen.Bethesda.{meta.Release.ToCategory()}.{meta.Release.ToCategory()}Mod";
         var regis = LoquiRegistration.GetRegisterByFullName(typeStr);
         if (regis == null)
@@ -47,10 +52,6 @@ public class FormIDCollisionFixer
             throw new Exception($"No loqui registration found for {typeStr}");
         }
 
-        foreach (var m in this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
-        {
-            
-        }
         var method = this.GetType().GetMethod("DetectAndFixInternal", BindingFlags.Instance | BindingFlags.NonPublic)!;
         var genMethod = method.MakeGenericMethod(new Type[] { regis.SetterType, regis.GetterType });
         genMethod.Invoke(this, new object?[]
