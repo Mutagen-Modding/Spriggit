@@ -8,7 +8,7 @@ using StrongInject;
 
 namespace Spriggit.CLI;
 
-[Register(typeof(EntryPointCache))]
+[Register(typeof(EntryPointCache), typeof(IEntryPointCache))]
 [Register(typeof(SpriggitEngine))]
 [Register(typeof(GetMetaToUse))]
 [Register(typeof(ConstructEntryPoint))]

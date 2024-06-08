@@ -14,7 +14,7 @@ namespace Spriggit.CLI;
 [Register(typeof(FormIDCollisionDetector))]
 [Register(typeof(FormIDCollisionFixer))]
 [Register(typeof(GetMetaToUse))]
-[Register(typeof(EntryPointCache))]
+[Register(typeof(EntryPointCache), typeof(IEntryPointCache))]
 [Register(typeof(ConstructEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]

@@ -7,12 +7,12 @@ namespace Spriggit.Engine;
 public class GetDefaultEntryPoint
 {
     private readonly IFileSystem _fileSystem;
-    private readonly EntryPointCache _entryPointCache;
+    private readonly IEntryPointCache _entryPointCache;
     private readonly NugetDownloader _nugetDownloader;
     private const string RecordDataFileNameWithoutExtension = "RecordData";
 
     public GetDefaultEntryPoint(IFileSystem fileSystem,
-        EntryPointCache entryPointCache,
+        IEntryPointCache entryPointCache,
         NugetDownloader nugetDownloader)
     {
         _fileSystem = fileSystem;

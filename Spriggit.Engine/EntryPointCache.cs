@@ -5,7 +5,13 @@ using Spriggit.Core;
 
 namespace Spriggit.Engine;
 
-public class EntryPointCache
+public interface IEntryPointCache
+{
+    Task<IEngineEntryPoint?> GetFor(SpriggitMeta meta, CancellationToken cancel);
+    Task<IEngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel);
+}
+
+public class EntryPointCache : IEntryPointCache
 {
     private readonly object _lock = new();
     private readonly Dictionary<SpriggitMeta, Task<PackageIdentity?>> _metaToPackageIdentity = new();

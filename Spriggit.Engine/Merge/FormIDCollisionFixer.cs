@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using System.Reflection;
 using LibGit2Sharp;
 using Loqui;
@@ -14,7 +14,7 @@ public class FormIDCollisionFixer
 {
     private readonly IFileSystem _fileSystem;
     private readonly FormIDReassigner _reassigner;
-    private readonly EntryPointCache _entryPointCache;
+    private readonly IEntryPointCache _entryPointCache;
     private readonly GetMetaToUse _getMetaToUse;
     private readonly GitFolderLocator _gitFolderLocator;
     private readonly FormIDCollisionDetector _detector;
@@ -22,7 +22,7 @@ public class FormIDCollisionFixer
     public FormIDCollisionFixer(
         IFileSystem fileSystem,
         FormIDReassigner reassigner,
-        EntryPointCache entryPointCache,
+        IEntryPointCache entryPointCache,
         GetMetaToUse getMetaToUse,
         GitFolderLocator gitFolderLocator,
         FormIDCollisionDetector detector)

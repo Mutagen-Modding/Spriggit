@@ -60,7 +60,7 @@ public class LinkVm : ViewModel
         EditLinkVm editLinkVm,
         LinkInputVm input,
         PackageInputQuery packageInputQuery,
-        EntryPointCache entryPointCache,
+        IEntryPointCache entryPointCache,
         RepoListings repoListings,
         LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {

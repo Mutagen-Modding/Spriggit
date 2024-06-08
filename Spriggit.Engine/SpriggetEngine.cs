@@ -13,7 +13,7 @@ public class SpriggitEngine(
     IFileSystem fileSystem,
     IWorkDropoff? workDropoff,
     ICreateStream? createStream,
-    EntryPointCache entryPointCache,
+    IEntryPointCache entryPointCache,
     SpriggitMetaLocator spriggitMetaLocator,
     ILogger logger,
     GetMetaToUse getMetaToUse,
