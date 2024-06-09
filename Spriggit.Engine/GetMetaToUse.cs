@@ -13,20 +13,20 @@ public class GetMetaToUse
     private readonly IWorkDropoff? _workDropoff;
     private readonly ICreateStream? _createStream;
     private readonly GetDefaultEntryPoint _getDefaultEntryPoint;
-    private readonly SpriggitEmbeddedMetaPersister _embeddedMetaPersister;
+    private readonly SpriggitExternalMetaPersister _externalMetaPersister;
 
     public GetMetaToUse(
         IFileSystem fileSystem,
         IWorkDropoff? workDropoff,
         ICreateStream? createStream,
         GetDefaultEntryPoint getDefaultEntryPoint,
-        SpriggitEmbeddedMetaPersister embeddedMetaPersister)
+        SpriggitExternalMetaPersister externalMetaPersister)
     {
         _fileSystem = fileSystem;
         _workDropoff = workDropoff;
         _createStream = createStream;
         _getDefaultEntryPoint = getDefaultEntryPoint;
-        _embeddedMetaPersister = embeddedMetaPersister;
+        _externalMetaPersister = externalMetaPersister;
     }
     
     public async Task<SpriggitMeta> Get(
@@ -34,7 +34,7 @@ public class GetMetaToUse
         DirectoryPath spriggitPluginPath,
         CancellationToken cancel)
     {
-        var sourceInfo = _embeddedMetaPersister.TryParseEmbeddedMeta(spriggitPluginPath);
+        var sourceInfo = _externalMetaPersister.TryParseEmbeddedMeta(spriggitPluginPath);
 
         if (sourceInfo == null)
         {

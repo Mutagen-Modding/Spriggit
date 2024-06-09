@@ -26,7 +26,7 @@ namespace Spriggit.CLI;
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(PluginPublisher))]
 [Register(typeof(GitFolderLocator))]
-[Register(typeof(SpriggitEmbeddedMetaPersister))]
+[Register(typeof(SpriggitExternalMetaPersister))]
 partial class FormIDCollisionContainer : IContainer<FormIDCollisionFixer>
 {
     [Instance] private readonly IFileSystem _fileSystem;

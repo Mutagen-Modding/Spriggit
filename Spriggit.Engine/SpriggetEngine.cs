@@ -19,7 +19,7 @@ public class SpriggitEngine(
     GetMetaToUse getMetaToUse,
     SerializeBlocker serializeBlocker,
     CurrentVersionsProvider currentVersionsProvider,
-    SpriggitEmbeddedMetaPersister metaPersister,
+    SpriggitExternalMetaPersister metaPersister,
     PluginBackupCreator pluginBackupCreator,
     IModFilesMover modFilesMover)
 {

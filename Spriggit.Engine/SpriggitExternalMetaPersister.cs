@@ -7,7 +7,7 @@ using Spriggit.Core;
 
 namespace Spriggit.Engine;
 
-public class SpriggitEmbeddedMetaPersister
+public class SpriggitExternalMetaPersister
 {
     public const string FileName = "spriggit.meta";
     
@@ -22,7 +22,7 @@ public class SpriggitEmbeddedMetaPersister
         }
     };
 
-    public SpriggitEmbeddedMetaPersister(IFileSystem fileSystem)
+    public SpriggitExternalMetaPersister(IFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
     }
