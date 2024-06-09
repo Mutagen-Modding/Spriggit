@@ -2,7 +2,7 @@
 using Noggog;
 using Serilog;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class FindTargetFramework
 {

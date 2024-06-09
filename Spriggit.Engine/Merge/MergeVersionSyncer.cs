@@ -3,6 +3,7 @@ using Noggog;
 using Noggog.IO;
 using NuGet.Versioning;
 using Spriggit.Core;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.Engine.Merge;
 

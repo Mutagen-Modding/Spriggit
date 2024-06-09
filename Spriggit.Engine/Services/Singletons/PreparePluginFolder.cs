@@ -4,7 +4,7 @@ using Noggog.IO;
 using NuGet.Packaging.Core;
 using Serilog;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class PreparePluginFolder
 {

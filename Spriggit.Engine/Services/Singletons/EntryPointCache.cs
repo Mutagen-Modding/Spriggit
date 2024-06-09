@@ -3,7 +3,7 @@ using NuGet.Packaging.Core;
 using Serilog;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public interface IEntryPointCache
 {

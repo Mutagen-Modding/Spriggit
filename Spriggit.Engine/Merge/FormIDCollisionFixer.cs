@@ -7,6 +7,7 @@ using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
 using Spriggit.Core;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.Engine.Merge;
 

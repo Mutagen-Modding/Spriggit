@@ -6,7 +6,7 @@ using Noggog;
 using Noggog.IO;
 using Serilog;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class PluginBackupCreator
 {

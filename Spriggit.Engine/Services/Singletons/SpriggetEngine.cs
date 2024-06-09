@@ -7,7 +7,7 @@ using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class SpriggitEngine(
     IFileSystem fileSystem,

@@ -4,7 +4,7 @@ using Noggog;
 using Serilog;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class SpriggitMetaLocator
 {

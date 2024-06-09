@@ -10,6 +10,7 @@ using Noggog;
 using NSubstitute;
 using Serilog;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
 namespace Spriggit.Tests;

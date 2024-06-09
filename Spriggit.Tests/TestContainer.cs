@@ -6,6 +6,7 @@ using Noggog.WorkEngine;
 using Serilog;
 using Serilog.Core;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.Tests;
 

@@ -13,7 +13,7 @@ using NuGet.Versioning;
 using Spriggit.Core;
 using ILogger = Serilog.ILogger;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class NugetDownloader
 {

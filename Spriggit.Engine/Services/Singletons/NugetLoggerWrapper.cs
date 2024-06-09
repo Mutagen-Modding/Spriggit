@@ -2,7 +2,7 @@
 using Serilog.Events;
 using ILogger = Serilog.ILogger;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class NugetLoggerWrap : NuGet.Common.ILogger
 {

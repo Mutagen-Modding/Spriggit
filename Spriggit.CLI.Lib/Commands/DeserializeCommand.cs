@@ -36,4 +36,9 @@ public class DeserializeCommand
         HelpText = "Days to keep backup plugins in the temp folder (default 30)",
         Required = false)]
     public uint BackupDays { get; set; } = 30;
+
+    [Option('l', "Localized",
+        HelpText = "Forces the build to be localized if true, or unlocalized if false.  If missing, the mod's flags will determine localization.",
+        Required = false)]
+    public bool? Localized { get; set; } = null;
 }

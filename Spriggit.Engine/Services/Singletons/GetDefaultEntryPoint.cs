@@ -2,7 +2,7 @@ using System.IO.Abstractions;
 using Noggog;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class GetDefaultEntryPoint
 {

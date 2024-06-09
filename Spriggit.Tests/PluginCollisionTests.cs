@@ -5,6 +5,7 @@ using Mutagen.Bethesda;
 using Noggog.IO;
 using Spriggit.Core;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
 namespace Spriggit.Tests;

@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Noggog;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class SerializeBlocker
 {

@@ -1,18 +1,18 @@
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
+using System.Reactive.Disposables;
+using System.Reflection;
 using McMaster.NETCore.Plugins;
-using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins;
+using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
-using Noggog;
-using Spriggit.Core;
-using System.IO.Abstractions;
-using System.Reflection;
 using NuGet.Packaging.Core;
-using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Disposables;
 using Serilog;
+using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class ConstructAssemblyLoadedEntryPoint
 {

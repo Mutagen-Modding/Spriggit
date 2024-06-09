@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 using Noggog;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class SpriggitExternalMetaPersister
 {

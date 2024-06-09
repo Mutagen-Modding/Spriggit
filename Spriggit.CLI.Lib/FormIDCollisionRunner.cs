@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Spriggit.CLI.Commands;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI;
 

@@ -5,7 +5,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class GetMetaToUse
 {

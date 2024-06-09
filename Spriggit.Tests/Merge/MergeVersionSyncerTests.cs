@@ -12,6 +12,7 @@ using Noggog.WorkEngine;
 using Spriggit.Core;
 using Spriggit.Engine;
 using Spriggit.Engine.Merge;
+using Spriggit.Engine.Services.Singletons;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 

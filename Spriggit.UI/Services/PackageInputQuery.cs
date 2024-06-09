@@ -1,6 +1,7 @@
 ﻿using Mutagen.Bethesda;
 using Noggog;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Spriggit.UI.Settings;
 
 namespace Spriggit.UI.Services;

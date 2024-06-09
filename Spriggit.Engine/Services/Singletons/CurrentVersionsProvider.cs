@@ -1,6 +1,6 @@
 ﻿using Noggog;
 
-namespace Spriggit.Engine;
+namespace Spriggit.Engine.Services.Singletons;
 
 public class CurrentVersionsProvider
 {

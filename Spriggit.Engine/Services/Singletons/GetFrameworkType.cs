@@ -1,4 +1,4 @@
-﻿namespace Spriggit.Engine;
+﻿namespace Spriggit.Engine.Services.Singletons;
 
 public enum FrameworkType
 {

@@ -3,6 +3,7 @@ using FluentAssertions;
 using Noggog;
 using Noggog.Testing.AutoFixture;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
 namespace Spriggit.Tests;

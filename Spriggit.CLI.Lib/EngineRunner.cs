@@ -3,6 +3,7 @@ using Noggog.WorkEngine;
 using Spriggit.CLI.Commands;
 using Spriggit.CLI.Lib;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI;
 

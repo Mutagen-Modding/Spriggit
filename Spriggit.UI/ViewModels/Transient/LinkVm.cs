@@ -12,6 +12,7 @@ using ReactiveUI.Fody.Helpers;
 using Serilog;
 using Spriggit.Core;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Spriggit.UI.Services;
 using Spriggit.UI.ViewModels.Singletons;
 

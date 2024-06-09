@@ -4,6 +4,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
 namespace Spriggit.CLI;

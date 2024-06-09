@@ -13,6 +13,7 @@ using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using Spriggit.Core;
 using Spriggit.Engine;
+using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
 namespace Spriggit.Tests;
