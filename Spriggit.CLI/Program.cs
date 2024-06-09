@@ -11,4 +11,5 @@ return await Parser.Default.ParseArguments(args, typeof(DeserializeCommand), typ
         async (DeserializeCommand deserialize) => await EngineRunner.Run(deserialize, null),
         async (SerializeCommand serialize) => await EngineRunner.Run(serialize, null),
         async (FormIDCollisionCommand formIdCollision) => await FormIDCollisionRunner.Run(formIdCollision),
+        async (MergeVersionSyncerCommand versionSyncer) => await MergeVersionSyncerRunner.Run(versionSyncer),
         async _ => -1);

@@ -12,4 +12,22 @@
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Commands\MergeVersionSyncerCommand.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="MergeVersionSyncerRunner.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="MergeVersionSyncerContainer.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+    </ItemGroup>
+
 </Project>
