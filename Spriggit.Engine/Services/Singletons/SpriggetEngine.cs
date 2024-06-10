@@ -21,7 +21,8 @@ public class SpriggitEngine(
     CurrentVersionsProvider currentVersionsProvider,
     SpriggitExternalMetaPersister metaPersister,
     PluginBackupCreator pluginBackupCreator,
-    IModFilesMover modFilesMover)
+    IModFilesMover modFilesMover,
+    LocalizeEnforcer localizeEnforcer)
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
@@ -82,6 +83,7 @@ public class SpriggitEngine(
         string spriggitPluginPath, 
         FilePath outputFile,
         uint backupDays,
+        bool? localize,
         IEngineEntryPoint? entryPt = default,
         SpriggitSource? source = default,
         CancellationToken? cancel = default)
@@ -104,7 +106,7 @@ public class SpriggitEngine(
         
         using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("Spriggit", "Translations", Path.GetRandomFileName()));
 
-        string tempOutput = Path.Combine(tmp.Dir, Path.GetFileName(outputFile));
+        ModPath tempOutput = Path.Combine(tmp.Dir, Path.GetFileName(outputFile));
         
         pluginBackupCreator.Backup(outputFile, backupDays: backupDays);
 
@@ -119,6 +121,11 @@ public class SpriggitEngine(
             cancel: cancel.Value);
         logger.Information("Finished deserializing with {BethesdaPluginPath} to temp output {Output} with {Meta}", 
             spriggitPluginPath, tempOutput, meta);
+
+        if (localize != null)
+        {
+            localizeEnforcer.Localize(localize.Value, tempOutput, meta.Release);
+        }
     
         var dir = outputFile.Directory;
         if (dir != null)

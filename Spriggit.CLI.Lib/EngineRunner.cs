@@ -47,6 +47,7 @@ public static class EngineRunner
                 outputFile: deserializeCommand.OutputPath,
                 source: source,
                 entryPt: entryPoint,
+                localize: deserializeCommand.Localized,
                 backupDays: deserializeCommand.BackupDays,
                 cancel: CancellationToken.None);
         return 0;
