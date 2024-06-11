@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Mutagen.Bethesda.Starfield"/>
+        <PackageReference Include="Mutagen.Bethesda.Testing"/>
+        <PackageReference Include="Noggog.Testing"/>
+        <PackageReference Include="xunit"/>
+        <PackageReference Include="xunit.runner.console"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
+        <ProjectReference Include="..\Spriggit.Tests\Spriggit.Tests.csproj" />
+        <ProjectReference Include="..\Spriggit.UI\Spriggit.UI.csproj" />
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Merge\MergeVersionSyncerTests.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="ContainerTests.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="ContainerTestUtil.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+    </ItemGroup>
+
+</Project>
