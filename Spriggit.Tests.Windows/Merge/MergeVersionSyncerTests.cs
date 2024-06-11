@@ -10,7 +10,6 @@ using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Noggog.WorkEngine;
 using Spriggit.Core;
-using Spriggit.Engine;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.Yaml.Starfield;
@@ -40,7 +39,6 @@ public class MergeVersionSyncerTests
         }
     }
     
-#if OS_WINDOWS
     // [Theory, MutagenModAutoData(GameRelease.Starfield)]
     // public async Task NothingToFix(
     //     IFileSystem fileSystem,
@@ -231,5 +229,4 @@ public class MergeVersionSyncerTests
 
         File.ReadAllText(Path.Combine(spriggitModPath, "Testing123")).Should().Be("NewContent");
     }
-#endif
 }

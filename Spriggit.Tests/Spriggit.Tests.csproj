@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
     
-    <PropertyGroup>
-        <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
         <PackageReference Include="Mutagen.Bethesda.Starfield"/>
@@ -16,11 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
-        <ProjectReference Include="..\Spriggit.UI\Spriggit.UI.csproj" />
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
     </ItemGroup>
     
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <DefineConstants>OS_WINDOWS</DefineConstants>
-    </PropertyGroup>
 </Project>

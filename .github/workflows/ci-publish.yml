@@ -55,8 +55,12 @@ jobs:
         exclude:
           - os: ubuntu-latest
             sln: Spriggit.sln
+          - os: ubuntu-latest
+            sln: Spriggit.Tests.Windows.sln
           - os: macos-latest
-            sln: Spriggit.sln 
+            sln: Spriggit.sln
+          - os: macos-latest
+            sln: Spriggit.Tests.Windows.sln
           - os: windows-latest
             sln: Spriggit.Linux.sln
           
