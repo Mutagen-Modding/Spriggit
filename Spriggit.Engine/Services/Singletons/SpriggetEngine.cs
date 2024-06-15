@@ -33,8 +33,6 @@ public class SpriggitEngine(
     {
         cancel ??= CancellationToken.None;
         
-        logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
-        
         serializeBlocker.CheckAndBlock(outputFolder);
         
         if (meta == null)
@@ -89,8 +87,6 @@ public class SpriggitEngine(
         CancellationToken? cancel = default)
     {
         cancel ??= CancellationToken.None;
-        
-        logger.Information("Spriggit version {Version}", currentVersionsProvider.SpriggitVersion);
         
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel.Value);
