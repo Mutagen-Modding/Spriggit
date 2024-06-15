@@ -60,7 +60,7 @@ This command helps detangle colliding FormIDs that result after a Git Merge.
     The logic that Spriggit contains to handle FormID conflicts can only handle two records with a single FormID.  As such, collisions need to be handled immediately after each Git merge.
 
 ### Typical
-`.\Path\To\Spriggit.CLI.exe convert-from-plugin --SpriggitPath "C:\MyGitRepository\SomeMod.esp"`
+`.\Path\To\Spriggit.CLI.exe formid-collision -p "C:\MyGitRepository\SomeMod.esp\"`
 
 ### Parameters
 | Short | Long | Required | Description |
