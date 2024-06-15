@@ -8,7 +8,7 @@ CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
 var vers = new CurrentVersionsProvider();
-Console.WriteLine("Spriggit version {Version}", vers.SpriggitVersion);
+Console.WriteLine($"Spriggit version {vers.SpriggitVersion}");
 
 return await Parser.Default.ParseArguments(args, typeof(DeserializeCommand), typeof(SerializeCommand), typeof(FormIDCollisionCommand))
     .MapResult(
