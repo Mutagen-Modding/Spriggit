@@ -95,6 +95,13 @@ public class FormIDCollisionFixer
 
         var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
         
+        // ToDo
+        // Swap to more official mutagen call
+        origMergedMod.NextFormID = origMergedMod.EnumerateMajorRecords()
+            .Select(x => x.FormKey.ID)
+            .StartWith(origMergedMod.GetDefaultInitialNextFormID())
+            .Max() + 1;
+        
         _logger.Information("Locating collisions");
         var collisions = _detector.LocateCollisions(origMergedMod);
         if (collisions.Count == 0)
