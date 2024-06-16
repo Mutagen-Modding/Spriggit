@@ -13,11 +13,10 @@ using Spriggit.Engine.Merge;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 
-namespace Spriggit.Tests.Merge;
+namespace Spriggit.Tests.Windows.Merge;
 
 public class FormIDCollisionFixerTests
 {
-#if OS_WINDOWS
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task NothingToFix(
         IFileSystem fileSystem,
@@ -31,22 +30,25 @@ public class FormIDCollisionFixerTests
         DirectoryPath spriggitModPath,
         FormIDCollisionFixer sut)
     {
+        var spriggitSource = new SpriggitSource()
+        {
+            PackageName = "Spriggit.Yaml.Starfield",
+            Version = "Test"
+        };
+        
         var modPath = Path.Combine(modFolder, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder);
         mod.WriteToBinary(modPath, fileSystem: fileSystem);
         await entryPoint.Serialize(
             modPath, spriggitModPath, GameRelease.Starfield,
             null, fileSystem, null,
-            new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Starfield",
-                Version = "Test"
-            },
+            spriggitSource,
             CancellationToken.None);
         
         await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
             entryPoint,
-            spriggitModPath: spriggitModPath);
+            spriggitModPath: spriggitModPath,
+            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.Starfield, modKey));
 
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder2);
@@ -146,7 +148,8 @@ public class FormIDCollisionFixerTests
 
         await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
             entryPoint,
-            spriggitModPath: spriggitModPath);
+            spriggitModPath: spriggitModPath,
+            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.Starfield, mod.ModKey));
         
         var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
@@ -168,5 +171,4 @@ public class FormIDCollisionFixerTests
         reimport.Npcs.First().FormKey.Should()
             .NotBe(reimport.Weapons.First().FormKey);
     }
-#endif
 }
