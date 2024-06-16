@@ -40,7 +40,7 @@ public class FormIDCollisionFixer
         DirectoryPath spriggitModPath)
     {
         var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
-        var entryPoint = await _entryPointCache.GetFor(meta, CancellationToken.None);
+        var entryPoint = await _entryPointCache.GetFor(meta.ToMeta(), CancellationToken.None);
         if (entryPoint == null)
         {
             throw new NullReferenceException($"Could not construct entry point for {meta}");
@@ -59,27 +59,18 @@ public class FormIDCollisionFixer
         {
             entryPoint,
             spriggitModPath,
+            meta
         });
     }
 
     internal async Task DetectAndFixInternal<TMod, TModGetter>(
         IEntryPoint entryPoint,
-        DirectoryPath spriggitModPath)
+        DirectoryPath spriggitModPath,
+        SpriggitEmbeddedMeta meta)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
     {
         using var tmp = TempFolder.Factory(fileSystem: _fileSystem);
-
-        var meta = await entryPoint.TryGetMetaInfo(
-            spriggitModPath,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-        if (meta == null)
-        {
-            throw new Exception("Could not locate target meta");
-        }
 
         FilePath origMergedModPath = Path.Combine(tmp.Dir, "MergedOrig", meta.ModKey.FileName);
         origMergedModPath.Directory?.Create(_fileSystem);
@@ -133,7 +124,9 @@ public class FormIDCollisionFixer
         }
         
         var origBranch = repo.Head;
-        var branch = repo.CreateBranch($"Spriggit-Merge-Fix-{origBranch.Tip.Sha.Substring(0, 6)}", parents[0]);
+        var branchName = $"Spriggit-Merge-Fix-{origBranch.Tip.Sha.Substring(0, 6)}";
+        repo.Branches.Remove(branchName);
+        var branch = repo.CreateBranch(branchName, parents[0]);
         Commands.Checkout(repo, branch);
 
         await entryPoint.Deserialize(

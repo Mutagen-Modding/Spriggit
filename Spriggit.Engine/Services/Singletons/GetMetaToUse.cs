@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
@@ -29,7 +30,7 @@ public class GetMetaToUse
         _externalMetaPersister = externalMetaPersister;
     }
     
-    public async Task<SpriggitMeta> Get(
+    public async Task<SpriggitEmbeddedMeta> Get(
         SpriggitSource? source,
         DirectoryPath spriggitPluginPath,
         CancellationToken cancel)
@@ -48,7 +49,8 @@ public class GetMetaToUse
         }
         if (sourceInfo == null) throw new DataException($"Could not locate source info from {spriggitPluginPath}");
 
-        return new SpriggitMeta(
+        return new SpriggitEmbeddedMeta(
+            ModKey: sourceInfo.ModKey,
             Source: source ?? sourceInfo.Source,
             Release: sourceInfo.Release);
     }

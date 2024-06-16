@@ -137,7 +137,7 @@ public class MergeVersionSyncer
         Commands.Checkout(repo, newBranch);
         
         var newMeta = await _getMetaToUse.Get(null, spriggitPath, CancellationToken.None);
-        var newEntryPoint = await _entryPointCache.GetFor(newMeta, CancellationToken.None);
+        var newEntryPoint = await _entryPointCache.GetFor(newMeta.ToMeta(), CancellationToken.None);
         if (newEntryPoint == null)
         {
             throw new NullReferenceException($"Could not construct entry point for {newMeta}");
@@ -153,7 +153,7 @@ public class MergeVersionSyncer
         Commands.Checkout(repo, oldBranch);
         
         var oldMeta = await _getMetaToUse.Get(null, spriggitPath, CancellationToken.None);
-        var oldEntryPoint = await _entryPointCache.GetFor(oldMeta, CancellationToken.None);
+        var oldEntryPoint = await _entryPointCache.GetFor(oldMeta.ToMeta(), CancellationToken.None);
         if (oldEntryPoint == null)
         {
             throw new NullReferenceException($"Could not construct entry point for {oldMeta}");

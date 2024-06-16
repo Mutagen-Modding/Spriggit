@@ -94,7 +94,7 @@ public class SpriggitEngine(
         if (entryPt == null)
         {
             logger.Information("Getting entry point for {Meta}", meta);
-            entryPt = await entryPointCache.GetFor(meta, cancel.Value);
+            entryPt = await entryPointCache.GetFor(meta.ToMeta(), cancel.Value);
             if (entryPt == null) throw new NotSupportedException($"Could not locate entry point for: {meta}");
         }
 
