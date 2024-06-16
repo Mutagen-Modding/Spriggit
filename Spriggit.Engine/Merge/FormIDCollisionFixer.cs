@@ -59,12 +59,17 @@ public class FormIDCollisionFixer
 
         var method = this.GetType().GetMethod("DetectAndFixInternal", BindingFlags.Instance | BindingFlags.NonPublic)!;
         var genMethod = method.MakeGenericMethod(new Type[] { regis.SetterType, regis.GetterType });
-        genMethod.Invoke(this, new object?[]
+        
+        var obj = genMethod.Invoke(this, new object?[]
         {
             entryPoint,
             spriggitModPath,
             meta
         });
+        if (obj is Task t)
+        {
+            await t;
+        }
     }
 
     internal async Task DetectAndFixInternal<TMod, TModGetter>(
