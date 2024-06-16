@@ -24,5 +24,7 @@ catch (Exception ex)
 {
     Console.WriteLine("Error:");
     Console.WriteLine(ex);
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.StackTrace);
     return -1;
 }
