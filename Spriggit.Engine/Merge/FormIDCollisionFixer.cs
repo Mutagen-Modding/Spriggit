@@ -212,6 +212,8 @@ public class FormIDCollisionFixer
         _logger.Information("Deleting fix branch {Branch}", branch.CanonicalName);
         repo.Branches.Remove(branch);
         
+        _logger.Information("Checking for collisions in fixed result");
+        
         FilePath newMergedModPath = Path.Combine(tmp.Dir, "MergedNew", meta.ModKey.FileName);
         _logger.Information("Creating result temp folder {Path}", newMergedModPath.Directory);
         newMergedModPath.Directory?.Create(_fileSystem);
@@ -225,7 +227,6 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        _logger.Information("Checking for collisions in fixed result");
         var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
 
         var newCollisions = _detector.LocateCollisions(newMergedMod);
