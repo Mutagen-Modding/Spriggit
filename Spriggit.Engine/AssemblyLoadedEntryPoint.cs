@@ -6,12 +6,14 @@ using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using NuGet.Packaging.Core;
+using Serilog;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
 
 public class AssemblyLoadedEntryPoint : IEngineEntryPoint
 {
+    private readonly ILogger _logger;
     private readonly CompositeDisposable _disposable;
     private readonly ISimplisticEntryPoint? _simplisticEntryPoint;
     private readonly IEntryPoint? _entryPoint;
@@ -21,8 +23,10 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         IEntryPoint? entryPoint,
         ISimplisticEntryPoint? simplisticEntryPoint,
         PackageIdentity package,
-        CompositeDisposable disposable)
+        CompositeDisposable disposable,
+        ILogger logger)
     {
+        _logger = logger;
         _disposable = disposable;
         _simplisticEntryPoint = simplisticEntryPoint;
         _entryPoint = entryPoint;
@@ -32,11 +36,19 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
     public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
-        if (_entryPoint != null)
+        try
         {
-            await _entryPoint.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+            if (_entryPoint != null)
+            {
+                await _entryPoint.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+                return;
+            }
         }
-        else if (_simplisticEntryPoint != null)
+        catch (Exception e)
+        {
+            _logger.Warning(e, "Error running full entry point due to exception. Falling back to simplistic if possible.");
+        }
+        if (_simplisticEntryPoint != null)
         {
             await _simplisticEntryPoint.Serialize(
                 modPath: modPath,

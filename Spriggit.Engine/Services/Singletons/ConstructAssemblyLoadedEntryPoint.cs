@@ -98,7 +98,8 @@ public class ConstructAssemblyLoadedEntryPoint
             entryPoint,
             simplisticEntryPoint,
             ident,
-            disposable);
+            disposable,
+            _logger);
     }
 
     private IEntryPoint? GetEntryPointFromAssembly(Assembly defAssembly)
