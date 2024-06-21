@@ -9,7 +9,8 @@ namespace Spriggit.Engine.Services.Singletons;
 
 public class SpriggitExternalMetaPersister
 {
-    public const string FileName = "spriggit.meta";
+    public const string OldFileName = "spriggit.meta";
+    public const string FileName = "spriggit-meta.json";
     
     private readonly IFileSystem _fileSystem;
     
@@ -42,7 +43,14 @@ public class SpriggitExternalMetaPersister
     public SpriggitEmbeddedMeta? TryParseEmbeddedMeta(DirectoryPath spriggitFolder)
     {
         var path = Path.Combine(spriggitFolder, FileName);
-        if (!_fileSystem.File.Exists(path)) return null;
+        if (!_fileSystem.File.Exists(path))
+        {
+            path = Path.Combine(spriggitFolder, OldFileName);
+            if (!_fileSystem.File.Exists(path))
+            {
+                return null;
+            }
+        }
         var str = _fileSystem.File.ReadAllText(path);
         var embedded = JsonConvert.DeserializeObject<SpriggitEmbeddedMetaSerialize>(str, JsonSettings);
         if (embedded == null
