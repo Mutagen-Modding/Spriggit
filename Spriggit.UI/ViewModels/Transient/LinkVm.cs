@@ -221,6 +221,7 @@ public class LinkVm : ViewModel
             await _engine.Serialize(
                 bethesdaPluginPath: Input.ModPathPicker.TargetPath,
                 outputFolder: Input.GitFolderPicker.TargetPath,
+                postSerializeChecks: true,
                 meta: meta.Value,
                 cancel: cancel);
             _logger.Information("Finished syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,

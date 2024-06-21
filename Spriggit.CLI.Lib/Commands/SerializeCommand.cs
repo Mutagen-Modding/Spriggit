@@ -46,4 +46,9 @@ public class SerializeCommand
         HelpText = "ModKey override.  If left blank, file name will be used",
         Required = false)]
     public string? ModKey { get; set; }
+
+    [Option('c', "Check",
+        HelpText = "Checks some basic correctness after serialization.  Not extensive.",
+        Required = false)]
+    public bool Check { get; set; } = true;
 }

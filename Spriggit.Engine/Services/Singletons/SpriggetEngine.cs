@@ -18,15 +18,16 @@ public class SpriggitEngine(
     ILogger logger,
     GetMetaToUse getMetaToUse,
     SerializeBlocker serializeBlocker,
-    CurrentVersionsProvider currentVersionsProvider,
     SpriggitExternalMetaPersister metaPersister,
     PluginBackupCreator pluginBackupCreator,
     IModFilesMover modFilesMover,
-    LocalizeEnforcer localizeEnforcer)
+    LocalizeEnforcer localizeEnforcer,
+    PostSerializeChecker postSerializeChecker)
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
+        bool postSerializeChecks,
         IEngineEntryPoint? entryPt = default,
         SpriggitMeta? meta = default,
         CancellationToken? cancel = default)
@@ -74,6 +75,15 @@ public class SpriggitEngine(
                 source,
                 meta.Release,
                 bethesdaPluginPath.ModKey));
+        if (postSerializeChecks)
+        {
+            await postSerializeChecker.Check(
+                bethesdaPluginPath,
+                meta.Release,
+                outputFolder,
+                entryPt,
+                cancel.Value);   
+        }
         logger.Information("Finished serializing from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
     }
 

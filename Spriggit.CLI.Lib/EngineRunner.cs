@@ -67,6 +67,7 @@ public static class EngineRunner
                 bethesdaPluginPath: modPath,
                 outputFolder: serializeCommand.OutputPath,
                 entryPt: entryPoint,
+                postSerializeChecks: serializeCommand.Check,
                 meta: meta,
                 cancel: CancellationToken.None); 
         return 0;
