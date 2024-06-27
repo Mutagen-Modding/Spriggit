@@ -16,14 +16,15 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
 {
     protected static readonly BinaryWriteParameters NoCheckWriteParameters = new()
     {
+        RecordCount = RecordCountOption.Iterate,
+        NextFormID = NextFormIDOption.Iterate,
         ModKey = ModKeyOption.CorrectToPath,
         MastersListContent = MastersListContentOption.NoCheck,
-        RecordCount = RecordCountOption.NoCheck,
         MastersListOrdering = MastersListOrderingOption.NoCheck,
-        NextFormID = NextFormIDOption.NoCheck,
         FormIDUniqueness = FormIDUniquenessOption.NoCheck,
         MasterFlag = MasterFlagOption.NoCheck,
         FormIDCompaction = FormIDCompactionOption.NoCheck,
+        LowerRangeDisallowedHandler = ALowerRangeDisallowedHandlerOption.NoCheck,
         CleanNulls = false
     };
     
