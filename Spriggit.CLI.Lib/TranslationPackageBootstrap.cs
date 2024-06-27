@@ -1,5 +1,5 @@
 ﻿using CommandLine;
-using Spriggit.CLI.Commands;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.Engine;
 
 namespace Spriggit.CLI.Lib;

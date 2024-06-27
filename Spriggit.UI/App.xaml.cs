@@ -6,7 +6,8 @@ using Microsoft.VisualBasic.Logging;
 using Noggog.IO;
 using Serilog;
 using Spriggit.CLI;
-using Spriggit.CLI.Commands;
+using Spriggit.CLI.Lib;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.UI.Services;
 
 namespace Spriggit.UI;

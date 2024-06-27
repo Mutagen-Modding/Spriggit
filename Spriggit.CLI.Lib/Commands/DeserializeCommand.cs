@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using Noggog;
 
-namespace Spriggit.CLI.Commands;
+namespace Spriggit.CLI.Lib.Commands;
 
 [Verb("deserialize", aliases: new[] { "create-plugin", "convert-to-plugin" }, HelpText = "Converts a mod from its text based representation to a binary Bethesda plugin")]
 public class DeserializeCommand

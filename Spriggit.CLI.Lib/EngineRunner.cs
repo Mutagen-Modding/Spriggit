@@ -1,11 +1,10 @@
 using System.IO.Abstractions;
 using Noggog.WorkEngine;
-using Spriggit.CLI.Commands;
-using Spriggit.CLI.Lib;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 
-namespace Spriggit.CLI;
+namespace Spriggit.CLI.Lib;
 
 public static class EngineRunner
 {

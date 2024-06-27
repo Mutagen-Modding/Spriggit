@@ -1,6 +1,6 @@
 ﻿using Mutagen.Bethesda.Plugins;
 using Noggog;
-using Spriggit.CLI.Commands;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.Core;
 
 namespace Spriggit.CLI.Lib;

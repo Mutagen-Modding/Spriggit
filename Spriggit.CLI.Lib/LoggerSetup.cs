@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Spriggit.CLI;
+namespace Spriggit.CLI.Lib;
 
 public static class LoggerSetup
 {

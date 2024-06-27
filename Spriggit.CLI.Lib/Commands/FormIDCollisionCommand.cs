@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Spriggit.CLI.Commands;
+namespace Spriggit.CLI.Lib.Commands;
 
 [Verb("formid-collision", HelpText = "Command to be run after a git merge to address FormID collisions")]
 public class FormIDCollisionCommand

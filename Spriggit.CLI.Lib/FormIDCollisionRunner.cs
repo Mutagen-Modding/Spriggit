@@ -1,9 +1,8 @@
 ﻿using System.IO.Abstractions;
-using Spriggit.CLI.Commands;
-using Spriggit.Engine;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.Engine.Services.Singletons;
 
-namespace Spriggit.CLI;
+namespace Spriggit.CLI.Lib;
 
 public static class FormIDCollisionRunner
 {

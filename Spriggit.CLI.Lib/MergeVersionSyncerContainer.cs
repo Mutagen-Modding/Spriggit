@@ -1,15 +1,12 @@
 ﻿using System.IO.Abstractions;
-using Mutagen.Bethesda.Plugins.IO.DI;
-using Mutagen.Bethesda.Plugins.Records.Mapping;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
-using Spriggit.Engine;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
-namespace Spriggit.CLI;
+namespace Spriggit.CLI.Lib;
 
 [Register(typeof(GetMetaToUse))]
 [Register(typeof(EntryPointCache), typeof(IEntryPointCache))]

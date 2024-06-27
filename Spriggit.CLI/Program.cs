@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+using System.Globalization;
 using CommandLine;
-using Spriggit.CLI;
-using Spriggit.CLI.Commands;
+using Spriggit.CLI.Lib;
+using Spriggit.CLI.Lib.Commands;
 using Spriggit.Engine.Services.Singletons;
 
 try

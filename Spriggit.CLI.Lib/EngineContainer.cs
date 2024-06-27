@@ -3,11 +3,10 @@ using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
-using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
-namespace Spriggit.CLI;
+namespace Spriggit.CLI.Lib;
 
 [Register(typeof(EntryPointCache), typeof(IEntryPointCache))]
 [Register(typeof(SpriggitEngine))]

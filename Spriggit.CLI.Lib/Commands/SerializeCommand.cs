@@ -2,7 +2,7 @@
 using Mutagen.Bethesda;
 using Noggog;
 
-namespace Spriggit.CLI.Commands;
+namespace Spriggit.CLI.Lib.Commands;
 
 [Verb("serialize", aliases: new[] { "convert-from-plugin" }, HelpText = "Converts a binary Bethesda plugin to a text based representation")]
 public class SerializeCommand
