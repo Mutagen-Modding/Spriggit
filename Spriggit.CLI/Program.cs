@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using CommandLine;
 using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
@@ -12,12 +12,19 @@ try
     var vers = new CurrentVersionsProvider();
     Console.WriteLine($"Spriggit version {vers.SpriggitVersion}");
 
-    return await Parser.Default.ParseArguments(args, typeof(DeserializeCommand), typeof(SerializeCommand), typeof(FormIDCollisionCommand))
+    return await Parser.Default.ParseArguments(
+            args, 
+            typeof(DeserializeCommand),
+            typeof(SerializeCommand),
+            typeof(FormIDCollisionCommand),
+            typeof(MergeVersionSyncerCommand),
+            typeof(StandardizeCommand))
         .MapResult(
             async (DeserializeCommand deserialize) => await EngineRunner.Run(deserialize, null),
             async (SerializeCommand serialize) => await EngineRunner.Run(serialize, null),
             async (FormIDCollisionCommand formIdCollision) => await FormIDCollisionRunner.Run(formIdCollision),
             async (MergeVersionSyncerCommand versionSyncer) => await MergeVersionSyncerRunner.Run(versionSyncer),
+            async (StandardizeCommand standardize) => await StandardizeRunner.Run(standardize),
             async _ => -1);
 }
 catch (Exception ex)
