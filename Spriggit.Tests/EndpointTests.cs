@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
@@ -27,7 +28,10 @@ public class EndpointTests
     {
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {
@@ -64,7 +68,10 @@ public class EndpointTests
             fileSystem.Directory.CreateDirectory(dataFolder);
             fileSystem.Directory.CreateDirectory(dataFolder2);
             var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
-            mod.WriteToBinary(modPath, fileSystem: fileSystem);
+            mod.WriteToBinary(modPath, new BinaryWriteParameters()
+            {
+                FileSystem = fileSystem
+            });
             await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
                 streamCreator: null, new SpriggitSource()
                 {
@@ -117,7 +124,10 @@ public class EndpointTests
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
         fileSystem.Directory.CreateDirectory(dataFolder2);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {

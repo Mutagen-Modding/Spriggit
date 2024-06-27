@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Oblivion;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -23,7 +24,10 @@ public class LocalizeEnforcerTests
         LocalizeEnforcer sut)
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         Assert.Throws<ArgumentException>(() =>
         {
             sut.Localize(localize: true, modPath, mod.GameRelease);
@@ -39,7 +43,10 @@ public class LocalizeEnforcerTests
         LocalizeEnforcer sut)
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         sut.Localize(localize: false, modPath, mod.GameRelease);
     }
     
@@ -53,9 +60,16 @@ public class LocalizeEnforcerTests
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
         mod.UsingLocalization = false;
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         sut.Localize(localize: false, modPath, mod.GameRelease);
-        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, fileSystem: fileSystem);
+        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, 
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem
+            });
         reimport.UsingLocalization.Should().Be(false);
     }
     
@@ -69,9 +83,16 @@ public class LocalizeEnforcerTests
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
         mod.UsingLocalization = true;
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         sut.Localize(localize: true, modPath, mod.GameRelease);
-        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, fileSystem: fileSystem);
+        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease,
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem
+            });
         reimport.UsingLocalization.Should().Be(true);
     }
     
@@ -85,9 +106,16 @@ public class LocalizeEnforcerTests
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
         mod.UsingLocalization = false;
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         sut.Localize(localize: true, modPath, mod.GameRelease);
-        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, fileSystem: fileSystem);
+        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease,
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem
+            });
         reimport.UsingLocalization.Should().Be(true);
     }
     
@@ -101,9 +129,16 @@ public class LocalizeEnforcerTests
     {
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
         mod.UsingLocalization = true;
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         sut.Localize(localize: false, modPath, mod.GameRelease);
-        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, fileSystem: fileSystem);
+        using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, 
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem
+            });
         reimport.UsingLocalization.Should().Be(false);
     }
 }

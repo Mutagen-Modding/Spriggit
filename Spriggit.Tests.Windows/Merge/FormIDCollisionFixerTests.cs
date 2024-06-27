@@ -3,6 +3,7 @@ using FluentAssertions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -38,7 +39,10 @@ public class FormIDCollisionFixerTests
         
         var modPath = Path.Combine(modFolder, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         await entryPoint.Serialize(
             modPath, spriggitModPath, GameRelease.Starfield,
             null, fileSystem, null,
@@ -60,7 +64,10 @@ public class FormIDCollisionFixerTests
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield, fileSystem: fileSystem);
+        var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield, new BinaryReadParameters()
+        {
+            FileSystem = fileSystem
+        });
         reimport.EnumerateMajorRecords().Should().HaveCount(1);
         reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
     }

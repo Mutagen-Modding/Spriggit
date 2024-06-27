@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
@@ -98,7 +99,10 @@ public class PostSerializeChecker
 
     private Summary GetSummaryFor(ModPath path, GameRelease release)
     {
-        using var mod = ModInstantiator.ImportGetter(path, release, fileSystem: _fileSystem);
+        using var mod = ModInstantiator.ImportGetter(path, release, new BinaryReadParameters()
+        {
+            FileSystem = _fileSystem
+        });
 
         var summary = new Summary();
 

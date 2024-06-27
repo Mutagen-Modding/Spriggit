@@ -3,6 +3,7 @@ using System.Reflection;
 using LibGit2Sharp;
 using Loqui;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
@@ -93,7 +94,10 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
+        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
+        {
+            FileSystem = _fileSystem
+        });
         
         // ToDo
         // Swap to more official mutagen call
@@ -177,7 +181,10 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
+        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
+        {
+            FileSystem = _fileSystem
+        });
 
         _logger.Information("Executing reassignment");
         _reassigner.Reassign<TMod, TModGetter>(
@@ -227,7 +234,10 @@ public class FormIDCollisionFixer
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, fileSystem: _fileSystem);
+        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, new BinaryReadParameters()
+        {
+            FileSystem = _fileSystem
+        });
 
         var newCollisions = _detector.LocateCollisions(newMergedMod);
         if (newCollisions.Count != 0)

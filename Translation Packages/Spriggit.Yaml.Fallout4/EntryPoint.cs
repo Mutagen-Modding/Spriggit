@@ -41,8 +41,11 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         using var modGetter = Fallout4Mod.CreateFromBinaryOverlay(
             modPath, 
             release.ToFallout4Release(), 
-            fileSystem: fileSystem,
-            throwOnUnknownSubrecord: true);
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem,
+                ThrowOnUnknownSubrecord = true
+            });
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             dir,
@@ -67,7 +70,10 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
-        mod.WriteToBinary(outputPath, fileSystem: fileSystem, param: NoCheckWriteParameters);
+        mod.WriteToBinary(outputPath, param: NoCheckWriteParameters with
+        {
+            FileSystem = fileSystem
+        });
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Yaml.YamlSerializationReaderKernel ReaderKernel = new();

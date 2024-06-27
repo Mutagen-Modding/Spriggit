@@ -40,8 +40,11 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         fileSystem = fileSystem.GetOrDefault();
         using var modGetter = OblivionMod.CreateFromBinaryOverlay(
             modPath, 
-            fileSystem: fileSystem,
-            throwOnUnknownSubrecord: true);
+            new BinaryReadParameters()
+            {
+                FileSystem = fileSystem,
+                ThrowOnUnknownSubrecord = true
+            });
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,
             dir,
@@ -66,7 +69,10 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
-        mod.WriteToBinary(outputPath, fileSystem: fileSystem, param: NoCheckWriteParameters);
+        mod.WriteToBinary(outputPath, param: NoCheckWriteParameters with
+        {
+            FileSystem = fileSystem
+        });
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -64,7 +65,10 @@ public class ConstructEntryPointTests
             var fs = new MockFileSystem();
             fs.Directory.CreateDirectory(_outputFolder);
             var modPath = Path.Combine(_outputFolder, _mod.ModKey.ToString());
-            _mod.WriteToBinary(modPath, fileSystem: fs);
+            _mod.WriteToBinary(modPath, new BinaryWriteParameters()
+            {
+                FileSystem = fs
+            });
             var serializeOutputFolder = Path.Combine(_outputFolder, "serialize", _mod.ModKey.FileName);
             await entryPoint.Serialize(
                 modPath,
@@ -91,7 +95,10 @@ public class ConstructEntryPointTests
             var reimport = StarfieldMod.CreateFromBinaryOverlay(
                 modPath,
                 StarfieldRelease.Starfield,
-                fileSystem: fs);
+                new BinaryReadParameters()
+                {
+                    FileSystem = fs
+                });
             reimport.Npcs.Select(x => x.FormKey).Should().Equal(_npc.FormKey);
         }
     }

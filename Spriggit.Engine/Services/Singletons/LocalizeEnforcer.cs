@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 
 namespace Spriggit.Engine.Services.Singletons;
@@ -19,7 +20,10 @@ public class LocalizeEnforcer
         ModPath modPath,
         GameRelease release)
     {
-        var mod = ModInstantiator.ImportSetter(modPath, release, _fileSystem);
+        var mod = ModInstantiator.ImportSetter(modPath, release, BinaryReadParameters.Default with
+        {
+            FileSystem = _fileSystem
+        });
         if (localize == mod.UsingLocalization) return;
         if (localize && !mod.CanUseLocalization)
         {
@@ -27,6 +31,9 @@ public class LocalizeEnforcer
         }
 
         mod.UsingLocalization = localize;
-        mod.WriteToBinary(modPath, fileSystem: _fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = _fileSystem
+        });
     }
 }

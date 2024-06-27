@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -38,7 +39,10 @@ public class PostSerializeCheckerTests
         Sut sut)
     {
         var modPath = Path.Combine(existingModFolder.Path, mod.ModKey.FileName);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
 
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
@@ -79,7 +83,10 @@ public class PostSerializeCheckerTests
         Sut sut)
     {
         var modPath = Path.Combine(existingModFolder.Path, mod.ModKey.FileName);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
 
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
@@ -98,7 +105,10 @@ public class PostSerializeCheckerTests
             });
         
         mod.Books.Clear();
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         
         await Assert.ThrowsAsync<DataMisalignedException>(async () =>
         {
@@ -125,7 +135,10 @@ public class PostSerializeCheckerTests
         Sut sut)
     {
         var modPath = Path.Combine(existingModFolder.Path, mod.ModKey.FileName);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
 
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
@@ -144,7 +157,10 @@ public class PostSerializeCheckerTests
             });
 
         mod.Books.AddNew();
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
 
         await Assert.ThrowsAsync<DataMisalignedException>(async () =>
         {

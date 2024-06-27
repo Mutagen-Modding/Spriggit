@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
 using Spriggit.Core;
@@ -31,7 +32,10 @@ public class TestUtil
     {
         var modPath = new ModPath(Path.Combine(dataFolder, mod.ModKey.ToString()));
         fileSystem.Directory.CreateDirectory(dataFolder);
-        mod.WriteToBinary(modPath, fileSystem: fileSystem);
+        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+        {
+            FileSystem = fileSystem
+        });
         await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, new SpriggitSource()
             {
@@ -50,7 +54,11 @@ public class TestUtil
         var modPath2 = Path.Combine(dataFolder, otherModKey.ToString());
         await entryPoint.Deserialize(spriggitFolder, modPath2, workDropoff: null, fileSystem: fileSystem,
             streamCreator: null, CancellationToken.None);
-        var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield, fileSystem: fileSystem);
+        var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield,
+            BinaryReadParameters.Default with
+            {
+                FileSystem = fileSystem
+            });
         return reimport;
     }
 }
