@@ -3,9 +3,11 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Analysis;
 using Mutagen.Bethesda.Plugins.Binary.Headers;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Plugins.Binary.Processing;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Meta;
 using Noggog;
+using Noggog.IO;
 using Spriggit.CLI.Lib.Commands;
 
 namespace Spriggit.CLI.Lib;
@@ -14,14 +16,24 @@ public static class StandardizeRunner
 {
     public static async Task<int> Run(StandardizeCommand cmd)
     {
-        using (var f = File.OpenWrite(cmd.OutputPath))
+        ModPath modPath = cmd.InputPath;
+        using var tmp = TempFolder.Factory();
+        var sortPath = Path.Combine(tmp.Dir, modPath.ModKey.FileName);
+        using (var f = File.OpenWrite(sortPath))
         {
             ModRecordSorter2.Sort(() =>
                 {
                     var meta = ParsingMeta.Factory(BinaryReadParameters.Default, cmd.GameRelease, cmd.InputPath);
                     return new MutagenBinaryReadStream(cmd.InputPath, meta);
-                }, f,
-                cmd.GameRelease);
+                }, f);
+        }
+        using (var f = File.OpenWrite(cmd.OutputPath))
+        {
+            ModDecompressor.Decompress(() =>
+                {
+                    var meta = ParsingMeta.Factory(BinaryReadParameters.Default, cmd.GameRelease, sortPath);
+                    return new MutagenBinaryReadStream(sortPath, meta);
+                }, f);
         }
 
         return 0;
@@ -32,10 +44,10 @@ static class ModRecordSorter2
 {
     public static void Sort(
         Func<IMutagenReadStream> streamCreator,
-        Stream outputStream,
-        GameRelease release)
+        Stream outputStream)
     {
         using var inputStream = streamCreator();
+        var release = inputStream.MetaData.Constants.Release;
         using var locatorStream = streamCreator();
         using var writer = new MutagenWriter(outputStream, release, dispose: false);
         if (inputStream.Complete) return;
@@ -60,8 +72,9 @@ static class ModRecordSorter2
                     if (grupFrame.Complete) continue;
                     if (inputStream.TryGetGroupHeader(out var subGroupMeta))
                     {
+                        var subGroupBytes = inputStream.ReadMemory(checked((int)subGroupMeta.TotalLength), readSafe: true);
                         storage.GetOrAdd(rec.FormID)
-                            .Add(inputStream.ReadMemory(checked((int)subGroupMeta.TotalLength), readSafe: true));
+                            .Add(subGroupBytes);
                     }
                 }
             }
