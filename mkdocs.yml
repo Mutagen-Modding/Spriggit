@@ -63,4 +63,5 @@ nav:
   - Troubleshooting: 
     - Backups: backups.md
     - Unexpected Records: unexpected-records.md
+    - Bad Target Folder: bad-target-folder.md
     - Backwards Compatibility With Alpha Versions: alpha-backwards-compatibility.md
