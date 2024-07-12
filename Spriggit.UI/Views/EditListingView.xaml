@@ -12,20 +12,20 @@
                        mc:Ignorable="d"
                        d:DesignHeight="400" d:DesignWidth="300">
     <StackPanel Orientation="Vertical" Margin="5">
+        <TextBlock Text="Path to Mod File" Margin="5" FontSize="14" FontWeight="Bold" />
+        <wpf:PathPicker x:Name="ModPathPicker" Margin="5" />
+        <TextBlock Text="Path to Git Folder" Margin="5" FontSize="14" FontWeight="Bold" />
+        <wpf:PathPicker x:Name="GitFolderPicker" Margin="5" />
         <TextBlock Grid.Column="0" Text="Game Release"
                    VerticalAlignment="Bottom"
                    Margin="5" FontSize="14" FontWeight="Bold" />
-        <ComboBox x:Name="GameReleaseCombo" Margin="5">
+        <ComboBox x:Name="GameReleaseCombo" Margin="5" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBlock Text="Path to Mod File" Margin="5" FontSize="14" FontWeight="Bold" />
-        <wpf:PathPicker x:Name="ModPathPicker" Margin="5" />
-        <TextBlock Text="Path to Git Folder" Margin="5" FontSize="14" FontWeight="Bold" />
-        <wpf:PathPicker x:Name="GitFolderPicker" Margin="5" />
         <TextBlock Text="Spriggit Package" Margin="5" FontSize="14" FontWeight="Bold" />
         <Border Margin="5"
                 Padding="10,0"

@@ -80,6 +80,10 @@ public partial class EditListingView
                 .Select(has => has ? new Thickness(0,5,0,8) : new Thickness(0))
                 .BindTo(this, x => x.VersioningPane.Margin)
                 .DisposeWith(disp);
+            hasConfig
+                .Select(x => !x)
+                .BindTo(this, x => x.GameReleaseCombo.IsEnabled)
+                .DisposeWith(disp);
         });
     }
 }
