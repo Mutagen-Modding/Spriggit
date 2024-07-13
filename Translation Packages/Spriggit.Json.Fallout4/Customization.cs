@@ -7,7 +7,9 @@ public class Customization : ICustomize
 {
     public void Customize(ICustomizationBuilder builder)
     {
-        builder.FilePerRecord();
+        builder
+            .OmitLastModifiedData()
+            .FilePerRecord();
     }
 }
 
