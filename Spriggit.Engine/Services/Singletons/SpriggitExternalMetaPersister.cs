@@ -3,6 +3,7 @@ using Mutagen.Bethesda.Plugins;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Noggog;
+using NuGet.Versioning;
 using Spriggit.Core;
 
 namespace Spriggit.Engine.Services.Singletons;
@@ -11,6 +12,7 @@ public class SpriggitExternalMetaPersister
 {
     public const string OldFileName = "spriggit.meta";
     public const string FileName = "spriggit-meta.json";
+    private static readonly NuGetVersion SwapVersion = new NuGetVersion(0, 25, 0);
     
     private readonly IFileSystem _fileSystem;
     
@@ -30,7 +32,9 @@ public class SpriggitExternalMetaPersister
     
     public void Persist(DirectoryPath spriggitFolder, SpriggitEmbeddedMeta meta)
     {
-        var path = Path.Combine(spriggitFolder, FileName);
+        var nugetVersion = NuGetVersion.Parse(meta.Source.Version);
+        var fileName = nugetVersion < SwapVersion ? OldFileName : FileName;
+        var path = Path.Combine(spriggitFolder, fileName);
         var serializeObj = new SpriggitEmbeddedMetaSerialize(
             meta.Source.PackageName,
             meta.Source.Version,
