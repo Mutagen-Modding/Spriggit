@@ -25,7 +25,7 @@ public class FakeEntryPointCache : IEntryPointCache
         return new EngineEntryPointWrapper(
             Substitute.For<ILogger>(),
             new PackageIdentity("UnitTests", new NuGetVersion(1, 1, 1)),
-            ep);
+            new EngineEntryPointWrapperItem(ep, null));
     }
 
     public Task<IEngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)

@@ -68,7 +68,7 @@ public class PostSerializeCheckerTests
             new EngineEntryPointWrapper(
                 logger,
                 new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
-                entryPoint),
+                new EngineEntryPointWrapperItem(entryPoint, null)),
             CancellationToken.None);
     }
     
@@ -122,7 +122,7 @@ public class PostSerializeCheckerTests
                 new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
-                    entryPoint),
+                    new EngineEntryPointWrapperItem(entryPoint, null)),
                 CancellationToken.None);
         });
     }
@@ -176,7 +176,7 @@ public class PostSerializeCheckerTests
                 new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
-                    entryPoint),
+                    new EngineEntryPointWrapperItem(entryPoint, null)),
                 CancellationToken.None);
         });
     }

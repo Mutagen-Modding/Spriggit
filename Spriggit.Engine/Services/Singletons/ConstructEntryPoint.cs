@@ -12,6 +12,7 @@ public class ConstructEntryPoint
     private readonly PreparePluginFolder _preparePluginFolder;
     private readonly TargetFrameworkDirLocator _frameworkDirLocator;
     private readonly DebugState _debugState;
+    private readonly ConstructCliEndpoint _constructCliEndpoint;
     private readonly FindTargetFramework _findTargetFramework;
     private readonly ConstructAssemblyLoadedEntryPoint _constructAssemblyLoadedEntryPoint;
 
@@ -20,6 +21,7 @@ public class ConstructEntryPoint
         PreparePluginFolder preparePluginFolder,
         TargetFrameworkDirLocator frameworkDirLocator,
         DebugState debugState,
+        ConstructCliEndpoint constructCliEndpoint,
         FindTargetFramework findTargetFramework,
         ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint,
         IFileSystem fileSystem)
@@ -28,6 +30,7 @@ public class ConstructEntryPoint
         _preparePluginFolder = preparePluginFolder;
         _frameworkDirLocator = frameworkDirLocator;
         _debugState = debugState;
+        _constructCliEndpoint = constructCliEndpoint;
         _findTargetFramework = findTargetFramework;
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
         _fileSystem = fileSystem;
@@ -49,7 +52,7 @@ public class ConstructEntryPoint
     {
         var sourcesPath = Path.Combine(tempPath, SpriggitTempSourcesProvider.SourcesSubPath);
         var packageUnpackFolder = new DirectoryPath(Path.Combine(sourcesPath, ident.ToString()));
-        
+
         if (_debugState.ClearNugetSources && packageUnpackFolder.CheckExists())
         {
             _logger.Information("In debug mode.  Deleting entire folder {Path}", packageUnpackFolder);
@@ -101,6 +104,15 @@ public class ConstructEntryPoint
             return await ConstructFor(sourcesPath, ident, cancellationToken, false);
         }
 
-        return ret;
+        var cliEndpoint = await _constructCliEndpoint.ConstructFor(tempPath, ident, cancellationToken);
+        if (cliEndpoint == null) return ret;
+        if (ret == null) return new EngineEntryPointWrapper(_logger, ident, 
+            new EngineEntryPointWrapperItem(null, cliEndpoint));
+
+        return new EngineEntryPointWrapper(
+            _logger,
+            ident,
+            new EngineEntryPointWrapperItem(ret, null),
+            new EngineEntryPointWrapperItem(null, cliEndpoint));
     }
 }

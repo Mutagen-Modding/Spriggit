@@ -39,19 +39,16 @@ public class ConstructEntryPointTests
     {
         private readonly StarfieldMod _mod;
         private readonly Npc _npc;
-        private readonly DirectoryPath _outputFolder;
 
         public Payload(
             DebugState debugState,
             PreparePluginFolder preparePluginFolder,
             ConstructEntryPoint sut,
             StarfieldMod mod,
-            Npc npc,
-            DirectoryPath outputFolder)
+            Npc npc)
         {
             _mod = mod;
             _npc = npc;
-            _outputFolder = outputFolder;
             PreparePluginFolder = preparePluginFolder;
             Sut = sut;
             debugState.ClearNugetSources = false;
@@ -60,16 +57,21 @@ public class ConstructEntryPointTests
         public PreparePluginFolder PreparePluginFolder { get; }
         public ConstructEntryPoint Sut { get; }
 
-        public async Task RunPassthrough(IEntryPoint entryPoint, PackageIdentity ident)
+        public async Task RunPassthrough(
+            IEntryPoint entryPoint,
+            PackageIdentity ident,
+            [CallerMemberName] string? name = null)
         {
-            var fs = new MockFileSystem();
-            fs.Directory.CreateDirectory(_outputFolder);
-            var modPath = Path.Combine(_outputFolder, _mod.ModKey.ToString());
+            var fs = new FileSystem();
+            using var tmp = CreateDirFor(Path.Combine(name ?? "Unknown", "Passthrough"));
+            var outputFolder = tmp.Dir;
+            fs.Directory.CreateDirectory(outputFolder);
+            var modPath = Path.Combine(outputFolder, _mod.ModKey.ToString());
             _mod.WriteToBinary(modPath, new BinaryWriteParameters()
             {
                 FileSystem = fs
             });
-            var serializeOutputFolder = Path.Combine(_outputFolder, "serialize", _mod.ModKey.FileName);
+            var serializeOutputFolder = Path.Combine(outputFolder, "serialize", _mod.ModKey.FileName);
             await entryPoint.Serialize(
                 modPath,
                 serializeOutputFolder,
@@ -83,8 +85,8 @@ public class ConstructEntryPointTests
                     PackageName = ident.Id
                 },
                 CancellationToken.None);
-            fs.Directory.CreateDirectory(Path.Combine(_outputFolder, "deserialized"));
-            var deserializeOutputFolder = Path.Combine(_outputFolder, "deserialized", _mod.ModKey.FileName);
+            fs.Directory.CreateDirectory(Path.Combine(outputFolder, "deserialized"));
+            var deserializeOutputFolder = Path.Combine(outputFolder, "deserialized", _mod.ModKey.FileName);
             await entryPoint.Deserialize(
                 serializeOutputFolder,
                 deserializeOutputFolder,

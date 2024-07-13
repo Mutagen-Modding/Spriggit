@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog.IO;
+using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine.Services.Singletons;
@@ -12,6 +13,8 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitEngine))]
 [Register(typeof(GetMetaToUse))]
 [Register(typeof(ConstructEntryPoint))]
+[Register(typeof(ConstructCliEndpoint))]
+[Register(typeof(PrepareCliFolder))]
 [Register(typeof(GetDefaultEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(PluginPublisher))]
@@ -28,6 +31,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitExternalMetaPersister))]
 [Register(typeof(LocalizeEnforcer))]
 [Register(typeof(NugetSourceProvider))]
+[Register(typeof(ProcessFactory))]
 [Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]

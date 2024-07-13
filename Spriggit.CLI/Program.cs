@@ -11,6 +11,7 @@ try
 
     var vers = new CurrentVersionsProvider();
     Console.WriteLine($"Spriggit version {vers.SpriggitVersion}");
+    Console.WriteLine(string.Join(' ', args));
 
     return await Parser.Default.ParseArguments(
             args, 

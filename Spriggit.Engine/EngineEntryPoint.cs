@@ -15,23 +15,25 @@ public interface IEngineEntryPoint : IEntryPoint, IDisposable
     PackageIdentity Package { get; }
 }
 
+public record EngineEntryPointWrapperItem(IEntryPoint? EntryPoint, ISimplisticEntryPoint? SimplisticEntryPoint);
+
 public class EngineEntryPointWrapper : IEngineEntryPoint
 {
     private readonly ILogger _logger;
-    private readonly IEntryPoint[] _entryPoints;
+    private readonly EngineEntryPointWrapperItem[] _entryPoints;
     public PackageIdentity Package { get; }
 
     public EngineEntryPointWrapper(
         ILogger logger,
         PackageIdentity packageIdentity,
-        params IEntryPoint[] entryPoints)
+        params EngineEntryPointWrapperItem[] entryPoints)
     {
         _logger = logger;
         _entryPoints = entryPoints;
         Package = packageIdentity;
     }
 
-    public Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
+    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -39,7 +41,20 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         {
             try
             {
-                return entryPt.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+                if (entryPt.EntryPoint != null)
+                {
+                    await entryPt.EntryPoint.Serialize(
+                        modPath, outputDir, release, workDropoff,
+                        fileSystem, streamCreator, meta, cancel);
+                    return;
+                }
+                else if (entryPt.SimplisticEntryPoint != null)
+                {
+                    await entryPt.SimplisticEntryPoint.Serialize(
+                        modPath, outputDir, (int)release, 
+                        meta.PackageName, meta.Version, cancel);
+                    return;
+                }
             }
             catch (Exception e)
             {
@@ -51,7 +66,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
     }
 
-    public Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
+    public async Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -59,7 +74,19 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         {
             try
             {
-                return entryPt.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+                if (entryPt.EntryPoint != null)
+                {
+                    await entryPt.EntryPoint.Deserialize(
+                        inputPath, outputPath, workDropoff,
+                        fileSystem, streamCreator, cancel);
+                    return;
+                }
+                else if (entryPt.SimplisticEntryPoint != null)
+                {
+                    await entryPt.SimplisticEntryPoint.Deserialize(
+                        inputPath, outputPath, cancel);
+                    return;
+                }
             }
             catch (Exception e)
             {
@@ -71,7 +98,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
     }
 
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
+    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
         CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -79,7 +106,17 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         {
             try
             {
-                return entryPt.TryGetMetaInfo(inputPath, workDropoff, fileSystem, streamCreator, cancel);
+                if (entryPt.EntryPoint != null)
+                {
+                    return await entryPt.EntryPoint.TryGetMetaInfo(
+                        inputPath, workDropoff, fileSystem,
+                        streamCreator, cancel);
+                }
+                else if (entryPt.SimplisticEntryPoint != null)
+                {
+                    return await entryPt.SimplisticEntryPoint.TryGetMetaInfo(
+                        inputPath, cancel);
+                }
             }
             catch (Exception e)
             {

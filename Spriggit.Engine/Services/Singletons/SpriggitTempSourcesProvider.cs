@@ -8,4 +8,6 @@ public class SpriggitTempSourcesProvider
         Path.Combine(Path.GetTempPath(), "Spriggit"));
 
     public const string SourcesSubPath = "Sources";
+
+    public const string ClisSubPath = "CLIs";
 }

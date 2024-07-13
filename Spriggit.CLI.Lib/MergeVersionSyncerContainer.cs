@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Noggog.IO;
+using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine.Merge;
@@ -22,7 +23,10 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PluginPublisher))]
 [Register(typeof(NugetSourceProvider))]
 [Register(typeof(GitFolderLocator))]
+[Register(typeof(ProcessFactory))]
 [Register(typeof(SpriggitExternalMetaPersister))]
+[Register(typeof(ConstructCliEndpoint))]
+[Register(typeof(PrepareCliFolder))]
 [Register(typeof(MergeVersionSyncer))]
 partial class MergeVersionSyncerContainer : IContainer<MergeVersionSyncer>
 {

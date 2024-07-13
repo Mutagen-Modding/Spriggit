@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Noggog.IO;
+using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Engine.Merge;
@@ -25,6 +26,9 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(PluginPublisher))]
 [Register(typeof(GitFolderLocator))]
+[Register(typeof(ProcessFactory))]
+[Register(typeof(ConstructCliEndpoint))]
+[Register(typeof(PrepareCliFolder))]
 [Register(typeof(SpriggitExternalMetaPersister))]
 partial class FormIDCollisionContainer : IContainer<FormIDCollisionFixer>
 {
