@@ -72,7 +72,7 @@ public class EntryPointCache : IEntryPointCache
                 {
                     _logger.Information("Constructing entry point for {Ident}", ident);
                     var ret = await _constructEntryPoint.ConstructFor(
-                        _tempSourcesProvider.SpriggitSourcesPath,
+                        _tempSourcesProvider.SpriggitTempPath,
                         ident, 
                         CancellationToken.None);
                     if (ret != null)

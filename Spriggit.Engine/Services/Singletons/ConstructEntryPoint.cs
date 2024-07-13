@@ -34,32 +34,33 @@ public class ConstructEntryPoint
     }
 
     public Task<IEngineEntryPoint?> ConstructFor(
-        DirectoryPath sourcesPath,
+        DirectoryPath tempPath,
         PackageIdentity ident,
         CancellationToken cancellationToken)
     {
-        return ConstructFor(sourcesPath, ident, cancellationToken, true);
+        return ConstructFor(tempPath, ident, cancellationToken, true);
     }
 
     private async Task<IEngineEntryPoint?> ConstructFor(
-        DirectoryPath sourcesPath,
+        DirectoryPath tempPath,
         PackageIdentity ident, 
         CancellationToken cancellationToken,
         bool shouldRetry)
     {
-        var rootDir = new DirectoryPath(Path.Combine(sourcesPath, ident.ToString()));
+        var sourcesPath = Path.Combine(tempPath, SpriggitTempSourcesProvider.SourcesSubPath);
+        var packageUnpackFolder = new DirectoryPath(Path.Combine(sourcesPath, ident.ToString()));
         
-        if (_debugState.ClearNugetSources && rootDir.CheckExists())
+        if (_debugState.ClearNugetSources && packageUnpackFolder.CheckExists())
         {
-            _logger.Information("In debug mode.  Deleting entire folder {Path}", rootDir);
-            _fileSystem.Directory.DeleteEntireFolder(rootDir, deleteFolderItself: true);
+            _logger.Information("In debug mode.  Deleting entire folder {Path}", packageUnpackFolder);
+            _fileSystem.Directory.DeleteEntireFolder(packageUnpackFolder, deleteFolderItself: true);
         }
 
-        if (!rootDir.CheckExists())
+        if (!packageUnpackFolder.CheckExists())
         {
             try
             {
-                await _preparePluginFolder.Prepare(ident, cancellationToken, rootDir);
+                await _preparePluginFolder.Prepare(ident, cancellationToken, packageUnpackFolder);
             }
             catch (Exception e)
             {
@@ -72,7 +73,7 @@ public class ConstructEntryPoint
         IEngineEntryPoint? ret;
         try
         {
-            var packageDir = Path.Combine(rootDir, $"{ident}");
+            var packageDir = Path.Combine(packageUnpackFolder, $"{ident}");
 
             var targetFramework = _findTargetFramework.FindTargetFrameworkWithin(packageDir);
 
@@ -95,8 +96,8 @@ public class ConstructEntryPoint
 
         if (ret == null && shouldRetry)
         {
-            _logger.Information("Error constructing entry point.  Deleting entire folder and then retrying {Path}", rootDir);
-            _fileSystem.Directory.DeleteEntireFolder(rootDir, deleteFolderItself: true);
+            _logger.Information("Error constructing entry point.  Deleting entire folder and then retrying {Path}", packageUnpackFolder);
+            _fileSystem.Directory.DeleteEntireFolder(packageUnpackFolder, deleteFolderItself: true);
             return await ConstructFor(sourcesPath, ident, cancellationToken, false);
         }
 
