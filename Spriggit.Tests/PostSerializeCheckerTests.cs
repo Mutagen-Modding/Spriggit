@@ -30,6 +30,7 @@ public class PostSerializeCheckerTests
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task Typical(
         IFileSystem fileSystem,
+        ILogger logger,
         DirectoryPath existingModFolder,
         DirectoryPath spriggitPath,
         EntryPoint entryPoint,
@@ -65,14 +66,16 @@ public class PostSerializeCheckerTests
             GameRelease.Starfield,
             spriggitPath,
             new EngineEntryPointWrapper(
-                entryPoint,
-                new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3))),
+                logger,
+                new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
+                entryPoint),
             CancellationToken.None);
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task SpriggitExtraMismatch(
         IFileSystem fileSystem,
+        ILogger logger,
         DirectoryPath existingModFolder,
         DirectoryPath spriggitPath,
         EntryPoint entryPoint,
@@ -117,8 +120,9 @@ public class PostSerializeCheckerTests
                 GameRelease.Starfield,
                 spriggitPath,
                 new EngineEntryPointWrapper(
-                    entryPoint,
-                    new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3))),
+                    logger,
+                    new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
+                    entryPoint),
                 CancellationToken.None);
         });
     }
@@ -126,6 +130,7 @@ public class PostSerializeCheckerTests
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
     public async Task SpriggitMissingMismatch(
         IFileSystem fileSystem,
+        ILogger logger,
         DirectoryPath existingModFolder,
         DirectoryPath spriggitPath,
         EntryPoint entryPoint,
@@ -169,8 +174,9 @@ public class PostSerializeCheckerTests
                 GameRelease.Starfield,
                 spriggitPath,
                 new EngineEntryPointWrapper(
-                    entryPoint,
-                    new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3))),
+                    logger,
+                    new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
+                    entryPoint),
                 CancellationToken.None);
         });
     }

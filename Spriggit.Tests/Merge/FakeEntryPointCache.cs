@@ -1,6 +1,8 @@
 ﻿using Noggog;
+using NSubstitute;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using Serilog;
 using Spriggit.Core;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
@@ -20,7 +22,10 @@ public class FakeEntryPointCache : IEntryPointCache
     {
         var ep = _dict.GetOrDefault(meta);
         if (ep == null) return null;
-        return new EngineEntryPointWrapper(ep, new PackageIdentity("UnitTests", new NuGetVersion(1, 1, 1)));
+        return new EngineEntryPointWrapper(
+            Substitute.For<ILogger>(),
+            new PackageIdentity("UnitTests", new NuGetVersion(1, 1, 1)),
+            ep);
     }
 
     public Task<IEngineEntryPoint?> GetFor(PackageIdentity? ident, CancellationToken cancel)
