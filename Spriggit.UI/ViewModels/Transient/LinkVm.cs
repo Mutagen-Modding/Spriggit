@@ -14,6 +14,7 @@ using Spriggit.Core;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.UI.Services;
+using Spriggit.UI.Settings;
 using Spriggit.UI.ViewModels.Singletons;
 
 namespace Spriggit.UI.ViewModels.Transient;
@@ -98,11 +99,25 @@ public class LinkVm : ViewModel
                     CancellationToken.None);
                 if (vers.Failed) return vers.BubbleFailure<SpriggitMeta>();
 
+                string packageNameToUse;
+                switch (x.Item1)
+                {
+                    case LinkSourceCategory.Yaml:
+                    case LinkSourceCategory.Json:
+                        packageNameToUse = $"Spriggit.{x.Item1}.{x.Item2}";
+                        break;
+                    case LinkSourceCategory.Custom:
+                        packageNameToUse = x.Item3;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 return GetResponse<SpriggitMeta>.Succeed(new SpriggitMeta(
                     new SpriggitSource()
                     {
                         Version = vers.Value,
-                        PackageName = package.Value,
+                        PackageName = packageNameToUse,
                     },
                     x.Item2));
             })
