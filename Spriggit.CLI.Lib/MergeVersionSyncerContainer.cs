@@ -20,6 +20,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitTempSourcesProvider))]
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(PluginPublisher))]
+[Register(typeof(NugetSourceProvider))]
 [Register(typeof(GitFolderLocator))]
 [Register(typeof(SpriggitExternalMetaPersister))]
 [Register(typeof(MergeVersionSyncer))]

@@ -18,17 +18,17 @@ namespace Spriggit.Engine.Services.Singletons;
 public class NugetDownloader
 {
     private readonly ILogger _logger;
+    private readonly NugetSourceProvider _nugetSourceProvider;
     private readonly NuGet.Common.ILogger _nugetLogger;
     private readonly SourceCacheContext _cache = new();
-    private readonly ISettings _settings;
-    private readonly SourceRepositoryProvider _provider;
     
-    public NugetDownloader(ILogger logger)
+    public NugetDownloader(
+        ILogger logger,
+        NugetSourceProvider nugetSourceProvider)
     {
         _logger = logger;
+        _nugetSourceProvider = nugetSourceProvider;
         _nugetLogger = new NugetLoggerWrap(logger);
-        _settings = Settings.LoadDefaultSettings(root: null);
-        _provider = new SourceRepositoryProvider(_settings, Repository.Provider.GetCoreV3());
     }
 
     private static NuGetVersion? GetLatestVersion(IEnumerable<NuGetVersion> versions)
@@ -60,7 +60,7 @@ public class NugetDownloader
         if (packageVersion.IsNullOrWhitespace())
         {
             _logger.Information("No version specified.  Checking NuGet repositories for latest version");
-            var repos = _provider.GetRepositories().ToArray();
+            var repos = _nugetSourceProvider.SourceRepositories;
 
             if (repos.Length == 0)
             {
@@ -95,7 +95,10 @@ public class NugetDownloader
     {
         FolderNuGetProject project = new FolderNuGetProject(packagesPath);
 
-        NuGetPackageManager packageManager = new NuGetPackageManager(_provider, _settings, packagesPath)
+        NuGetPackageManager packageManager = new NuGetPackageManager(
+            _nugetSourceProvider.SourceRepositoryProvider, 
+            _nugetSourceProvider.Settings,
+            packagesPath)
         {
             PackagesFolderNuGetProject = project
         };
@@ -104,7 +107,7 @@ public class NugetDownloader
         ResolutionContext resolutionContext = new ResolutionContext(
             DependencyBehavior.Lowest, allowPrereleaseVersions, allowUnlisted, VersionConstraints.None);
 
-        var clientPolicyContext = ClientPolicyContext.GetClientPolicy(_settings, _nugetLogger);
+        var clientPolicyContext = ClientPolicyContext.GetClientPolicy(_nugetSourceProvider.Settings, _nugetLogger);
         INuGetProjectContext projectContext = new ConsoleProjectContext(_nugetLogger)
         {
             PackageExtractionContext = new PackageExtractionContext(
@@ -115,7 +118,7 @@ public class NugetDownloader
             )
         };
         
-        var repos = _provider.GetRepositories().ToArray();
+        var repos = _nugetSourceProvider.SourceRepositories;
         await packageManager.InstallPackageAsync(packageManager.PackagesFolderNuGetProject,
             identity, resolutionContext, projectContext, repos,
             Array.Empty<SourceRepository>(),  // This is a list of secondary source repositories, probably empty
@@ -129,7 +132,7 @@ public class NugetDownloader
     {
         if (packageVersion.IsNullOrWhitespace())
         {
-            var repos = _provider.GetRepositories().ToArray();
+            var repos = _nugetSourceProvider.SourceRepositories;
             foreach (var repository in repos)
             {
                 FindPackageByIdResource resource = await repository.GetResourceAsync<FindPackageByIdResource>();

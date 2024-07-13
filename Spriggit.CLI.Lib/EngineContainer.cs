@@ -27,6 +27,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitTempSourcesProvider))]
 [Register(typeof(SpriggitExternalMetaPersister))]
 [Register(typeof(LocalizeEnforcer))]
+[Register(typeof(NugetSourceProvider))]
 [Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
