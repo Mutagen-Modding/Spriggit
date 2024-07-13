@@ -1,6 +1,7 @@
 ﻿using Noggog;
 using Noggog.Processes.DI;
 using NuGet.Packaging.Core;
+using NuGet.Versioning;
 using Serilog;
 using Serilog.Core;
 
@@ -22,6 +23,19 @@ public class ConstructCliEndpoint
         _prepareCliFolder = prepareCliFolder;
     }
 
+    private bool IsSameCliVersion(NuGetVersion version)
+    {
+        var assemblyVersion = AssemblyVersions.For<ConstructCliEndpoint>().ProductVersion;
+        if (assemblyVersion == null) return false;
+        var indexOfPlus = assemblyVersion.IndexOf("+");
+        if (indexOfPlus != null)
+        {
+            assemblyVersion = assemblyVersion.Substring(0, indexOfPlus);
+        }
+
+        return assemblyVersion.TrimEnd(".0").Equals(version.ToString().TrimEnd(".0"));
+    }
+
     public async Task<CliEntryPoint?> ConstructFor(
         DirectoryPath tempPath,
         PackageIdentity ident,
@@ -32,7 +46,7 @@ public class ConstructCliEndpoint
         // Would need to fish for spriggit dependencies in that case
         var cliVersion = ident.Version;
         
-        if (AssemblyVersions.For<ConstructCliEndpoint>().ProductVersion?.Equals(cliVersion.ToString()) ?? false)
+        if (IsSameCliVersion(cliVersion))
         {
             return null;
         }
