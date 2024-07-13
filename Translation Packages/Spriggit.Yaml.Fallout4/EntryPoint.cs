@@ -22,7 +22,6 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         MastersListContent = MastersListContentOption.NoCheck,
         MastersListOrdering = MastersListOrderingOption.NoCheck,
         FormIDUniqueness = FormIDUniquenessOption.NoCheck,
-        MasterFlag = MasterFlagOption.NoCheck,
         FormIDCompaction = FormIDCompactionOption.NoCheck,
         LowerRangeDisallowedHandler = ALowerRangeDisallowedHandlerOption.NoCheck,
         CleanNulls = false
