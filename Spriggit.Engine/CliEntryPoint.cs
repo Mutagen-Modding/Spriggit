@@ -34,7 +34,8 @@ public class CliEntryPoint : ISimplisticEntryPoint
     public async Task Serialize(string modPath, string outputDir, int release, string packageName, string version,
         CancellationToken cancel)
     {
-        var args = $"serialize -i \"{modPath}\" -o \"{outputDir}\" -g {release} -p {packageName} -v {version}";
+        var args = $"serialize -i \"{modPath}\" -o \"{outputDir}\" -g {release} -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}";
+        _logger.Information("Running CLI Entry point serialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(_pathToExe)
             {
@@ -55,7 +56,8 @@ public class CliEntryPoint : ISimplisticEntryPoint
 
     public async Task Deserialize(string inputPath, string outputPath, CancellationToken cancel)
     {
-        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\"";
+        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}";
+        _logger.Information("Running CLI Entry point deserialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(_pathToExe)
             {
