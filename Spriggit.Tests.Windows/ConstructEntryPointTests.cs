@@ -17,7 +17,7 @@ using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
-namespace Spriggit.Tests;
+namespace Spriggit.Tests.Windows;
 
 /// <summary>
 /// These unit tests leave some trash in temp
