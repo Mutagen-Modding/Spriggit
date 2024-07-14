@@ -15,7 +15,6 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ConstructEntryPoint))]
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]
-[Register(typeof(GetDefaultEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(PluginPublisher))]
 [Register(typeof(SpriggitMetaLocator))]

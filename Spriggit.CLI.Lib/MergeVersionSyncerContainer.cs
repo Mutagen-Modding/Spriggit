@@ -16,7 +16,6 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]
 [Register(typeof(FindTargetFramework))]
 [Register(typeof(TargetFrameworkDirLocator))]
-[Register(typeof(GetDefaultEntryPoint))]
 [Register(typeof(GetFrameworkType))]
 [Register(typeof(SpriggitTempSourcesProvider))]
 [Register(typeof(PreparePluginFolder))]
