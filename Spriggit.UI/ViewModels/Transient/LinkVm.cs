@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Noggog;
 using Noggog.WPF;
@@ -64,7 +65,8 @@ public class LinkVm : ViewModel
         PackageInputQuery packageInputQuery,
         IEntryPointCache entryPointCache,
         RepoListings repoListings,
-        LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
+        LinkSourceCategoryToPackageName linkSourceCategoryToPackageName,
+        DefaultSpriggitPackageNameGenerator defaultSpriggitPackageNameGenerator)
     {
         _logger = logger;
         _engine = engine;
@@ -104,7 +106,7 @@ public class LinkVm : ViewModel
                 {
                     case LinkSourceCategory.Yaml:
                     case LinkSourceCategory.Json:
-                        packageNameToUse = $"Spriggit.{x.Item1}.{x.Item2}";
+                        packageNameToUse = defaultSpriggitPackageNameGenerator.PackageNameFor(x.Item1.ToString(), x.Item2);
                         break;
                     case LinkSourceCategory.Custom:
                         packageNameToUse = x.Item3;
