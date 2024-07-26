@@ -3,7 +3,6 @@ using Noggog.Processes.DI;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using Serilog;
-using Serilog.Core;
 
 namespace Spriggit.Engine.Services.Singletons;
 
@@ -27,8 +26,8 @@ public class ConstructCliEndpoint
     {
         var assemblyVersion = AssemblyVersions.For<ConstructCliEndpoint>().ProductVersion;
         if (assemblyVersion == null) return false;
-        var indexOfPlus = assemblyVersion.IndexOf("+");
-        if (indexOfPlus != null)
+        var indexOfPlus = assemblyVersion.IndexOf("+", StringComparison.InvariantCulture);
+        if (indexOfPlus != -1)
         {
             assemblyVersion = assemblyVersion.Substring(0, indexOfPlus);
         }
