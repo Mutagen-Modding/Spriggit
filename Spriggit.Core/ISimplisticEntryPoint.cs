@@ -5,6 +5,7 @@ public interface ISimplisticEntryPoint
     public Task Serialize(
         string modPath,
         string outputDir,
+        string? dataPath,
         int release,
         string packageName,
         string version,
@@ -13,6 +14,7 @@ public interface ISimplisticEntryPoint
     public Task Deserialize(
         string inputPath,
         string outputPath,
+        string? dataPath,
         CancellationToken cancel);
     
     public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(

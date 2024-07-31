@@ -27,7 +27,8 @@ public class MergeVersionSyncer
     }
 
     public async Task DetectAndFix(
-        DirectoryPath spriggitModPath)
+        DirectoryPath spriggitModPath,
+        DirectoryPath? dataFolder)
     {
         var gitRootPath = _gitFolderLocator.Get(spriggitModPath);
         
@@ -101,10 +102,11 @@ public class MergeVersionSyncer
         }
         
         await ExecuteUpgrade(
-            repo, 
+            repo: repo, 
             oldSha: oldSha,
             newSha: newSha,
-            spriggitModPath);
+            spriggitPath: spriggitModPath,
+            dataFolder: dataFolder);
     }
 
     private SpriggitEmbeddedMeta GetEmbeddedMeta(
@@ -130,7 +132,8 @@ public class MergeVersionSyncer
         Repository repo,
         string oldSha,
         string newSha,
-        DirectoryPath spriggitPath)
+        DirectoryPath spriggitPath,
+        DirectoryPath? dataFolder)
     {
         var origBranch = repo.Head;
         var newBranch = repo.CreateBranch($"Spriggit-Merge-Fix-New-{origBranch.Tip.Sha.Substring(0, 6)}", newSha);
@@ -179,10 +182,11 @@ public class MergeVersionSyncer
 
         var modPath = Path.Combine(tmp.Dir.Path, oldExternalMeta.ModKey.FileName);
         
-        await oldEntryPoint.Deserialize(spriggitPath, modPath, 
-            null, null, null, CancellationToken.None);
+        await oldEntryPoint.Deserialize(
+            inputPath: spriggitPath, outputPath: modPath, dataPath: dataFolder,
+            workDropoff: null, fileSystem: null, streamCreator: null, cancel: CancellationToken.None);
 
-        await newEntryPoint.Serialize(modPath, spriggitPath,
+        await newEntryPoint.Serialize(modPath, spriggitPath, dataFolder,
             newExternalMeta.Release,
             null, null, null, newExternalMeta.Source, cancel: CancellationToken.None);
     }

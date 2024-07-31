@@ -27,6 +27,7 @@ public class SpriggitEngine(
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
         DirectoryPath outputFolder, 
+        DirectoryPath? dataPath,
         bool postSerializeChecks,
         IEngineEntryPoint? entryPt = default,
         SpriggitMeta? meta = default,
@@ -62,8 +63,9 @@ public class SpriggitEngine(
         logger.Information("Starting to serialize from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
         await entryPt.Serialize(
             bethesdaPluginPath,
-            outputFolder,
-            meta.Release,
+            outputDir: outputFolder,
+            dataPath: dataPath,
+            release: meta.Release,
             fileSystem: fileSystem,
             workDropoff: workDropoff,
             streamCreator: createStream,
@@ -78,11 +80,12 @@ public class SpriggitEngine(
         if (postSerializeChecks)
         {
             await postSerializeChecker.Check(
-                bethesdaPluginPath,
-                meta.Release,
-                outputFolder,
-                entryPt,
-                cancel.Value);   
+                mod: bethesdaPluginPath,
+                release: meta.Release,
+                spriggit: outputFolder,
+                dataPath: dataPath,
+                entryPt: entryPt,
+                cancel: cancel.Value);   
         }
         logger.Information("Finished serializing from {BethesdaPluginPath} to {Output} with {Meta}", bethesdaPluginPath, outputFolder, meta);
     }
@@ -90,6 +93,7 @@ public class SpriggitEngine(
     public async Task Deserialize(
         string spriggitPluginPath, 
         FilePath outputFile,
+        DirectoryPath? dataPath,
         uint backupDays,
         bool? localize,
         IEngineEntryPoint? entryPt = default,
@@ -120,7 +124,8 @@ public class SpriggitEngine(
             spriggitPluginPath, tempOutput, meta);
         await entryPt.Deserialize(
             spriggitPluginPath,
-            tempOutput,
+            outputPath: tempOutput,
+            dataPath: dataPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,

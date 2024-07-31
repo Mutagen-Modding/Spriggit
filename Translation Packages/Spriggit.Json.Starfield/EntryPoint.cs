@@ -14,22 +14,10 @@ namespace Spriggit.Json.Starfield;
 
 public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
 {
-    protected static readonly BinaryWriteParameters NoCheckWriteParameters = new()
-    {
-        RecordCount = RecordCountOption.Iterate,
-        NextFormID = NextFormIDOption.Iterate,
-        ModKey = ModKeyOption.CorrectToPath,
-        MastersListContent = MastersListContentOption.NoCheck,
-        MastersListOrdering = MastersListOrderingOption.NoCheck,
-        FormIDUniqueness = FormIDUniquenessOption.NoCheck,
-        FormIDCompaction = FormIDCompactionOption.NoCheck,
-        LowerRangeDisallowedHandler = ALowerRangeDisallowedHandlerOption.NoCheck,
-        CleanNulls = false
-    };
-
     public async Task Serialize(
         ModPath modPath, 
-        DirectoryPath dir,
+        DirectoryPath outputDir,
+        DirectoryPath? dataPath,
         GameRelease release,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
@@ -38,17 +26,17 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = StarfieldMod.CreateFromBinaryOverlay(
-            modPath, 
-            StarfieldRelease.Starfield,
-            new BinaryReadParameters()
-            {
-                FileSystem = fileSystem,
-                ThrowOnUnknownSubrecord = true
-            });
+        using var modGetter = StarfieldMod
+            .Create(release.ToStarfieldRelease())
+            .FromPath(modPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataPath)
+            .WithFileSystem(fileSystem)
+            .ThrowIfUnknownSubrecord()
+            .Construct();
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,
-            dir,
+            outputDir,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: streamCreator,
@@ -59,6 +47,7 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
     public async Task Deserialize(
         string inputPath,
         string outputPath,
+        DirectoryPath? dataPath,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
@@ -70,10 +59,20 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             fileSystem: fileSystem,
             streamCreator: streamCreator,
             cancel: cancel);
-        mod.WriteToBinary(outputPath, param: NoCheckWriteParameters with
-        {
-            FileSystem = fileSystem
-        });
+        await mod.BeginWrite
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataPath)
+            .ToPath(outputPath)
+            .WithFileSystem(fileSystem)
+            .WithRecordCount(RecordCountOption.Iterate)
+            .WithModKeySync(ModKeyOption.CorrectToPath)
+            .WithMastersListContent(MastersListContentOption.NoCheck)
+            .WithMastersListOrdering(MastersListOrderingOption.NoCheck)
+            .NoFormIDUniquenessCheck()
+            .NoFormIDCompactnessCheck()
+            .NoCheckIfLowerRangeDisallowed()
+            .NoNullFormIDStandardization()
+            .WriteAsync();
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
@@ -104,12 +103,13 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
         return new SpriggitEmbeddedMeta(src, release, modKey);
     }
 
-    public async Task Serialize(string modPath, string outputDir, int release, string packageName, string version,
+    public async Task Serialize(string modPath, string outputDir, string? dataPath, int release, string packageName, string version,
         CancellationToken cancel)
     {
         await Serialize(
             modPath: new ModPath(modPath),
-            dir: outputDir,
+            outputDir: outputDir,
+            dataPath: dataPath,
             release: (GameRelease)release,
             workDropoff: null,
             fileSystem: null,
@@ -122,11 +122,12 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             cancel: cancel);
     }
 
-    public Task Deserialize(string inputPath, string outputPath, CancellationToken cancel)
+    public Task Deserialize(string inputPath, string outputPath, string? dataPath, CancellationToken cancel)
     {
         return Deserialize(
             inputPath: inputPath,
             outputPath: outputPath,
+            dataPath: dataPath,
             workDropoff: null,
             fileSystem: null,
             streamCreator: null,

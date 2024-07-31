@@ -32,14 +32,23 @@ public class EndpointTests
         {
             FileSystem = fileSystem
         });
-        await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, new SpriggitSource()
+        await entryPoint.Serialize(modPath: modPath,
+            outputDir: spriggitFolder,
+            dataPath: dataFolder,
+            release: GameRelease.Starfield,
+            workDropoff: null,
+            fileSystem: fileSystem,
+            streamCreator: null, meta: new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, CancellationToken.None);
-        await entryPoint.Deserialize(spriggitFolder, modPath, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, CancellationToken.None);
+            }, cancel: CancellationToken.None);
+        await entryPoint.Deserialize(inputPath: spriggitFolder,
+            outputPath: modPath,
+            dataPath: dataFolder,
+            workDropoff: null,
+            fileSystem: fileSystem,
+            streamCreator: null, cancel: CancellationToken.None);
         fileSystem.File.Exists(modPath)
             .Should().BeTrue();
         var stringsFolder = Path.Combine(dataFolder, "Strings");
@@ -72,15 +81,24 @@ public class EndpointTests
             {
                 FileSystem = fileSystem
             });
-            await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
-                streamCreator: null, new SpriggitSource()
+            await entryPoint.Serialize(modPath: modPath,
+                outputDir: spriggitFolder,
+                dataPath: dataFolder,
+                release: GameRelease.Starfield,
+                workDropoff: null,
+                fileSystem: fileSystem,
+                streamCreator: null, meta: new SpriggitSource()
                 {
                     PackageName = "Spriggit.Yaml.Starfield",
                     Version = "Test"
-                }, CancellationToken.None);
+                }, cancel: CancellationToken.None);
             var modPath2 = new ModPath(Path.Combine(dataFolder2, mod.ModKey.ToString()));
-            await entryPoint.Deserialize(spriggitFolder, modPath2, workDropoff: null, fileSystem: fileSystem,
-                streamCreator: null, CancellationToken.None);
+            await entryPoint.Deserialize(inputPath: spriggitFolder,
+                outputPath: modPath2,
+                dataPath: dataFolder2,
+                workDropoff: null,
+                fileSystem: fileSystem,
+                streamCreator: null, cancel: CancellationToken.None);
             fileSystem.File.Exists(modPath2)
                 .Should().BeTrue();
             var stringsFolder = Path.Combine(dataFolder2, "Strings");
@@ -128,15 +146,24 @@ public class EndpointTests
         {
             FileSystem = fileSystem
         });
-        await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, new SpriggitSource()
+        await entryPoint.Serialize(modPath: modPath,
+            outputDir: spriggitFolder,
+            dataPath: dataFolder,
+            release: GameRelease.Starfield,
+            workDropoff: null,
+            fileSystem: fileSystem,
+            streamCreator: null, meta: new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, CancellationToken.None);
+            }, cancel: CancellationToken.None);
         var modPath2 = Path.Combine(dataFolder2, otherModKey.ToString());
-        await entryPoint.Deserialize(spriggitFolder, modPath2, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, CancellationToken.None);
+        await entryPoint.Deserialize(inputPath: spriggitFolder,
+            outputPath: modPath2,
+            dataPath: dataFolder2,
+            workDropoff: null,
+            fileSystem: fileSystem,
+            streamCreator: null, cancel: CancellationToken.None);
         var otherStringsFolder = Path.Combine(dataFolder2, "Strings");
         var path = Path.Combine(otherStringsFolder, $"{otherModKey.Name}_en.STRINGS");
         fileSystem.File.Exists(path)

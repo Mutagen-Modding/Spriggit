@@ -25,6 +25,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(PluginPublisher))]
 [Register(typeof(GitFolderLocator))]
+[Register(typeof(PackageVersioningChecker))]
 [Register(typeof(ProcessFactory))]
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]

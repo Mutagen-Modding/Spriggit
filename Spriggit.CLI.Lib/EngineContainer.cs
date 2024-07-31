@@ -31,6 +31,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(LocalizeEnforcer))]
 [Register(typeof(NugetSourceProvider))]
 [Register(typeof(ProcessFactory))]
+[Register(typeof(PackageVersioningChecker))]
 [Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]

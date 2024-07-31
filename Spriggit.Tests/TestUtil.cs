@@ -36,12 +36,15 @@ public class TestUtil
         {
             FileSystem = fileSystem
         });
-        await entryPoint.Serialize(modPath, spriggitFolder, GameRelease.Starfield, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, new SpriggitSource()
+        await entryPoint.Serialize(
+            modPath: modPath, outputDir: spriggitFolder, dataPath: dataFolder,
+            release: GameRelease.Starfield, 
+            workDropoff: null, fileSystem: fileSystem,
+            streamCreator: null, meta: new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, CancellationToken.None);
+            }, cancel: CancellationToken.None);
     }
     
     public static async Task<IStarfieldModDisposableGetter> ImportStarfield(
@@ -52,8 +55,12 @@ public class TestUtil
         EntryPoint entryPoint)
     {
         var modPath2 = Path.Combine(dataFolder, otherModKey.ToString());
-        await entryPoint.Deserialize(spriggitFolder, modPath2, workDropoff: null, fileSystem: fileSystem,
-            streamCreator: null, CancellationToken.None);
+        await entryPoint.Deserialize(inputPath: spriggitFolder,
+            outputPath: modPath2,
+            dataPath: dataFolder,
+            workDropoff: null,
+            fileSystem: fileSystem,
+            streamCreator: null, cancel: CancellationToken.None);
         var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield,
             BinaryReadParameters.Default with
             {

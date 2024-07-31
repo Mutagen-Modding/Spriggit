@@ -18,7 +18,8 @@ public static class MergeVersionSyncerRunner
         await GetContainer(new DebugState { ClearNugetSources = command.Debug })
             .Resolve().Value
             .DetectAndFix(
-                spriggitModPath: command.SpriggitPath); 
+                spriggitModPath: command.SpriggitPath,
+                dataFolder: command.DataFolder); 
         return 0;
     }
 }

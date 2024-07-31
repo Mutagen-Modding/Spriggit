@@ -17,7 +17,7 @@ public class CellTest : SpotTestBase
         IFileSystem fileSystem,
         StarfieldMod mod,
         Random random,
-        DirectoryPath dataFolder,
+        DirectoryPath existingDataFolder,
         DirectoryPath spriggitFolder,
         ModKey otherModKey,
         EntryPoint entryPoint)
@@ -72,7 +72,7 @@ public class CellTest : SpotTestBase
             }
         });
         
-        var reimport = await TestUtil.PassThroughStarfield(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
+        var reimport = await TestUtil.PassThroughStarfield(fileSystem, mod, existingDataFolder, spriggitFolder, otherModKey, entryPoint);
         reimport.Cells.First().SubBlocks.First().Cells.First().Traversals!.Count.Should().Be(traversals.Count);
     }
 }

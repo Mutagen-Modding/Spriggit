@@ -27,7 +27,7 @@ public class DeserializeCommand
         Required = false)]
     public byte? Threads { get; set; }
 
-    [Option('d', "Debug",
+    [Option("Debug",
         HelpText = "Set up for debug mode, including resetting nuget caches",
         Required = false)]
     public bool Debug { get; set; }
@@ -41,4 +41,9 @@ public class DeserializeCommand
         HelpText = "Forces the build to be localized if true, or unlocalized if false.  If missing, the mod's flags will determine localization.",
         Required = false)]
     public bool? Localized { get; set; } = null;
+
+    [Option('d', "DataFolder",
+        HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)",
+        Required = false)]
+    public string? DataFolder { get; set; }
 }

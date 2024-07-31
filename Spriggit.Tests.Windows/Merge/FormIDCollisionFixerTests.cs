@@ -4,24 +4,24 @@ using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
-using Mutagen.Bethesda.Starfield;
+using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Spriggit.Core;
 using Spriggit.Engine.Merge;
-using Spriggit.Yaml.Starfield;
+using Spriggit.Yaml.Skyrim;
 using Xunit;
 
 namespace Spriggit.Tests.Windows.Merge;
 
 public class FormIDCollisionFixerTests
 {
-    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    [Theory, MutagenModAutoData]
     public async Task NothingToFix(
         IFileSystem fileSystem,
-        StarfieldMod mod,
+        SkyrimMod mod,
         Npc n1,
         ModKey modKey,
         EntryPoint entryPoint,
@@ -33,7 +33,7 @@ public class FormIDCollisionFixerTests
     {
         var spriggitSource = new SpriggitSource()
         {
-            PackageName = "Spriggit.Yaml.Starfield",
+            PackageName = "Spriggit.Yaml.Skyrim",
             Version = "Test"
         };
         
@@ -44,27 +44,30 @@ public class FormIDCollisionFixerTests
             FileSystem = fileSystem
         });
         await entryPoint.Serialize(
-            modPath, spriggitModPath, GameRelease.Starfield,
+            modPath, spriggitModPath, null,
+            GameRelease.SkyrimSE,
             null, fileSystem, null,
             spriggitSource,
             CancellationToken.None);
         
-        await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
+        await sut.DetectAndFixInternal<ISkyrimMod, ISkyrimModGetter>(
             entryPoint,
             spriggitModPath: spriggitModPath,
-            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.Starfield, modKey));
+            dataPath: null,
+            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.SkyrimSE, modKey));
 
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder2);
         await entryPoint.Deserialize(
             inputPath: spriggitModPath,
             outputPath: modPath2,
+            dataPath: null,
             fileSystem: fileSystem,
             workDropoff: null,
             streamCreator: null,
             cancel: CancellationToken.None);
 
-        var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield, new BinaryReadParameters()
+        var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.SkyrimSE, new BinaryReadParameters()
         {
             FileSystem = fileSystem
         });
@@ -72,16 +75,16 @@ public class FormIDCollisionFixerTests
         reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, TargetFileSystem.Real)]
     public async Task SomethingToFix(
-        StarfieldMod mod,
+        SkyrimMod mod,
         Armor armor,
         EntryPoint entryPoint,
         FormIDCollisionFixer sut)
     {
         var spriggitSource = new SpriggitSource()
         {
-            PackageName = "Spriggit.Yaml.Starfield",
+            PackageName = "Spriggit.Yaml.Skyrim",
             Version = "Test"
         };
         using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false, deleteAfter: false);
@@ -100,7 +103,8 @@ public class FormIDCollisionFixerTests
         File.WriteAllText(Path.Combine(tmp.Dir, "Readme.md"), "Readme");
         mod.WriteToBinary(modPath);
         await entryPoint.Serialize(
-            modPath, spriggitModPath, GameRelease.Starfield,
+            modPath, spriggitModPath, null,
+            GameRelease.SkyrimSE,
             null, null, null,
             spriggitSource,
             CancellationToken.None);
@@ -117,12 +121,14 @@ public class FormIDCollisionFixerTests
         // Setup lhs
         {
             Commands.Checkout(repo, lhs);
-            var weap = new Weapon(formKeyToCollide, StarfieldRelease.Starfield);
+            var weap = new Weapon(formKeyToCollide, SkyrimRelease.SkyrimSE);
             mod.Weapons.Add(weap);
             mod.WriteToBinary(modPath);
             
             await entryPoint.Serialize(
-                modPath, spriggitModPath, GameRelease.Starfield,
+                modPath, spriggitModPath,
+                dataPath: null,
+                GameRelease.SkyrimSE,
                 null, null, null,
                 spriggitSource,
                 CancellationToken.None);
@@ -135,12 +141,13 @@ public class FormIDCollisionFixerTests
         // Setup rhs
         {
             Commands.Checkout(repo, rhs);
-            var npc = new Npc(formKeyToCollide, StarfieldRelease.Starfield);
+            var npc = new Npc(formKeyToCollide, SkyrimRelease.SkyrimSE);
             mod.Npcs.Add(npc);
             mod.WriteToBinary(modPath);
             
             await entryPoint.Serialize(
-                modPath, spriggitModPath, GameRelease.Starfield,
+                modPath, spriggitModPath,
+                dataPath: null, GameRelease.SkyrimSE,
                 null, null, null,
                 spriggitSource,
                 CancellationToken.None);
@@ -153,10 +160,11 @@ public class FormIDCollisionFixerTests
         // Merge
         repo.Merge(lhs, signature, new MergeOptions());
 
-        await sut.DetectAndFixInternal<IStarfieldMod, IStarfieldModGetter>(
+        await sut.DetectAndFixInternal<ISkyrimMod, ISkyrimModGetter>(
             entryPoint,
             spriggitModPath: spriggitModPath,
-            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.Starfield, mod.ModKey));
+            dataPath: null,
+            meta: new SpriggitEmbeddedMeta(spriggitSource, GameRelease.SkyrimSE, mod.ModKey));
         
         var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
@@ -164,12 +172,13 @@ public class FormIDCollisionFixerTests
         await entryPoint.Deserialize(
             inputPath: spriggitModPath,
             outputPath: modPath2,
+            dataPath: null,
             fileSystem: null,
             workDropoff: null,
             streamCreator: null,
             cancel: CancellationToken.None);
         
-        var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield);
+        var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.SkyrimSE);
         reimport.EnumerateMajorRecords().Should().HaveCount(3);
         reimport.Armors.Select(x => x.FormKey)
             .Should().Equal(armor.FormKey);

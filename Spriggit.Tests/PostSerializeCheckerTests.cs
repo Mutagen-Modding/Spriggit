@@ -48,9 +48,10 @@ public class PostSerializeCheckerTests
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
         await entryPoint.Serialize(
-            modPath,
-            spriggitPath,
-            GameRelease.Starfield,
+            modPath: modPath,
+            outputDir: spriggitPath,
+            dataPath: null,
+            release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
             streamCreator: null,
@@ -62,14 +63,15 @@ public class PostSerializeCheckerTests
             });
         
         await sut.Checker.Check(
-            modPath,
-            GameRelease.Starfield,
-            spriggitPath,
-            new EngineEntryPointWrapper(
+            mod: modPath,
+            release: GameRelease.Starfield,
+            spriggit: spriggitPath,
+            dataPath: null,
+            entryPt: new EngineEntryPointWrapper(
                 logger,
                 new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
                 new EngineEntryPointWrapperItem(entryPoint, null)),
-            CancellationToken.None);
+            cancel: CancellationToken.None);
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -94,9 +96,10 @@ public class PostSerializeCheckerTests
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
         await entryPoint.Serialize(
-            modPath,
-            spriggitPath,
-            GameRelease.Starfield,
+            modPath: modPath,
+            outputDir: spriggitPath,
+            dataPath: null,
+            release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
             streamCreator: null,
@@ -116,14 +119,15 @@ public class PostSerializeCheckerTests
         await Assert.ThrowsAsync<DataMisalignedException>(async () =>
         {
             await sut.Checker.Check(
-                modPath,
-                GameRelease.Starfield,
-                spriggitPath,
-                new EngineEntryPointWrapper(
+                mod: modPath,
+                release: GameRelease.Starfield,
+                spriggit: spriggitPath,
+                dataPath: null,
+                entryPt: new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
                     new EngineEntryPointWrapperItem(entryPoint, null)),
-                CancellationToken.None);
+                cancel: CancellationToken.None);
         });
     }
     
@@ -148,9 +152,10 @@ public class PostSerializeCheckerTests
         spriggitPath = Path.Combine(spriggitPath, mod.ModKey.FileName);
         
         await entryPoint.Serialize(
-            modPath,
-            spriggitPath,
-            GameRelease.Starfield,
+            modPath: modPath,
+            outputDir: spriggitPath,
+            dataPath: null,
+            release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
             streamCreator: null,
@@ -170,14 +175,15 @@ public class PostSerializeCheckerTests
         await Assert.ThrowsAsync<DataMisalignedException>(async () =>
         {
             await sut.Checker.Check(
-                modPath,
-                GameRelease.Starfield,
-                spriggitPath,
-                new EngineEntryPointWrapper(
+                mod: modPath,
+                release: GameRelease.Starfield,
+                spriggit: spriggitPath,
+                dataPath: null,
+                entryPt: new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
                     new EngineEntryPointWrapperItem(entryPoint, null)),
-                CancellationToken.None);
+                cancel: CancellationToken.None);
         });
     }
 }

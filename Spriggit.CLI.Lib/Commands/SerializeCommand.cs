@@ -37,7 +37,7 @@ public class SerializeCommand
         Required = false)]
     public byte? Threads { get; set; }
 
-    [Option('d', "Debug",
+    [Option("Debug",
         HelpText = "Set up for debug mode, including resetting nuget caches",
         Required = false)]
     public bool Debug { get; set; }
@@ -51,4 +51,9 @@ public class SerializeCommand
         HelpText = "Checks some basic correctness after serialization.  Not extensive.",
         Required = false)]
     public bool Check { get; set; } = true;
+
+    [Option('d', "DataFolder",
+        HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)",
+        Required = false)]
+    public string? DataFolder { get; set; }
 }

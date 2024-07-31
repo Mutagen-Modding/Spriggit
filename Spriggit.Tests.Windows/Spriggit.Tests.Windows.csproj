@@ -6,7 +6,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="Mutagen.Bethesda.Starfield"/>
+        <PackageReference Include="Mutagen.Bethesda.Skyrim"/>
         <PackageReference Include="Mutagen.Bethesda.Testing"/>
         <PackageReference Include="Noggog.Testing"/>
         <PackageReference Include="xunit"/>
@@ -18,7 +18,7 @@
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
         <ProjectReference Include="..\Spriggit.Tests\Spriggit.Tests.csproj" />
         <ProjectReference Include="..\Spriggit.UI\Spriggit.UI.csproj" />
-        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj" />
     </ItemGroup>
 
     <ItemGroup>

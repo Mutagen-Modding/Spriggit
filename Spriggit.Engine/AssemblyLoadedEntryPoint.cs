@@ -33,14 +33,18 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         Package = package;
     }
 
-    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
+    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, 
+        DirectoryPath? dataPath,
+        GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
         try
         {
             if (_entryPoint != null)
             {
-                await _entryPoint.Serialize(modPath, outputDir, release, workDropoff, fileSystem, streamCreator, meta, cancel);
+                await _entryPoint.Serialize(
+                    modPath, outputDir, dataPath, release, 
+                    workDropoff, fileSystem, streamCreator, meta, cancel);
                 return;
             }
         }
@@ -53,6 +57,7 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
             await _simplisticEntryPoint.Serialize(
                 modPath: modPath,
                 outputDir: outputDir,
+                dataPath: dataPath,
                 release: (int)release,
                 packageName: meta.PackageName,
                 version: meta.Version,
@@ -64,14 +69,14 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         }
     }
 
-    public async Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
+    public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
         if (_entryPoint != null)
         {
             try
             {
-                await _entryPoint.Deserialize(inputPath, outputPath, workDropoff, fileSystem, streamCreator, cancel);
+                await _entryPoint.Deserialize(inputPath, outputPath, dataPath, workDropoff, fileSystem, streamCreator, cancel);
                 return;
             }
             catch (ArgumentException)
@@ -81,7 +86,9 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
 
         if (_simplisticEntryPoint != null)
         {
-            await _simplisticEntryPoint.Deserialize(inputPath: inputPath, outputPath: outputPath, cancel: cancel);
+            await _simplisticEntryPoint.Deserialize(
+                inputPath: inputPath, outputPath: outputPath,
+                dataPath: dataPath, cancel: cancel);
         }
         else
         {

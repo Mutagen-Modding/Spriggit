@@ -33,6 +33,7 @@ public class PostSerializeChecker
         ModPath mod,
         GameRelease release,
         DirectoryPath spriggit,
+        DirectoryPath? dataPath,
         IEngineEntryPoint entryPt,
         CancellationToken cancel)
     {
@@ -42,8 +43,9 @@ public class PostSerializeChecker
             using var tmp = TempFolder.Factory(fileSystem: _fileSystem);
             var outPath = Path.Combine(tmp.Dir, mod.ModKey.FileName);
             await entryPt.Deserialize(
-                spriggit,
-                outPath,
+                inputPath: spriggit,
+                outputPath: outPath,
+                dataPath: dataPath,
                 fileSystem: _fileSystem,
                 workDropoff: _workDropoff,
                 streamCreator: _createStream,

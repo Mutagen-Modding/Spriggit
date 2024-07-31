@@ -44,6 +44,7 @@ public static class EngineRunner
             .Deserialize(
                 spriggitPluginPath: deserializeCommand.InputPath,
                 outputFile: deserializeCommand.OutputPath,
+                dataPath: deserializeCommand.DataFolder,
                 source: source,
                 entryPt: entryPoint,
                 localize: deserializeCommand.Localized,
@@ -65,6 +66,7 @@ public static class EngineRunner
             .Serialize(
                 bethesdaPluginPath: modPath,
                 outputFolder: serializeCommand.OutputPath,
+                dataPath: serializeCommand.DataFolder,
                 entryPt: entryPoint,
                 postSerializeChecks: serializeCommand.Check,
                 meta: meta,

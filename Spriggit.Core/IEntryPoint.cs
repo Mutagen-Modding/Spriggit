@@ -12,6 +12,7 @@ public interface IEntryPoint
     public Task Serialize(
         ModPath modPath,
         DirectoryPath outputDir,
+        DirectoryPath? dataPath,
         GameRelease release,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
@@ -22,6 +23,7 @@ public interface IEntryPoint
     public Task Deserialize(
         string inputPath,
         string outputPath,
+        DirectoryPath? dataPath,
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,

@@ -8,6 +8,7 @@ using DynamicData;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Starfield;
 using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
@@ -36,6 +37,12 @@ public class LinkInputVm : ViewModel
         PathType = PathPickerVM.PathTypeOptions.Folder,
         ExistCheckOption = PathPickerVM.CheckOptions.On
     };
+    
+    public PathPickerVM DataFolderPicker { get; } = new()
+    {
+        PathType = PathPickerVM.PathTypeOptions.Folder,
+        ExistCheckOption = PathPickerVM.CheckOptions.IfPathNotEmpty
+    };
 
     [Reactive] public GameRelease Release { get; set; } = GameRelease.SkyrimSE;
 
@@ -61,6 +68,9 @@ public class LinkInputVm : ViewModel
     public ICommand CreateSpriggitConfigCommand { get; }
 
     private readonly Subject<Unit> _refreshSpriggitConfig = new();
+    
+    private readonly ObservableAsPropertyHelper<bool> _needsDataFolder;
+    public bool NeedsDataFolder => _needsDataFolder.Value;
 
     public LinkInputVm(
         ILogger logger,
@@ -156,6 +166,10 @@ public class LinkInputVm : ViewModel
                 
                 _refreshSpriggitConfig.OnNext(Unit.Default);
             });
+
+        _needsDataFolder = this.WhenAnyValue(x => x.Release)
+            .Select(x => x == GameRelease.Starfield)
+            .ToGuiProperty(this, nameof(Release));
     }
 
     public void Absorb(LinkSettings settings)

@@ -33,7 +33,8 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         Package = packageIdentity;
     }
 
-    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
+    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, 
+        DirectoryPath? dataPath, GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -44,14 +45,14 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
                 if (entryPt.EntryPoint != null)
                 {
                     await entryPt.EntryPoint.Serialize(
-                        modPath, outputDir, release, workDropoff,
+                        modPath, outputDir, dataPath, release, workDropoff,
                         fileSystem, streamCreator, meta, cancel);
                     return;
                 }
                 else if (entryPt.SimplisticEntryPoint != null)
                 {
                     await entryPt.SimplisticEntryPoint.Serialize(
-                        modPath, outputDir, (int)release, 
+                        modPath, outputDir, dataPath, (int)release, 
                         meta.PackageName, meta.Version, cancel);
                     return;
                 }
@@ -66,7 +67,9 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
     }
 
-    public async Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
+    public async Task Deserialize(string inputPath, string outputPath, 
+        DirectoryPath? dataPath,
+        IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -77,14 +80,14 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
                 if (entryPt.EntryPoint != null)
                 {
                     await entryPt.EntryPoint.Deserialize(
-                        inputPath, outputPath, workDropoff,
+                        inputPath, outputPath, dataPath, workDropoff,
                         fileSystem, streamCreator, cancel);
                     return;
                 }
                 else if (entryPt.SimplisticEntryPoint != null)
                 {
                     await entryPt.SimplisticEntryPoint.Deserialize(
-                        inputPath, outputPath, cancel);
+                        inputPath, outputPath, dataPath, cancel);
                     return;
                 }
             }

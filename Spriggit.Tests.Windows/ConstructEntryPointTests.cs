@@ -1,21 +1,18 @@
 ﻿using System.IO.Abstractions;
-using System.IO.Abstractions.TestingHelpers;
 using System.Runtime.CompilerServices;
 using FluentAssertions;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
-using Mutagen.Bethesda.Starfield;
+using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
-using Noggog;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using Spriggit.Core;
-using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
+using Npc = Mutagen.Bethesda.Skyrim.Npc;
 
 namespace Spriggit.Tests.Windows;
 
@@ -37,14 +34,14 @@ public class ConstructEntryPointTests
 
     public class Payload
     {
-        private readonly StarfieldMod _mod;
+        private readonly SkyrimMod _mod;
         private readonly Npc _npc;
 
         public Payload(
             DebugState debugState,
             PreparePluginFolder preparePluginFolder,
             ConstructEntryPoint sut,
-            StarfieldMod mod,
+            SkyrimMod mod,
             Npc npc)
         {
             _mod = mod;
@@ -75,7 +72,8 @@ public class ConstructEntryPointTests
             await entryPoint.Serialize(
                 modPath,
                 serializeOutputFolder,
-                GameRelease.Starfield,
+                dataPath: null,
+                GameRelease.SkyrimSE,
                 null,
                 fs,
                 null,
@@ -90,13 +88,14 @@ public class ConstructEntryPointTests
             await entryPoint.Deserialize(
                 serializeOutputFolder,
                 deserializeOutputFolder,
+                dataPath: null,
                 null,
                 fs,
                 null,
                 CancellationToken.None);
-            var reimport = StarfieldMod.CreateFromBinaryOverlay(
+            var reimport = SkyrimMod.CreateFromBinaryOverlay(
                 modPath,
-                StarfieldRelease.Starfield,
+                SkyrimRelease.SkyrimSE,
                 new BinaryReadParameters()
                 {
                     FileSystem = fs
@@ -105,10 +104,10 @@ public class ConstructEntryPointTests
         }
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task TypicalExisting(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(0, 18, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 18, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
@@ -117,10 +116,10 @@ public class ConstructEntryPointTests
         await payload.RunPassthrough(entryPt!, ident);
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task Version17(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(0, 17, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 17, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
@@ -129,10 +128,10 @@ public class ConstructEntryPointTests
         await payload.RunPassthrough(entryPt!, ident);
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task Version16(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(0, 16, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 16, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
@@ -141,10 +140,10 @@ public class ConstructEntryPointTests
         await payload.RunPassthrough(entryPt!, ident);
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task Version15(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(0, 15, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 15, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
@@ -153,19 +152,19 @@ public class ConstructEntryPointTests
         await payload.RunPassthrough(entryPt!, ident);
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task PackageDoesNotExist(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(255, 18, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(255, 18, 0));
         using var tmp = CreateDirFor();
         using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
         entryPt.Should().BeNull();
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task PluginFolderMalformedShouldRetry(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(0, 18, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 18, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         Directory.CreateDirectory(identFolder);

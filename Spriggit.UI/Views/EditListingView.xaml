@@ -16,6 +16,8 @@
         <wpf:PathPicker x:Name="ModPathPicker" Margin="5" />
         <TextBlock Text="Path to Git Folder" Margin="5" FontSize="14" FontWeight="Bold" />
         <wpf:PathPicker x:Name="GitFolderPicker" Margin="5" />
+        <TextBlock x:Name="DataFolderTextBlock" Text="Path to Data Folder" Margin="5" FontSize="14" FontWeight="Bold" />
+        <wpf:PathPicker x:Name="DataFolderPicker" Margin="5" />
         <TextBlock Grid.Column="0" Text="Game Release"
                    VerticalAlignment="Bottom"
                    Margin="5" FontSize="14" FontWeight="Bold" />

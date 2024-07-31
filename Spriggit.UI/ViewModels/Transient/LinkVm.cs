@@ -4,15 +4,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Installs;
 using Noggog;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
 using Spriggit.Core;
-using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
@@ -221,6 +219,14 @@ public class LinkVm : ViewModel
             .DisposeWith(this);
     }
 
+    private DirectoryPath? GetDataFolder()
+    {
+        if (!Input.NeedsDataFolder) return null;
+        var path = Input.DataFolderPicker.TargetPath;
+        if (!path.IsNullOrWhitespace()) return path;
+        return GameLocations.GetDataFolder(Input.Release);
+    }
+
     private async Task SyncToGit(CancellationToken cancel)
     {
         try
@@ -238,6 +244,7 @@ public class LinkVm : ViewModel
             await _engine.Serialize(
                 bethesdaPluginPath: Input.ModPathPicker.TargetPath,
                 outputFolder: Input.GitFolderPicker.TargetPath,
+                dataPath: GetDataFolder(),
                 postSerializeChecks: true,
                 meta: meta.Value,
                 cancel: cancel);
@@ -264,6 +271,7 @@ public class LinkVm : ViewModel
             await _engine.Deserialize(
                 spriggitPluginPath: Input.GitFolderPicker.TargetPath,
                 outputFile: Input.ModPathPicker.TargetPath,
+                dataPath: GetDataFolder(),
                 source: null,
                 localize: null,
                 backupDays: 30,

@@ -3,7 +3,7 @@ using FluentAssertions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Starfield;
+using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.IO;
@@ -12,7 +12,7 @@ using Noggog.WorkEngine;
 using Spriggit.Core;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
-using Spriggit.Yaml.Starfield;
+using Spriggit.Yaml.Skyrim;
 using Xunit;
 
 namespace Spriggit.Tests.Merge;
@@ -39,10 +39,10 @@ public class MergeVersionSyncerTests
         }
     }
     
-    // [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    // [Theory, MutagenModAutoData(GameRelease.Skyrim)]
     // public async Task NothingToFix(
     //     IFileSystem fileSystem,
-    //     StarfieldMod mod,
+    //     SkyrimMod mod,
     //     Npc n1,
     //     ModKey modKey,
     //     EntryPoint entryPoint,
@@ -56,11 +56,11 @@ public class MergeVersionSyncerTests
     //     fileSystem.Directory.CreateDirectory(modFolder);
     //     mod.WriteToBinary(modPath, fileSystem: fileSystem);
     //     await entryPoint.Serialize(
-    //         modPath, spriggitModPath, GameRelease.Starfield,
+    //         modPath, spriggitModPath, GameRelease.Skyrim,
     //         null, fileSystem, null,
     //         new SpriggitSource()
     //         {
-    //             PackageName = "Spriggit.Yaml.Starfield",
+    //             PackageName = "Spriggit.Yaml.Skyrim",
     //             Version = "1.0"
     //         },
     //         CancellationToken.None);
@@ -77,7 +77,7 @@ public class MergeVersionSyncerTests
     //         streamCreator: null,
     //         cancel: CancellationToken.None);
     //
-    //     var reimport = StarfieldMod.CreateFromBinary(modPath2, StarfieldRelease.Starfield, fileSystem: fileSystem);
+    //     var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.Skyrim, fileSystem: fileSystem);
     //     reimport.EnumerateMajorRecords().Should().HaveCount(1);
     //     reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
     // }
@@ -95,7 +95,8 @@ public class MergeVersionSyncerTests
             _isOld = isOld;
         }
         
-        public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
+        public async Task Serialize(ModPath modPath, DirectoryPath outputDir,  DirectoryPath? dataPath, 
+            GameRelease release, IWorkDropoff? workDropoff,
             IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
         {
             if (_isOld)
@@ -108,7 +109,7 @@ public class MergeVersionSyncerTests
             fileSystem.File.WriteAllText(Path.Combine(outputDir, "Testing123"), "NewContent");
         }
 
-        public async Task Deserialize(string inputPath, string outputPath,
+        public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath,
             IWorkDropoff? workDropoff, IFileSystem? fileSystem,
             ICreateStream? streamCreator, CancellationToken cancel)
         {
@@ -129,9 +130,9 @@ public class MergeVersionSyncerTests
         }
     }
 
-    [Theory, MutagenModAutoData(GameRelease.Starfield, TargetFileSystem.Real)]
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, TargetFileSystem.Real)]
     public async Task SomethingToFix(
-        StarfieldMod mod,
+        SkyrimMod mod,
         Armor armor,
         EntryPoint entryPoint,
         SpriggitExternalMetaPersister metaPersister,
@@ -140,15 +141,15 @@ public class MergeVersionSyncerTests
         var v1 = new SpriggitEmbeddedMeta(
             new SpriggitSource()
             {
-                PackageName = "Spriggit.Yaml.Starfield",
+                PackageName = "Spriggit.Yaml.Skyrim",
                 Version = "1.0"
-            }, GameRelease.Starfield, mod.ModKey);
+            }, GameRelease.SkyrimSE, mod.ModKey);
         var v2 = new SpriggitEmbeddedMeta(
             new SpriggitSource()
             {
-                PackageName = "Spriggit.Yaml.Starfield",
+                PackageName = "Spriggit.Yaml.Skyrim",
                 Version = "2.0"
-            }, GameRelease.Starfield, mod.ModKey);
+            }, GameRelease.SkyrimSE, mod.ModKey);
         
         sut.EntryPointCache.RegisterFor(new SpriggitMeta(v1.Source, v1.Release), 
             new FakeEntryPoint(mod.ModKey, isOld: true));
@@ -170,9 +171,12 @@ public class MergeVersionSyncerTests
         // Make initial content
         File.WriteAllText(Path.Combine(tmp.Dir, "Readme.md"), "Readme");
         var weap = mod.Weapons.AddNew();
+        weap.EnchantmentAmount = 3;
         mod.WriteToBinary(modPath);
         await entryPoint.Serialize(
-            modPath, spriggitModPath, GameRelease.Starfield,
+            modPath, spriggitModPath,
+            dataPath: null,
+            GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
             CancellationToken.None);
@@ -192,7 +196,8 @@ public class MergeVersionSyncerTests
             mod.WriteToBinary(modPath);
             
             await entryPoint.Serialize(
-                modPath, spriggitModPath, GameRelease.Starfield,
+                modPath, spriggitModPath,
+                dataPath: null, GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
                 CancellationToken.None);
@@ -206,11 +211,12 @@ public class MergeVersionSyncerTests
         {
             Commands.Checkout(repo, rhs);
             weap.Name = null;
-            weap.DistanceDeceleration = 1.4f;
+            weap.Description = "RHS";
             mod.WriteToBinary(modPath);
             
             await entryPoint.Serialize(
-                modPath, spriggitModPath, GameRelease.Starfield,
+                modPath, spriggitModPath,
+                dataPath: null, GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,
                 CancellationToken.None);
@@ -225,7 +231,8 @@ public class MergeVersionSyncerTests
         repo.Merge(lhs, signature, new MergeOptions());
         
         await sut.Sut.DetectAndFix(
-            spriggitModPath: spriggitModPath);
+            spriggitModPath: spriggitModPath,
+            dataFolder: null);
 
         File.ReadAllText(Path.Combine(spriggitModPath, "Testing123")).Should().Be("NewContent");
     }

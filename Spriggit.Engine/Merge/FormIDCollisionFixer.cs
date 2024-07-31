@@ -76,6 +76,7 @@ public class FormIDCollisionFixer
     internal async Task DetectAndFixInternal<TMod, TModGetter>(
         IEntryPoint entryPoint,
         DirectoryPath spriggitModPath,
+        DirectoryPath? dataPath,
         SpriggitEmbeddedMeta meta)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
@@ -87,8 +88,9 @@ public class FormIDCollisionFixer
 
         _logger.Information("Deserializing mod to {Path}", origMergedModPath);
         await entryPoint.Deserialize(
-            spriggitModPath,
-            origMergedModPath,
+            inputPath: spriggitModPath,
+            outputPath: origMergedModPath,
+            dataPath: dataPath,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,
@@ -174,8 +176,9 @@ public class FormIDCollisionFixer
 
         _logger.Information("Deserializing mod to {Path}", origMergedModPath);        
         await entryPoint.Deserialize(
-            spriggitModPath,
-            origMergedModPath,
+            inputPath: spriggitModPath,
+            outputPath: origMergedModPath,
+            dataPath: dataPath,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,
@@ -197,9 +200,10 @@ public class FormIDCollisionFixer
         
         _logger.Information("Serializing mod to {Path}", spriggitModPath);  
         await entryPoint.Serialize(
-            origMergedModPath.Path,
-            spriggitModPath,
-            meta.Release,
+            modPath: origMergedModPath.Path,
+            outputDir: spriggitModPath,
+            dataPath: dataPath,
+            release: meta.Release,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,
@@ -227,8 +231,9 @@ public class FormIDCollisionFixer
 
         _logger.Information("Deserializing mod to {Path}", newMergedModPath);  
         await entryPoint.Deserialize(
-            spriggitModPath,
-            newMergedModPath,
+            inputPath: spriggitModPath,
+            outputPath: newMergedModPath,
+            dataPath: dataPath,
             workDropoff: null,
             fileSystem: _fileSystem,
             streamCreator: null,

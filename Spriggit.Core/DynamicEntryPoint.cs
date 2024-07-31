@@ -16,8 +16,12 @@ public class DynamicEntryPoint : IEntryPoint
         _wrappedEndPoint = wrappedEndPoint;
     }
 
-    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, GameRelease release, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
+    public async Task Serialize(
+        ModPath modPath, DirectoryPath outputDir, 
+        DirectoryPath? dataPath,
+        GameRelease release, IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem, ICreateStream? streamCreator, 
+        SpriggitSource meta, CancellationToken cancel)
     {
         var serializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Serialize")!;
         var metaType = serializeMethod.GetParameters()[6];
@@ -30,6 +34,7 @@ public class DynamicEntryPoint : IEntryPoint
         {
             modPath,
             outputDir,
+            dataPath,
             release,
             workDropoff,
             fileSystem,
@@ -43,7 +48,10 @@ public class DynamicEntryPoint : IEntryPoint
         }
     }
 
-    public async Task Deserialize(string inputPath, string outputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
+    public async Task Deserialize(
+        string inputPath, string outputPath,
+        DirectoryPath? dataPath,
+        IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
         var deserializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Deserialize")!;
@@ -52,6 +60,7 @@ public class DynamicEntryPoint : IEntryPoint
         {
             inputPath,
             outputPath,
+            dataPath,
             workDropoff,
             fileSystem,
             streamCreator,

@@ -11,15 +11,18 @@ public class ConstructCliEndpoint
     private readonly ILogger _logger;
     private readonly ProcessFactory _processFactory;
     private readonly PrepareCliFolder _prepareCliFolder;
+    private readonly PackageVersioningChecker _packageVersioningChecker;
 
     public ConstructCliEndpoint(
         ILogger logger,
         ProcessFactory processFactory,
-        PrepareCliFolder prepareCliFolder)
+        PrepareCliFolder prepareCliFolder, 
+        PackageVersioningChecker packageVersioningChecker)
     {
         _logger = logger;
         _processFactory = processFactory;
         _prepareCliFolder = prepareCliFolder;
+        _packageVersioningChecker = packageVersioningChecker;
     }
 
     private bool IsSameCliVersion(NuGetVersion version)
@@ -71,6 +74,7 @@ public class ConstructCliEndpoint
             Log.ForContext<CliEntryPoint>(),
             _processFactory,
             exePath,
+            _packageVersioningChecker,
             ident);
     }
 }
