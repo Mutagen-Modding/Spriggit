@@ -19,17 +19,4 @@
         <ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="Customization.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="EntryPoint.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-    </ItemGroup>
-
 </Project>
