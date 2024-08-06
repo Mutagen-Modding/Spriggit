@@ -29,3 +29,11 @@ public class ModHeaderStatsCustomization : ICustomize<IModStatsGetter>
         builder.Omit(x => x.NumRecords);
     }
 }
+
+public class ConditionCustomization : ICustomize<IConditionGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IConditionGetter> builder)
+    {
+        builder.Omit(x => x.Unknown1);
+    }
+}
