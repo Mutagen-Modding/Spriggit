@@ -124,7 +124,7 @@ public class ConstructAssemblyLoadedEntryPoint
     {
         _logger.Information("Finding entry point type");
         _logger.Information("Looking for typically named entry point classes");
-        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(","))}.EntryPoint";
+        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(",", StringComparison.OrdinalIgnoreCase))}.EntryPoint";
         entryPt = assembly.GetType(name);
         if (entryPt != null) return true;
         _logger.Information("Iterating through all classes to find entry point");
@@ -143,7 +143,7 @@ public class ConstructAssemblyLoadedEntryPoint
     {
         _logger.Information("Finding simplistic entry point type");
         _logger.Information("Looking for typically named simplistic entry point classes");
-        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(","))}.EntryPoint";
+        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(",", StringComparison.OrdinalIgnoreCase))}.EntryPoint";
         entryPt = assembly.GetType(name);
         if (entryPt != null) return true;
         _logger.Information("Iterating through all classes to find simplistic entry point");
