@@ -9,6 +9,7 @@ public class Customization : ICustomize
     {
         builder
             .OmitLastModifiedData()
+            .OmitTimestampData()
             .FilePerRecord();
     }
 }
