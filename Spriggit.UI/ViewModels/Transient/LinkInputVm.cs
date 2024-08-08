@@ -169,7 +169,7 @@ public class LinkInputVm : ViewModel
 
         _needsDataFolder = this.WhenAnyValue(x => x.Release)
             .Select(x => x == GameRelease.Starfield)
-            .ToGuiProperty(this, nameof(Release));
+            .ToGuiProperty(this, nameof(NeedsDataFolder));
     }
 
     public void Absorb(LinkSettings settings)
