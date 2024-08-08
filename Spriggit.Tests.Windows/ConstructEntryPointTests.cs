@@ -23,7 +23,7 @@ public class ConstructEntryPointTests
 {
     private static TempFolder CreateDirFor([CallerMemberName] string? name = null)
     {
-        var dir = Path.Combine("SpriggitUnitTests", name!);
+        var dir = Path.Combine("SpriggitUnitTests", nameof(ConstructEntryPointTests), name!);
         var temp = TempFolder.FactoryByAddedPath(
             dir,
             deleteAfter: false);

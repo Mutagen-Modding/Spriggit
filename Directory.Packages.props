@@ -22,16 +22,16 @@
       <Version>[0.46.0.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization">
-      <Version>[1.22]</Version>
+      <Version>[1.22.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
-      <Version>[1.22]</Version>
+      <Version>[1.22.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
-      <Version>[1.22]</Version>
+      <Version>[1.22.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
-      <Version>[1.22]</Version>
+      <Version>[1.22.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Skyrim">
       <Version>[0.46.0.1]</Version>
