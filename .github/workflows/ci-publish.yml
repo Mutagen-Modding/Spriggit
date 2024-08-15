@@ -115,15 +115,15 @@ jobs:
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.UI/bin/Release/net7.0-windows/win-x64/publish/* Spriggit.zip
+        powershell Compress-Archive Spriggit.UI/bin/Release/net8.0-windows/win-x64/publish/* Spriggit.zip
     - name: Archive Linux CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0/linux-x64/publish/* SpriggitLinuxCLI.zip
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net8.0/linux-x64/publish/* SpriggitLinuxCLI.zip
     - name: Archive CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net7.0/win-x64/publish/* SpriggitCLI.zip
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net8.0/win-x64/publish/* SpriggitCLI.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
