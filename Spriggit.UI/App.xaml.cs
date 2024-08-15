@@ -105,7 +105,7 @@ public partial class App : Application
 
         Serilog.Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File(Path.Combine("logs", logFileName))
+            .WriteTo.File(Path.Combine("logs", logFileName), retainedFileTimeLimit: TimeSpan.FromDays(7))
             .WriteTo.File(curLog)
             .CreateLogger();
 
