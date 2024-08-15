@@ -33,6 +33,9 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             .WithFileSystem(fileSystem)
             .ThrowIfUnknownSubrecord()
             .Construct();
+        
+        modGetter.WriteToBinary(@$"C:\Users\Justin\Documents\SpriggitTests\Derp\{modPath.ModKey}");
+        
         await MutagenYamlConverter.Instance.Serialize(
             modGetter,
             outputDir,

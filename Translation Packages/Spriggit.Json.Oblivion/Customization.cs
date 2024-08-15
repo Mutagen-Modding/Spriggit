@@ -22,3 +22,21 @@ public class ModHeaderStatsCustomization : ICustomize<IModStatsGetter>
         builder.Omit(x => x.NumRecords);
     }
 }
+
+public class CellCustomization : ICustomize<ICellGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<ICellGetter> builder)
+    {
+        builder.EmbedRecordsInSameFile(x => x.Temporary)
+            .EmbedRecordsInSameFile(x => x.Persistent)
+            .EmbedRecordsInSameFile(x => x.Landscape);
+    }
+}
+
+public class WorldspaceCustomization : ICustomize<IWorldspaceGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IWorldspaceGetter> builder)
+    {
+        builder.EmbedRecordsInSameFile(x => x.TopCell);
+    }
+}
