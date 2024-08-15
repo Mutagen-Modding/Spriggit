@@ -20,11 +20,12 @@ public class DynamicEntryPoint : IEntryPoint
         ModPath modPath, DirectoryPath outputDir, 
         DirectoryPath? dataPath,
         GameRelease release, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator, 
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator, 
         SpriggitSource meta, CancellationToken cancel)
     {
         var serializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Serialize")!;
-        var metaType = serializeMethod.GetParameters()[6];
+        var metaType = serializeMethod.GetParameters()[7];
         var metaReplacement = Activator.CreateInstance(metaType.ParameterType)!;
         dynamic dynamicMeta = metaReplacement;
         dynamicMeta.PackageName = meta.PackageName;
