@@ -36,6 +36,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
 [Register(typeof(PostSerializeChecker))]
+[Register(typeof(DataPathChecker))]
 partial class EngineContainer : IContainer<SpriggitEngine>
 {
     [Instance] private readonly IFileSystem _fileSystem;

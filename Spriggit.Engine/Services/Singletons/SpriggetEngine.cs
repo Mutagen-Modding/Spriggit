@@ -22,7 +22,8 @@ public class SpriggitEngine(
     PluginBackupCreator pluginBackupCreator,
     IModFilesMover modFilesMover,
     LocalizeEnforcer localizeEnforcer,
-    PostSerializeChecker postSerializeChecker)
+    PostSerializeChecker postSerializeChecker,
+    DataPathChecker dataPathChecker)
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
@@ -46,6 +47,8 @@ public class SpriggitEngine(
         {
             throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a .spriggit file present, or specify at least GameRelease and PackageName");
         }
+        
+        dataPathChecker.CheckDataPath(meta.Release, dataPath);
 
         if (entryPt == null)
         {
