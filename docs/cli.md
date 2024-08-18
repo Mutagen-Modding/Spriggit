@@ -23,7 +23,8 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference during Separated Master game mods (Starfield) |
+|      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
 !!! error "Must Have Dedicated Folder"
     Make sure the output path is pointed to a folder which is -wholly- dedicated to containing Spriggit content.   [More Info](backups.md)
@@ -44,8 +45,9 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion.  Leave blank to auto detect |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion.  Leave blank to auto detect |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
-| `-B` | `--BackupDays` | Optional | Days to keep backup plugins in the temp folder (default 30) |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference during Separated Master game mods (Starfield) |
+|      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
+| `-b` | `--BackupDays` | Optional | Days to keep backup plugins in the temp folder (default 30) |
 
 !!! tip "Omit Package Details"
     Spriggit stores the package details it was created with, so in most circumstances, you want to let it automatically detect the package information.
