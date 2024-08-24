@@ -2,6 +2,7 @@
 using CommandLine;
 using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
+using Spriggit.CLI.Lib.Commands.SortProperties;
 using Spriggit.Engine.Services.Singletons;
 
 try
@@ -19,13 +20,15 @@ try
             typeof(SerializeCommand),
             typeof(FormIDCollisionCommand),
             typeof(MergeVersionSyncerCommand),
-            typeof(StandardizeCommand))
+            typeof(StandardizeCommand),
+            typeof(SortPropertiesCommand))
         .MapResult(
-            async (DeserializeCommand deserialize) => await EngineRunner.Run(deserialize, null),
-            async (SerializeCommand serialize) => await EngineRunner.Run(serialize, null),
-            async (FormIDCollisionCommand formIdCollision) => await FormIDCollisionRunner.Run(formIdCollision),
-            async (MergeVersionSyncerCommand versionSyncer) => await MergeVersionSyncerRunner.Run(versionSyncer),
-            async (StandardizeCommand standardize) => await StandardizeRunner.Run(standardize),
+            async (DeserializeCommand cmd) => await EngineRunner.Run(cmd, null),
+            async (SerializeCommand cmd) => await EngineRunner.Run(cmd, null),
+            async (FormIDCollisionCommand cmd) => await FormIDCollisionRunner.Run(cmd),
+            async (MergeVersionSyncerCommand cmd) => await MergeVersionSyncerRunner.Run(cmd),
+            async (StandardizeCommand cmd) => await StandardizeRunner.Run(cmd),
+            async (SortPropertiesCommand cmd) => await cmd.Run(),
             async _ => -1);
 }
 catch (Exception ex)

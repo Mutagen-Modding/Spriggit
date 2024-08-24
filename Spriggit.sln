@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Yaml.Fallout4", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Tests.Windows", "Spriggit.Tests.Windows\Spriggit.Tests.Windows.csproj", "{2FD43392-1152-4FA0-9849-F062F051E8EE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Processors", "Processors", "{020F9454-5666-4294-9DB0-87A7ABF8ABF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

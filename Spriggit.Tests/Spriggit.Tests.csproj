@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Spriggit.CLI.Lib\Spriggit.CLI.Lib.csproj" />
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
     </ItemGroup>
