@@ -132,13 +132,13 @@ public class MergeVersionSyncerTests
         SpriggitExternalMetaPersister metaPersister,
         Fixture sut)
     {
-        var v1 = new SpriggitEmbeddedMeta(
+        var v1 = new SpriggitModKeyMeta(
             new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Skyrim",
                 Version = "1.0"
             }, GameRelease.SkyrimSE, mod.ModKey);
-        var v2 = new SpriggitEmbeddedMeta(
+        var v2 = new SpriggitModKeyMeta(
             new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Skyrim",

@@ -77,7 +77,7 @@ public class FormIDCollisionFixer
         IEntryPoint entryPoint,
         DirectoryPath spriggitModPath,
         DirectoryPath? dataPath,
-        SpriggitEmbeddedMeta meta)
+        SpriggitModKeyMeta meta)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
     {

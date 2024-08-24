@@ -109,7 +109,7 @@ public class MergeVersionSyncer
             dataFolder: dataFolder);
     }
 
-    private SpriggitEmbeddedMeta GetEmbeddedMeta(
+    private SpriggitModKeyMeta GetEmbeddedMeta(
         Repository repo,
         string sha,
         DirectoryPath spriggitPath)

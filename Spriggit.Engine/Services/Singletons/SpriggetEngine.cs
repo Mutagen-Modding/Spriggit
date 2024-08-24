@@ -76,7 +76,7 @@ public class SpriggitEngine(
             cancel: cancel.Value);
         metaPersister.Persist(
             outputFolder, 
-            new SpriggitEmbeddedMeta(
+            new SpriggitModKeyMeta(
                 source,
                 meta.Release,
                 bethesdaPluginPath.ModKey));

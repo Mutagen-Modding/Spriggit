@@ -14,7 +14,7 @@ public class GetMetaToUse
         _externalMetaPersister = externalMetaPersister;
     }
     
-    public async Task<SpriggitEmbeddedMeta> Get(
+    public async Task<SpriggitModKeyMeta> Get(
         SpriggitSource? source,
         DirectoryPath spriggitPluginPath,
         CancellationToken cancel)
@@ -23,7 +23,7 @@ public class GetMetaToUse
 
         if (sourceInfo == null) throw new DataException($"Could not locate source info from {spriggitPluginPath}");
 
-        return new SpriggitEmbeddedMeta(
+        return new SpriggitModKeyMeta(
             ModKey: sourceInfo.ModKey,
             Source: source ?? sourceInfo.Source,
             Release: sourceInfo.Release);
