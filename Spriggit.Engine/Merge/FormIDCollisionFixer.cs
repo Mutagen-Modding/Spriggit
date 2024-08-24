@@ -42,7 +42,8 @@ public class FormIDCollisionFixer
     }
 
     public async Task DetectAndFix(
-        DirectoryPath spriggitModPath)
+        DirectoryPath spriggitModPath,
+        DirectoryPath? dataPath)
     {
         var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
         var entryPoint = await _entryPointCache.GetFor(meta.ToMeta(), CancellationToken.None);
@@ -65,6 +66,7 @@ public class FormIDCollisionFixer
         {
             entryPoint,
             spriggitModPath,
+            dataPath,
             meta
         });
         if (obj is Task t)

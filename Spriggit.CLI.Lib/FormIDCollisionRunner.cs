@@ -18,7 +18,8 @@ public static class FormIDCollisionRunner
         await GetContainer(new DebugState { ClearNugetSources = formIdCollisionCommand.Debug })
             .Resolve().Value
             .DetectAndFix(
-                spriggitModPath: formIdCollisionCommand.SpriggitPath); 
+                spriggitModPath: formIdCollisionCommand.SpriggitPath,
+                dataPath: formIdCollisionCommand.DataFolder); 
         return 0;
     }
 }
