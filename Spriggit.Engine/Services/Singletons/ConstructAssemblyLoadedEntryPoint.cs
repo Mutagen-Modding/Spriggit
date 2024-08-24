@@ -41,7 +41,6 @@ public class ConstructAssemblyLoadedEntryPoint
                     typeof(ISimplisticEntryPoint),
                     typeof(ICreateStream),
                     typeof(SpriggitSource),
-                    typeof(SpriggitModKeyMeta),
                     typeof(IWorkDropoff),
                     typeof(CancellationToken),
                     typeof(GameRelease),
@@ -75,7 +74,6 @@ public class ConstructAssemblyLoadedEntryPoint
                     {
                         typeof(ISimplisticEntryPoint),
                         typeof(SpriggitSource),
-                        typeof(SpriggitModKeyMeta),
                     });
                 disposable.Add(loader);
 
