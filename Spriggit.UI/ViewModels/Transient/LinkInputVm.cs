@@ -145,9 +145,9 @@ public class LinkInputVm : ViewModel
                 }
                 
                 var dialog = new SaveFileDialog();
-                dialog.Filter = "Spriggit Config file|*.spriggit";
-                dialog.Title = "Save a .spriggit file";
-                dialog.FileName = $".spriggit";
+                dialog.Filter = $"Spriggit Config file|*{SpriggitMetaLocator.ConfigFileName}";
+                dialog.Title = $"Save a {SpriggitMetaLocator.ConfigFileName} file";
+                dialog.FileName = SpriggitMetaLocator.ConfigFileName;
                 dialog.InitialDirectory = System.IO.Path.GetDirectoryName(GitFolderPicker.TargetPath) ?? "";
                 dialog.ShowDialog();
 

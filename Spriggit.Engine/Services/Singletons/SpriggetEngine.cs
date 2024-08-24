@@ -45,7 +45,7 @@ public class SpriggitEngine(
 
         if (meta == null)
         {
-            throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a .spriggit file present, or specify at least GameRelease and PackageName");
+            throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a {SpriggitMetaLocator.ConfigFileName} file present, or specify at least GameRelease and PackageName");
         }
         
         dataPathChecker.CheckDataPath(meta.Release, dataPath);

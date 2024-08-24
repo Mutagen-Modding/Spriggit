@@ -27,7 +27,7 @@ public class SpriggitMetaLocator
             FilePath file = Path.Combine(outputFolder, ConfigFileName);
             if (file.Exists)
             {
-                _logger.Information("Found .spriggit config at {ConfigPath}", file);
+                _logger.Information($"Found {ConfigFileName} config at {{ConfigPath}}", file);
                 return file;
             }
 
@@ -54,7 +54,7 @@ public class SpriggitMetaLocator
                 return null;
             }
 
-            _logger.Information("Loaded .spriggit config with {Meta}", meta);
+            _logger.Information($"Loaded {ConfigFileName} config with {{Meta}}", meta);
             return new SpriggitMeta(
                 new SpriggitSource()
                 {
