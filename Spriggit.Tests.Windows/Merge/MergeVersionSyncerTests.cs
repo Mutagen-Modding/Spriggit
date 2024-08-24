@@ -122,12 +122,6 @@ public class MergeVersionSyncerTests
             Path.GetFileName(outputPath).Should().Be(_modKey.FileName);
             fileSystem.File.WriteAllText(outputPath, "OldContent");
         }
-
-        public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
-            CancellationToken cancel)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE, TargetFileSystem.Real)]

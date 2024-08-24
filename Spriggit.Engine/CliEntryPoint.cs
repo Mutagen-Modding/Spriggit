@@ -88,9 +88,4 @@ public class CliEntryPoint : ISimplisticEntryPoint
             });
         await processWrapper.Run();
     }
-
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, CancellationToken cancel)
-    {
-        throw new NotImplementedException();
-    }
 }

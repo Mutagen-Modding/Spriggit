@@ -28,11 +28,4 @@ public interface IEntryPoint
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         CancellationToken cancel);
-    
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(
-        string inputPath,
-        IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem,
-        ICreateStream? streamCreator,
-        CancellationToken cancel);
 }

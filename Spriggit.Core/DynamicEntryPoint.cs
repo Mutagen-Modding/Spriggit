@@ -73,20 +73,6 @@ public class DynamicEntryPoint : IEntryPoint
         }
     }
 
-    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
-        CancellationToken cancel)
-    {
-        dynamic dynamicRet = await ((dynamic)_wrappedEndPoint).TryGetMetaInfo(inputPath, workDropoff, fileSystem, streamCreator, cancel);
-        return new SpriggitEmbeddedMeta(
-            new SpriggitSource()
-            {
-                PackageName = dynamicRet.Source.PackageName,
-                Version = dynamicRet.Source.Version
-            },
-            (GameRelease)(int)dynamicRet.Release,
-            ModKey.FromNameAndExtension(dynamicRet.ModKey.ToString()));
-    }
-
     public void Dispose()
     {
         if (_wrappedEndPoint is IDisposable disp)

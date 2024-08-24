@@ -16,8 +16,4 @@ public interface ISimplisticEntryPoint
         string outputPath,
         string? dataPath,
         CancellationToken cancel);
-    
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(
-        string inputPath,
-        CancellationToken cancel);
 }

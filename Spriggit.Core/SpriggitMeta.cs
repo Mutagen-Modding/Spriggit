@@ -10,5 +10,6 @@ public record SpriggitEmbeddedMeta(SpriggitSource Source, GameRelease Release, M
 {
     public SpriggitMeta ToMeta() => new SpriggitMeta(Source, Release);
 }
+
 public record SpriggitEmbeddedMetaSerialize(
     string? PackageName, string? Version, GameRelease? Release, string? ModKey);

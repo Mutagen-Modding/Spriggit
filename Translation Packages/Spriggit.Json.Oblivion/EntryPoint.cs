@@ -76,32 +76,6 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
     
-    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(
-        string inputPath, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator,
-        CancellationToken cancel)
-    {
-        fileSystem = fileSystem.GetOrDefault();
-        if (streamCreator == null || streamCreator is NoPreferenceStreamCreator)
-        {
-            streamCreator = NormalFileStreamCreator.Instance;
-        }
-        SpriggitSource src = new();
-        SerializationHelper.ExtractMeta(
-            fileSystem: fileSystem,
-            modKeyPath: inputPath,
-            path: Path.Combine(inputPath, SerializationHelper.RecordDataFileName(ReaderKernel.ExpectedExtension)),
-            streamCreator: streamCreator,
-            kernel: ReaderKernel,
-            extraMeta: src,
-            metaReader: static (r, m, k, s) => Spriggit.Core.SpriggitSource_Serialization.DeserializeInto(r, k, m, s),
-            modKey: out var modKey,
-            release: out var release,
-            cancel: cancel);
-
-        return new SpriggitEmbeddedMeta(src, release, modKey);
-    }
-
     public async Task Serialize(
         string modPath, string outputDir, string? dataPath, 
         int release, string packageName, string version,
@@ -132,16 +106,6 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
             workDropoff: null,
             fileSystem: null,
             streamCreator: null,
-            cancel: cancel);
-    }
-
-    public Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, CancellationToken cancel)
-    {
-        return TryGetMetaInfo(
-            inputPath, 
-            workDropoff: null, 
-            fileSystem: null, 
-            streamCreator: null, 
             cancel: cancel);
     }
 }

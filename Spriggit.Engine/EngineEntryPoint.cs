@@ -101,36 +101,6 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
     }
 
-    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
-        CancellationToken cancel)
-    {
-        Exception? lastEx = null;
-        foreach (var entryPt in _entryPoints)
-        {
-            try
-            {
-                if (entryPt.EntryPoint != null)
-                {
-                    return await entryPt.EntryPoint.TryGetMetaInfo(
-                        inputPath, workDropoff, fileSystem,
-                        streamCreator, cancel);
-                }
-                else if (entryPt.SimplisticEntryPoint != null)
-                {
-                    return await entryPt.SimplisticEntryPoint.TryGetMetaInfo(
-                        inputPath, cancel);
-                }
-            }
-            catch (Exception e)
-            {
-                lastEx = e;
-                _logger.Warning(e, "Error getting meta info against entry point {Type} for identity {Identity}", entryPt.GetType(), Package);
-            }
-        }
-
-        throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
-    }
-
     public void Dispose()
     {
     }

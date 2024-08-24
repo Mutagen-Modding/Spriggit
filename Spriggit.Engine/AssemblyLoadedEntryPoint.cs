@@ -96,23 +96,6 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         }
     }
 
-    public async Task<SpriggitEmbeddedMeta?> TryGetMetaInfo(string inputPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
-        CancellationToken cancel)
-    {
-        if (_entryPoint != null)
-        {
-            return await _entryPoint.TryGetMetaInfo(inputPath, workDropoff, fileSystem, streamCreator, cancel);
-        }
-        else if (_simplisticEntryPoint != null)
-        {
-            return await _simplisticEntryPoint.TryGetMetaInfo(inputPath: inputPath, cancel: cancel);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public void Dispose()
     {
         _disposable.Dispose();
