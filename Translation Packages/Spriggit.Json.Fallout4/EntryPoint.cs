@@ -11,7 +11,7 @@ using Spriggit.Core;
 
 namespace Spriggit.Json.Fallout4;
 
-public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
+public class EntryPoint : IEntryPoint
 {
     public async Task Serialize(
         ModPath modPath, 
@@ -74,35 +74,4 @@ public class EntryPoint : IEntryPoint, ISimplisticEntryPoint
     }
 
     private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
-    
-    public async Task Serialize(string modPath, string outputPath, string? dataPath, int release, string packageName, string version,
-        CancellationToken cancel)
-    {
-        await Serialize(
-            modPath: new ModPath(modPath),
-            outputPath: outputPath,
-            dataPath: dataPath,
-            release: (GameRelease)release,
-            workDropoff: null,
-            fileSystem: null,
-            streamCreator: null,
-            meta: new SpriggitSource()
-            {
-                PackageName = packageName,
-                Version = version
-            },
-            cancel: cancel);
-    }
-
-    public Task Deserialize(string inputPath, string outputPath, string? dataPath, CancellationToken cancel)
-    {
-        return Deserialize(
-            inputPath: inputPath,
-            outputPath: outputPath,
-            dataPath: dataPath,
-            workDropoff: null,
-            fileSystem: null,
-            streamCreator: null,
-            cancel: cancel);
-    }
 }

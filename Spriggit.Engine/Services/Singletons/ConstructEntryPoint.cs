@@ -107,12 +107,12 @@ public class ConstructEntryPoint
         var cliEndpoint = await _constructCliEndpoint.ConstructFor(tempPath, ident, cancellationToken);
         if (cliEndpoint == null) return ret;
         if (ret == null) return new EngineEntryPointWrapper(_logger, ident, 
-            new EngineEntryPointWrapperItem(null, cliEndpoint));
+            cliEndpoint);
 
         return new EngineEntryPointWrapper(
             _logger,
             ident,
-            new EngineEntryPointWrapperItem(ret, null),
-            new EngineEntryPointWrapperItem(null, cliEndpoint));
+            ret,
+            cliEndpoint);
     }
 }

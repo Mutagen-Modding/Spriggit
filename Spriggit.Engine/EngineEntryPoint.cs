@@ -15,18 +15,16 @@ public interface IEngineEntryPoint : IEntryPoint, IDisposable
     PackageIdentity Package { get; }
 }
 
-public record EngineEntryPointWrapperItem(IEntryPoint? EntryPoint, ISimplisticEntryPoint? SimplisticEntryPoint);
-
 public class EngineEntryPointWrapper : IEngineEntryPoint
 {
     private readonly ILogger _logger;
-    private readonly EngineEntryPointWrapperItem[] _entryPoints;
+    private readonly IEntryPoint[] _entryPoints;
     public PackageIdentity Package { get; }
 
     public EngineEntryPointWrapper(
         ILogger logger,
         PackageIdentity packageIdentity,
-        params EngineEntryPointWrapperItem[] entryPoints)
+        params IEntryPoint[] entryPoints)
     {
         _logger = logger;
         _entryPoints = entryPoints;
@@ -42,20 +40,10 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         {
             try
             {
-                if (entryPt.EntryPoint != null)
-                {
-                    await entryPt.EntryPoint.Serialize(
-                        modPath, outputDir, dataPath, release, workDropoff,
-                        fileSystem, streamCreator, meta, cancel);
-                    return;
-                }
-                else if (entryPt.SimplisticEntryPoint != null)
-                {
-                    await entryPt.SimplisticEntryPoint.Serialize(
-                        modPath, outputDir, dataPath, (int)release, 
-                        meta.PackageName, meta.Version, cancel);
-                    return;
-                }
+                await entryPt.Serialize(
+                    modPath, outputDir, dataPath, release, workDropoff,
+                    fileSystem, streamCreator, meta, cancel);
+                return;
             }
             catch (Exception e)
             {
@@ -77,19 +65,10 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         {
             try
             {
-                if (entryPt.EntryPoint != null)
-                {
-                    await entryPt.EntryPoint.Deserialize(
-                        inputPath, outputPath, dataPath, workDropoff,
-                        fileSystem, streamCreator, cancel);
-                    return;
-                }
-                else if (entryPt.SimplisticEntryPoint != null)
-                {
-                    await entryPt.SimplisticEntryPoint.Deserialize(
-                        inputPath, outputPath, dataPath, cancel);
-                    return;
-                }
+                await entryPt.Deserialize(
+                    inputPath, outputPath, dataPath, workDropoff,
+                    fileSystem, streamCreator, cancel);
+                return;
             }
             catch (Exception e)
             {

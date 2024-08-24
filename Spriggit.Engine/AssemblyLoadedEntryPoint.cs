@@ -6,29 +6,22 @@ using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using NuGet.Packaging.Core;
-using Serilog;
 using Spriggit.Core;
 
 namespace Spriggit.Engine;
 
 public class AssemblyLoadedEntryPoint : IEngineEntryPoint
 {
-    private readonly ILogger _logger;
     private readonly CompositeDisposable _disposable;
-    private readonly ISimplisticEntryPoint? _simplisticEntryPoint;
-    private readonly IEntryPoint? _entryPoint;
+    private readonly IEntryPoint _entryPoint;
     public PackageIdentity Package { get; }
 
     public AssemblyLoadedEntryPoint(
-        IEntryPoint? entryPoint,
-        ISimplisticEntryPoint? simplisticEntryPoint,
+        IEntryPoint entryPoint,
         PackageIdentity package,
-        CompositeDisposable disposable,
-        ILogger logger)
+        CompositeDisposable disposable)
     {
-        _logger = logger;
         _disposable = disposable;
-        _simplisticEntryPoint = simplisticEntryPoint;
         _entryPoint = entryPoint;
         Package = package;
     }
@@ -38,62 +31,15 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
-        try
-        {
-            if (_entryPoint != null)
-            {
-                await _entryPoint.Serialize(
-                    modPath, outputDir, dataPath, release, 
-                    workDropoff, fileSystem, streamCreator, meta, cancel);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.Warning(e, "Error running full entry point due to exception. Falling back to simplistic if possible.");
-        }
-        if (_simplisticEntryPoint != null)
-        {
-            await _simplisticEntryPoint.Serialize(
-                modPath: modPath,
-                outputDir: outputDir,
-                dataPath: dataPath,
-                release: (int)release,
-                packageName: meta.PackageName,
-                version: meta.Version,
-                cancel);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+        await _entryPoint.Serialize(
+            modPath, outputDir, dataPath, release, 
+            workDropoff, fileSystem, streamCreator, meta, cancel);
     }
 
     public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
-        if (_entryPoint != null)
-        {
-            try
-            {
-                await _entryPoint.Deserialize(inputPath, outputPath, dataPath, workDropoff, fileSystem, streamCreator, cancel);
-                return;
-            }
-            catch (ArgumentException)
-            {
-            }
-        }
-
-        if (_simplisticEntryPoint != null)
-        {
-            await _simplisticEntryPoint.Deserialize(
-                inputPath: inputPath, outputPath: outputPath,
-                dataPath: dataPath, cancel: cancel);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+        await _entryPoint.Deserialize(inputPath, outputPath, dataPath, workDropoff, fileSystem, streamCreator, cancel);
     }
 
     public void Dispose()

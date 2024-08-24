@@ -28,7 +28,6 @@ public class ConstructAssemblyLoadedEntryPoint
         CompositeDisposable disposable = new();
         IEntryPoint? entryPoint = null;
         Assembly? defAssembly = null;
-        ISimplisticEntryPoint? simplisticEntryPoint = null;
         try
         {
             var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
@@ -38,7 +37,6 @@ public class ConstructAssemblyLoadedEntryPoint
                 sharedTypes: new[]
                 {
                     typeof(IEntryPoint),
-                    typeof(ISimplisticEntryPoint),
                     typeof(ICreateStream),
                     typeof(SpriggitSource),
                     typeof(IWorkDropoff),
@@ -62,42 +60,15 @@ public class ConstructAssemblyLoadedEntryPoint
             _logger.Warning(e, "Error loading IEntryPoint from assembly file");
         }
 
-        try
-        {
-            if (defAssembly == null)
-            {
-                var assemblyFile = Path.Combine(frameworkDir, $"{ident.Id}.dll");
-                _logger.Information("Loading plugin: {Path}", assemblyFile);
-                var loader = PluginLoader.CreateFromAssemblyFile(
-                    assemblyFile: assemblyFile,
-                    sharedTypes: new[]
-                    {
-                        typeof(ISimplisticEntryPoint),
-                        typeof(SpriggitSource),
-                    });
-                disposable.Add(loader);
-
-                _logger.Information("Retrieving default assembly");
-                defAssembly = loader.LoadDefaultAssembly();
-            }
-            simplisticEntryPoint = GetSimplisticEntryPointFromAssembly(defAssembly);
-        }
-        catch (Exception e)
-        {
-            _logger.Warning(e, "Error loading ISimplisticEntryPoint from assembly file");
-        }
-
-        if (entryPoint == null && simplisticEntryPoint == null)
+        if (entryPoint == null)
         {
             return null;
         }
 
         return new AssemblyLoadedEntryPoint(
             entryPoint,
-            simplisticEntryPoint,
             ident,
-            disposable,
-            _logger);
+            disposable);
     }
 
     private IEntryPoint? GetEntryPointFromAssembly(Assembly defAssembly)
@@ -108,14 +79,6 @@ public class ConstructAssemblyLoadedEntryPoint
         if (assemblyEntryPointInstance == null) return null;
         var wrappedInstance = new DynamicEntryPoint(assemblyEntryPointInstance);
         return wrappedInstance;
-    }
-
-    private ISimplisticEntryPoint? GetSimplisticEntryPointFromAssembly(Assembly defAssembly)
-    {
-        _logger.Information("Trying to create simplistic entry point object");
-        if (!LocateSimplisticEntryPointType(defAssembly, out var entryPt)) return null;
-        var assemblyEntryPointInstance = Activator.CreateInstance(entryPt);
-        return assemblyEntryPointInstance as ISimplisticEntryPoint;
     }
 
     private bool LocateEntryPointType(Assembly assembly, [MaybeNullWhen(false)] out Type entryPt)
@@ -136,24 +99,4 @@ public class ConstructAssemblyLoadedEntryPoint
 
         return true;
     }
-
-    private bool LocateSimplisticEntryPointType(Assembly assembly, [MaybeNullWhen(false)] out Type entryPt)
-    {
-        _logger.Information("Finding simplistic entry point type");
-        _logger.Information("Looking for typically named simplistic entry point classes");
-        var name = $"{assembly.FullName!.Substring(0, assembly.FullName!.IndexOf(",", StringComparison.OrdinalIgnoreCase))}.EntryPoint";
-        entryPt = assembly.GetType(name);
-        if (entryPt != null) return true;
-        _logger.Information("Iterating through all classes to find simplistic entry point");
-        entryPt = assembly.GetTypes()
-            .FirstOrDefault(t => typeof(ISimplisticEntryPoint).IsAssignableFrom(t) && !t.IsAbstract);
-        if (entryPt == null)
-        {
-            _logger.Information("Could not find simplistic entry point");
-            return false;
-        }
-
-        return true;
-    }
-
 }
