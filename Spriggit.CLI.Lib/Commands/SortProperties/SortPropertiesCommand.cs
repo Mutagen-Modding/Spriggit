@@ -38,7 +38,7 @@ public class SortPropertiesCommand
                 sorter = new SortPropertiesFallout4();
                 break;
             case GameCategory.Starfield:
-                sorter = new SortPropertiesStarfield();
+                sorter = new SortPropertiesStarfield(new FileSystem());
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

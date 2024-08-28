@@ -1,4 +1,5 @@
-﻿using Mutagen.Bethesda;
+﻿using System.IO.Abstractions;
+using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
@@ -7,6 +8,13 @@ namespace Spriggit.CLI.Lib.Commands.SortProperties;
 
 public class SortPropertiesStarfield : ISortProperties
 {
+    private readonly IFileSystem _fileSystem;
+
+    public SortPropertiesStarfield(IFileSystem fileSystem)
+    {
+        _fileSystem = fileSystem;
+    }
+    
     public bool HasWorkToDo(
         ModPath path,
         GameRelease release,
@@ -16,6 +24,7 @@ public class SortPropertiesStarfield : ISortProperties
             .FromPath(path)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
+            .WithFileSystem(_fileSystem)
             .Construct();
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
@@ -95,6 +104,7 @@ public class SortPropertiesStarfield : ISortProperties
             .FromPath(path)
             .WithNoLoadOrder()
             .Mutable()
+            .WithFileSystem(_fileSystem)
             .Construct();
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
@@ -147,6 +157,7 @@ public class SortPropertiesStarfield : ISortProperties
             .WithDataFolder(dataFolder)
             .ToPath(outputPath)
             .NoModKeySync()
+            .WithFileSystem(_fileSystem)
             .WriteAsync();
     }
 
