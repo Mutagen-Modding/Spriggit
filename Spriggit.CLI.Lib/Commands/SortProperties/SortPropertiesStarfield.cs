@@ -140,6 +140,7 @@ public class SortPropertiesStarfield : ISortProperties
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
             .ToPath(outputPath)
+            .NoModKeySync()
             .WriteAsync();
     }
 

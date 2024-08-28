@@ -102,6 +102,7 @@ public class SortPropertiesFallout4 : ISortProperties
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
             .ToPath(outputPath)
+            .NoModKeySync()
             .WriteAsync();
     }
 

@@ -89,6 +89,7 @@ public class SortPropertiesSkyrim : ISortProperties
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
             .ToPath(outputPath)
+            .NoModKeySync()
             .WithFileSystem(_fileSystem)
             .WriteAsync();
     }
