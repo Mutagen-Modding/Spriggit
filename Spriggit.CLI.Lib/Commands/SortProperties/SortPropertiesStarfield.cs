@@ -136,6 +136,12 @@ public class SortPropertiesStarfield : ISortProperties
                 ProcessScript(dialAdapter.ScriptFragments?.Script);
             }
         }
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
         await mod.BeginWrite
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)

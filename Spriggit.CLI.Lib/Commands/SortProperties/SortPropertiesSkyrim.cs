@@ -85,6 +85,12 @@ public class SortPropertiesSkyrim : ISortProperties
                 }
             }
         }
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
         await mod.BeginWrite
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)

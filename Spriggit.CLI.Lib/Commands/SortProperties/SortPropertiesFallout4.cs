@@ -98,6 +98,12 @@ public class SortPropertiesFallout4 : ISortProperties
                 ProcessScript(packageAdapter.ScriptFragments?.Script);
             }
         }
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
         await mod.BeginWrite
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
