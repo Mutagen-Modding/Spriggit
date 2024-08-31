@@ -41,7 +41,7 @@ public class ConstructEntryPoint
         PackageIdentity ident,
         CancellationToken cancellationToken)
     {
-        return ConstructFor(tempPath, ident, cancellationToken, true);
+        return ConstructFor(tempPath, ident, cancellationToken, shouldRetry: false);
     }
 
     private async Task<IEngineEntryPoint?> ConstructFor(
@@ -72,7 +72,7 @@ public class ConstructEntryPoint
             }
             shouldRetry = false;
         }
-
+        
         IEngineEntryPoint? ret;
         try
         {

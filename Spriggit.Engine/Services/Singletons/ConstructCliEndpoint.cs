@@ -44,8 +44,8 @@ public class ConstructCliEndpoint
         CancellationToken cancellationToken)
     {
         // ToDo
-        // Don't assume it's a spriggit translation package
-        // Would need to fish for spriggit dependencies in that case
+        // Don't assume it's an official spriggit translation package.
+        // If it wasn't we would need to fish for spriggit dependencies
         var cliVersion = ident.Version;
         
         if (IsSameCliVersion(cliVersion))
