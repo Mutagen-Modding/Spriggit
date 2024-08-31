@@ -13,13 +13,28 @@
             <Version>17.10.0</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Core">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Kernel">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mutagen.Bethesda.Skyrim">
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mutagen.Bethesda.Oblivion">
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mutagen.Bethesda.Fallout4">
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mutagen.Bethesda.Starfield">
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mutagen.Bethesda.Testing">
+            <Version>[0.46.0.1-nightly-20240826-095673]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Serialization">
             <Version>[1.24]</Version>
@@ -32,21 +47,6 @@
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
             <Version>[1.24]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Starfield">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Testing">
-            <Version>[0.46.0.1-nightly-20240827-232520]</Version>
         </PackageVersion>
         <PackageVersion Include="Noggog.Autofac">
             <Version>[2.65.0-nightly-20240727-092271]</Version>
