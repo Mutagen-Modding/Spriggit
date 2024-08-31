@@ -166,7 +166,14 @@ public class LinkVm : ViewModel
             {
                 if (m.Succeeded)
                 {
-                    await entryPointCache.GetFor(m.Value, CancellationToken.None);
+                    try
+                    {
+                        await entryPointCache.GetFor(m.Value, CancellationToken.None);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error prepping entry point");
+                    }
                 }
             })
             .DisposeWith(this);
