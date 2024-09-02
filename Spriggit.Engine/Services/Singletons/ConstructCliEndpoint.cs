@@ -50,6 +50,7 @@ public class ConstructCliEndpoint
         
         if (IsSameCliVersion(cliVersion))
         {
+            _logger.Information("Not making CLI endpoint, as it was the same version: {Version}", cliVersion);
             return null;
         }
             
