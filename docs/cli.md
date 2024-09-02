@@ -23,7 +23,7 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference during Separated Master game mods (Starfield) |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  Starfield must include the parameter, but can leave empty to explicitly not list a Data folder.  |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
 !!! error "Must Have Dedicated Folder"
@@ -45,7 +45,7 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion.  Leave blank to auto detect |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion.  Leave blank to auto detect |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference during Separated Master game mods (Starfield) |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  Starfield must include the parameter, but can leave empty to explicitly not list a Data folder.  |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 | `-b` | `--BackupDays` | Optional | Days to keep backup plugins in the temp folder (default 30) |
 
