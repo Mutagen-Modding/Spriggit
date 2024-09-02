@@ -102,7 +102,8 @@ public class SortPropertiesStarfield : ISortProperties
     {
         var mod = StarfieldMod.Create(release.ToStarfieldRelease())
             .FromPath(path)
-            .WithNoLoadOrder()
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataFolder)
             .Mutable()
             .WithFileSystem(_fileSystem)
             .Construct();
