@@ -119,6 +119,10 @@ public class SortPropertiesStarfield : ISortProperties
             if (hasVM.VirtualMachineAdapter is IVirtualMachineAdapterIndexed indexedAdapter)
             {
                 ProcessScripts(indexedAdapter.Scripts);
+                if (indexedAdapter.ScriptFragments is { } frags)
+                {
+                    ProcessScript(frags.Script);
+                }
             }
             
             if (hasVM.VirtualMachineAdapter is IQuestAdapter questAdapter)
