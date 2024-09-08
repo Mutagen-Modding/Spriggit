@@ -37,7 +37,12 @@ public class PostSerializeChecker
         IEngineEntryPoint entryPt,
         CancellationToken cancel)
     {
-        _logger.Information("Running basic correctness sanity checks.");
+        _logger.Information("Running basic correctness sanity checks:");
+        _logger.Information($"  Path: {mod}");
+        _logger.Information($"  Package: {entryPt.Package}");
+        _logger.Information($"  Release: {release}");
+        _logger.Information($"  Data Folder: {dataPath}");
+        _logger.Information($"  Spriggit Folder: {spriggit}");
         var newSummaryTask = _workDropoff.EnqueueAndWait(async () =>
         {
             using var tmp = TempFolder.Factory(fileSystem: _fileSystem);
