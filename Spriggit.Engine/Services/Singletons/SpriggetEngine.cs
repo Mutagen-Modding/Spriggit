@@ -68,6 +68,7 @@ public class SpriggitEngine(
             bethesdaPluginPath,
             outputDir: outputFolder,
             dataPath: dataPath,
+            knownMasters: Array.Empty<KnownMaster>(),
             release: meta.Release,
             fileSystem: fileSystem,
             workDropoff: workDropoff,
@@ -87,6 +88,7 @@ public class SpriggitEngine(
                 release: meta.Release,
                 spriggit: outputFolder,
                 dataPath: dataPath,
+                knownMasters: Array.Empty<KnownMaster>(),
                 entryPt: entryPt,
                 cancel: cancel.Value);   
         }
@@ -129,6 +131,7 @@ public class SpriggitEngine(
             spriggitPluginPath,
             outputPath: tempOutput,
             dataPath: dataPath,
+            knownMasters: Array.Empty<KnownMaster>(),
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,

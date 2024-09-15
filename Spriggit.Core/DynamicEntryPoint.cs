@@ -17,15 +17,19 @@ public class DynamicEntryPoint : IEntryPoint
     }
 
     public async Task Serialize(
-        ModPath modPath, DirectoryPath outputDir, 
+        ModPath modPath,
+        DirectoryPath outputDir, 
         DirectoryPath? dataPath,
-        GameRelease release, IWorkDropoff? workDropoff,
+        KnownMaster[] knownMasters,
+        GameRelease release,
+        IWorkDropoff? workDropoff,
         IFileSystem? fileSystem,
         ICreateStream? streamCreator, 
-        SpriggitSource meta, CancellationToken cancel)
+        SpriggitSource meta, 
+        CancellationToken cancel)
     {
         var serializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Serialize")!;
-        var metaType = serializeMethod.GetParameters()[7];
+        var metaType = serializeMethod.GetParameters()[8];
         var metaReplacement = Activator.CreateInstance(metaType.ParameterType)!;
         dynamic dynamicMeta = metaReplacement;
         dynamicMeta.PackageName = meta.PackageName;
@@ -36,6 +40,7 @@ public class DynamicEntryPoint : IEntryPoint
             modPath,
             outputDir,
             dataPath,
+            knownMasters,
             release,
             workDropoff,
             fileSystem,
@@ -50,10 +55,14 @@ public class DynamicEntryPoint : IEntryPoint
     }
 
     public async Task Deserialize(
-        string inputPath, string outputPath,
+        string inputPath,
+        string outputPath,
         DirectoryPath? dataPath,
-        IWorkDropoff? workDropoff, IFileSystem? fileSystem,
-        ICreateStream? streamCreator, CancellationToken cancel)
+        KnownMaster[] knownMasters,
+        IWorkDropoff? workDropoff, 
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator, 
+        CancellationToken cancel)
     {
         var deserializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Deserialize")!;
         
@@ -62,6 +71,7 @@ public class DynamicEntryPoint : IEntryPoint
             inputPath,
             outputPath,
             dataPath,
+            knownMasters,
             workDropoff,
             fileSystem,
             streamCreator,

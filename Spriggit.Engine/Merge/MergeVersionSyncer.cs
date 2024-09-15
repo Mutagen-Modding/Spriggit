@@ -184,9 +184,11 @@ public class MergeVersionSyncer
         
         await oldEntryPoint.Deserialize(
             inputPath: spriggitPath, outputPath: modPath, dataPath: dataFolder,
+            knownMasters: Array.Empty<KnownMaster>(),
             workDropoff: null, fileSystem: null, streamCreator: null, cancel: CancellationToken.None);
 
         await newEntryPoint.Serialize(modPath, spriggitPath, dataFolder,
+            knownMasters: Array.Empty<KnownMaster>(),
             newExternalMeta.Release,
             null, null, null, newExternalMeta.Source, cancel: CancellationToken.None);
     }

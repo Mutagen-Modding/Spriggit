@@ -75,6 +75,7 @@ public class DataFolderAwarenessTests
             var modPath = Path.Combine(dataFolder, mod.ModKey.ToString());
             var dataFolderToUse = useDataFolder ? dataFolder : default(DirectoryPath?);
             await mod.BeginWrite
+                .ToPath(modPath)
                 .WithLoadOrder(new ModKey[]
                 {
                     NormalMasterKey,
@@ -82,7 +83,6 @@ public class DataFolderAwarenessTests
                     SmallMasterKey
                 })
                 .WithDataFolder(dataFolder)
-                .ToPath(modPath)
                 .WithFileSystem(FileSystem)
                 .WriteAsync();
             var serializeOutputFolder = Path.Combine(outputFolder, "serialize", mod.ModKey.FileName);
@@ -90,6 +90,7 @@ public class DataFolderAwarenessTests
                 modPath,
                 serializeOutputFolder,
                 dataPath: dataFolderToUse,
+                knownMasters: Array.Empty<KnownMaster>(),
                 mod.GameRelease,
                 null,
                 FileSystem,
@@ -106,6 +107,7 @@ public class DataFolderAwarenessTests
                 serializeOutputFolder,
                 deserializeOutputFolder,
                 dataPath: dataFolderToUse,
+                knownMasters: Array.Empty<KnownMaster>(),
                 null,
                 FileSystem,
                 null,
@@ -261,7 +263,7 @@ public class DataFolderAwarenessTests
         mediumMaster.WriteToBinary(Path.Combine(dataFolder, mediumMaster.ModKey.FileName));
 
         var ep = new Spriggit.Yaml.Starfield.EntryPoint();
-        await Assert.ThrowsAsync<FilePathedException>(async () =>
+        await Assert.ThrowsAsync<MissingModMappingException>(async () =>
         {
             var modPath = await payload.RunPassthrough(
                 Path.Combine(tmp.Dir, "Spriggit"),

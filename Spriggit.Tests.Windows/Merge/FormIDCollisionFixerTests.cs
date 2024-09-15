@@ -45,6 +45,7 @@ public class FormIDCollisionFixerTests
         });
         await entryPoint.Serialize(
             modPath, spriggitModPath, null,
+            knownMasters: Array.Empty<KnownMaster>(),
             GameRelease.SkyrimSE,
             null, fileSystem, null,
             spriggitSource,
@@ -62,6 +63,7 @@ public class FormIDCollisionFixerTests
             inputPath: spriggitModPath,
             outputPath: modPath2,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             fileSystem: fileSystem,
             workDropoff: null,
             streamCreator: null,
@@ -104,6 +106,7 @@ public class FormIDCollisionFixerTests
         mod.WriteToBinary(modPath);
         await entryPoint.Serialize(
             modPath, spriggitModPath, null,
+            knownMasters: Array.Empty<KnownMaster>(),
             GameRelease.SkyrimSE,
             null, null, null,
             spriggitSource,
@@ -128,6 +131,7 @@ public class FormIDCollisionFixerTests
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
                 dataPath: null,
+                knownMasters: Array.Empty<KnownMaster>(),
                 GameRelease.SkyrimSE,
                 null, null, null,
                 spriggitSource,
@@ -147,7 +151,9 @@ public class FormIDCollisionFixerTests
             
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
-                dataPath: null, GameRelease.SkyrimSE,
+                dataPath: null, 
+                knownMasters: Array.Empty<KnownMaster>(),
+                GameRelease.SkyrimSE,
                 null, null, null,
                 spriggitSource,
                 CancellationToken.None);
@@ -173,6 +179,7 @@ public class FormIDCollisionFixerTests
             inputPath: spriggitModPath,
             outputPath: modPath2,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             fileSystem: null,
             workDropoff: null,
             streamCreator: null,

@@ -95,7 +95,8 @@ public class MergeVersionSyncerTests
             _isOld = isOld;
         }
         
-        public async Task Serialize(ModPath modPath, DirectoryPath outputDir,  DirectoryPath? dataPath, 
+        public async Task Serialize(ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath, 
+            KnownMaster[] knownMasters,
             GameRelease release, IWorkDropoff? workDropoff,
             IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
         {
@@ -110,6 +111,7 @@ public class MergeVersionSyncerTests
         }
 
         public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath,
+            KnownMaster[] knownMasters,
             IWorkDropoff? workDropoff, IFileSystem? fileSystem,
             ICreateStream? streamCreator, CancellationToken cancel)
         {
@@ -170,6 +172,7 @@ public class MergeVersionSyncerTests
         await entryPoint.Serialize(
             modPath, spriggitModPath,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
@@ -191,7 +194,9 @@ public class MergeVersionSyncerTests
             
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
-                dataPath: null, GameRelease.SkyrimSE,
+                dataPath: null, 
+                knownMasters: Array.Empty<KnownMaster>(),
+                GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
                 CancellationToken.None);
@@ -210,7 +215,9 @@ public class MergeVersionSyncerTests
             
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
-                dataPath: null, GameRelease.SkyrimSE,
+                dataPath: null, 
+                knownMasters: Array.Empty<KnownMaster>(),
+                GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,
                 CancellationToken.None);

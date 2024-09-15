@@ -105,9 +105,9 @@ public class SortPropertiesFallout4 : ISortProperties
         }
         
         await mod.BeginWrite
+            .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
-            .ToPath(outputPath)
             .NoModKeySync()
             .WriteAsync();
     }

@@ -51,6 +51,7 @@ public class PostSerializeCheckerTests
             modPath: modPath,
             outputDir: spriggitPath,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
@@ -67,6 +68,7 @@ public class PostSerializeCheckerTests
             release: GameRelease.Starfield,
             spriggit: spriggitPath,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             entryPt: new EngineEntryPointWrapper(
                 logger,
                 new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
@@ -99,6 +101,7 @@ public class PostSerializeCheckerTests
             modPath: modPath,
             outputDir: spriggitPath,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
@@ -123,6 +126,7 @@ public class PostSerializeCheckerTests
                 release: GameRelease.Starfield,
                 spriggit: spriggitPath,
                 dataPath: null,
+                knownMasters: Array.Empty<KnownMaster>(),
                 entryPt: new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),
@@ -155,6 +159,7 @@ public class PostSerializeCheckerTests
             modPath: modPath,
             outputDir: spriggitPath,
             dataPath: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             release: GameRelease.Starfield,
             fileSystem: fileSystem,
             workDropoff: null,
@@ -179,6 +184,7 @@ public class PostSerializeCheckerTests
                 release: GameRelease.Starfield,
                 spriggit: spriggitPath,
                 dataPath: null,
+                knownMasters: Array.Empty<KnownMaster>(),
                 entryPt: new EngineEntryPointWrapper(
                     logger,
                     new PackageIdentity("Spriggit.Yaml.Starfield", new NuGetVersion(1, 2, 3)),

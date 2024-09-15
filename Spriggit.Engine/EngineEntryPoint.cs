@@ -32,7 +32,9 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
     }
 
     public async Task Serialize(ModPath modPath, DirectoryPath outputDir, 
-        DirectoryPath? dataPath, GameRelease release, IWorkDropoff? workDropoff,
+        DirectoryPath? dataPath, 
+        KnownMaster[] knownMasters,
+        GameRelease release, IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
     {
         Exception? lastEx = null;
@@ -41,7 +43,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
             try
             {
                 await entryPt.Serialize(
-                    modPath, outputDir, dataPath, release, workDropoff,
+                    modPath, outputDir, dataPath, knownMasters, release, workDropoff,
                     fileSystem, streamCreator, meta, cancel);
                 return;
             }
@@ -57,6 +59,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
 
     public async Task Deserialize(string inputPath, string outputPath, 
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         IWorkDropoff? workDropoff, IFileSystem? fileSystem,
         ICreateStream? streamCreator, CancellationToken cancel)
     {
@@ -66,7 +69,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
             try
             {
                 await entryPt.Deserialize(
-                    inputPath, outputPath, dataPath, workDropoff,
+                    inputPath, outputPath, dataPath, knownMasters, workDropoff,
                     fileSystem, streamCreator, cancel);
                 return;
             }

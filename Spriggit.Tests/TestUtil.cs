@@ -40,6 +40,7 @@ public class TestUtil
             modPath: modPath, outputDir: spriggitFolder, dataPath: dataFolder,
             release: GameRelease.Starfield, 
             workDropoff: null, fileSystem: fileSystem,
+            knownMasters: Array.Empty<KnownMaster>(),
             streamCreator: null, meta: new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Starfield",
@@ -59,6 +60,7 @@ public class TestUtil
             outputPath: modPath2,
             dataPath: dataFolder,
             workDropoff: null,
+            knownMasters: Array.Empty<KnownMaster>(),
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
         var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield,

@@ -92,9 +92,9 @@ public class SortPropertiesSkyrim : ISortProperties
         }
         
         await mod.BeginWrite
+            .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
-            .ToPath(outputPath)
             .NoModKeySync()
             .WithFileSystem(_fileSystem)
             .WriteAsync();

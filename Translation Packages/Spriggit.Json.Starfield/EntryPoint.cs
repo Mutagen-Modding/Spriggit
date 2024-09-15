@@ -2,6 +2,7 @@ using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Newtonsoft;
 using Mutagen.Bethesda.Serialization.Utility;
 using Mutagen.Bethesda.Starfield;
@@ -18,6 +19,7 @@ public class EntryPoint : IEntryPoint
         ModPath modPath, 
         DirectoryPath outputDir,
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         GameRelease release,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
@@ -32,6 +34,9 @@ public class EntryPoint : IEntryPoint
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
+            .WithKnownMasters(
+                knownMasters.Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
+                    .ToArray())
             .ThrowIfUnknownSubrecord()
             .Construct();
         await MutagenJsonConverter.Instance.Serialize(
@@ -48,6 +53,7 @@ public class EntryPoint : IEntryPoint
         string inputPath,
         string outputPath,
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
@@ -60,9 +66,9 @@ public class EntryPoint : IEntryPoint
             streamCreator: streamCreator,
             cancel: cancel);
         await mod.BeginWrite
+            .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
-            .ToPath(outputPath)
             .WithFileSystem(fileSystem)
             .WithRecordCount(RecordCountOption.Iterate)
             .WithModKeySync(ModKeyOption.CorrectToPath)
@@ -72,6 +78,9 @@ public class EntryPoint : IEntryPoint
             .NoFormIDCompactnessCheck()
             .NoCheckIfLowerRangeDisallowed()
             .NoNullFormIDStandardization()
+            .WithKnownMasters(
+                knownMasters.Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
+                    .ToArray())
             .WriteAsync();
     }
 

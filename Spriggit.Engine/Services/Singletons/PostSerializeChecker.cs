@@ -1,12 +1,15 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Headers;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Plugins.Meta;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
+using Spriggit.Core;
 
 namespace Spriggit.Engine.Services.Singletons;
 
@@ -34,6 +37,7 @@ public class PostSerializeChecker
         GameRelease release,
         DirectoryPath spriggit,
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         IEngineEntryPoint entryPt,
         CancellationToken cancel)
     {
@@ -51,13 +55,14 @@ public class PostSerializeChecker
                 inputPath: spriggit,
                 outputPath: outPath,
                 dataPath: dataPath,
+                knownMasters: knownMasters,
                 fileSystem: _fileSystem,
                 workDropoff: _workDropoff,
                 streamCreator: _createStream,
                 cancel: cancel);
-            return GetSummaryFor(outPath, release);
+            return GetSummaryFor(outPath, release, dataPath, knownMasters);
         });
-        var origSummaryTask = _workDropoff.EnqueueAndWait(() => GetSummaryFor(mod, release));
+        var origSummaryTask = _workDropoff.EnqueueAndWait(() => GetSummaryFor(mod, release, dataPath, knownMasters));
 
         var newSummary = await newSummaryTask;
         var origSummary = await origSummaryTask;
@@ -104,11 +109,40 @@ public class PostSerializeChecker
         public HashSet<FormLinkInformation> RecordIDs = new();
     }
 
-    private Summary GetSummaryFor(ModPath path, GameRelease release)
+    private Summary GetSummaryFor(ModPath path, GameRelease release, DirectoryPath? dataDirectoryPath, KnownMaster[] knownMasters)
     {
+        // ToDo
+        // Eventually use generic read builder
+        Cache<IModMasterStyledGetter, ModKey>? masterFlagsLookup = null;
+        if (GameConstants.Get(release).SeparateMasterLoadOrders)
+        {
+            var header = ModHeaderFrame.FromPath(path, release, _fileSystem);
+            masterFlagsLookup = new Cache<IModMasterStyledGetter, ModKey>(x => x.ModKey);
+            var knownMastersLookup = knownMasters.ToDictionary(x => x.ModKey, x => x);
+            foreach (var master in header.Masters(path.ModKey).Select(x => x.Master))
+            {
+                if (knownMastersLookup.TryGetValue(master, out var known))
+                {
+                    masterFlagsLookup.Add(new KeyedMasterStyle(known.ModKey, known.Style));
+                }
+                else
+                {
+                    if (dataDirectoryPath == null)
+                    {
+                        throw new ArgumentNullException(nameof(dataDirectoryPath), "Data directory was not set");
+                    }
+
+                    var otherPath = Path.Combine(dataDirectoryPath, master.FileName);
+                    var otherHeader = ModHeaderFrame.FromPath(otherPath, release, _fileSystem);
+                    masterFlagsLookup.Add(new KeyedMasterStyle(master, otherHeader.MasterStyle));
+                }
+            }
+        }
+        
         using var mod = ModInstantiator.ImportGetter(path, release, new BinaryReadParameters()
         {
-            FileSystem = _fileSystem
+            FileSystem = _fileSystem,
+            MasterFlagsLookup = masterFlagsLookup
         });
 
         var summary = new Summary();

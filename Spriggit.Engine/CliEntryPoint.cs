@@ -46,7 +46,10 @@ public class CliEntryPoint : IEntryPoint
         return string.Empty;
     }
     
-    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath, GameRelease release,
+    public async Task Serialize(
+        ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
+        GameRelease release,
         IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta,
         CancellationToken cancel)
     {
@@ -70,7 +73,9 @@ public class CliEntryPoint : IEntryPoint
         await processWrapper.Run();
     }
 
-    public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath, IWorkDropoff? workDropoff,
+    public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath, 
+        KnownMaster[] knownMasters,
+        IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, CancellationToken cancel)
     {
         var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}{GetDataPathParam(dataPath)}";

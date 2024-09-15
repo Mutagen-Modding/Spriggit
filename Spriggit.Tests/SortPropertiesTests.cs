@@ -69,9 +69,9 @@ public class SortPropertiesTests
         var modPath = Path.Combine(existingDir, skyrimMod.ModKey.FileName);
 
         await skyrimMod.BeginWrite
+            .ToPath(modPath)
             .WithLoadOrderFromHeaderMasters()
             .WithNoDataFolder()
-            .ToPath(modPath)
             .WithFileSystem(fileSystem)
             .WriteAsync();
 
@@ -133,9 +133,9 @@ public class SortPropertiesTests
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
 
         await mod.BeginWrite
+            .ToPath(modPath)
             .WithLoadOrderFromHeaderMasters()
             .WithNoDataFolder()
-            .ToPath(modPath)
             .WithFileSystem(fileSystem)
             .NoModKeySync()
             .WriteAsync();

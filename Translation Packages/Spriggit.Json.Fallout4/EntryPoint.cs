@@ -17,6 +17,7 @@ public class EntryPoint : IEntryPoint
         ModPath modPath, 
         DirectoryPath outputPath,
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         GameRelease release,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
@@ -46,6 +47,7 @@ public class EntryPoint : IEntryPoint
         string inputPath,
         string outputPath,
         DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
         IWorkDropoff? workDropoff, 
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
@@ -58,9 +60,9 @@ public class EntryPoint : IEntryPoint
             streamCreator: streamCreator,
             cancel: cancel);
         await mod.BeginWrite
+            .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
-            .ToPath(outputPath)
             .WithFileSystem(fileSystem)
             .WithRecordCount(RecordCountOption.Iterate)
             .WithModKeySync(ModKeyOption.CorrectToPath)

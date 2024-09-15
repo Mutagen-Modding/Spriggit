@@ -1,4 +1,4 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using System.Reactive.Disposables;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
@@ -26,20 +26,42 @@ public class AssemblyLoadedEntryPoint : IEngineEntryPoint
         Package = package;
     }
 
-    public async Task Serialize(ModPath modPath, DirectoryPath outputDir, 
+    public async Task Serialize(
+        ModPath modPath, 
+        DirectoryPath outputDir, 
         DirectoryPath? dataPath,
-        GameRelease release, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
+        KnownMaster[] knownMasters,
+        GameRelease release,
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem, 
+        ICreateStream? streamCreator,
+        SpriggitSource meta,
+        CancellationToken cancel)
     {
         await _entryPoint.Serialize(
-            modPath, outputDir, dataPath, release, 
+            modPath, outputDir, dataPath, knownMasters, release, 
             workDropoff, fileSystem, streamCreator, meta, cancel);
     }
 
-    public async Task Deserialize(string inputPath, string outputPath, DirectoryPath? dataPath, IWorkDropoff? workDropoff, IFileSystem? fileSystem,
-        ICreateStream? streamCreator, CancellationToken cancel)
+    public async Task Deserialize(
+        string inputPath, 
+        string outputPath,
+        DirectoryPath? dataPath,
+        KnownMaster[] knownMasters,
+        IWorkDropoff? workDropoff,
+        IFileSystem? fileSystem,
+        ICreateStream? streamCreator,
+        CancellationToken cancel)
     {
-        await _entryPoint.Deserialize(inputPath, outputPath, dataPath, workDropoff, fileSystem, streamCreator, cancel);
+        await _entryPoint.Deserialize(
+            inputPath,
+            outputPath,
+            dataPath,
+            knownMasters,
+            workDropoff,
+            fileSystem,
+            streamCreator,
+            cancel);
     }
 
     public void Dispose()
