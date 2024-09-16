@@ -22,3 +22,29 @@ This file should be next to, or above the Spriggit mod folder(s) you want it to 
 
 ## Updating
 To update to a different version, simply modify the file to the desired version, and then run any spriggit commands.
+
+## Known Masters
+`.spriggit` files can also supply extra information to help with Starfield translations in the form of Known Masters.
+
+Since Starfield requires extra information about all listed masters, typically it needs those master files present so they can be read in and referenced.   However, when running Spriggit translations on a server, those master files might not be available.
+
+In situations like these, you can list the master files and their "Master Style" within a `.spriggit` file to provide the necessary information, without the actual master mod files needing to be present.
+
+```
+{
+   "KnownMasters": 
+   [
+       {
+	       "ModKey": "Starfield.esm",
+		   "Style": "Full"
+	   }
+   ]
+}
+```
+
+Where the options are:
+- Full
+- Medium
+- Small
+
+These correspond to the type of master the file it is, and the FormID master index patterns it was saved with.

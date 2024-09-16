@@ -23,12 +23,15 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  Starfield must include the parameter, but can leave empty to explicitly not list a Data folder.  |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
-!!! error "Must Have Dedicated Folder"
+!!! bug "Must Have Dedicated Folder"
     Make sure the output path is pointed to a folder which is -wholly- dedicated to containing Spriggit content.   [More Info](backups.md)
 
+!!! bug "Starfield"
+    Starfield must supply [Master Style Input](#master-style-input)
+	
 ## Deserialize | Convert To Plugin
 `deserialize`, `convert-to-plugin`, `create-plugin`
 
@@ -45,14 +48,25 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion.  Leave blank to auto detect |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion.  Leave blank to auto detect |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
-| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  Starfield must include the parameter, but can leave empty to explicitly not list a Data folder.  |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 | `-b` | `--BackupDays` | Optional | Days to keep backup plugins in the temp folder (default 30) |
 
 !!! tip "Omit Package Details"
     Spriggit stores the package details it was created with, so in most circumstances, you want to let it automatically detect the package information.
 	
+!!! bug "Starfield"
+    Starfield must supply [Master Style Input](#master-style-input)
+	
 [:octicons-arrow-right-24: Backups](backups.md)
+
+## Master Style Input
+Newer games, like Starfield, require extra inputs in order to translate.  These games need information from the source files of every master they list in a way that older games do not.  As such, you either need to provide:
+
+- `-d` `--DataFolder` parameter pointing to a folder containing all of the master files, for reference.
+- `Known Masters` within a [`.spriggit` file](spriggit-file.md#known-masters)
+
+For command lines running as part of CI processes on servers without game information, the Known Master system can often be preferable to actually having the master files on hand.
 
 ## FormID Collision Fixing
 `formid-collision`
@@ -72,7 +86,6 @@ This command helps detangle colliding FormIDs that result after a Git Merge.
 | ---- | ---- | ---- | ---- |
 | `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
 | `-d` | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
-
 
 
  
