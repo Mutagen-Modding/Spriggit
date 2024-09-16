@@ -40,7 +40,7 @@ public class CliEntryPoint : IEntryPoint
         if (dataPath != null
             && _packageVersioningChecker.SupportsDataPath(_package))
         {
-            return $"-d \"{dataPath}\"";
+            return $" -d \"{dataPath}\"";
         }
 
         return string.Empty;
