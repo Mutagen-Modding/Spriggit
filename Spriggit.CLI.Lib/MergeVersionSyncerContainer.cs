@@ -27,6 +27,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitExternalMetaPersister))]
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]
+[Register(typeof(SpriggitFileLocator))]
 [Register(typeof(MergeVersionSyncer))]
 partial class MergeVersionSyncerContainer : IContainer<MergeVersionSyncer>
 {

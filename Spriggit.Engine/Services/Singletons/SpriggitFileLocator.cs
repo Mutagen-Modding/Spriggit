@@ -6,13 +6,13 @@ using Spriggit.Core;
 
 namespace Spriggit.Engine.Services.Singletons;
 
-public class SpriggitMetaLocator
+public class SpriggitFileLocator
 {
     public const string ConfigFileName = ".spriggit";
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public SpriggitMetaLocator(
+    public SpriggitFileLocator(
         ILogger logger,
         IFileSystem fileSystem)
     {
@@ -22,10 +22,10 @@ public class SpriggitMetaLocator
 
     public FilePath? LocateSpriggitConfigFile(DirectoryPath? outputFolder)
     {
-        while (_fileSystem.Directory.Exists(outputFolder))
+        while (outputFolder != null)
         {
             FilePath file = Path.Combine(outputFolder, ConfigFileName);
-            if (file.Exists)
+            if (file.CheckExists(_fileSystem))
             {
                 _logger.Information($"Found {ConfigFileName} config at {{ConfigPath}}", file);
                 return file;
@@ -37,31 +37,42 @@ public class SpriggitMetaLocator
         return null;
     }
     
-    public SpriggitMeta? LocateAndParse(DirectoryPath outputFolder)
+    public SpriggitFile? LocateAndParse(DirectoryPath outputFolder)
     {
         var config = LocateSpriggitConfigFile(outputFolder);
         return Parse(config);
     }
     
-    public SpriggitMeta? Parse(FilePath? path)
+    public SpriggitFile? Parse(FilePath? path)
     {
         if (path == null) return null;
         try
         {
-            var meta = JsonConvert.DeserializeObject<SpriggitMetaSerialize>(_fileSystem.File.ReadAllText(path.Value));
-            if (meta == null || meta.PackageName.IsNullOrWhitespace() || meta.Release == null)
+            var fileSerialize = JsonConvert.DeserializeObject<SpriggitFileSerialize>(_fileSystem.File.ReadAllText(path.Value));
+            if (fileSerialize == null)
             {
                 return null;
             }
 
-            _logger.Information($"Loaded {ConfigFileName} config with {{Meta}}", meta);
-            return new SpriggitMeta(
-                new SpriggitSource()
-                {
-                    PackageName = meta.PackageName,
-                    Version = meta.Version ?? "",
-                },
-                meta.Release.Value);
+            SpriggitMeta? source = null;
+            if (!fileSerialize.PackageName.IsNullOrWhitespace()
+                && fileSerialize.Release != null)
+            {
+                source = new SpriggitMeta(
+                    new SpriggitSource()
+                    {
+                        PackageName = fileSerialize.PackageName,
+                        Version = fileSerialize.Version ?? "",
+                    },
+                    fileSerialize.Release.Value);
+            }
+
+            _logger.Information($"Loaded {ConfigFileName} config with {{Meta}}", fileSerialize);
+            return new SpriggitFile(
+                source,
+                fileSerialize.KnownMasters?
+                    .Select(m => new KnownMaster(m.ModKey, m.Style))
+                    .ToArray() ?? []);
         }
         catch (Exception e)
         {

@@ -15,10 +15,10 @@ public class SerializeBlocker
     
     public void CheckAndBlock(DirectoryPath outputFolder)
     {
-        var spriggitFile = Path.Combine(outputFolder, SpriggitMetaLocator.ConfigFileName);
+        var spriggitFile = Path.Combine(outputFolder, SpriggitFileLocator.ConfigFileName);
         if (_fileSystem.File.Exists(spriggitFile))
         {
-            throw new InvalidOperationException($"Cannot export next to a {SpriggitMetaLocator.ConfigFileName} file.  Target should be a dedicated folder.");
+            throw new InvalidOperationException($"Cannot export next to a {SpriggitFileLocator.ConfigFileName} file.  Target should be a dedicated folder.");
         }
         
         var gitFolder = Path.Combine(outputFolder, ".git");

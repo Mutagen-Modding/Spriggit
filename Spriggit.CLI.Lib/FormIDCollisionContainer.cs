@@ -29,6 +29,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ProcessFactory))]
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]
+[Register(typeof(SpriggitFileLocator))]
 [Register(typeof(SpriggitExternalMetaPersister))]
 partial class FormIDCollisionContainer : IContainer<FormIDCollisionFixer>
 {

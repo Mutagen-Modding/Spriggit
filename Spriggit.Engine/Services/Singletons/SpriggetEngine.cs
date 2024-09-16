@@ -14,7 +14,7 @@ public class SpriggitEngine(
     IWorkDropoff? workDropoff,
     ICreateStream? createStream,
     IEntryPointCache entryPointCache,
-    SpriggitMetaLocator spriggitMetaLocator,
+    SpriggitFileLocator spriggitFileLocator,
     ILogger logger,
     GetMetaToUse getMetaToUse,
     SerializeBlocker serializeBlocker,
@@ -22,8 +22,7 @@ public class SpriggitEngine(
     PluginBackupCreator pluginBackupCreator,
     IModFilesMover modFilesMover,
     LocalizeEnforcer localizeEnforcer,
-    PostSerializeChecker postSerializeChecker,
-    DataPathChecker dataPathChecker)
+    PostSerializeChecker postSerializeChecker)
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 
@@ -38,18 +37,18 @@ public class SpriggitEngine(
         
         serializeBlocker.CheckAndBlock(outputFolder);
         
-        if (meta == null)
+        var spriggitFile = spriggitFileLocator.LocateAndParse(outputFolder);
+        
+        if (meta == null && spriggitFile != null)
         {
-            meta = spriggitMetaLocator.LocateAndParse(outputFolder);
+            meta = spriggitFile.Meta;
         }
 
         if (meta == null)
         {
-            throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a {SpriggitMetaLocator.ConfigFileName} file present, or specify at least GameRelease and PackageName");
+            throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a {SpriggitFileLocator.ConfigFileName} file present, or specify at least GameRelease and PackageName");
         }
         
-        dataPathChecker.CheckDataPath(meta.Release, dataPath);
-
         if (entryPt == null)
         {
             logger.Information("Getting entry point for {Meta}", meta);
@@ -68,7 +67,7 @@ public class SpriggitEngine(
             bethesdaPluginPath,
             outputDir: outputFolder,
             dataPath: dataPath,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
             release: meta.Release,
             fileSystem: fileSystem,
             workDropoff: workDropoff,
@@ -88,7 +87,7 @@ public class SpriggitEngine(
                 release: meta.Release,
                 spriggit: outputFolder,
                 dataPath: dataPath,
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
                 entryPt: entryPt,
                 cancel: cancel.Value);   
         }
@@ -109,6 +108,8 @@ public class SpriggitEngine(
         
         logger.Information("Getting meta to use for {Source} at path {PluginPath}", source, spriggitPluginPath);
         var meta = await getMetaToUse.Get(source, spriggitPluginPath, cancel.Value);
+
+        var spriggitFile = spriggitFileLocator.LocateAndParse(spriggitPluginPath);
 
         if (entryPt == null)
         {
@@ -131,7 +132,7 @@ public class SpriggitEngine(
             spriggitPluginPath,
             outputPath: tempOutput,
             dataPath: dataPath,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,

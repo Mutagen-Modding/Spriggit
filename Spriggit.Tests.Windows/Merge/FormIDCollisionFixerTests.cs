@@ -55,7 +55,8 @@ public class FormIDCollisionFixerTests
             entryPoint,
             spriggitModPath: spriggitModPath,
             dataPath: null,
-            meta: new SpriggitModKeyMeta(spriggitSource, GameRelease.SkyrimSE, modKey));
+            meta: new SpriggitModKeyMeta(spriggitSource, GameRelease.SkyrimSE, modKey),
+            knownMasters: Array.Empty<KnownMaster>());
 
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
         fileSystem.Directory.CreateDirectory(modFolder2);
@@ -170,7 +171,8 @@ public class FormIDCollisionFixerTests
             entryPoint,
             spriggitModPath: spriggitModPath,
             dataPath: null,
-            meta: new SpriggitModKeyMeta(spriggitSource, GameRelease.SkyrimSE, mod.ModKey));
+            meta: new SpriggitModKeyMeta(spriggitSource, GameRelease.SkyrimSE, mod.ModKey),
+            knownMasters: Array.Empty<KnownMaster>());
         
         var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);

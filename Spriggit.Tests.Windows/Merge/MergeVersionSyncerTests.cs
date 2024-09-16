@@ -28,6 +28,7 @@ public class MergeVersionSyncerTests
             FakeEntryPointCache entryPointCache,
             GetMetaToUse getMetaToUse,
             SpriggitExternalMetaPersister metaPersister,
+            SpriggitFileLocator fileLocator,
             GitFolderLocator gitFolderLocator)
         {
             EntryPointCache = entryPointCache;
@@ -35,6 +36,7 @@ public class MergeVersionSyncerTests
                 getMetaToUse,
                 entryPointCache,
                 metaPersister,
+                fileLocator,
                 gitFolderLocator);
         }
     }

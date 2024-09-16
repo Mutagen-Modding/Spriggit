@@ -104,7 +104,7 @@
       <DefaultPackFolder>content</DefaultPackFolder>
       <BuildAction>Compile</BuildAction>
     </Compile>
-    <Compile Update="Services\Singletons\SpriggitMetaLocator.cs">
+    <Compile Update="Services\Singletons\SpriggitFileLocator.cs">
       <CodeLanguage>cs</CodeLanguage>
       <DefaultPackFolder>content</DefaultPackFolder>
       <BuildAction>Compile</BuildAction>

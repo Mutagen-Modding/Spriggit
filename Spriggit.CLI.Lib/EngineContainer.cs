@@ -17,7 +17,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PrepareCliFolder))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(PluginPublisher))]
-[Register(typeof(SpriggitMetaLocator))]
+[Register(typeof(SpriggitFileLocator))]
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(CurrentVersionsProvider))]
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]
@@ -36,7 +36,6 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
 [Register(typeof(PostSerializeChecker))]
-[Register(typeof(DataPathChecker))]
 partial class EngineContainer : IContainer<SpriggitEngine>
 {
     [Instance] private readonly IFileSystem _fileSystem;

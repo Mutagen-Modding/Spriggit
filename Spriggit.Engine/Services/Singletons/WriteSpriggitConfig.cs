@@ -18,10 +18,11 @@ public class WriteSpriggitConfig
     
     public void Write(FilePath path, SpriggitMeta meta, IFileSystem fileSystem)
     {
-        var serialize = new SpriggitMetaSerialize(
+        var serialize = new SpriggitFileSerialize(
             meta.Source.PackageName,
             meta.Source.Version,
-            meta.Release);
+            meta.Release,
+            Array.Empty<KnownMaster>());
         var str = JsonConvert.SerializeObject(serialize, Formatting.Indented, JsonSettings);
         fileSystem.File.WriteAllText(path, str);
     }
