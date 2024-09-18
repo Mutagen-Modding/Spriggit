@@ -19,7 +19,7 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | ---- | ---- | ---- | ---- |
 | `-i` | `--InputPath` | Required | Path to the Bethesda plugin (esp/esm) |
 | `-o` | `--OutputPath` | Required | Dedicated folder to export mod as its text representation |
-| `-g` | `--GameRelease` | Semi | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
+| `-g` | `--GameRelease` | Semi-Optional | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
@@ -94,14 +94,14 @@ The final capstone should then be the `serialize` command once all the other cus
 This command helps derandomize script properties, which often change order randomly after edits in the CK
 
 #### Typical
-`.\Path\To\Spriggit.CLI.exe sort-script-properties -i "C:\MyGitRepository\SomeMod.esp" -o "Some\Temp\Path\SomeMod.esp"
+`.\Path\To\Spriggit.CLI.exe sort-script-properties -i "C:\MyGitRepository\SomeMod.esp" -o "Some\Temp\Path\SomeMod.esp"`
 
 #### Parameters
 | Short | Long | Required | Description |
 | ---- | ---- | ---- | ---- |
 | `-i` | `--InputPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
 | `-o` | `--OutputPath` | Required | Path to export the mod with the properties sorted |
-| `-g` | `--GameRelease` | Semi | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
+| `-g` | `--GameRelease` | Semi-Optional | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
 | `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 
 ## Master Style Input
