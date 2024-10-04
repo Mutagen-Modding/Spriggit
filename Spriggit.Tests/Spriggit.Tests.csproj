@@ -14,6 +14,15 @@
         <ProjectReference Include="..\Spriggit.CLI.Lib\Spriggit.CLI.Lib.csproj" />
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Oblivion\Spriggit.Yaml.Oblivion.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="TestOblivionUtil.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
     </ItemGroup>
     
 </Project>

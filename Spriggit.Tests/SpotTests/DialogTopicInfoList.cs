@@ -33,7 +33,7 @@ public class DialogTopicInfoList : SpotTestBase
         resp.Edits = "Edits";
         resp2.Edits = "Edits2";
 
-        var reimport = await TestUtil.PassThroughStarfield(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
+        var reimport = await TestStarfieldUtil.PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
 
         reimport.EnumerateMajorRecords().Should().HaveCount(4);
         reimport.Quests.Count.Should().Be(1);

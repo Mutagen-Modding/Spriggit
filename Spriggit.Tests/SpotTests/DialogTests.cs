@@ -27,7 +27,7 @@ public class DialogTests : SpotTestBase
         var resp = resps.Responses.AddReturn(new DialogResponse());
         resp.Edits = "Edits";
 
-        var reimport = await TestUtil.PassThroughStarfield(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
+        var reimport = await TestStarfieldUtil.PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
 
         reimport.EnumerateMajorRecords().Should().HaveCount(3);
         reimport.Quests.Count.Should().Be(1);
