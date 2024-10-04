@@ -1,4 +1,10 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Abstractions;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Headers;
@@ -67,10 +73,13 @@ public class PostSerializeChecker
         var newSummary = await newSummaryTask;
         var origSummary = await origSummaryTask;
 
-        foreach (var id in origSummary.RecordIDs)
+        foreach (var id in origSummary.RecordIDs.ToArray())
         {
-            origSummary.RecordIDs.Remove(id);
-            newSummary.RecordIDs.Remove(id);
+            if (newSummary.RecordIDs.Count == 0) break;
+            if (newSummary.RecordIDs.Remove(id))
+            {
+                origSummary.RecordIDs.Remove(id);
+            }
         }
 
         if (newSummary.RecordIDs.Count > 0 || origSummary.RecordIDs.Count > 0)
