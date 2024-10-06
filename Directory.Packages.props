@@ -13,28 +13,28 @@
             <Version>17.10.0</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Core">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Kernel">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Starfield">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Testing">
-            <Version>[0.47]</Version>
+            <Version>[0.47.1]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Serialization">
             <Version>[1.25]</Version>
