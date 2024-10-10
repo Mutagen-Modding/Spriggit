@@ -6,6 +6,7 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Starfield;
 using Xunit;
 

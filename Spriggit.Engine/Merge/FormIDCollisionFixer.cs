@@ -18,9 +18,8 @@ public class FormIDCollisionFixer
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
     private readonly FormIDReassigner _reassigner;
-    private readonly IEntryPointCache _entryPointCache;
+    private readonly SpriggitEngine _spriggitEngine;
     private readonly GetMetaToUse _getMetaToUse;
-    private readonly SpriggitFileLocator _spriggitFileLocator;
     private readonly GitFolderLocator _gitFolderLocator;
     private readonly FormIDCollisionDetector _detector;
 
@@ -28,18 +27,16 @@ public class FormIDCollisionFixer
         ILogger logger,
         IFileSystem fileSystem,
         FormIDReassigner reassigner,
-        IEntryPointCache entryPointCache,
+        SpriggitEngine spriggitEngine,
         GetMetaToUse getMetaToUse,
-        SpriggitFileLocator spriggitFileLocator,
         GitFolderLocator gitFolderLocator,
         FormIDCollisionDetector detector)
     {
         _logger = logger;
         _fileSystem = fileSystem;
         _reassigner = reassigner;
-        _entryPointCache = entryPointCache;
+        _spriggitEngine = spriggitEngine;
         _getMetaToUse = getMetaToUse;
-        _spriggitFileLocator = spriggitFileLocator;
         _gitFolderLocator = gitFolderLocator;
         _detector = detector;
     }
@@ -49,14 +46,7 @@ public class FormIDCollisionFixer
         DirectoryPath? dataPath)
     {
         var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
-        var entryPoint = await _entryPointCache.GetFor(meta.ToMeta(), CancellationToken.None);
-        if (entryPoint == null)
-        {
-            throw new NullReferenceException($"Could not construct entry point for {meta}");
-        }
 
-        var spriggitFile = _spriggitFileLocator.LocateAndParse(spriggitModPath);
-        
         var typeStr = $"Mutagen.Bethesda.{meta.Release.ToCategory()}.{meta.Release.ToCategory()}Mod";
         var regis = LoquiRegistration.GetRegisterByFullName(typeStr);
         if (regis == null)
@@ -69,10 +59,8 @@ public class FormIDCollisionFixer
         
         var obj = genMethod.Invoke(this, new object?[]
         {
-            entryPoint,
             spriggitModPath,
             dataPath,
-            spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
             meta
         });
         if (obj is Task t)
@@ -82,10 +70,8 @@ public class FormIDCollisionFixer
     }
 
     internal async Task DetectAndFixInternal<TMod, TModGetter>(
-        IEntryPoint entryPoint,
         DirectoryPath spriggitModPath,
         DirectoryPath? dataPath,
-        KnownMaster[] knownMasters,
         SpriggitModKeyMeta meta)
         where TMod : class, IContextMod<TMod, TModGetter>, TModGetter
         where TModGetter : class, IContextGetterMod<TMod, TModGetter>
@@ -96,15 +82,12 @@ public class FormIDCollisionFixer
         origMergedModPath.Directory?.Create(_fileSystem);
 
         _logger.Information("Deserializing mod to {Path}", origMergedModPath);
-        await entryPoint.Deserialize(
-            inputPath: spriggitModPath,
-            outputPath: origMergedModPath,
+        await _spriggitEngine.Deserialize(
+            spriggitPluginPath: spriggitModPath,
+            outputFile: origMergedModPath,
             dataPath: dataPath,
-            knownMasters: knownMasters,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            cancel: CancellationToken.None);
+            backupDays: 0,
+            localize: null);
 
         var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
         {
@@ -184,16 +167,13 @@ public class FormIDCollisionFixer
         var branch = repo.CreateBranch(branchName, parents[0]);
         Commands.Checkout(repo, branch);
 
-        _logger.Information("Deserializing mod to {Path}", origMergedModPath);        
-        await entryPoint.Deserialize(
-            inputPath: spriggitModPath,
-            outputPath: origMergedModPath,
+        _logger.Information("Deserializing mod to {Path}", origMergedModPath);
+        await _spriggitEngine.Deserialize(
+            spriggitPluginPath: spriggitModPath,
+            outputFile: origMergedModPath,
             dataPath: dataPath,
-            knownMasters: knownMasters,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            cancel: CancellationToken.None);
+            backupDays: 0,
+            localize: null);
 
         var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
         {
@@ -209,18 +189,13 @@ public class FormIDCollisionFixer
         _logger.Information("Writing reassigned mod to {Path}", origMergedModPath.Path);
         branchMod.WriteToBinary(origMergedModPath.Path);
         
-        _logger.Information("Serializing mod to {Path}", spriggitModPath);  
-        await entryPoint.Serialize(
-            modPath: origMergedModPath.Path,
-            outputDir: spriggitModPath,
+        _logger.Information("Serializing mod to {Path}", spriggitModPath);
+        await _spriggitEngine.Serialize(
+            bethesdaPluginPath: origMergedModPath.Path,
+            outputFolder: spriggitModPath,
             dataPath: dataPath,
-            knownMasters: knownMasters,
-            release: meta.Release,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            meta: meta.Source,
-            cancel: CancellationToken.None);
+            postSerializeChecks: true,
+            meta: meta.ToMeta());
 
         _logger.Information("Committing changes");
         Commands.Checkout(repo, branch);
@@ -242,15 +217,12 @@ public class FormIDCollisionFixer
         newMergedModPath.Directory?.Create(_fileSystem);
 
         _logger.Information("Deserializing mod to {Path}", newMergedModPath);  
-        await entryPoint.Deserialize(
-            inputPath: spriggitModPath,
-            outputPath: newMergedModPath,
+        await _spriggitEngine.Deserialize(
+            spriggitPluginPath: spriggitModPath,
+            outputFile: newMergedModPath,
             dataPath: dataPath,
-            knownMasters: knownMasters,
-            workDropoff: null,
-            fileSystem: _fileSystem,
-            streamCreator: null,
-            cancel: CancellationToken.None);
+            backupDays: 0,
+            localize: null);
 
         var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, new BinaryReadParameters()
         {

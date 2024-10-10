@@ -17,10 +17,6 @@ public record SpriggitFileSerialize(
     GameRelease? Release,
     KnownMaster[]? KnownMasters);
 
-public record KnownMasterSerialize(
-    string ModKey, 
-    MasterStyle Style);
-
 public record SpriggitMeta(SpriggitSource Source, GameRelease Release);
 
 public record SpriggitModKeyMeta(SpriggitSource Source, GameRelease Release, ModKey ModKey)

@@ -5,6 +5,7 @@ using Mutagen.Bethesda.Oblivion;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Oblivion;
 using Xunit;
 

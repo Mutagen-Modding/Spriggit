@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
@@ -31,6 +32,14 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PrepareCliFolder))]
 [Register(typeof(SpriggitFileLocator))]
 [Register(typeof(SpriggitExternalMetaPersister))]
+[Register(typeof(SpriggitEngine))]
+[Register(typeof(ModFilesMover), typeof(IModFilesMover))]
+[Register(typeof(LocalizeEnforcer))]
+[Register(typeof(PostSerializeChecker))]
+[Register(typeof(SerializeBlocker))]
+[Register(typeof(PluginBackupCreator))]
+[Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
+[Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 partial class FormIDCollisionContainer : IContainer<FormIDCollisionFixer>
 {
     [Instance] private readonly IFileSystem _fileSystem;

@@ -1,19 +1,19 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Oblivion;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Starfield;
 using Noggog;
 using Spriggit.Core;
-using Spriggit.Yaml.Oblivion;
+using Spriggit.Yaml.Starfield;
 
-namespace Spriggit.Tests;
+namespace Spriggit.Tests.Utility;
 
-public class TestOblivionUtil
+public class TestStarfieldUtil
 {
-    public static async Task<IOblivionModDisposableGetter> PassThrough(
+    public static async Task<IStarfieldModDisposableGetter> PassThrough(
         IFileSystem fileSystem,
-        OblivionMod mod, 
+        StarfieldMod mod, 
         DirectoryPath dataFolder,
         DirectoryPath spriggitFolder,
         ModKey otherModKey,
@@ -25,7 +25,7 @@ public class TestOblivionUtil
     
     public static async Task Export(
         IFileSystem fileSystem,
-        OblivionMod mod, 
+        StarfieldMod mod, 
         DirectoryPath dataFolder,
         DirectoryPath spriggitFolder,
         EntryPoint entryPoint)
@@ -38,17 +38,17 @@ public class TestOblivionUtil
         });
         await entryPoint.Serialize(
             modPath: modPath, outputDir: spriggitFolder, dataPath: dataFolder,
-            release: GameRelease.Oblivion, 
+            release: GameRelease.Starfield, 
             workDropoff: null, fileSystem: fileSystem,
             knownMasters: Array.Empty<KnownMaster>(),
             streamCreator: null, meta: new SpriggitSource()
             {
-                PackageName = "Spriggit.Yaml.Oblivion",
+                PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
             }, cancel: CancellationToken.None);
     }
     
-    public static async Task<IOblivionModDisposableGetter> Import(
+    public static async Task<IStarfieldModDisposableGetter> Import(
         IFileSystem fileSystem,
         ModKey otherModKey, 
         DirectoryPath dataFolder,
@@ -63,7 +63,7 @@ public class TestOblivionUtil
             knownMasters: Array.Empty<KnownMaster>(),
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
-        var reimport = OblivionMod.CreateFromBinaryOverlay(modPath2,
+        var reimport = StarfieldMod.CreateFromBinaryOverlay(modPath2, StarfieldRelease.Starfield,
             BinaryReadParameters.Default with
             {
                 FileSystem = fileSystem

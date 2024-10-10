@@ -18,7 +18,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="TestOblivionUtil.cs">
+      <Compile Update="Utility\TestContainer.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="Utility\TestOblivionUtil.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="Utility\TestStarfieldUtil.cs">
         <CodeLanguage>cs</CodeLanguage>
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Compile</BuildAction>
