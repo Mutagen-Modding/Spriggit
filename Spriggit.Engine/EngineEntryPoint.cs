@@ -54,7 +54,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
             }
         }
 
-        throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
+        throw lastEx ?? new ArgumentException("Unknown entry point error");
     }
 
     public async Task Deserialize(string inputPath, string outputPath, 
@@ -80,7 +80,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
             }
         }
 
-        throw lastEx ?? new ExecutionEngineException("Unknown entry point error");
+        throw lastEx ?? new ArgumentException("Unknown entry point error");
     }
 
     public void Dispose()
