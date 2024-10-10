@@ -18,7 +18,7 @@ jobs:
     outputs:
       same_sha: ${{ steps.check.outputs.same_sha }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           
@@ -65,9 +65,9 @@ jobs:
             sln: Spriggit.Linux.sln
           
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Setup .NET 8
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.*
     - name: Install dependencies
@@ -90,11 +90,11 @@ jobs:
       id: current-time
       with:
         format: YYYYMMDD-HHmmSS
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Setup .NET 8
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.*
     - name: Install dependencies
@@ -161,7 +161,7 @@ jobs:
     if: needs.activity-short-circuit.outputs.same_sha == 'false'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Reset nightly to release
