@@ -26,6 +26,13 @@ public class SortStarfield : ISort
             .WithDataFolder(dataFolder)
             .WithFileSystem(_fileSystem)
             .Construct();
+        if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+
+        return false;
+    }
+
+    private bool VirtualMachineAdapterHasWorkToDo(IStarfieldModDisposableGetter mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
@@ -107,6 +114,24 @@ public class SortStarfield : ISort
             .Mutable()
             .WithFileSystem(_fileSystem)
             .Construct();
+        SortVirtualMachineAdapter(mod);
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
+        await mod.BeginWrite
+            .ToPath(outputPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataFolder)
+            .NoModKeySync()
+            .WithFileSystem(_fileSystem)
+            .WriteAsync();
+    }
+
+    private void SortVirtualMachineAdapter(IStarfieldMod mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
         {
@@ -151,19 +176,6 @@ public class SortStarfield : ISort
                 ProcessScript(dialAdapter.ScriptFragments?.Script);
             }
         }
-
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
-        await mod.BeginWrite
-            .ToPath(outputPath)
-            .WithLoadOrderFromHeaderMasters()
-            .WithDataFolder(dataFolder)
-            .NoModKeySync()
-            .WithFileSystem(_fileSystem)
-            .WriteAsync();
     }
 
     private void ProcessScript(IScriptEntry? scriptEntry)

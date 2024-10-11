@@ -15,6 +15,12 @@ public class SortFallout4 : ISort
         using var mod = Fallout4Mod.Create(release.ToFallout4Release())
             .FromPath(path)
             .Construct();
+        if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+        return false;
+    }
+
+    private bool VirtualMachineAdapterHasWorkToDo(IFallout4ModDisposableGetter mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
@@ -70,6 +76,23 @@ public class SortFallout4 : ISort
             .FromPath(path)
             .Mutable()
             .Construct();
+        SortVirtualMachineAdapter(mod);
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
+        await mod.BeginWrite
+            .ToPath(outputPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataFolder)
+            .NoModKeySync()
+            .WriteAsync();
+    }
+
+    private void SortVirtualMachineAdapter(IFallout4Mod mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
         {
@@ -98,18 +121,6 @@ public class SortFallout4 : ISort
                 ProcessScript(packageAdapter.ScriptFragments?.Script);
             }
         }
-
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
-        await mod.BeginWrite
-            .ToPath(outputPath)
-            .WithLoadOrderFromHeaderMasters()
-            .WithDataFolder(dataFolder)
-            .NoModKeySync()
-            .WriteAsync();
     }
 
     private void ProcessScript(IScriptEntry? scriptEntry)

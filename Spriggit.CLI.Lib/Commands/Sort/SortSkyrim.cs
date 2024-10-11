@@ -24,6 +24,13 @@ public class SortSkyrim : ISort
             .FromPath(path)
             .WithFileSystem(_fileSystem)
             .Construct();
+        if (HasVirtualMachineAdapterWorkToDo(mod)) return true;
+
+        return false;
+    }
+
+    private bool HasVirtualMachineAdapterWorkToDo(ISkyrimModDisposableGetter mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
@@ -68,6 +75,24 @@ public class SortSkyrim : ISort
             .WithFileSystem(_fileSystem)
             .Mutable()
             .Construct();
+        SortVirtualMachineAdapter(mod);
+
+        foreach (var maj in mod.EnumerateMajorRecords())
+        {
+            maj.IsCompressed = false;
+        }
+        
+        await mod.BeginWrite
+            .ToPath(outputPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithDataFolder(dataFolder)
+            .NoModKeySync()
+            .WithFileSystem(_fileSystem)
+            .WriteAsync();
+    }
+
+    private void SortVirtualMachineAdapter(ISkyrimMod mod)
+    {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
         {
@@ -85,19 +110,6 @@ public class SortSkyrim : ISort
                 }
             }
         }
-
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
-        await mod.BeginWrite
-            .ToPath(outputPath)
-            .WithLoadOrderFromHeaderMasters()
-            .WithDataFolder(dataFolder)
-            .NoModKeySync()
-            .WithFileSystem(_fileSystem)
-            .WriteAsync();
     }
 
     private void ProcessScript(IScriptEntry scriptEntry)
