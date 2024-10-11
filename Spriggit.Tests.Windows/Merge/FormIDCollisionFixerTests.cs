@@ -48,8 +48,7 @@ public class FormIDCollisionFixerTests
         Npc n1,
         ModKey modKey)
     {
-        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false, deleteAfter: false);
-        tmp.Dir.DeleteEntireFolder();
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false, deleteAfter: false, deleteBefore: true);
 
         var meta = new SpriggitMeta(
             new SpriggitSource()
