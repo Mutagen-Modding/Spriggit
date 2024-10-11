@@ -4,13 +4,13 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
 
-namespace Spriggit.CLI.Lib.Commands.SortProperties;
+namespace Spriggit.CLI.Lib.Commands.Sort;
 
-public class SortPropertiesSkyrim : ISortProperties
+public class SortSkyrim : ISort
 {
     private readonly IFileSystem _fileSystem;
 
-    public SortPropertiesSkyrim(IFileSystem fileSystem)
+    public SortSkyrim(IFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
     }

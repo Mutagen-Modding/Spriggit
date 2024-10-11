@@ -5,7 +5,7 @@ using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
-using Spriggit.CLI.Lib.Commands.SortProperties;
+using Spriggit.CLI.Lib.Commands.Sort;
 using Xunit;
 using Npc = Mutagen.Bethesda.Skyrim.Npc;
 using Quest = Mutagen.Bethesda.Skyrim.Quest;
@@ -17,7 +17,7 @@ using ScriptProperty = Mutagen.Bethesda.Skyrim.ScriptProperty;
 
 namespace Spriggit.Tests;
 
-public class SortPropertiesTests
+public class SortTests
 {
     [Theory, MutagenModAutoData]
     public async Task Typical(
@@ -27,7 +27,7 @@ public class SortPropertiesTests
         SkyrimMod skyrimMod,
         Npc npc,
         Quest quest,
-        SortPropertiesSkyrim sortPropertiesSkyrim)
+        SortSkyrim sortSkyrim)
     {
         npc.VirtualMachineAdapter ??= new();
         npc.VirtualMachineAdapter.Scripts.Add(new ScriptEntry()
@@ -77,9 +77,9 @@ public class SortPropertiesTests
 
         var modPath2 = Path.Combine(existingDir2, skyrimMod.ModKey.FileName);
 
-        sortPropertiesSkyrim.HasWorkToDo(modPath, GameRelease.SkyrimSE, null)
+        sortSkyrim.HasWorkToDo(modPath, GameRelease.SkyrimSE, null)
             .Should().BeTrue();
-        await sortPropertiesSkyrim.Run(modPath, GameRelease.SkyrimSE, modPath2, null);
+        await sortSkyrim.Run(modPath, GameRelease.SkyrimSE, modPath2, null);
 
         using var reimport = SkyrimMod.Create(SkyrimRelease.SkyrimSE)
             .FromPath(modPath2)
@@ -111,7 +111,7 @@ public class SortPropertiesTests
         StarfieldMod mod,
         TerminalMenu terminalMenu,
         string someName,
-        SortPropertiesStarfield sortPropertiesStarfield)
+        SortStarfield sortStarfield)
     {
         terminalMenu.VirtualMachineAdapter ??= new();
         terminalMenu.VirtualMachineAdapter.Scripts.Add(new Mutagen.Bethesda.Starfield.ScriptEntry()
@@ -142,9 +142,9 @@ public class SortPropertiesTests
 
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
-        sortPropertiesStarfield.HasWorkToDo(modPath, GameRelease.Starfield, null)
+        sortStarfield.HasWorkToDo(modPath, GameRelease.Starfield, null)
             .Should().BeTrue();
-        await sortPropertiesStarfield.Run(modPath, GameRelease.Starfield, modPath2, null);
+        await sortStarfield.Run(modPath, GameRelease.Starfield, modPath2, null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
             .FromPath(modPath2)

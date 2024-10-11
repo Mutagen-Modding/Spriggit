@@ -4,13 +4,13 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
 
-namespace Spriggit.CLI.Lib.Commands.SortProperties;
+namespace Spriggit.CLI.Lib.Commands.Sort;
 
-public class SortPropertiesStarfield : ISortProperties
+public class SortStarfield : ISort
 {
     private readonly IFileSystem _fileSystem;
 
-    public SortPropertiesStarfield(IFileSystem fileSystem)
+    public SortStarfield(IFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
     }

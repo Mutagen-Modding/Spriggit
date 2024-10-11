@@ -2,10 +2,10 @@
 using CommandLine;
 using Mutagen.Bethesda;
 
-namespace Spriggit.CLI.Lib.Commands.SortProperties;
+namespace Spriggit.CLI.Lib.Commands.Sort;
 
-[Verb("sort-script-properties", HelpText = "Command to sort script properties, which often get randomized")]
-public class SortPropertiesCommand
+[Verb("sort-randomized-fields", HelpText = "Command to sort fields that often get randomized during mod editing")]
+public class SortCommand
 {
     [Option('i', "InputPath", HelpText = "Path to the Bethesda plugin to process", Required = true)]
     public string InputPath { get; set; } = string.Empty;
@@ -25,20 +25,20 @@ public class SortPropertiesCommand
 
     public async Task<int> Run()
     {
-        ISortProperties sorter;
+        ISort sorter;
         switch (GameRelease.ToCategory())
         {
             case GameCategory.Oblivion:
                 // Nothing to do
                 return 0;
             case GameCategory.Skyrim:
-                sorter = new SortPropertiesSkyrim(new FileSystem());
+                sorter = new SortSkyrim(new FileSystem());
                 break;
             case GameCategory.Fallout4:
-                sorter = new SortPropertiesFallout4();
+                sorter = new SortFallout4();
                 break;
             case GameCategory.Starfield:
-                sorter = new SortPropertiesStarfield(new FileSystem());
+                sorter = new SortStarfield(new FileSystem());
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

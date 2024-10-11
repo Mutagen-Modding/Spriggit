@@ -2,9 +2,9 @@
 using Mutagen.Bethesda.Plugins;
 using Noggog;
 
-namespace Spriggit.CLI.Lib.Commands.SortProperties;
+namespace Spriggit.CLI.Lib.Commands.Sort;
 
-public interface ISortProperties
+public interface ISort
 {
     bool HasWorkToDo(
         ModPath path,

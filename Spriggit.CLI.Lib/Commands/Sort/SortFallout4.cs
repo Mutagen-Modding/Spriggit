@@ -1,11 +1,11 @@
 ﻿using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Fallout4;
+using Mutagen.Bethesda.Plugins;
 using Noggog;
 
-namespace Spriggit.CLI.Lib.Commands.SortProperties;
+namespace Spriggit.CLI.Lib.Commands.Sort;
 
-public class SortPropertiesFallout4 : ISortProperties
+public class SortFallout4 : ISort
 {
     public bool HasWorkToDo(
         ModPath path, 
