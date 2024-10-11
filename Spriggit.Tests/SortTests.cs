@@ -1,13 +1,18 @@
 ﻿using System.IO.Abstractions;
 using FluentAssertions;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Fallout4;
+using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Spriggit.CLI.Lib.Commands.Sort;
 using Xunit;
+using HeadData = Mutagen.Bethesda.Skyrim.HeadData;
+using MorphGroup = Mutagen.Bethesda.Fallout4.MorphGroup;
 using Npc = Mutagen.Bethesda.Skyrim.Npc;
+using NpcFaceMorph = Mutagen.Bethesda.Starfield.NpcFaceMorph;
 using Quest = Mutagen.Bethesda.Skyrim.Quest;
 using QuestFragmentAlias = Mutagen.Bethesda.Skyrim.QuestFragmentAlias;
 using ScriptBoolProperty = Mutagen.Bethesda.Skyrim.ScriptBoolProperty;
@@ -20,7 +25,7 @@ namespace Spriggit.Tests;
 public class SortTests
 {
     [Theory, MutagenModAutoData]
-    public async Task Typical(
+    public async Task VirtualMachineAdapter(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
         DirectoryPath existingDir2,
@@ -99,6 +104,184 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
+            .Should()
+            .Equal("Abc", "Xyz");
+    }
+    
+    [Theory, MutagenModAutoData(GameRelease.Fallout4)]
+    public async Task FalloutMorphGroups(
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        DirectoryPath existingDir2,
+        Fallout4Mod mod,
+        Mutagen.Bethesda.Fallout4.Race race,
+        SortFallout4 sort)
+    {
+        race.HeadData ??= new GenderedItem<Mutagen.Bethesda.Fallout4.HeadData?>(
+            new Mutagen.Bethesda.Fallout4.HeadData()
+            {
+                MorphGroups = new ExtendedList<MorphGroup>()
+                {
+                    new MorphGroup()
+                    {
+                        Name = "Xyz",
+                    },
+                    new MorphGroup()
+                    {
+                        Name = "Abc",
+                    }
+                }
+            },
+            new Mutagen.Bethesda.Fallout4.HeadData()
+            {
+                MorphGroups = new ExtendedList<MorphGroup>()
+                {
+                    new MorphGroup()
+                    {
+                        Name = "Xyz",
+                    },
+                    new MorphGroup()
+                    {
+                        Name = "Abc",
+                    }
+                }
+            });
+
+        var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
+
+        await mod.BeginWrite
+            .ToPath(modPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .WriteAsync();
+
+        var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
+
+        sort.HasWorkToDo(modPath, GameRelease.Fallout4, null)
+            .Should().BeTrue();
+        await sort.Run(modPath, GameRelease.Fallout4, modPath2, null);
+
+        using var reimport = Fallout4Mod.Create(Fallout4Release.Fallout4)
+            .FromPath(modPath2)
+            .WithFileSystem(fileSystem)
+            .Construct();
+        reimport.Races.Records.Select(x => x.HeadData)
+            .NotNull()
+            .SelectMany(x => new []
+            {
+                x.Male,
+                x.Female
+            })
+            .NotNull()
+            .SelectMany(x => x.MorphGroups)
+            .Select(x => x.Name)
+            .Should()
+            .Equal("Abc", "Xyz", "Abc", "Xyz");
+    }
+    
+    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    public async Task StarfieldMorphGroups(
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        DirectoryPath existingDir2,
+        StarfieldMod mod,
+        Mutagen.Bethesda.Starfield.Npc npc,
+        SortStarfield sort)
+    {
+        var race = mod.Races.AddNew();
+        for (int key = 0; key < 64; ++key)
+        {
+            race.BipedObjects[(Mutagen.Bethesda.Starfield.BipedObject)key] = new();
+        }
+        race.ChargenAndSkintones ??= new GenderedItem<ChargenAndSkintones?>(
+            new ChargenAndSkintones()
+            {
+                Chargen = new Chargen()
+                {
+                    MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
+                    {
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Xyz",
+                        },
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Abc",
+                        }
+                    }
+                }
+            },
+            new ChargenAndSkintones()
+            {
+                Chargen = new Chargen()
+                {
+                    MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
+                    {
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Xyz",
+                        },
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Abc",
+                        }
+                    }
+                }
+            });
+
+        npc.FaceMorphs.Add(new NpcFaceMorph()
+        {
+            MorphGroups = new ExtendedList<NpcMorphGroup>()
+            {
+                new NpcMorphGroup()
+                {
+                    MorphGroup = "Xyz"
+                },
+                new NpcMorphGroup()
+                {
+                    MorphGroup = "Abc"
+                }
+            }
+        });
+        
+
+        var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
+
+        await mod.BeginWrite
+            .ToPath(modPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .WriteAsync();
+
+        var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
+
+        sort.HasWorkToDo(modPath, GameRelease.Starfield, null)
+            .Should().BeTrue();
+        await sort.Run(modPath, GameRelease.Starfield, modPath2, null);
+
+        using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
+            .FromPath(modPath2)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .Construct();
+        reimport.Races.Records.Select(x => x.ChargenAndSkintones)
+            .NotNull()
+            .SelectMany(x => new []
+            {
+                x.Male,
+                x.Female
+            })
+            .NotNull()
+            .SelectMany(x => x.Chargen?.MorphGroups ?? [])
+            .Select(x => x.Name)
+            .Should()
+            .Equal("Abc", "Xyz", "Abc", "Xyz");
+        reimport.Npcs.Records.SelectMany(x => x.FaceMorphs)
+            .SelectMany(x => x.MorphGroups)
+            .Select(x => x.MorphGroup)
             .Should()
             .Equal("Abc", "Xyz");
     }

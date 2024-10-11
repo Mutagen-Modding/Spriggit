@@ -25,6 +25,7 @@ public class SortCommand
 
     public async Task<int> Run()
     {
+        var fs = new FileSystem();
         ISort sorter;
         switch (GameRelease.ToCategory())
         {
@@ -32,13 +33,13 @@ public class SortCommand
                 // Nothing to do
                 return 0;
             case GameCategory.Skyrim:
-                sorter = new SortSkyrim(new FileSystem());
+                sorter = new SortSkyrim(fs);
                 break;
             case GameCategory.Fallout4:
-                sorter = new SortFallout4();
+                sorter = new SortFallout4(fs);
                 break;
             case GameCategory.Starfield:
-                sorter = new SortStarfield(new FileSystem());
+                sorter = new SortStarfield(fs);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

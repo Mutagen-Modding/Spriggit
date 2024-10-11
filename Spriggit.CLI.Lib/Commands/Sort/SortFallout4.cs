@@ -1,4 +1,5 @@
-﻿using Mutagen.Bethesda;
+﻿using System.IO.Abstractions;
+using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins;
 using Noggog;
@@ -7,6 +8,13 @@ namespace Spriggit.CLI.Lib.Commands.Sort;
 
 public class SortFallout4 : ISort
 {
+    private readonly IFileSystem _fileSystem;
+
+    public SortFallout4(IFileSystem fileSystem)
+    {
+        _fileSystem = fileSystem;
+    }
+    
     public bool HasWorkToDo(
         ModPath path, 
         GameRelease release,
@@ -14,8 +22,36 @@ public class SortFallout4 : ISort
     {
         using var mod = Fallout4Mod.Create(release.ToFallout4Release())
             .FromPath(path)
+            .WithFileSystem(_fileSystem)
             .Construct();
         if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+        if (MorphGroupHasWorkToDo(mod)) return true;
+        return false;
+    }
+
+    private bool MorphGroupHasWorkToDo(IFallout4ModDisposableGetter mod)
+    {
+        foreach (var race in mod
+                     .EnumerateMajorRecords<IRaceGetter>()
+                     .AsParallel())
+        {
+            var headData = race.HeadData;
+            if (HeadDataHasWorkToDo(headData?.Male)) return true;
+            if (HeadDataHasWorkToDo(headData?.Female)) return true;
+        }
+
+        return false;
+    }
+
+    private bool HeadDataHasWorkToDo(IHeadDataGetter? headData)
+    {
+        if (headData == null) return false;
+        var names = headData.MorphGroups.Select(x => x.Name).ToArray();
+        if (!names.SequenceEqual(names.OrderBy(x => x)))
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -74,9 +110,11 @@ public class SortFallout4 : ISort
     {
         var mod = Fallout4Mod.Create(release.ToFallout4Release())
             .FromPath(path)
+            .WithFileSystem(_fileSystem)
             .Mutable()
             .Construct();
         SortVirtualMachineAdapter(mod);
+        SortMorphGroups(mod);
 
         foreach (var maj in mod.EnumerateMajorRecords())
         {
@@ -87,6 +125,7 @@ public class SortFallout4 : ISort
             .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
+            .WithFileSystem(_fileSystem)
             .NoModKeySync()
             .WriteAsync();
     }
@@ -121,6 +160,24 @@ public class SortFallout4 : ISort
                 ProcessScript(packageAdapter.ScriptFragments?.Script);
             }
         }
+    }
+
+    private void SortMorphGroups(IFallout4Mod mod)
+    {
+        foreach (var race in mod
+                     .EnumerateMajorRecords<IRace>()
+                     .AsParallel())
+        {
+            SortHeadDataMorphGroups(race.HeadData?.Male);
+            SortHeadDataMorphGroups(race.HeadData?.Female);
+        }
+    }
+
+    private void SortHeadDataMorphGroups(IHeadData? headData)
+    {
+        if (headData == null) return;
+        headData.MorphGroups.SetTo(
+            headData.MorphGroups.ToArray().OrderBy(x => x.Name));
     }
 
     private void ProcessScript(IScriptEntry? scriptEntry)

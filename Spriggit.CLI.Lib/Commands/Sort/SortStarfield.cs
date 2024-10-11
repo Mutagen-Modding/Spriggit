@@ -27,6 +27,41 @@ public class SortStarfield : ISort
             .WithFileSystem(_fileSystem)
             .Construct();
         if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+        if (MorphGroupHasWorkToDo(mod)) return true;
+
+        return false;
+    }
+
+    private bool MorphGroupHasWorkToDo(IStarfieldModDisposableGetter mod)
+    {
+        foreach (var race in mod
+                     .EnumerateMajorRecords<IRaceGetter>()
+                     .AsParallel())
+        {
+            var charGen = race.ChargenAndSkintones;
+            if (ChargenHasWorkToDo(charGen?.Male)) return true;
+            if (ChargenHasWorkToDo(charGen?.Female)) return true;
+        }
+        
+        foreach (var npc in mod
+                     .EnumerateMajorRecords<INpcGetter>()
+                     .AsParallel())
+        {
+            var names = npc.FaceMorphs.SelectMany(x => x.MorphGroups).Select(x => x.MorphGroup).ToArray();
+            if (!names.SequenceEqual(names.OrderBy(x => x))) return true;
+        }
+
+        return false;
+    }
+
+    private bool ChargenHasWorkToDo(IChargenAndSkintonesGetter? charGen)
+    {
+        if (charGen?.Chargen == null) return false;
+        var names = charGen.Chargen.MorphGroups.Select(x => x.Name).ToArray();
+        if (!names.SequenceEqual(names.OrderBy(x => x)))
+        {
+            return true;
+        }
 
         return false;
     }
@@ -116,6 +151,7 @@ public class SortStarfield : ISort
             .WithFileSystem(_fileSystem)
             .Construct();
         SortVirtualMachineAdapter(mod);
+        SortMorphGroups(mod);
 
         foreach (var maj in mod.EnumerateMajorRecords())
         {
@@ -192,5 +228,38 @@ public class SortStarfield : ISort
         {
             ProcessScript(scriptEntry);
         }
+    }
+
+    private void SortMorphGroups(IStarfieldMod mod)
+    {
+        foreach (var race in mod
+                     .EnumerateMajorRecords<IRace>()
+                     .AsParallel())
+        {
+            SortChargenMorphGroups(race.ChargenAndSkintones?.Male?.Chargen);
+            SortChargenMorphGroups(race.ChargenAndSkintones?.Female?.Chargen);
+        }
+        foreach (var npc in mod
+                     .EnumerateMajorRecords<INpc>()
+                     .AsParallel())
+        {
+            foreach (var faceMorph in npc.FaceMorphs)
+            {
+                SortNpcFaceMorphs(faceMorph);
+            }
+        }
+    }
+
+    private void SortNpcFaceMorphs(INpcFaceMorph npcFaceMorph)
+    {
+        npcFaceMorph.MorphGroups.SetTo(
+            npcFaceMorph.MorphGroups.ToArray().OrderBy(x => x.MorphGroup));
+    }
+
+    private void SortChargenMorphGroups(IChargen? item)
+    {
+        if (item == null) return;
+        item.MorphGroups.SetTo(
+            item.MorphGroups.ToArray().OrderBy(x => x.Name));
     }
 }
