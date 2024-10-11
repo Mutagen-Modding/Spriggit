@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using DynamicData;
 using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
@@ -282,6 +283,54 @@ public class SortTests
         reimport.Npcs.Records.SelectMany(x => x.FaceMorphs)
             .SelectMany(x => x.MorphGroups)
             .Select(x => x.MorphGroup)
+            .Should()
+            .Equal("Abc", "Xyz");
+    }
+    
+    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    public async Task StarfieldMorphBlends(
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        DirectoryPath existingDir2,
+        StarfieldMod mod,
+        Mutagen.Bethesda.Starfield.Npc npc,
+        SortStarfield sort)
+    {
+        npc.MorphBlends.Add(new []
+        {
+            new NpcMorphBlend()
+            {
+                BlendName = "Xyz"
+            },
+            new NpcMorphBlend()
+            {
+                BlendName = "Abc"
+            },
+        });
+
+        var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
+
+        await mod.BeginWrite
+            .ToPath(modPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .WriteAsync();
+
+        var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
+
+        sort.HasWorkToDo(modPath, GameRelease.Starfield, null)
+            .Should().BeTrue();
+        await sort.Run(modPath, GameRelease.Starfield, modPath2, null);
+
+        using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
+            .FromPath(modPath2)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .Construct();
+        reimport.Npcs.Records.SelectMany(x => x.MorphBlends)
+            .Select(x => x.BlendName)
             .Should()
             .Equal("Abc", "Xyz");
     }

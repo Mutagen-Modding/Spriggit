@@ -27,12 +27,13 @@ public class SortStarfield : ISort
             .WithFileSystem(_fileSystem)
             .Construct();
         if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
-        if (MorphGroupHasWorkToDo(mod)) return true;
+        if (RaceMorphGroupHasWorkToDo(mod)) return true;
+        if (NpcsHaveWorkToDo(mod)) return true;
 
         return false;
     }
 
-    private bool MorphGroupHasWorkToDo(IStarfieldModDisposableGetter mod)
+    private bool RaceMorphGroupHasWorkToDo(IStarfieldModDisposableGetter mod)
     {
         foreach (var race in mod
                      .EnumerateMajorRecords<IRaceGetter>()
@@ -42,13 +43,20 @@ public class SortStarfield : ISort
             if (ChargenHasWorkToDo(charGen?.Male)) return true;
             if (ChargenHasWorkToDo(charGen?.Female)) return true;
         }
-        
+
+        return false;
+    }
+
+    private bool NpcsHaveWorkToDo(IStarfieldModDisposableGetter mod)
+    {
         foreach (var npc in mod
                      .EnumerateMajorRecords<INpcGetter>()
                      .AsParallel())
         {
-            var names = npc.FaceMorphs.SelectMany(x => x.MorphGroups).Select(x => x.MorphGroup).ToArray();
-            if (!names.SequenceEqual(names.OrderBy(x => x))) return true;
+            var morphGroupNames = npc.FaceMorphs.SelectMany(x => x.MorphGroups).Select(x => x.MorphGroup).ToArray();
+            if (!morphGroupNames.SequenceEqual(morphGroupNames.OrderBy(x => x))) return true;
+            var morphBlendNames = npc.MorphBlends.Select(x => x.BlendName).ToArray();
+            if (!morphBlendNames.SequenceEqual(morphBlendNames.OrderBy(x => x))) return true;
         }
 
         return false;
@@ -152,6 +160,7 @@ public class SortStarfield : ISort
             .Construct();
         SortVirtualMachineAdapter(mod);
         SortMorphGroups(mod);
+        SortMorphBlends(mod);
 
         foreach (var maj in mod.EnumerateMajorRecords())
         {
@@ -247,6 +256,17 @@ public class SortStarfield : ISort
             {
                 SortNpcFaceMorphs(faceMorph);
             }
+        }
+    }
+
+    private void SortMorphBlends(IStarfieldMod mod)
+    {
+        foreach (var npc in mod
+                     .EnumerateMajorRecords<INpc>()
+                     .AsParallel())
+        {
+            npc.MorphBlends.SetTo(
+                npc.MorphBlends.ToArray().OrderBy(x => x.BlendName));
         }
     }
 
