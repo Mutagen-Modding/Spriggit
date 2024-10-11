@@ -25,13 +25,13 @@ public class SortFallout4 : ISort
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter == null) continue;
-            foreach (var script in hasVM.VirtualMachineAdapter.Scripts)
+            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
+            foreach (var script in vm.Scripts)
             {
                 if (HasOutOfOrderScript(script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IQuestAdapter questAdapter)
+            if (vm is IQuestAdapter questAdapter)
             {
                 if (HasOutOfOrderScript(questAdapter.Script)) return true;
                 foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
@@ -40,12 +40,12 @@ public class SortFallout4 : ISort
                 }
             }
 
-            if (hasVM.VirtualMachineAdapter is IPerkAdapterGetter perkAdapter)
+            if (vm is IPerkAdapterGetter perkAdapter)
             {
                 if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IPackageAdapterGetter packageAdapter)
+            if (vm is IPackageAdapterGetter packageAdapter)
             {
                 if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
             }
@@ -57,8 +57,8 @@ public class SortFallout4 : ISort
     private bool HasOutOfOrderScript(IScriptEntryGetter? scriptEntry)
     {
         if (scriptEntry == null) return false;
-        if (!scriptEntry.Properties.Select(x => x.Name)
-                .SequenceEqual(scriptEntry.Properties.OrderBy(x => x.Name).Select(x => x.Name)))
+        var names = scriptEntry.Properties.Select(x => x.Name).ToArray();
+        if (!names.SequenceEqual(names.OrderBy(x => x)))
         {
             return true;
         }
@@ -96,13 +96,13 @@ public class SortFallout4 : ISort
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
         {
-            if (hasVM.VirtualMachineAdapter == null) continue;
-            foreach (var script in hasVM.VirtualMachineAdapter.Scripts)
+            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
+            foreach (var script in vm.Scripts)
             {
                 ProcessScript(script);
             }
             
-            if (hasVM.VirtualMachineAdapter is IQuestAdapter questAdapter)
+            if (vm is IQuestAdapter questAdapter)
             {
                 ProcessScript(questAdapter.Script);
                 foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
@@ -111,12 +111,12 @@ public class SortFallout4 : ISort
                 }
             }
 
-            if (hasVM.VirtualMachineAdapter is IPerkAdapter perkAdapter)
+            if (vm is IPerkAdapter perkAdapter)
             {
                 ProcessScript(perkAdapter.ScriptFragments?.Script);
             }
 
-            if (hasVM.VirtualMachineAdapter is IPackageAdapter packageAdapter)
+            if (vm is IPackageAdapter packageAdapter)
             {
                 ProcessScript(packageAdapter.ScriptFragments?.Script);
             }

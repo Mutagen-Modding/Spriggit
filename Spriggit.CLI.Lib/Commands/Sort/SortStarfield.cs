@@ -37,18 +37,18 @@ public class SortStarfield : ISort
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter == null) continue;
-            foreach (var script in hasVM.VirtualMachineAdapter.Scripts)
+            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
+            foreach (var script in vm.Scripts)
             {
                 if (HasOutOfOrderScript(script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IVirtualMachineAdapterIndexedGetter indexedAdapter)
+            if (vm is IVirtualMachineAdapterIndexedGetter indexedAdapter)
             {
                 if (HasOutOfOrderScript(indexedAdapter.ScriptFragments?.Script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IQuestAdapter questAdapter)
+            if (vm is IQuestAdapter questAdapter)
             {
                 if (HasOutOfOrderScript(questAdapter.Script)) return true;
                 foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
@@ -57,22 +57,22 @@ public class SortStarfield : ISort
                 }
             }
 
-            if (hasVM.VirtualMachineAdapter is IPerkAdapterGetter perkAdapter)
+            if (vm is IPerkAdapterGetter perkAdapter)
             {
                 if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IPackageAdapterGetter packageAdapter)
+            if (vm is IPackageAdapterGetter packageAdapter)
             {
                 if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is ISceneAdapterGetter sceneAdapter)
+            if (vm is ISceneAdapterGetter sceneAdapter)
             {
                 if (HasOutOfOrderScript(sceneAdapter.ScriptFragments?.Script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IDialogResponsesAdapterGetter dialAdapter)
+            if (vm is IDialogResponsesAdapterGetter dialAdapter)
             {
                 if (HasOutOfOrderScript(dialAdapter.ScriptFragments?.Script)) return true;
             }
@@ -84,13 +84,14 @@ public class SortStarfield : ISort
     private bool HasOutOfOrderScript(IScriptEntryGetter? scriptEntry)
     {
         if (scriptEntry == null) return false;
-        if (!scriptEntry.Properties.Select(x => x.Name)
-                .SequenceEqual(scriptEntry.Properties.OrderBy(x => x.Name).Select(x => x.Name)))
+        var props = scriptEntry.Properties.ToArray();
+        var names = props.Select(x => x.Name).ToArray();
+        if (!names.SequenceEqual(names.OrderBy(x => x)))
         {
             return true;
         }
 
-        foreach (var prop in scriptEntry.Properties.OfType<IScriptStructPropertyGetter>())
+        foreach (var prop in props.OfType<IScriptStructPropertyGetter>())
         {
             foreach (var memb in prop.Members)
             {

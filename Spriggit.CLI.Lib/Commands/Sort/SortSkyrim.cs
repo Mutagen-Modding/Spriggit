@@ -35,13 +35,13 @@ public class SortSkyrim : ISort
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter == null) continue;
-            foreach (var script in hasVM.VirtualMachineAdapter.Scripts)
+            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
+            foreach (var script in vm.Scripts)
             {
                 if (HasOutOfOrderScript(script)) return true;
             }
 
-            if (hasVM.VirtualMachineAdapter is IQuestAdapter questAdapter)
+            if (vm is IQuestAdapter questAdapter)
             {
                 foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
                 {
@@ -55,8 +55,8 @@ public class SortSkyrim : ISort
 
     private bool HasOutOfOrderScript(IScriptEntryGetter scriptEntry)
     {
-        if (!scriptEntry.Properties.Select(x => x.Name)
-                .SequenceEqual(scriptEntry.Properties.OrderBy(x => x.Name).Select(x => x.Name)))
+        var names = scriptEntry.Properties.Select(x => x.Name).ToArray();
+        if (!names.SequenceEqual(names.OrderBy(x => x)))
         {
             return true;
         }
