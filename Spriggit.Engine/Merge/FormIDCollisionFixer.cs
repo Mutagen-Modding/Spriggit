@@ -3,6 +3,7 @@ using System.Reflection;
 using LibGit2Sharp;
 using Loqui;
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
@@ -48,6 +49,8 @@ public class FormIDCollisionFixer
         var meta = await _getMetaToUse.Get(null, spriggitModPath, CancellationToken.None);
 
         var typeStr = $"Mutagen.Bethesda.{meta.Release.ToCategory()}.{meta.Release.ToCategory()}Mod";
+
+        Warmup.Init();
         var regis = LoquiRegistration.GetRegisterByFullName(typeStr);
         if (regis == null)
         {
