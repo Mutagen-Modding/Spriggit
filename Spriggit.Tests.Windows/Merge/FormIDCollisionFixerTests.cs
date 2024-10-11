@@ -48,7 +48,7 @@ public class FormIDCollisionFixerTests
         Npc n1,
         ModKey modKey)
     {
-        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false, deleteAfter: false, deleteBefore: true);
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer", nameof(NothingToFix)), throwIfUnsuccessfulDisposal: false, deleteAfter: false, deleteBefore: true);
 
         var meta = new SpriggitMeta(
             new SpriggitSource()
@@ -108,9 +108,8 @@ public class FormIDCollisionFixerTests
         SkyrimMod mod,
         Armor armor)
     {
-        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer"), throwIfUnsuccessfulDisposal: false, deleteAfter: false);
-        tmp.Dir.DeleteEntireFolder();
-        
+        using var tmp = TempFolder.FactoryByAddedPath(Path.Combine("SpriggitUnitTests", "FormIdCollisionFixer", nameof(SomethingToFix)), throwIfUnsuccessfulDisposal: false, deleteAfter: false, deleteBefore: true);
+
         var modFolder = Path.Combine(tmp.Dir, "ModFolder");
         Directory.CreateDirectory(modFolder);
         var modPath = Path.Combine(modFolder, mod.ModKey.FileName);
