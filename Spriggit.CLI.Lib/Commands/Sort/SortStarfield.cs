@@ -26,7 +26,7 @@ public class SortStarfield : ISort
             .WithDataFolder(dataFolder)
             .WithFileSystem(_fileSystem)
             .Construct();
-        if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+        if (VirtualMachineAdaptersHaveWorkToDo(mod)) return true;
         if (RaceMorphGroupHasWorkToDo(mod)) return true;
         if (NpcsHaveWorkToDo(mod)) return true;
 
@@ -40,8 +40,17 @@ public class SortStarfield : ISort
                      .AsParallel())
         {
             var charGen = race.ChargenAndSkintones;
-            if (ChargenHasWorkToDo(charGen?.Male)) return true;
-            if (ChargenHasWorkToDo(charGen?.Female)) return true;
+            if (ChargenHasWorkToDo(charGen?.Male))
+            {
+                Console.WriteLine($"{race} Male CharGen has sorting to be done.");
+                return true;
+            }
+
+            if (ChargenHasWorkToDo(charGen?.Female))
+            {
+                Console.WriteLine($"{race} Female CharGen has sorting to be done.");
+                return true;
+            }
         }
 
         return false;
@@ -54,9 +63,17 @@ public class SortStarfield : ISort
                      .AsParallel())
         {
             var morphGroupNames = npc.FaceMorphs.SelectMany(x => x.MorphGroups).Select(x => x.MorphGroup).ToArray();
-            if (!morphGroupNames.SequenceEqual(morphGroupNames.OrderBy(x => x))) return true;
+            if (!morphGroupNames.SequenceEqual(morphGroupNames.OrderBy(x => x)))
+            {
+                Console.WriteLine($"{npc} Morph Group Names sorting to be done.");
+                return true;
+            }
             var morphBlendNames = npc.MorphBlends.Select(x => x.BlendName).ToArray();
-            if (!morphBlendNames.SequenceEqual(morphBlendNames.OrderBy(x => x))) return true;
+            if (!morphBlendNames.SequenceEqual(morphBlendNames.OrderBy(x => x)))
+            {
+                Console.WriteLine($"{npc} Morph Blend Names sorting to be done.");
+                return true;
+            }
         }
 
         return false;
@@ -74,51 +91,62 @@ public class SortStarfield : ISort
         return false;
     }
 
-    private bool VirtualMachineAdapterHasWorkToDo(IStarfieldModDisposableGetter mod)
+    private bool VirtualMachineAdaptersHaveWorkToDo(IStarfieldModDisposableGetter mod)
     {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
-            foreach (var script in vm.Scripts)
+            if (VirtualMachineAdapterHasWorkToDo(hasVM))
+            {
+                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool VirtualMachineAdapterHasWorkToDo(IHaveVirtualMachineAdapterGetter hasVM)
+    {
+        if (hasVM.VirtualMachineAdapter is not {} vm) return false;
+        foreach (var script in vm.Scripts)
+        {
+            if (HasOutOfOrderScript(script)) return true;
+        }
+
+        if (vm is IVirtualMachineAdapterIndexedGetter indexedAdapter)
+        {
+            if (HasOutOfOrderScript(indexedAdapter.ScriptFragments?.Script)) return true;
+        }
+
+        if (vm is IQuestAdapter questAdapter)
+        {
+            if (HasOutOfOrderScript(questAdapter.Script)) return true;
+            foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
             {
                 if (HasOutOfOrderScript(script)) return true;
             }
+        }
 
-            if (vm is IVirtualMachineAdapterIndexedGetter indexedAdapter)
-            {
-                if (HasOutOfOrderScript(indexedAdapter.ScriptFragments?.Script)) return true;
-            }
+        if (vm is IPerkAdapterGetter perkAdapter)
+        {
+            if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
+        }
 
-            if (vm is IQuestAdapter questAdapter)
-            {
-                if (HasOutOfOrderScript(questAdapter.Script)) return true;
-                foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
-                {
-                    if (HasOutOfOrderScript(script)) return true;
-                }
-            }
+        if (vm is IPackageAdapterGetter packageAdapter)
+        {
+            if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
+        }
 
-            if (vm is IPerkAdapterGetter perkAdapter)
-            {
-                if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
-            }
+        if (vm is ISceneAdapterGetter sceneAdapter)
+        {
+            if (HasOutOfOrderScript(sceneAdapter.ScriptFragments?.Script)) return true;
+        }
 
-            if (vm is IPackageAdapterGetter packageAdapter)
-            {
-                if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
-            }
-
-            if (vm is ISceneAdapterGetter sceneAdapter)
-            {
-                if (HasOutOfOrderScript(sceneAdapter.ScriptFragments?.Script)) return true;
-            }
-
-            if (vm is IDialogResponsesAdapterGetter dialAdapter)
-            {
-                if (HasOutOfOrderScript(dialAdapter.ScriptFragments?.Script)) return true;
-            }
+        if (vm is IDialogResponsesAdapterGetter dialAdapter)
+        {
+            if (HasOutOfOrderScript(dialAdapter.ScriptFragments?.Script)) return true;
         }
 
         return false;

@@ -24,29 +24,40 @@ public class SortSkyrim : ISort
             .FromPath(path)
             .WithFileSystem(_fileSystem)
             .Construct();
-        if (HasVirtualMachineAdapterWorkToDo(mod)) return true;
+        if (VirtualMachineAdaptersHaveWorkToDo(mod)) return true;
 
         return false;
     }
 
-    private bool HasVirtualMachineAdapterWorkToDo(ISkyrimModDisposableGetter mod)
+    private bool VirtualMachineAdaptersHaveWorkToDo(ISkyrimModDisposableGetter mod)
     {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
-            foreach (var script in vm.Scripts)
+            if (VirtualMachineAdapterHasWorkToDo(hasVM)) 
+            {
+                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool VirtualMachineAdapterHasWorkToDo(IHaveVirtualMachineAdapterGetter hasVM)
+    {
+        if (hasVM.VirtualMachineAdapter is not {} vm) return false;
+        foreach (var script in vm.Scripts)
+        {
+            if (HasOutOfOrderScript(script)) return true;
+        }
+
+        if (vm is IQuestAdapter questAdapter)
+        {
+            foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
             {
                 if (HasOutOfOrderScript(script)) return true;
-            }
-
-            if (vm is IQuestAdapter questAdapter)
-            {
-                foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
-                {
-                    if (HasOutOfOrderScript(script)) return true;
-                }
             }
         }
 

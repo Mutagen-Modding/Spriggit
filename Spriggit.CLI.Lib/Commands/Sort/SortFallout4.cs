@@ -24,7 +24,7 @@ public class SortFallout4 : ISort
             .FromPath(path)
             .WithFileSystem(_fileSystem)
             .Construct();
-        if (VirtualMachineAdapterHasWorkToDo(mod)) return true;
+        if (VirtualMachineAdaptersHaveWorkToDo(mod)) return true;
         if (MorphGroupHasWorkToDo(mod)) return true;
         return false;
     }
@@ -36,8 +36,16 @@ public class SortFallout4 : ISort
                      .AsParallel())
         {
             var headData = race.HeadData;
-            if (HeadDataHasWorkToDo(headData?.Male)) return true;
-            if (HeadDataHasWorkToDo(headData?.Female)) return true;
+            if (HeadDataHasWorkToDo(headData?.Male))
+            {
+                Console.WriteLine($"{race} Male Head Data sorting to be done.");
+                return true;
+            }
+            if (HeadDataHasWorkToDo(headData?.Female))
+            {
+                Console.WriteLine($"{race} Female Head Data sorting to be done.");
+                return true;
+            }
         }
 
         return false;
@@ -55,36 +63,47 @@ public class SortFallout4 : ISort
         return false;
     }
 
-    private bool VirtualMachineAdapterHasWorkToDo(IFallout4ModDisposableGetter mod)
+    private bool VirtualMachineAdaptersHaveWorkToDo(IFallout4ModDisposableGetter mod)
     {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
                      .AsParallel())
         {
-            if (hasVM.VirtualMachineAdapter is not {} vm) continue;
-            foreach (var script in vm.Scripts)
+            if (VirtualMachineAdapterHasWorkToDo(hasVM))
+            {
+                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool VirtualMachineAdapterHasWorkToDo(IHaveVirtualMachineAdapterGetter hasVM)
+    {
+        if (hasVM.VirtualMachineAdapter is not {} vm) return false;
+        foreach (var script in vm.Scripts)
+        {
+            if (HasOutOfOrderScript(script)) return true;
+        }
+
+        if (vm is IQuestAdapter questAdapter)
+        {
+            if (HasOutOfOrderScript(questAdapter.Script)) return true;
+            foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
             {
                 if (HasOutOfOrderScript(script)) return true;
             }
+        }
 
-            if (vm is IQuestAdapter questAdapter)
-            {
-                if (HasOutOfOrderScript(questAdapter.Script)) return true;
-                foreach (var script in questAdapter.Aliases.SelectMany(x => x.Scripts))
-                {
-                    if (HasOutOfOrderScript(script)) return true;
-                }
-            }
+        if (vm is IPerkAdapterGetter perkAdapter)
+        {
+            if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
+        }
 
-            if (vm is IPerkAdapterGetter perkAdapter)
-            {
-                if (HasOutOfOrderScript(perkAdapter.ScriptFragments?.Script)) return true;
-            }
-
-            if (vm is IPackageAdapterGetter packageAdapter)
-            {
-                if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
-            }
+        if (vm is IPackageAdapterGetter packageAdapter)
+        {
+            if (HasOutOfOrderScript(packageAdapter.ScriptFragments?.Script)) return true;
         }
 
         return false;
