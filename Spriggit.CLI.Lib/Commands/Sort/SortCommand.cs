@@ -23,37 +23,16 @@ public class SortCommand
         Required = false)]
     public string? DataFolder { get; set; }
 
+    private static SortRunnerContainer GetContainer()
+    {
+        return new SortRunnerContainer(new FileSystem(), LoggerSetup.Logger);
+    }
+    
     public async Task<int> Run()
     {
-        var fs = new FileSystem();
-        ISort sorter;
-        switch (GameRelease.ToCategory())
-        {
-            case GameCategory.Oblivion:
-                // Nothing to do
-                return 0;
-            case GameCategory.Skyrim:
-                sorter = new SortSkyrim(fs);
-                break;
-            case GameCategory.Fallout4:
-                sorter = new SortFallout4(fs);
-                break;
-            case GameCategory.Starfield:
-                sorter = new SortStarfield(fs);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        Console.WriteLine("Checking if there's any work to do.");
-        if (!sorter.HasWorkToDo(InputPath, GameRelease, DataFolder))
-        {
-            Console.WriteLine("No sorting to be done.  Exiting.");
-            return 0;
-        }
-        
-        await sorter.Run(InputPath, GameRelease, OutputPath, DataFolder);
-        Console.WriteLine("Sorting complete.  Exiting.");
+        await GetContainer()
+            .Resolve().Value
+            .Run(this);
         return 0;
     }
 }

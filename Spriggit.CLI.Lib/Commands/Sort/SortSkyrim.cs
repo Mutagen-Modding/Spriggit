@@ -3,15 +3,20 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
+using Serilog;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
 public class SortSkyrim : ISort
 {
+    private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public SortSkyrim(IFileSystem fileSystem)
+    public SortSkyrim(
+        ILogger logger,
+        IFileSystem fileSystem)
     {
+        _logger = logger;
         _fileSystem = fileSystem;
     }
     
@@ -37,7 +42,7 @@ public class SortSkyrim : ISort
         {
             if (VirtualMachineAdapterHasWorkToDo(hasVM)) 
             {
-                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                _logger.Information($"{hasVM} Virtual Machine Adapter has sorting to be done.");
                 return true;
             }
         }

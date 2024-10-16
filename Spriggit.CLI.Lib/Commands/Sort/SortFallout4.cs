@@ -3,16 +3,21 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins;
 using Noggog;
+using Serilog;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
 public class SortFallout4 : ISort
 {
+    private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public SortFallout4(IFileSystem fileSystem)
+    public SortFallout4(
+        IFileSystem fileSystem,
+        ILogger logger)
     {
         _fileSystem = fileSystem;
+        _logger = logger;
     }
     
     public bool HasWorkToDo(
@@ -38,12 +43,12 @@ public class SortFallout4 : ISort
             var headData = race.HeadData;
             if (HeadDataHasWorkToDo(headData?.Male))
             {
-                Console.WriteLine($"{race} Male Head Data sorting to be done.");
+                _logger.Information($"{race} Male Head Data sorting to be done.");
                 return true;
             }
             if (HeadDataHasWorkToDo(headData?.Female))
             {
-                Console.WriteLine($"{race} Female Head Data sorting to be done.");
+                _logger.Information($"{race} Female Head Data sorting to be done.");
                 return true;
             }
         }
@@ -71,7 +76,7 @@ public class SortFallout4 : ISort
         {
             if (VirtualMachineAdapterHasWorkToDo(hasVM))
             {
-                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                _logger.Information($"{hasVM} Virtual Machine Adapter has sorting to be done.");
                 return true;
             }
         }

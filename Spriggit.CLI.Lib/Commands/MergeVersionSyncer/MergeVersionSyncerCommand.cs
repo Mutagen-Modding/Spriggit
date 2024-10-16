@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Spriggit.CLI.Lib.Commands;
+namespace Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 
 [Verb("merge-version-syncer", HelpText = "Command to be run after a git merge to address differing spriggit versions between parents")]
 public class MergeVersionSyncerCommand

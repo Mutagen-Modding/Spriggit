@@ -3,16 +3,21 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
+using Serilog;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
 public class SortStarfield : ISort
 {
+    private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public SortStarfield(IFileSystem fileSystem)
+    public SortStarfield(
+        IFileSystem fileSystem, 
+        ILogger logger)
     {
         _fileSystem = fileSystem;
+        _logger = logger;
     }
     
     public bool HasWorkToDo(
@@ -42,13 +47,13 @@ public class SortStarfield : ISort
             var charGen = race.ChargenAndSkintones;
             if (ChargenHasWorkToDo(charGen?.Male))
             {
-                Console.WriteLine($"{race} Male CharGen has sorting to be done.");
+                _logger.Information($"{race} Male CharGen has sorting to be done.");
                 return true;
             }
 
             if (ChargenHasWorkToDo(charGen?.Female))
             {
-                Console.WriteLine($"{race} Female CharGen has sorting to be done.");
+                _logger.Information($"{race} Female CharGen has sorting to be done.");
                 return true;
             }
         }
@@ -65,13 +70,13 @@ public class SortStarfield : ISort
             var morphGroupNames = npc.FaceMorphs.SelectMany(x => x.MorphGroups).Select(x => x.MorphGroup).ToArray();
             if (!morphGroupNames.SequenceEqual(morphGroupNames.OrderBy(x => x)))
             {
-                Console.WriteLine($"{npc} Morph Group Names sorting to be done.");
+                _logger.Information($"{npc} Morph Group Names sorting to be done.");
                 return true;
             }
             var morphBlendNames = npc.MorphBlends.Select(x => x.BlendName).ToArray();
             if (!morphBlendNames.SequenceEqual(morphBlendNames.OrderBy(x => x)))
             {
-                Console.WriteLine($"{npc} Morph Blend Names sorting to be done.");
+                _logger.Information($"{npc} Morph Blend Names sorting to be done.");
                 return true;
             }
         }
@@ -99,7 +104,7 @@ public class SortStarfield : ISort
         {
             if (VirtualMachineAdapterHasWorkToDo(hasVM))
             {
-                Console.WriteLine($"{hasVM} Virtual Machine Adapter has sorting to be done.");
+                _logger.Information($"{hasVM} Virtual Machine Adapter has sorting to be done.");
                 return true;
             }
         }

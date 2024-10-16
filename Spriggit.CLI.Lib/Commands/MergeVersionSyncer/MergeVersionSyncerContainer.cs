@@ -7,7 +7,7 @@ using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
-namespace Spriggit.CLI.Lib;
+namespace Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 
 [Register(typeof(GetMetaToUse))]
 [Register(typeof(EntryPointCache), typeof(IEntryPointCache))]
@@ -28,8 +28,8 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]
 [Register(typeof(SpriggitFileLocator))]
-[Register(typeof(MergeVersionSyncer))]
-partial class MergeVersionSyncerContainer : IContainer<MergeVersionSyncer>
+[Register(typeof(Engine.Merge.MergeVersionSyncer))]
+partial class MergeVersionSyncerContainer : IContainer<Engine.Merge.MergeVersionSyncer>
 {
     [Instance] private readonly IFileSystem _fileSystem;
     [Instance] private readonly ILogger _logger;
