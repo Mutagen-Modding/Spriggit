@@ -1,25 +1,56 @@
-﻿using System.IO.Abstractions;
-using Mutagen.Bethesda;
+﻿using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins.Records;
+using Serilog;
+using Spriggit.Core;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
 public class SortCommandRunner
 {
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger _logger;
+    private readonly SpriggitFileLocator _spriggitFileLocator;
     private readonly SortSkyrim _sortSkyrim;
     private readonly SortFallout4 _sortFallout4;
     private readonly SortStarfield _sortStarfield;
 
     public SortCommandRunner(
-        IFileSystem fileSystem,
+        ILogger logger,
+        SpriggitFileLocator spriggitFileLocator,
         SortSkyrim sortSkyrim,
         SortFallout4 sortFallout4,
         SortStarfield sortStarfield)
     {
-        _fileSystem = fileSystem;
+        _logger = logger;
+        _spriggitFileLocator = spriggitFileLocator;
         _sortSkyrim = sortSkyrim;
         _sortFallout4 = sortFallout4;
         _sortStarfield = sortStarfield;
+    }
+
+    private SpriggitFile? GetSpriggitFile(SortCommand cmd)
+    {
+        if (cmd.KnownMasterLocation != null)
+        {
+            _logger.Information("Using spriggit file from: {Path}", cmd.KnownMasterLocation);
+            return _spriggitFileLocator.LocateAndParse(cmd.KnownMasterLocation);
+        }
+
+        var ret = _spriggitFileLocator.LocateAndParse(Path.GetDirectoryName(cmd.OutputPath)!);
+        if (ret != null)
+        {
+            _logger.Information("Using spriggit file from: {Path}", cmd.OutputPath);
+            return ret;
+        }
+
+        ret = _spriggitFileLocator.LocateAndParse(Path.GetDirectoryName(cmd.InputPath)!);
+        if (ret != null)
+        {
+            _logger.Information("Using spriggit file from: {Path}", cmd.InputPath);
+            return ret;
+        }
+
+        return null;
     }
     
     public async Task Run(SortCommand cmd)
@@ -43,14 +74,18 @@ public class SortCommandRunner
                 throw new ArgumentOutOfRangeException();
         }
 
+        KeyedMasterStyle[] keyedMasterStyles = GetSpriggitFile(cmd)?.KnownMasters
+            .Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
+            .ToArray() ?? [];
+
         Console.WriteLine("Checking if there is sorting necessary.");
-        if (!sorter.HasWorkToDo(cmd.InputPath, cmd.GameRelease, cmd.DataFolder))
+        if (!sorter.HasWorkToDo(cmd.InputPath, cmd.GameRelease, keyedMasterStyles, cmd.DataFolder))
         {
             Console.WriteLine("No sorting to be done.  Exiting.");
             return;
         }
         
-        await sorter.Run(cmd.InputPath, cmd.GameRelease, cmd.OutputPath, cmd.DataFolder);
+        await sorter.Run(cmd.InputPath, cmd.GameRelease, cmd.OutputPath, keyedMasterStyles, cmd.DataFolder);
         Console.WriteLine("Sorting complete.  Exiting.");
     }
 }

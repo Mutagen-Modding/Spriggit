@@ -2,6 +2,7 @@
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Serilog;
 
@@ -23,6 +24,7 @@ public class SortFallout4 : ISort
     public bool HasWorkToDo(
         ModPath path, 
         GameRelease release,
+        KeyedMasterStyle[] knownMasters,
         DirectoryPath? dataFolder)
     {
         using var mod = Fallout4Mod.Create(release.ToFallout4Release())
@@ -130,6 +132,7 @@ public class SortFallout4 : ISort
         ModPath path, 
         GameRelease release, 
         ModPath outputPath,
+        KeyedMasterStyle[] knownMasters,
         DirectoryPath? dataFolder)
     {
         var mod = Fallout4Mod.Create(release.ToFallout4Release())
@@ -145,6 +148,7 @@ public class SortFallout4 : ISort
             maj.IsCompressed = false;
         }
         
+        outputPath.Path.Directory?.Create(_fileSystem);
         await mod.BeginWrite
             .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()

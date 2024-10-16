@@ -83,9 +83,9 @@ public class SortTests
 
         var modPath2 = Path.Combine(existingDir2, skyrimMod.ModKey.FileName);
 
-        sortSkyrim.HasWorkToDo(modPath, GameRelease.SkyrimSE, null)
+        sortSkyrim.HasWorkToDo(modPath, GameRelease.SkyrimSE, [], null)
             .Should().BeTrue();
-        await sortSkyrim.Run(modPath, GameRelease.SkyrimSE, modPath2, null);
+        await sortSkyrim.Run(modPath, GameRelease.SkyrimSE, modPath2, [], null);
 
         using var reimport = SkyrimMod.Create(SkyrimRelease.SkyrimSE)
             .FromPath(modPath2)
@@ -159,9 +159,9 @@ public class SortTests
 
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
-        sort.HasWorkToDo(modPath, GameRelease.Fallout4, null)
+        sort.HasWorkToDo(modPath, GameRelease.Fallout4, [], null)
             .Should().BeTrue();
-        await sort.Run(modPath, GameRelease.Fallout4, modPath2, null);
+        await sort.Run(modPath, GameRelease.Fallout4, modPath2, [], null);
 
         using var reimport = Fallout4Mod.Create(Fallout4Release.Fallout4)
             .FromPath(modPath2)
@@ -258,9 +258,9 @@ public class SortTests
 
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
-        sort.HasWorkToDo(modPath, GameRelease.Starfield, null)
+        sort.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
             .Should().BeTrue();
-        await sort.Run(modPath, GameRelease.Starfield, modPath2, null);
+        await sort.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
             .FromPath(modPath2)
@@ -319,9 +319,9 @@ public class SortTests
 
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
-        sort.HasWorkToDo(modPath, GameRelease.Starfield, null)
+        sort.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
             .Should().BeTrue();
-        await sort.Run(modPath, GameRelease.Starfield, modPath2, null);
+        await sort.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
             .FromPath(modPath2)
@@ -374,9 +374,9 @@ public class SortTests
 
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
-        sortStarfield.HasWorkToDo(modPath, GameRelease.Starfield, null)
+        sortStarfield.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
             .Should().BeTrue();
-        await sortStarfield.Run(modPath, GameRelease.Starfield, modPath2, null);
+        await sortStarfield.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
             .FromPath(modPath2)

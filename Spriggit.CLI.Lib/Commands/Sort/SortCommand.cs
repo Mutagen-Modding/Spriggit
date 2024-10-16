@@ -1,6 +1,7 @@
-﻿using System.IO.Abstractions;
+using System.IO.Abstractions;
 using CommandLine;
 using Mutagen.Bethesda;
+using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
@@ -22,6 +23,11 @@ public class SortCommand
         HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)",
         Required = false)]
     public string? DataFolder { get; set; }
+
+    [Option('k', "KnownMasterAnchorDirectory",
+        HelpText = "Path to begin search for .spriggit file in order to locate Known Masters.  (Only required for separated master games, like Starfield)",
+        Required = false)]
+    public string? KnownMasterLocation { get; set; }
 
     private static SortRunnerContainer GetContainer()
     {

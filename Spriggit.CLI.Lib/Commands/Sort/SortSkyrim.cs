@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using Serilog;
@@ -23,6 +24,7 @@ public class SortSkyrim : ISort
     public bool HasWorkToDo(
         ModPath path,
         GameRelease release,
+        KeyedMasterStyle[] knownMasters,
         DirectoryPath? dataFolder)
     {
         using var mod = SkyrimMod.Create(release.ToSkyrimRelease())
@@ -84,6 +86,7 @@ public class SortSkyrim : ISort
         ModPath path,
         GameRelease release, 
         ModPath outputPath,
+        KeyedMasterStyle[] knownMasters,
         DirectoryPath? dataFolder)
     {
         var mod = SkyrimMod.Create(release.ToSkyrimRelease())
@@ -98,6 +101,7 @@ public class SortSkyrim : ISort
             maj.IsCompressed = false;
         }
         
+        outputPath.Path.Directory?.Create(_fileSystem);
         await mod.BeginWrite
             .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()

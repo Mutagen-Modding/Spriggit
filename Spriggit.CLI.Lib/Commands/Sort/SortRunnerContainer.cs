@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
+using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
@@ -8,6 +9,7 @@ namespace Spriggit.CLI.Lib.Commands.Sort;
 [Register(typeof(SortFallout4))]
 [Register(typeof(SortStarfield))]
 [Register(typeof(SortCommandRunner))]
+[Register(typeof(SpriggitFileLocator))]
 partial class SortRunnerContainer : IContainer<SortCommandRunner>
 {
     [Instance] private readonly IFileSystem _fileSystem;
