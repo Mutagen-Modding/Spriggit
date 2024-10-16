@@ -43,6 +43,7 @@ In situations like these, you can list the master files and their "Master Style"
 ```
 
 Where the options are:
+
 - Full
 - Medium
 - Small
