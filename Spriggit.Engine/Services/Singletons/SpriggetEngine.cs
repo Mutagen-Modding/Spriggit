@@ -67,7 +67,7 @@ public class SpriggitEngine(
             bethesdaPluginPath,
             outputDir: outputFolder,
             dataPath: dataPath,
-            knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
+            knownMasters: spriggitFile?.KnownMasters ?? [],
             release: meta.Release,
             fileSystem: fileSystem,
             workDropoff: workDropoff,
@@ -87,7 +87,7 @@ public class SpriggitEngine(
                 release: meta.Release,
                 spriggit: outputFolder,
                 dataPath: dataPath,
-                knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
+                knownMasters: spriggitFile?.KnownMasters ?? [],
                 entryPt: entryPt,
                 cancel: cancel.Value);   
         }
