@@ -180,6 +180,7 @@ public class LinkInputVm : ViewModel
         Version = settings.SpriggitPackageVersion;
         SourceCategory = settings.SourceCategory;
         Release = settings.GameRelease;
+        DataFolderPicker.TargetPath = settings.DataFolderPath;
         
         // Needs to go last to drive config reading
         GitFolderPicker.TargetPath = settings.GitPath;
@@ -195,6 +196,7 @@ public class LinkInputVm : ViewModel
             SpriggitPackageVersion = Version,
             SourceCategory = SourceCategory,
             GameRelease = Release,
+            DataFolderPath = DataFolderPicker.TargetPath
         };
     }
 
