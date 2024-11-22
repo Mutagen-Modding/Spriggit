@@ -12,6 +12,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk">
       <Version>17.12.0</Version>
     </PackageVersion>
+      <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageVersion Include="Mutagen.Bethesda">
       <Version>[0.48]</Version>
     </PackageVersion>
