@@ -106,11 +106,11 @@ jobs:
     - name: Pack Preview
       if: ${{ success() && (github.event.release.prerelease || github.event_name != 'release') }}
       run: |
-        dotnet pack Spriggit.sln -c Release -o out --version-suffix "nightly-${{ steps.current-time.outputs.formattedTime }}"
+        dotnet pack Spriggit.sln -c Release -o out --include-symbols
     - name: Pack Release
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: | 
-        dotnet pack Spriggit.sln -c Release -o out
+        dotnet pack Spriggit.sln -c Release -o out --include-symbols
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true 
