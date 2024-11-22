@@ -1,135 +1,135 @@
 <Project>
-    <ItemGroup>
-        <PackageVersion Include="CommandLineParser" Version="2.9.1" />
-        <PackageVersion Include="GitInfo" PrivateAssets="all">
-            <Version>3.3.5</Version>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Include="McMaster.NETCore.Plugins">
-            <Version>1.4.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.NET.Test.Sdk">
-            <Version>17.10.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Core">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Kernel">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Starfield">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Testing">
-            <Version>[0.47.4-nightly-20241025-100180]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Serialization">
-            <Version>[1.26]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
-            <Version>[1.26]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
-            <Version>[1.26]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
-            <Version>[1.26]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.Autofac">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.CSharpExt">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.CSharpExt.Windows">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.GitRepository">
-            <Version>1.2.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.Testing">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.WPF">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="Noggog.SourceGenerators">
-            <Version>[2.65.1-nightly-20241010-092782]</Version>
-        </PackageVersion>
-        <PackageVersion Include="NuGet.Build.Tasks">
-            <Version>6.10.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="NuGet.PackageManagement">
-            <Version>6.10.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="NuGet.Packaging">
-            <Version>6.5.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="NuGetizer">
-            <Version>1.2.1</Version>
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Include="NuGet.Protocol">
-            <Version>6.10.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="NuGet.Versioning">
-            <Version>6.7.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="ReactiveUI">
-            <Version>20.1.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-        <PackageVersion Include="ReactiveUI.Fody">
-            <Version>19.5.41</Version>
-        </PackageVersion>
-        <PackageVersion Include="ReactiveUI.Testing">
-            <Version>19.5.41</Version>
-        </PackageVersion>
-        <PackageVersion Include="ReactiveUI.WPF">
-            <Version>20.1.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="Serilog">
-            <Version>4.0.1</Version>
-        </PackageVersion>
-        <PackageVersion Include="Serilog.Enrichers.Thread">
-            <Version>4.0.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
-        <PackageVersion Include="Serilog.Sinks.Console">
-            <Version>6.0.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="Serilog.Sinks.File">
-            <Version>6.0.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="StrongInject">
-            <Version>1.4.4</Version>
-        </PackageVersion>
-        <PackageVersion Include="xunit">
-            <Version>2.9.0</Version>
-        </PackageVersion>
-        <PackageVersion Include="xunit.runner.console">
-            <Version>2.9.0</Version>
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Include="xunit.runner.visualstudio">
-            <Version>2.8.2</Version>
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="CommandLineParser" Version="2.9.1" />
+    <PackageVersion Include="GitInfo" PrivateAssets="all">
+      <Version>3.5.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="McMaster.NETCore.Plugins">
+      <Version>1.4.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk">
+      <Version>17.12.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Core">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Kernel">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Skyrim">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Oblivion">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Fallout4">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Starfield">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Testing">
+      <Version>[0.48]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Serialization">
+      <Version>[1.29.0]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
+      <Version>[1.29.0]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
+      <Version>[1.29.0]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
+      <Version>[1.29.0]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.Autofac">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.CSharpExt">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.CSharpExt.Windows">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.GitRepository">
+      <Version>1.3.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.Testing">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.WPF">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="Noggog.SourceGenerators">
+      <Version>[2.69]</Version>
+    </PackageVersion>
+    <PackageVersion Include="NuGet.Build.Tasks">
+      <Version>6.12.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="NuGet.PackageManagement">
+      <Version>6.12.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="NuGet.Packaging">
+      <Version>6.5.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="NuGetizer">
+      <Version>1.2.1</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="NuGet.Protocol">
+      <Version>6.12.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="NuGet.Versioning">
+      <Version>6.7.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI">
+      <Version>20.1.63</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+    <PackageVersion Include="ReactiveUI.Fody">
+      <Version>19.5.41</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.Testing">
+      <Version>19.5.41</Version>
+    </PackageVersion>
+    <PackageVersion Include="ReactiveUI.WPF">
+      <Version>20.1.63</Version>
+    </PackageVersion>
+    <PackageVersion Include="Serilog">
+      <Version>4.1.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Serilog.Enrichers.Thread">
+      <Version>4.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console">
+      <Version>6.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="Serilog.Sinks.File">
+      <Version>6.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="StrongInject">
+      <Version>1.4.4</Version>
+    </PackageVersion>
+    <PackageVersion Include="xunit">
+      <Version>2.9.2</Version>
+    </PackageVersion>
+    <PackageVersion Include="xunit.runner.console">
+      <Version>2.9.2</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="xunit.runner.visualstudio">
+      <Version>2.8.2</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+  </ItemGroup>
 </Project>
