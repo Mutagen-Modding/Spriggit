@@ -20,7 +20,7 @@ public class FormIDReassignerTests
         sut.Reassign<IStarfieldMod, IStarfieldModGetter>(
             mod, 
             () => mod.GetNextFormKey(), 
-            Array.Empty<IFormLinkIdentifier>());
+            []);
         mod.EnumerateMajorRecords().Should().HaveCount(2);
         mod.Npcs.RecordCache.Count.Should().Be(2);
         mod.Npcs.RecordCache.ContainsKey(n1.FormKey).Should().BeTrue();

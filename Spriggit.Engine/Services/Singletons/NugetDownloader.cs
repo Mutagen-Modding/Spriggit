@@ -121,7 +121,7 @@ public class NugetDownloader
         var repos = _nugetSourceProvider.SourceRepositories;
         await packageManager.InstallPackageAsync(packageManager.PackagesFolderNuGetProject,
             identity, resolutionContext, projectContext, repos,
-            Array.Empty<SourceRepository>(),  // This is a list of secondary source repositories, probably empty
+            [],  // This is a list of secondary source repositories, probably empty
             cancel);
     }
     

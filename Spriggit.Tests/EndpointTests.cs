@@ -37,7 +37,7 @@ public class EndpointTests
             dataPath: dataFolder,
             release: GameRelease.Starfield,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, meta: new SpriggitSource()
             {
@@ -48,7 +48,7 @@ public class EndpointTests
             outputPath: modPath,
             dataPath: dataFolder,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
         fileSystem.File.Exists(modPath)
@@ -88,7 +88,7 @@ public class EndpointTests
                 dataPath: dataFolder,
                 release: GameRelease.Starfield,
                 workDropoff: null,
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 fileSystem: fileSystem,
                 streamCreator: null, meta: new SpriggitSource()
                 {
@@ -100,7 +100,7 @@ public class EndpointTests
                 outputPath: modPath2,
                 dataPath: dataFolder2,
                 workDropoff: null,
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 fileSystem: fileSystem,
                 streamCreator: null, cancel: CancellationToken.None);
             fileSystem.File.Exists(modPath2)
@@ -155,7 +155,7 @@ public class EndpointTests
             dataPath: dataFolder,
             release: GameRelease.Starfield,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, meta: new SpriggitSource()
             {
@@ -167,7 +167,7 @@ public class EndpointTests
             outputPath: modPath2,
             dataPath: dataFolder2,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
         var otherStringsFolder = Path.Combine(dataFolder2, "Strings");

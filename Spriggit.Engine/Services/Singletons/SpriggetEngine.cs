@@ -132,7 +132,7 @@ public class SpriggitEngine(
             spriggitPluginPath,
             outputPath: tempOutput,
             dataPath: dataPath,
-            knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
+            knownMasters: spriggitFile?.KnownMasters ?? [],
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,

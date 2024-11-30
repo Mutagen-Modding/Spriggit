@@ -65,7 +65,7 @@ GameRelease: SkyrimSE";
             outputPath: Path.Combine(existingOutputDir, "ModKey.esp"),
             dataPath: null,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null,
             cancel: CancellationToken.None);

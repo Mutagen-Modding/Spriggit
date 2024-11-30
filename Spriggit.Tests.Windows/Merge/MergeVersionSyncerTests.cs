@@ -174,7 +174,7 @@ public class MergeVersionSyncerTests
         await entryPoint.Serialize(
             modPath, spriggitModPath,
             dataPath: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
@@ -197,7 +197,7 @@ public class MergeVersionSyncerTests
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
                 dataPath: null, 
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
@@ -218,7 +218,7 @@ public class MergeVersionSyncerTests
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
                 dataPath: null, 
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,

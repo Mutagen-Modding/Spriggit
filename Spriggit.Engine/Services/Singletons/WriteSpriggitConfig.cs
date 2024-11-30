@@ -22,7 +22,7 @@ public class WriteSpriggitConfig
             meta.Source.PackageName,
             meta.Source.Version,
             meta.Release,
-            Array.Empty<KnownMaster>());
+            []);
         var str = JsonConvert.SerializeObject(serialize, Formatting.Indented, JsonSettings);
         fileSystem.File.WriteAllText(path, str);
     }
