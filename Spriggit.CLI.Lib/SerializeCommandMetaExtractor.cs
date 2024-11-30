@@ -2,6 +2,7 @@
 using Noggog;
 using Spriggit.CLI.Lib.Commands;
 using Spriggit.Core;
+using Spriggit.Core.Commands;
 
 namespace Spriggit.CLI.Lib;
 

@@ -4,6 +4,7 @@ using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
 using Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 using Spriggit.CLI.Lib.Commands.Sort;
+using Spriggit.Core.Commands;
 using Spriggit.Engine.Services.Singletons;
 
 try

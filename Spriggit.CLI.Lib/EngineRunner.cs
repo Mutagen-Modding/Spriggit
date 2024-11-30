@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using Noggog.WorkEngine;
 using Spriggit.CLI.Lib.Commands;
+using Spriggit.Core.Commands;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 
