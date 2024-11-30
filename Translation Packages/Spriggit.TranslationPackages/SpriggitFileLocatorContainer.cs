@@ -4,19 +4,15 @@ using Spriggit.Core;
 using Spriggit.Core.Services.Singletons;
 using StrongInject;
 
-namespace Spriggit.CLI.Lib.Commands.Sort;
+namespace Spriggit.TranslationPackages;
 
-[Register(typeof(SortSkyrim))]
-[Register(typeof(SortFallout4))]
-[Register(typeof(SortStarfield))]
-[Register(typeof(SortCommandRunner))]
 [Register(typeof(SpriggitFileLocator))]
-partial class SortRunnerContainer : IContainer<SortCommandRunner>
+partial class SpriggitFileLocatorContainer : IContainer<SpriggitFileLocator>
 {
     [Instance] private readonly IFileSystem _fileSystem;
     [Instance] private readonly ILogger _logger;
 
-    public SortRunnerContainer(
+    public SpriggitFileLocatorContainer(
         IFileSystem fileSystem,
         ILogger logger)
     {

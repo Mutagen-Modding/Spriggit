@@ -10,6 +10,7 @@ using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Noggog.WorkEngine;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.Yaml.Skyrim;

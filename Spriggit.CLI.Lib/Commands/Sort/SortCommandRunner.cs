@@ -2,6 +2,7 @@
 using Mutagen.Bethesda.Plugins.Records;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;

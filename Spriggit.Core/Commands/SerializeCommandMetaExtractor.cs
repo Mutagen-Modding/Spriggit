@@ -1,10 +1,7 @@
 ﻿using Mutagen.Bethesda.Plugins;
 using Noggog;
-using Spriggit.CLI.Lib.Commands;
-using Spriggit.Core;
-using Spriggit.Core.Commands;
 
-namespace Spriggit.CLI.Lib;
+namespace Spriggit.Core.Commands;
 
 public static class SerializeCommandMetaExtractor
 {

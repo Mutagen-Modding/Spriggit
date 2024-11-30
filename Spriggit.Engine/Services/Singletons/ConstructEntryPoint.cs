@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using Noggog;
 using NuGet.Packaging.Core;
+using NuGet.Versioning;
 using Serilog;
 
 namespace Spriggit.Engine.Services.Singletons;
@@ -15,16 +16,19 @@ public class ConstructEntryPoint
     private readonly ConstructCliEndpoint _constructCliEndpoint;
     private readonly FindTargetFramework _findTargetFramework;
     private readonly ConstructAssemblyLoadedEntryPoint _constructAssemblyLoadedEntryPoint;
+    private readonly ConstructDotNetToolEndpoint _constructDotNetToolEntryPoint;
+    private readonly NuGetVersion _legacyVersion = new(0, 35, 1, 0);
 
     public ConstructEntryPoint(
         ILogger logger,
+        IFileSystem fileSystem, 
         PreparePluginFolder preparePluginFolder,
         TargetFrameworkDirLocator frameworkDirLocator,
         DebugState debugState,
         ConstructCliEndpoint constructCliEndpoint,
         FindTargetFramework findTargetFramework,
         ConstructAssemblyLoadedEntryPoint constructAssemblyLoadedEntryPoint,
-        IFileSystem fileSystem)
+        ConstructDotNetToolEndpoint constructDotNetToolEntryPoint)
     {
         _logger = logger;
         _preparePluginFolder = preparePluginFolder;
@@ -34,17 +38,25 @@ public class ConstructEntryPoint
         _findTargetFramework = findTargetFramework;
         _constructAssemblyLoadedEntryPoint = constructAssemblyLoadedEntryPoint;
         _fileSystem = fileSystem;
+        _constructDotNetToolEntryPoint = constructDotNetToolEntryPoint;
     }
 
-    public Task<IEngineEntryPoint?> ConstructFor(
+    public async Task<IEngineEntryPoint?> ConstructFor(
         DirectoryPath tempPath,
         PackageIdentity ident,
         CancellationToken cancellationToken)
     {
-        return ConstructFor(tempPath, ident, cancellationToken, shouldRetry: false);
+        // ToDo
+        // Don't assume it's a Spriggit package.  Others might have their own versioning
+        if (ident.Version <= _legacyVersion)
+        {
+            return await ConstructForLegacy(tempPath, ident, cancellationToken, shouldRetry: false);
+        }
+        
+        return await _constructDotNetToolEntryPoint.ConstructFor(tempPath, ident, cancellationToken);
     }
 
-    private async Task<IEngineEntryPoint?> ConstructFor(
+    private async Task<IEngineEntryPoint?> ConstructForLegacy(
         DirectoryPath tempPath,
         PackageIdentity ident, 
         CancellationToken cancellationToken,
@@ -101,7 +113,7 @@ public class ConstructEntryPoint
         {
             _logger.Information("Error constructing entry point.  Deleting entire folder and then retrying {Path}", packageUnpackFolder);
             _fileSystem.Directory.DeleteEntireFolder(packageUnpackFolder, deleteFolderItself: true);
-            return await ConstructFor(sourcesPath, ident, cancellationToken, false);
+            return await ConstructForLegacy(sourcesPath, ident, cancellationToken, false);
         }
 
         var cliEndpoint = await _constructCliEndpoint.ConstructFor(tempPath, ident, cancellationToken);

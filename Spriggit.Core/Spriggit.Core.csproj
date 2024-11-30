@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="Noggog.CSharpExt" />
         <PackageReference Include="Mutagen.Bethesda.Kernel" />
         <PackageReference Include="CommandLineParser" />
+        <PackageReference Include="Noggog.SourceGenerators" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="StrongInject" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="StrongInject" />
+        <PackageReference Include="TestableIO.System.IO.Abstractions.Wrappers" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
+    </ItemGroup>
+
+</Project>

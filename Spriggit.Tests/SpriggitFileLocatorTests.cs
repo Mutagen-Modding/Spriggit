@@ -2,6 +2,8 @@
 using FluentAssertions;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
 

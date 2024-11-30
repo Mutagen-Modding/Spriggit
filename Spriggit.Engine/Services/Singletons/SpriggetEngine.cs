@@ -6,6 +6,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 
 namespace Spriggit.Engine.Services.Singletons;
 

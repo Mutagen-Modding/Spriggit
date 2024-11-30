@@ -4,6 +4,8 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
+using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
@@ -18,6 +20,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(ConstructEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]
+[Register(typeof(ConstructDotNetToolEndpoint))]
 [Register(typeof(FindTargetFramework))]
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(GetFrameworkType))]
@@ -38,6 +41,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(PostSerializeChecker))]
 [Register(typeof(SerializeBlocker))]
 [Register(typeof(PluginBackupCreator))]
+[Register(typeof(DotNetToolTranslationPackagePathProvider))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]
 [Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 partial class FormIDCollisionContainer : IContainer<FormIDCollisionFixer>

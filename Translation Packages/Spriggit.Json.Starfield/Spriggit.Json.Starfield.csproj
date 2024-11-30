@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>exe</OutputType>
+        <PackAsTool>true</PackAsTool>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <DebugType>portable</DebugType>
@@ -23,6 +25,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
+        <ProjectReference Include="..\Spriggit.TranslationPackages\Spriggit.TranslationPackages.csproj" />
     </ItemGroup>
 
 </Project>
