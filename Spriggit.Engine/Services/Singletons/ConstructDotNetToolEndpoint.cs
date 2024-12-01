@@ -54,7 +54,12 @@ public class ConstructDotNetToolEndpoint
                     {
                         _logger.Error(x);
                     });
-                await processWrapper.Run();
+                var ret = await processWrapper.Run();
+                if (ret != 0)
+                {
+                    _logger.Error("Error running dotnet tool install for {Identity}", ident);
+                    return null;
+                }
             }
             catch (Exception e)
             {
