@@ -86,7 +86,6 @@
     <PackageVersion Include="ReactiveUI">
       <Version>20.1.63</Version>
     </PackageVersion>
-    <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
     <PackageVersion Include="ReactiveUI.Fody">
       <Version>19.5.41</Version>
     </PackageVersion>
