@@ -9,7 +9,7 @@
                        xmlns:singletons="clr-namespace:Spriggit.UI.ViewModels.Singletons"
                        mc:Ignorable="d"
                        d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <ContentPresenter x:Name="ContentPane">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type singletons:ReposListingVm}">
@@ -23,5 +23,5 @@
                 </DataTemplate>
             </ContentPresenter.Resources>
         </ContentPresenter>
-    </Grid>
+    </ScrollViewer>
 </wpf:NoggogUserControl>
