@@ -53,7 +53,7 @@ public class CliEntryPoint : IEntryPoint
         IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta,
         CancellationToken cancel)
     {
-        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}{GetDataPathParam(dataPath)}";
+        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
         _logger.Information("Running CLI Entry point serialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(_pathToExe)
@@ -82,7 +82,7 @@ public class CliEntryPoint : IEntryPoint
         IWorkDropoff? workDropoff,
         IFileSystem? fileSystem, ICreateStream? streamCreator, CancellationToken cancel)
     {
-        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}{GetDataPathParam(dataPath)}";
+        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
         _logger.Information("Running CLI Entry point deserialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(_pathToExe)

@@ -59,7 +59,7 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
     {
         var exePath = GetExePath();
 
-        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Version.ToString().TrimEnd(".0")}{GetDataPathParam(dataPath)}";
+        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
         _logger.Information("Running DotNet Entry point serialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(exePath)
@@ -88,7 +88,7 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
     {
         var exePath = GetExePath();
 
-        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimEnd(".0")}{GetDataPathParam(dataPath)}";
+        var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
         _logger.Information("Running CLI Entry point deserialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(exePath)

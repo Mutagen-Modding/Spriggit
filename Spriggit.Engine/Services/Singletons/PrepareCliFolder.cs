@@ -11,7 +11,7 @@ public class PrepareCliFolder
     {
         using var tmp = TempFolder.Factory();
         var path = Path.Combine(tmp.Dir, "SpriggitCLI.zip");
-        var url = $"https://github.com/Mutagen-Modding/Spriggit/releases/download/{version.ToString().TrimEnd(".0")}/SpriggitCLI.zip";
+        var url = $"https://github.com/Mutagen-Modding/Spriggit/releases/download/{version.ToString().TrimStringFromEnd(".0")}/SpriggitCLI.zip";
         await DownloadFileAsync(
             url,
             Path.Combine(tmp.Dir, "SpriggitCLI.zip"),
