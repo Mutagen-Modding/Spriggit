@@ -11,62 +11,60 @@
     </PackageVersion>
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageVersion Include="Mutagen.Bethesda">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Core">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Kernel">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Starfield">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Testing">
-      <Version>[0.49.0-alpha.25]</Version>
+      <Version>[0.49.0-alpha.34]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization">
-      <Version>[1.30.0-alpha.2]</Version>
+      <Version>[1.30.0-alpha.4]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
-      <Version>[1.30.0-alpha.2]</Version>
+      <Version>[1.30.0-alpha.4]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
-      <Version>[1.30.0-alpha.2]</Version>
+      <Version>[1.30.0-alpha.4]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
-      <Version>[1.30.0-alpha.2]</Version>
+      <Version>[1.30.0-alpha.4]</Version>
     </PackageVersion>
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Noggog.Autofac">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.CSharpExt.Windows">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
-    <PackageVersion Include="Noggog.GitRepository">
-      <Version>1.3.0</Version>
-    </PackageVersion>
+    <PackageVersion Include="Noggog.GitRepository" Version="1.5.0" />
     <PackageVersion Include="Noggog.Testing">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.WPF">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
     <PackageVersion Include="Noggog.SourceGenerators">
-      <Version>[2.69]</Version>
+      <Version>[2.70.0-alpha.12]</Version>
     </PackageVersion>
     <PackageVersion Include="NuGet.Build.Tasks">
       <Version>6.12.1</Version>
@@ -95,9 +93,7 @@
     <PackageVersion Include="ReactiveUI.WPF">
       <Version>20.1.63</Version>
     </PackageVersion>
-    <PackageVersion Include="Serilog">
-      <Version>4.1.0</Version>
-    </PackageVersion>
+    <PackageVersion Include="Serilog" Version="4.2.0" />
     <PackageVersion Include="Serilog.Enrichers.Thread">
       <Version>4.0.0</Version>
     </PackageVersion>
@@ -111,7 +107,7 @@
     <PackageVersion Include="StrongInject">
       <Version>1.4.4</Version>
     </PackageVersion>
-    <PackageVersion Include="TestableIO.System.IO.Abstractions.Wrappers" Version="21.1.3" />
+    <PackageVersion Include="TestableIO.System.IO.Abstractions.Wrappers" Version="21.1.7" />
     <PackageVersion Include="xunit">
       <Version>2.9.2</Version>
     </PackageVersion>
