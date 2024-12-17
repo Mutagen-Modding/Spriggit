@@ -11,6 +11,8 @@
     <Color x:Key="NeonGreen">#50de21</Color>
     <Color x:Key="TransparentGrayBackground">#18000000</Color>
     <Color x:Key="GrayBorder">#333333</Color>
+    <Color x:Key="TransparentLightGrayBackground">#18666666</Color>
+    <Color x:Key="LightGrayBorder">#666666</Color>
     <Color x:Key="Salmon">#e16063</Color>
     
     <SolidColorBrush x:Key="OrangeYellowBrush" Color="{StaticResource OrangeYellow}" />

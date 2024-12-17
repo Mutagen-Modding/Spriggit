@@ -3,157 +3,175 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:local="clr-namespace:Spriggit.UI"
                        xmlns:wpf="clr-namespace:Noggog.WPF;assembly=Noggog.WPF"
-                       xmlns:viewModels="clr-namespace:Spriggit.UI.ViewModels"
                        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                        xmlns:singletons="clr-namespace:Spriggit.UI.ViewModels.Singletons"
                        mc:Ignorable="d"
                        d:DesignHeight="400" d:DesignWidth="300">
-    <StackPanel Orientation="Vertical" Margin="5">
-        <TextBlock Text="Path to Mod File" Margin="5" FontSize="14" FontWeight="Bold" />
-        <wpf:PathPicker x:Name="ModPathPicker" Margin="5" />
-        <TextBlock Text="Path to Git Folder" Margin="5" FontSize="14" FontWeight="Bold" />
-        <wpf:PathPicker x:Name="GitFolderPicker" Margin="5" />
-        <TextBlock x:Name="DataFolderTextBlock" Text="Path to Data Folder" Margin="5" FontSize="14" FontWeight="Bold" />
-        <wpf:PathPicker x:Name="DataFolderPicker" Margin="5" />
-        <TextBlock Grid.Column="0" Text="Game Release"
-                   VerticalAlignment="Bottom"
-                   Margin="5" FontSize="14" FontWeight="Bold" />
-        <ComboBox x:Name="GameReleaseCombo" Margin="5" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <TextBlock Text="Spriggit Package" Margin="5" FontSize="14" FontWeight="Bold" />
-        <Border Margin="5"
-                Padding="10,0"
-                Background="{StaticResource TransparentGrayBackgroundBrush}"
-                BorderBrush="{StaticResource GrayBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="5">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
-                <Border x:Name="VersioningPane"
-                        CornerRadius="6"  >
-                    <StackPanel Orientation="Vertical" >
-                        <TabControl x:Name="TabControl">
-                            <TabItem Header="Yaml">
-                            </TabItem>
-                            <TabItem Header="Json">
-                            </TabItem>
-                            <TabItem Header="Custom">
-                            </TabItem>
-                        </TabControl>
-                        <StackPanel Orientation="Horizontal" Margin="5,0,5,8">
+                <TextBlock Text="Path to Mod File" Margin="5" FontSize="14" FontWeight="Bold" />
+                <wpf:PathPicker x:Name="ModPathPicker" Margin="5" />
+                <TextBlock Text="Path to Git Folder" Margin="5" FontSize="14" FontWeight="Bold" />
+                <wpf:PathPicker x:Name="GitFolderPicker" Margin="5" />
+                <TextBlock x:Name="DataFolderTextBlock" Text="Path to Data Folder" Margin="5" FontSize="14"
+                           FontWeight="Bold" />
+                <wpf:PathPicker x:Name="DataFolderPicker" Margin="5" />
+                <TextBlock Text="Game Release"
+                           VerticalAlignment="Bottom"
+                           Margin="5" FontSize="14" FontWeight="Bold" />
+                <ComboBox x:Name="GameReleaseCombo" Margin="5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="Spriggit Package" Margin="5" FontSize="14" FontWeight="Bold" />
+                <Border Margin="5"
+                        Padding="10,0"
+                        Background="{StaticResource TransparentGrayBackgroundBrush}"
+                        BorderBrush="{StaticResource GrayBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                    <StackPanel Orientation="Vertical">
+                        <Border x:Name="VersioningPane"
+                                CornerRadius="6">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock x:Name="PackageTextBlock"
-                                           Text="Package"
-                                           Margin="5,0,0,5"
-                                           FontSize="14" FontWeight="Bold" />
-                                <TextBox x:Name="SpriggitPackageBox"
-                                         Text="{Binding LinkInput.PackageName}"
-                                         Width="110"
-                                         Margin="0,0,5,0" />
+                                <TabControl x:Name="TabControl">
+                                    <TabItem Header="Yaml">
+                                    </TabItem>
+                                    <TabItem Header="Json">
+                                    </TabItem>
+                                    <TabItem Header="Custom">
+                                    </TabItem>
+                                </TabControl>
+                                <StackPanel Orientation="Horizontal" Margin="5,0,5,8">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="PackageTextBlock"
+                                                   Text="Package"
+                                                   Margin="5,0,0,5"
+                                                   FontSize="14" FontWeight="Bold" />
+                                        <TextBox x:Name="SpriggitPackageBox"
+                                                 Text="{Binding LinkInput.PackageName}"
+                                                 Width="110"
+                                                 Margin="0,0,5,0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="VersionBlock"
+                                                   Text="Version"
+                                                   Margin="5,0,0,5"
+                                                   FontSize="14" FontWeight="Bold" />
+                                        <TextBox x:Name="SpriggitVersionBox"
+                                                 Text="{Binding LinkInput.Version}"
+                                                 Width="110"
+                                                 mah:TextBoxHelper.Watermark="Latest version" />
+                                    </StackPanel>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock x:Name="VersionBlock"
-                                           Text="Version"
-                                           Margin="5,0,0,5"
-                                           FontSize="14" FontWeight="Bold" />
-                                <TextBox x:Name="SpriggitVersionBox"
-                                         Text="{Binding LinkInput.Version}"
-                                         Width="110"
-                                         mah:TextBoxHelper.Watermark="Latest version" />
-                            </StackPanel>
+                        </Border>
+                        <StackPanel Orientation="Horizontal" x:Name="SpriggitConfigActivePane" Margin="5,0,0,8">
+                            <TextBlock Text="Controlled by .spriggit config" />
+                            <Button x:Name="GoToSpriggitConfigFolderButton" Margin="5,0,0,0">
+                                <iconPacks:FontAwesome Kind="FolderSolid" />
+                            </Button>
+                            <Button x:Name="EditSpriggitConfigButton" Margin="5,0,0,0">
+                                <iconPacks:Zondicons Kind="EditPencil" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" x:Name="CreateSpriggitConfigPane" Margin="5,0,0,8">
+                            <TextBlock Text="Create .spriggit config" />
+                            <Button x:Name="CreateSpriggitConfigButton" Margin="5,0,0,0">
+                                <iconPacks:ForkAwesome Kind="PlusCircle" />
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <StackPanel Orientation="Horizontal" x:Name="SpriggitConfigActivePane" Margin="5,0,0,8">
-                    <TextBlock Text="Controlled by .spriggit config" />
-                    <Button x:Name="GoToSpriggitConfigFolderButton" Margin="5,0,0,0">
-                        <iconPacks:FontAwesome Kind="FolderSolid" />
-                    </Button>
-                    <Button x:Name="EditSpriggitConfigButton" Margin="5,0,0,0">
-                        <iconPacks:Zondicons Kind="EditPencil" />
-                    </Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" x:Name="CreateSpriggitConfigPane" Margin="5,0,0,8">
-                    <TextBlock Text="Create .spriggit config" />
-                    <Button x:Name="CreateSpriggitConfigButton" Margin="5,0,0,0">
-                        <iconPacks:ForkAwesome Kind="PlusCircle" />
-                    </Button>
-                </StackPanel>
             </StackPanel>
-        </Border>
-        <Grid Margin="0,5,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"
-                    x:Name="CancelButton"
-                    HorizontalContentAlignment="Stretch">
-                    <Grid Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <iconPacks:PackIconFontAwesome Grid.Column="0"
-                            Margin="15,0,10,15"
-                            VerticalAlignment="Center"
-                            Kind="ArrowLeftSolid" />
-                        <TextBlock Grid.Column="1"
-                            Margin="0,-2,0,0"
-                            VerticalAlignment="Top"
-                            FontSize="14"
-                            Text="Cancel">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=CancelButton}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Grid>
-                </Button>
-                <Button Grid.Column="1"
-                    x:Name="AcceptButton"
-                    HorizontalContentAlignment="Stretch">
-                    <Grid Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <iconPacks:PackIconFontAwesome Grid.Column="1"
-                            Margin="10,0,15,15"
-                            VerticalAlignment="Center"
-                            Kind="CheckSolid" />
-                        <TextBlock Grid.Column="0" x:Name="AddButtonText"
-                            Margin="0,-2,0,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            FontSize="14"
-                            Text="Confirm">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=AcceptButton}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Grid>
-                </Button>
-        </Grid>
-    </StackPanel>
+        </ScrollViewer>
+        <Rectangle Height="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Top" >
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="{StaticResource TransparentLightGrayBackground}" />
+                    <GradientStop Offset="0.15" Color="{StaticResource LightGrayBorder}" />
+                    <GradientStop Offset="0.85" Color="{StaticResource LightGrayBorder}" />
+                    <GradientStop Offset="1" Color="{StaticResource TransparentLightGrayBackground}" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Button Grid.Row="2" Grid.Column="0"
+                x:Name="CancelButton"
+                HorizontalContentAlignment="Stretch">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <iconPacks:PackIconFontAwesome Grid.Column="0"
+                                               Margin="15,0,10,5"
+                                               VerticalAlignment="Center"
+                                               Kind="ArrowLeftSolid" />
+                <TextBlock Grid.Column="1"
+                           Margin="0,-2,0,0"
+                           VerticalAlignment="Top"
+                           FontSize="14"
+                           Text="Cancel">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CancelButton}"
+                                             Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Button>
+        <Button Grid.Row="2" Grid.Column="1"
+                x:Name="AcceptButton"
+                HorizontalContentAlignment="Stretch">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <iconPacks:PackIconFontAwesome Grid.Column="1"
+                                               Margin="10,0,15,5"
+                                               VerticalAlignment="Center"
+                                               Kind="CheckSolid" />
+                <TextBlock Grid.Column="0" x:Name="AddButtonText"
+                           Margin="0,-2,0,0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"
+                           FontSize="14"
+                           Text="Confirm">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=AcceptButton}"
+                                             Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Button>
+    </Grid>
 </wpf:NoggogUserControl>
