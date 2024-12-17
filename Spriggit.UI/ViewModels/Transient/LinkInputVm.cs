@@ -36,7 +36,7 @@ public class LinkInputVm : ViewModel
     public PathPickerVM GitFolderPicker { get; } = new()
     {
         PathType = PathPickerVM.PathTypeOptions.Folder,
-        ExistCheckOption = PathPickerVM.CheckOptions.On
+        ExistCheckOption = PathPickerVM.CheckOptions.Off,
     };
     
     public PathPickerVM DataFolderPicker { get; } = new()
