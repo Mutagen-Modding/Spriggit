@@ -6,6 +6,7 @@ using Noggog.IO;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 
 namespace Spriggit.Engine.Services.Singletons;
 
@@ -132,7 +133,7 @@ public class SpriggitEngine(
             spriggitPluginPath,
             outputPath: tempOutput,
             dataPath: dataPath,
-            knownMasters: spriggitFile?.KnownMasters ?? Array.Empty<KnownMaster>(),
+            knownMasters: spriggitFile?.KnownMasters ?? [],
             workDropoff: workDropoff,
             fileSystem: fileSystem,
             streamCreator: createStream,

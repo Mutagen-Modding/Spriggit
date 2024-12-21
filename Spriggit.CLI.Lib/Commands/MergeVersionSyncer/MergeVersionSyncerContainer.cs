@@ -3,6 +3,8 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
+using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
@@ -14,6 +16,7 @@ namespace Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 [Register(typeof(ConstructEntryPoint))]
 [Register(typeof(NugetDownloader))]
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]
+[Register(typeof(ConstructDotNetToolEndpoint))]
 [Register(typeof(FindTargetFramework))]
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(GetFrameworkType))]
@@ -28,6 +31,7 @@ namespace Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 [Register(typeof(ConstructCliEndpoint))]
 [Register(typeof(PrepareCliFolder))]
 [Register(typeof(SpriggitFileLocator))]
+[Register(typeof(DotNetToolTranslationPackagePathProvider))]
 [Register(typeof(Engine.Merge.MergeVersionSyncer))]
 partial class MergeVersionSyncerContainer : IContainer<Engine.Merge.MergeVersionSyncer>
 {

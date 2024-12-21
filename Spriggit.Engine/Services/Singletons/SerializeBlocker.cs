@@ -1,5 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Noggog;
+using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 
 namespace Spriggit.Engine.Services.Singletons;
 

@@ -14,6 +14,7 @@
                      WindowTitleBrush="#252920"
                      NonActiveWindowTitleBrush="#252920"
                      NonActiveBorderBrush="#444444"
+                     MinWidth="250" MinHeight="250"
                      Title="Spriggit" Height="450" Width="325">
     <Grid>
         <Border BorderThickness="0,1,0,0">

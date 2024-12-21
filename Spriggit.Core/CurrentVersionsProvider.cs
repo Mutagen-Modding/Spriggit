@@ -1,6 +1,6 @@
 ﻿using Noggog;
 
-namespace Spriggit.Engine.Services.Singletons;
+namespace Spriggit.Core;
 
 public class CurrentVersionsProvider
 {
@@ -9,6 +9,6 @@ public class CurrentVersionsProvider
     public CurrentVersionsProvider()
     {
         var vers = AssemblyVersions.For<CurrentVersionsProvider>();
-        SpriggitVersion = vers.ProductVersion?.TrimEnd(".0").TrimEnd(".0");
+        SpriggitVersion = vers.ProductVersion?.TrimStringFromEnd(".0").TrimStringFromEnd(".0");
     }
 }

@@ -40,7 +40,7 @@ public class TestOblivionUtil
             modPath: modPath, outputDir: spriggitFolder, dataPath: dataFolder,
             release: GameRelease.Oblivion, 
             workDropoff: null, fileSystem: fileSystem,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             streamCreator: null, meta: new SpriggitSource()
             {
                 PackageName = "Spriggit.Yaml.Oblivion",
@@ -60,7 +60,7 @@ public class TestOblivionUtil
             outputPath: modPath2,
             dataPath: dataFolder,
             workDropoff: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
         var reimport = OblivionMod.CreateFromBinaryOverlay(modPath2,

@@ -10,4 +10,6 @@ public class SpriggitTempSourcesProvider
     public const string SourcesSubPath = "Sources";
 
     public const string ClisSubPath = "CLIs";
+
+    public const string TranslationToolsSubPath = "Translations";
 }

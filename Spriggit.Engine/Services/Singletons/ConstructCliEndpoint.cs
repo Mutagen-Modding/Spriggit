@@ -35,7 +35,7 @@ public class ConstructCliEndpoint
             assemblyVersion = assemblyVersion.Substring(0, indexOfPlus);
         }
 
-        return assemblyVersion.TrimEnd(".0").Equals(version.ToString().TrimEnd(".0"));
+        return assemblyVersion.TrimStringFromEnd(".0").Equals(version.ToString().TrimStringFromEnd(".0"));
     }
 
     public async Task<CliEntryPoint?> ConstructFor(

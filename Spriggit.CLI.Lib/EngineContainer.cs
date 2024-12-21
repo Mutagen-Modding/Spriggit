@@ -4,6 +4,8 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
+using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
@@ -21,6 +23,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(CurrentVersionsProvider))]
 [Register(typeof(ConstructAssemblyLoadedEntryPoint))]
+[Register(typeof(ConstructDotNetToolEndpoint))]
 [Register(typeof(GetFrameworkType))]
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(FindTargetFramework))]
@@ -32,6 +35,7 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(NugetSourceProvider))]
 [Register(typeof(ProcessFactory))]
 [Register(typeof(PackageVersioningChecker))]
+[Register(typeof(DotNetToolTranslationPackagePathProvider))]
 [Register(typeof(AssociatedFilesLocator), typeof(IAssociatedFilesLocator))]
 [Register(typeof(ModFilesMover), typeof(IModFilesMover))]
 [Register(typeof(ProvideCurrentTime), typeof(IProvideCurrentTime))]

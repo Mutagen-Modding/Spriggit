@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-
     <ItemGroup>
         <PackageReference Include="Noggog.CSharpExt" />
         <PackageReference Include="CommandLineParser" />
@@ -11,38 +10,4 @@
     <ItemGroup>
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Commands\SortProperties\SortPropertiesCommand.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="Commands\SortProperties\SortPropertiesFallout4.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="Commands\SortProperties\SortPropertiesStarfield.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="Commands\MergeVersionSyncer\MergeVersionSyncerContainer.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="Commands\MergeVersionSyncer\MergeVersionSyncerRunner.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-      <Compile Update="Commands\MergeVersionSyncer\MergeVersionSyncerCommand.cs">
-        <CodeLanguage>cs</CodeLanguage>
-        <DefaultPackFolder>content</DefaultPackFolder>
-        <BuildAction>Compile</BuildAction>
-      </Compile>
-    </ItemGroup>
-
 </Project>

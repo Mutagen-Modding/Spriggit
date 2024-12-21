@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 using Noggog.WorkEngine;
-using Spriggit.CLI.Lib.Commands;
+using Spriggit.Core.Commands;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 
@@ -22,10 +22,10 @@ public static class EngineRunner
 
         throw new NotImplementedException("Specific desired threads not yet implemented.");
         // This setup throws a stackoverflow.  Need to research/improve
-        var workDropoff = new WorkDropoff();
-        var worker = new WorkConsumer(new NumWorkThreadsConstant(threads), workDropoff);
-        worker.Start();
-        return workDropoff;
+        // var workDropoff = new WorkDropoff();
+        // var worker = new WorkConsumer(new NumWorkThreadsConstant(threads), workDropoff);
+        // worker.Start();
+        // return workDropoff;
     }
     
     private static EngineContainer GetContainer(DebugState debugState, byte? numThreads)

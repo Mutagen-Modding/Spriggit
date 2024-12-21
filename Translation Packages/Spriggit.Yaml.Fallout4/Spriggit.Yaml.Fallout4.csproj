@@ -1,9 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>exe</OutputType>
+        <PackAsTool>true</PackAsTool>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
-        <RootNamespace>Spriggit.Yaml.Oblivion</RootNamespace>
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
+        <ProjectReference Include="..\Spriggit.TranslationPackages\Spriggit.TranslationPackages.csproj" />
     </ItemGroup>
 
 </Project>

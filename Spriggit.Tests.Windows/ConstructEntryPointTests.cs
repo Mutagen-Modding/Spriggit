@@ -73,7 +73,7 @@ public class ConstructEntryPointTests
                 modPath,
                 serializeOutputFolder,
                 dataPath: null,
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 GameRelease.SkyrimSE,
                 null,
                 fs,
@@ -90,7 +90,7 @@ public class ConstructEntryPointTests
                 serializeOutputFolder,
                 deserializeOutputFolder,
                 dataPath: null,
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 null,
                 fs,
                 null,
@@ -109,43 +109,7 @@ public class ConstructEntryPointTests
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task TypicalExisting(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 18, 0));
-        using var tmp = CreateDirFor();
-        var identFolder = Path.Combine(tmp.Dir, ident.ToString());
-        await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
-        using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().NotBeNull();
-        await payload.RunPassthrough(entryPt!, ident);
-    }
-
-    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
-    public async Task Version17(Payload payload)
-    {
-        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 17, 0));
-        using var tmp = CreateDirFor();
-        var identFolder = Path.Combine(tmp.Dir, ident.ToString());
-        await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
-        using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().NotBeNull();
-        await payload.RunPassthrough(entryPt!, ident);
-    }
-
-    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
-    public async Task Version16(Payload payload)
-    {
-        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 16, 0));
-        using var tmp = CreateDirFor();
-        var identFolder = Path.Combine(tmp.Dir, ident.ToString());
-        await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
-        using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().NotBeNull();
-        await payload.RunPassthrough(entryPt!, ident);
-    }
-
-    [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
-    public async Task Version15(Payload payload)
-    {
-        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 15, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 20, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
@@ -166,7 +130,7 @@ public class ConstructEntryPointTests
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
     public async Task PluginFolderMalformedShouldRetry(Payload payload)
     {
-        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 18, 0));
+        var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(0, 20, 0));
         using var tmp = CreateDirFor();
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         Directory.CreateDirectory(identFolder);

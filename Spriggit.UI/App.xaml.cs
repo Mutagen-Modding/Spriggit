@@ -8,6 +8,7 @@ using Serilog;
 using Spriggit.CLI;
 using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
+using Spriggit.Core.Commands;
 using Spriggit.UI.Services;
 
 namespace Spriggit.UI;

@@ -2,9 +2,8 @@
 using Newtonsoft.Json;
 using Noggog;
 using Serilog;
-using Spriggit.Core;
 
-namespace Spriggit.Engine.Services.Singletons;
+namespace Spriggit.Core.Services.Singletons;
 
 public class SpriggitFileLocator
 {

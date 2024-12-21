@@ -15,6 +15,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.UI.Services;
@@ -35,7 +36,7 @@ public class LinkInputVm : ViewModel
     public PathPickerVM GitFolderPicker { get; } = new()
     {
         PathType = PathPickerVM.PathTypeOptions.Folder,
-        ExistCheckOption = PathPickerVM.CheckOptions.On
+        ExistCheckOption = PathPickerVM.CheckOptions.Off,
     };
     
     public PathPickerVM DataFolderPicker { get; } = new()
@@ -180,6 +181,7 @@ public class LinkInputVm : ViewModel
         Version = settings.SpriggitPackageVersion;
         SourceCategory = settings.SourceCategory;
         Release = settings.GameRelease;
+        DataFolderPicker.TargetPath = settings.DataFolderPath;
         
         // Needs to go last to drive config reading
         GitFolderPicker.TargetPath = settings.GitPath;
@@ -195,6 +197,7 @@ public class LinkInputVm : ViewModel
             SpriggitPackageVersion = Version,
             SourceCategory = SourceCategory,
             GameRelease = Release,
+            DataFolderPath = DataFolderPicker.TargetPath
         };
     }
 

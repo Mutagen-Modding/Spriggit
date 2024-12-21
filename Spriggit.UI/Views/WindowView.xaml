@@ -9,19 +9,17 @@
                        xmlns:singletons="clr-namespace:Spriggit.UI.ViewModels.Singletons"
                        mc:Ignorable="d"
                        d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <ContentPresenter x:Name="ContentPane">
-            <ContentPresenter.Resources>
-                <DataTemplate DataType="{x:Type singletons:ReposListingVm}">
-                    <local:ReposListingView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type singletons:AddNewLinkVm}">
-                    <local:EditListingView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type singletons:EditLinkVm}">
-                    <local:EditListingView />
-                </DataTemplate>
-            </ContentPresenter.Resources>
-        </ContentPresenter>
-    </Grid>
+    <ContentPresenter x:Name="ContentPane">
+        <ContentPresenter.Resources>
+            <DataTemplate DataType="{x:Type singletons:ReposListingVm}">
+                <local:ReposListingView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type singletons:AddNewLinkVm}">
+                <local:EditListingView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type singletons:EditLinkVm}">
+                <local:EditListingView />
+            </DataTemplate>
+        </ContentPresenter.Resources>
+    </ContentPresenter>
 </wpf:NoggogUserControl>

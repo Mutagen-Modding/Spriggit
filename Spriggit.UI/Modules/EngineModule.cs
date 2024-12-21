@@ -3,6 +3,7 @@ using Mutagen.Bethesda.Plugins.IO.DI;
 using Noggog.Autofac;
 using Noggog.IO;
 using Noggog.WorkEngine;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.UI.Modules;
@@ -11,6 +12,12 @@ public class EngineModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
+        builder.RegisterAssemblyTypes(typeof(SpriggitFileLocator).Assembly)
+            .InNamespacesOf(
+                typeof(SpriggitFileLocator))
+            .AsImplementedInterfaces()
+            .AsSelf()
+            .SingleInstance();
         builder.RegisterAssemblyTypes(typeof(SpriggitEngine).Assembly)
             .InNamespacesOf(
                 typeof(SpriggitEngine))

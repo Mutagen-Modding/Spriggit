@@ -10,6 +10,7 @@ using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Noggog.WorkEngine;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.Yaml.Skyrim;
@@ -174,7 +175,7 @@ public class MergeVersionSyncerTests
         await entryPoint.Serialize(
             modPath, spriggitModPath,
             dataPath: null,
-            knownMasters: Array.Empty<KnownMaster>(),
+            knownMasters: [],
             GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
@@ -197,7 +198,7 @@ public class MergeVersionSyncerTests
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
                 dataPath: null, 
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
@@ -218,7 +219,7 @@ public class MergeVersionSyncerTests
             await entryPoint.Serialize(
                 modPath, spriggitModPath,
                 dataPath: null, 
-                knownMasters: Array.Empty<KnownMaster>(),
+                knownMasters: [],
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,

@@ -7,6 +7,7 @@ using Noggog.WorkEngine;
 using Serilog;
 using Serilog.Core;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 
@@ -30,6 +31,13 @@ public class TestModule : Autofac.Module
         builder.RegisterAssemblyTypes(typeof(SpriggitEngine).Assembly)
             .InNamespacesOf(
                 typeof(SpriggitEngine))
+            .AsImplementedInterfaces()
+            .AsSelf()
+            .SingleInstance();
+        
+        builder.RegisterAssemblyTypes(typeof(SpriggitFileLocator).Assembly)
+            .InNamespacesOf(
+                typeof(SpriggitFileLocator))
             .AsImplementedInterfaces()
             .AsSelf()
             .SingleInstance();
