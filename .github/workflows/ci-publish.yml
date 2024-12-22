@@ -139,7 +139,7 @@ jobs:
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.UI/bin/Release/net9.0-windows/win-x64/publish/* Spriggit.zip
+        powershell Compress-Archive Spriggit.UI/bin/Release/net9.0/win-x64/publish/* Spriggit.zip
     - name: Archive Linux CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |

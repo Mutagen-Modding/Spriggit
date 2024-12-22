@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
         <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
