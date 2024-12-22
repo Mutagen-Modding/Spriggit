@@ -1,0 +1,7 @@
+<Project>
+
+    <PropertyGroup>
+        <PackageOutputPath>..\..\nupkg</PackageOutputPath> 
+    </PropertyGroup>
+
+</Project>

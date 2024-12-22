@@ -1,5 +1,8 @@
 <Project>
-  
+    <PropertyGroup>
+        <PackageOutputPath>..\nupkg</PackageOutputPath>
+    </PropertyGroup>
+    
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Condition="$([MSBuild]::IsOSPlatform('Windows')) And $(PackageId) != ''" Command="RD /S /Q &quot;%25USERPROFILE%25\.nuget\packages\$(PackageId)&quot;" />
     <Exec Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(PackageId) != ''" Command="rm -rf &quot;%25USERPROFILE%25\.nuget\packages\$(PackageId)&quot;" />
