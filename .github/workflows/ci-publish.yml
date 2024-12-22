@@ -169,21 +169,3 @@ jobs:
         file: SpriggitCLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
-    - name: Publish to Nuget.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
-  
-  update-nightly:
-    needs: [build-test-push, activity-short-circuit]
-    if: needs.activity-short-circuit.outputs.same_sha == 'false'
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Reset nightly to release
-      run: |
-        head_sha=$(git rev-parse --verify HEAD)
-        echo "head_sha=$head_sha"
-        git checkout nightly
-        git reset --hard $head_sha
-        git push
