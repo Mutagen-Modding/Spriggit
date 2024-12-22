@@ -8,9 +8,18 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ImplicitUsings>true</ImplicitUsings>
         <LangVersion>preview</LangVersion>
-        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/Mutagen-Modding/Spriggit</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Mutagen-Modding/Spriggit</RepositoryUrl>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+        <Copyright>2024</Copyright>
+        <Company>Mutagen</Company>
+        <Product>Mutagen</Product>
+        <PackageReleaseNotes>Bethesda Modding</PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Authors>Noggog</Authors>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
         <PackageReference Include="GitVersion.MsBuild">
