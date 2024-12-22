@@ -66,6 +66,15 @@ jobs:
           
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v3.0.3
+      with:
+        versionSpec: '6.0.5'
+    - name: Determine Version
+      id: version_step # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v3.0.3
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -97,6 +106,13 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.*
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v3.0.3
+      with:
+        versionSpec: '6.0.5'
+    - name: Determine Version
+      id: version_step # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v3.0.3
     - name: Install dependencies
       run: |
         dotnet clean Spriggit.sln -c Release && dotnet nuget locals all --clear
@@ -123,15 +139,15 @@ jobs:
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.UI/bin/Release/net8.0-windows/win-x64/publish/* Spriggit.zip
+        powershell Compress-Archive Spriggit.UI/bin/Release/net9.0/win-x64/publish/* Spriggit.zip
     - name: Archive Linux CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net8.0/linux-x64/publish/* SpriggitLinuxCLI.zip
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net9.0/linux-x64/publish/* SpriggitLinuxCLI.zip
     - name: Archive CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net8.0/win-x64/publish/* SpriggitCLI.zip
+        powershell Compress-Archive Spriggit.CLI/bin/Release/net9.0/win-x64/publish/* SpriggitCLI.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       uses: svenstaro/upload-release-action@v2
@@ -154,7 +170,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
     - name: Publish to Nuget.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
   
   update-nightly:
     needs: [build-test-push, activity-short-circuit]

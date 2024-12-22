@@ -1,16 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="McMaster.NETCore.Plugins" />
-      <PackageReference Include="Mutagen.Bethesda" />
-    <PackageReference Include="Noggog.GitRepository" />
-    <PackageReference Include="Noggog.SourceGenerators" />
-    <PackageReference Include="Noggog.Testing" />
-    <PackageReference Include="NuGet.Build.Tasks" />
-    <PackageReference Include="NuGet.PackageManagement" />
-    <PackageReference Include="NuGet.Protocol" />
-    <PackageReference Include="Serilog" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="McMaster.NETCore.Plugins"/>
+        <PackageReference Include="Mutagen.Bethesda"/>
+        <PackageReference Include="Noggog.GitRepository"/>
+        <PackageReference Include="Noggog.SourceGenerators"/>
+        <PackageReference Include="Noggog.Testing"/>
+        <PackageReference Include="NuGet.Build.Tasks"/>
+        <PackageReference Include="NuGet.PackageManagement"/>
+        <PackageReference Include="NuGet.Protocol"/>
+        <PackageReference Include="Serilog"/>
+    </ItemGroup>
 </Project>
