@@ -119,14 +119,9 @@ jobs:
         dotnet restore Spriggit.sln
     - name: Build
       run: dotnet build Spriggit.sln -c Release --no-restore /p:GeneratePackageOnBuild=false
-    - name: Pack Preview
-      if: ${{ success() && (github.event.release.prerelease || github.event_name != 'release') }}
+    - name: Pack
       run: |
-        dotnet pack Spriggit.sln -c Release -o out --include-symbols
-    - name: Pack Release
-      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
-      run: | 
-        dotnet pack Spriggit.sln -c Release -o out --include-symbols
+        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out --include-symbols -p:SymbolPackageFormat=snupkg
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true 
@@ -169,8 +164,11 @@ jobs:
         file: SpriggitCLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
+    - name: Print Packages
+      run: |
+        ls out/*.nupkg
     - name: Publish to Nuget.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push out/**/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
   
   update-nightly:
     needs: [build-test-push, activity-short-circuit]

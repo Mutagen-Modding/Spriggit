@@ -126,11 +126,7 @@ public class LinkVm : ViewModel
 
         SyncToModCommand = ReactiveCommand.Create<Unit>(
             execute: _ => { },
-            Observable.CombineLatest(
-                canRun,
-                Input.GitFolderPicker.WhenAnyValue(x => x.Exists),
-                (r, e) => r && e)
-                .ObserveOnGui());
+            canRun.ObserveOnGui());
         CancelSyncToModCommand = ReactiveCommand.Create(
             () => { },
             canExecute: this.WhenAnyValue(x => x.State).Select(x => x == SyncState.Mod)

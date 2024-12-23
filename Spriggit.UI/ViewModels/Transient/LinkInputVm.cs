@@ -37,6 +37,7 @@ public class LinkInputVm : ViewModel
     {
         PathType = PathPickerVM.PathTypeOptions.Folder,
         ExistCheckOption = PathPickerVM.CheckOptions.Off,
+        MissingIsError = false,
     };
     
     public PathPickerVM DataFolderPicker { get; } = new()
