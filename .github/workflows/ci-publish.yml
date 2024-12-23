@@ -169,8 +169,11 @@ jobs:
         file: SpriggitCLI.zip
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
+    - name: Print Packages
+      run: |
+        ls out/*.nupkg
     - name: Publish to Nuget.org
-      run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push out/**/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
   
   update-nightly:
     needs: [build-test-push, activity-short-circuit]
