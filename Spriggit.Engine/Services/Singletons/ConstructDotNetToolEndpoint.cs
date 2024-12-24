@@ -37,13 +37,14 @@ public class ConstructDotNetToolEndpoint
             try
             {
                 var args = $"tool install {ident.Id} --version {ident.Version} --tool-path \"{toolsPath}\"";
-                _logger.Information("Running DotNet Entry point serialize with Args: {Args}", args);
+                _logger.Information("Running DotNet Entry point install with Args: {Args}", args);
                 using var processWrapper = _processFactory.Create(
                     new ProcessStartInfo("dotnet")
                     {
                         Arguments = args,
                     },
-                    cancel: cancellationToken);
+                    cancel: cancellationToken,
+                    killWithParent: false);
                 using var outputSub = processWrapper.Output
                     .Subscribe(x =>
                     {

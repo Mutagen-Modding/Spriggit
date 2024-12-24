@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Runtime.InteropServices;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Noggog;
@@ -59,7 +60,8 @@ public class CliEntryPoint : IEntryPoint
             new ProcessStartInfo(_pathToExe)
             {
                 Arguments = args
-            });
+            },
+            killWithParent: !RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
         using var outputSub = processWrapper.Output
             .Subscribe(x =>
             {
@@ -88,7 +90,8 @@ public class CliEntryPoint : IEntryPoint
             new ProcessStartInfo(_pathToExe)
             {
                 Arguments = args
-            });
+            },
+            killWithParent: !RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
         using var outputSub = processWrapper.Output
             .Subscribe(x =>
             {

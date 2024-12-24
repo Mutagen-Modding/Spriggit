@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Runtime.InteropServices;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Noggog;
@@ -65,7 +66,8 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
             new ProcessStartInfo(exePath)
             {
                 Arguments = args
-            });
+            },
+            killWithParent: !RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
         using var outputSub = processWrapper.Output
             .Subscribe(x =>
             {
@@ -89,12 +91,13 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
         var exePath = GetExePath();
 
         var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
-        _logger.Information("Running CLI Entry point deserialize with Args: {Args}", args);
+        _logger.Information("Running DotNet Tool entry point deserialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(exePath)
             {
                 Arguments = args
-            });
+            },
+            killWithParent: !RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
         using var outputSub = processWrapper.Output
             .Subscribe(x =>
             {
