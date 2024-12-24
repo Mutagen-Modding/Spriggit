@@ -91,7 +91,7 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
         var exePath = GetExePath();
 
         var args = $"deserialize -i \"{inputPath}\" -o \"{outputPath}\" -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
-        _logger.Information("Running CLI Entry point deserialize with Args: {Args}", args);
+        _logger.Information("Running DotNet Tool entry point deserialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(exePath)
             {
