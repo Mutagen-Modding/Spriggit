@@ -25,6 +25,35 @@ public class ConstructDotNetToolEndpoint
         _tempSourcesProvider = tempSourcesProvider;
     }
 
+    private async Task<bool> IsToolInstalled(
+        PackageIdentity ident,
+        DirectoryPath toolsPath,
+        CancellationToken cancellationToken)
+    {
+        var args = $"tool list {ident.Id} --tool-path \"{toolsPath}\"";
+        var ret = _processFactory.Create(
+            new ProcessStartInfo("dotnet")
+            {
+                Arguments = args,
+            },
+            cancel: cancellationToken,
+            killWithParent: false);
+        bool found = false;
+        using var outputSub = ret.Output
+            .Subscribe(x =>
+            {
+                if (found) return;
+                var split = x.Split("      ");
+                if (split.Length != 3) return;
+                if (split[0].Equals(ident.Id, StringComparison.OrdinalIgnoreCase) && split[1] == ident.Version.ToString())
+                {
+                    found = true;
+                }
+            });
+        await ret.Run();
+        return found;
+    }
+
     public async Task<DotNetToolEntryPoint?> ConstructFor(
         DirectoryPath tempPath,
         PackageIdentity ident,
@@ -32,7 +61,7 @@ public class ConstructDotNetToolEndpoint
     {
         DirectoryPath toolsPath = _pathProvider.Path(tempPath, ident);
 
-        if (!toolsPath.CheckExists())
+        if (!await IsToolInstalled(ident, toolsPath, cancellationToken))
         {
             try
             {
