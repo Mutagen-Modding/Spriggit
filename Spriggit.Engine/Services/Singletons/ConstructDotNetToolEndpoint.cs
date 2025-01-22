@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO.Abstractions;
 using Noggog;
 using Noggog.Processes.DI;
 using NuGet.Packaging.Core;
@@ -9,17 +10,20 @@ namespace Spriggit.Engine.Services.Singletons;
 public class ConstructDotNetToolEndpoint
 {
     private readonly ILogger _logger;
+    private readonly IFileSystem _fileSystem;
     private readonly ProcessFactory _processFactory;
     private readonly DotNetToolTranslationPackagePathProvider _pathProvider;
     private readonly SpriggitTempSourcesProvider _tempSourcesProvider;
 
     public ConstructDotNetToolEndpoint(
         ILogger logger,
+        IFileSystem fileSystem,
         ProcessFactory processFactory,
         DotNetToolTranslationPackagePathProvider pathProvider,
         SpriggitTempSourcesProvider tempSourcesProvider)
     {
         _logger = logger;
+        _fileSystem = fileSystem;
         _processFactory = processFactory;
         _pathProvider = pathProvider;
         _tempSourcesProvider = tempSourcesProvider;
@@ -65,6 +69,7 @@ public class ConstructDotNetToolEndpoint
         {
             try
             {
+                _fileSystem.Directory.DeleteEntireFolder(toolsPath);
                 var args = $"tool install {ident.Id} --version {ident.Version} --tool-path \"{toolsPath}\"";
                 _logger.Information("Running DotNet Entry point install with Args: {Args}", args);
                 using var processWrapper = _processFactory.Create(
