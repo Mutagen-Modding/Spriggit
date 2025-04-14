@@ -1,10 +1,9 @@
 ﻿using System.IO.Abstractions;
 using Autofac;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Noggog.IO;
+using Shouldly;
 using Spriggit.Core;
-using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Spriggit.Tests.Utility;
 using Xunit;
@@ -36,12 +35,12 @@ public class PluginCollisionTests
                 jsonSrc,
                 GameRelease.SkyrimSE),
             CancellationToken.None);
-        jsonEntry.Should().NotBeNull();
+        jsonEntry.ShouldNotBeNull();
         var yamlEntry = await c.GetFor(new SpriggitMeta(
                 yamlSrc,
                 GameRelease.SkyrimSE),
             CancellationToken.None);
-        yamlEntry.Should().NotBeNull();
+        yamlEntry.ShouldNotBeNull();
 
         var metaContent = @"SpriggitSource:
   PackageName: Spriggit.Yaml.Skyrim

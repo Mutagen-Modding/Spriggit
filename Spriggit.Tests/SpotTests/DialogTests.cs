@@ -1,10 +1,11 @@
 using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Starfield;
 using Xunit;
@@ -30,15 +31,15 @@ public class DialogTests : SpotTestBase
 
         var reimport = await TestStarfieldUtil.PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
 
-        reimport.EnumerateMajorRecords().Should().HaveCount(3);
-        reimport.Quests.Count.Should().Be(1);
+        reimport.EnumerateMajorRecords().ShouldHaveCount(3);
+        reimport.Quests.Count.ShouldBe(1);
         var reimportQuest = reimport.Quests.First();
-        reimportQuest.DialogTopics.Count.Should().Be(1);
+        reimportQuest.DialogTopics.Count.ShouldBe(1);
         var reimportTopic = reimportQuest.DialogTopics.First();
-        reimportTopic.Responses.Count.Should().Be(1);
+        reimportTopic.Responses.Count.ShouldBe(1);
         var reimportResps = reimportTopic.Responses.First();
-        reimportResps.Responses.Count.Should().Be(1);
+        reimportResps.Responses.Count.ShouldBe(1);
         var reimportResp = reimportResps.Responses.First();
-        reimportResp.Edits.Should().Be("Edits");
+        reimportResp.Edits.ShouldBe("Edits");
     }
 }

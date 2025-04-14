@@ -1,8 +1,9 @@
-﻿using FluentAssertions;
-using Mutagen.Bethesda;
+﻿using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.Engine.Merge;
 using Xunit;
 
@@ -17,9 +18,9 @@ public class FormIDCollisionDetectorTests
         Npc n2,
         FormIDCollisionDetector sut)
     {
-        mod.Npcs.Count.Should().Be(2);
+        mod.Npcs.Count.ShouldBe(2);
         sut.LocateCollisions(mod)
-            .Should().BeEmpty();
+            .ShouldBeEmpty();
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -32,6 +33,6 @@ public class FormIDCollisionDetectorTests
         mod.Weapons.Add(weap);
         sut.LocateCollisions(mod)
             .Keys
-            .Should().Equal(n1.FormKey);
+            .ShouldEqual(n1.FormKey);
     }
 }

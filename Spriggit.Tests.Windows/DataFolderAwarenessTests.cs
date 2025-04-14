@@ -1,19 +1,18 @@
 ﻿using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
-using FluentAssertions;
-using Loqui;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Records;
-using Mutagen.Bethesda.Serialization.Exceptions;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.IO;
+using Noggog.Testing.Extensions;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using Shouldly;
 using Spriggit.Core;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
@@ -158,16 +157,16 @@ public class DataFolderAwarenessTests
             .FromPath(modPath)
             .Construct();
 
-        mod.Npcs.Should().HaveCount(3);
+        mod.Npcs.ShouldHaveCount(3);
         mod.Npcs.TryGetValue(normalNpc.FormKey, out var normalNpcReimport)
-            .Should().BeTrue();
-        normalNpcReimport!.FormKey.Should().Be(normalNpc.FormKey);
+            .ShouldBeTrue();
+        normalNpcReimport!.FormKey.ShouldBe(normalNpc.FormKey);
         mod.Npcs.TryGetValue(smallNpc.FormKey, out var smallNpcReimport)
-            .Should().BeTrue();
-        smallNpcReimport!.FormKey.Should().Be(smallNpc.FormKey);
+            .ShouldBeTrue();
+        smallNpcReimport!.FormKey.ShouldBe(smallNpc.FormKey);
         mod.Npcs.TryGetValue(originatingNpc.FormKey, out var originatingNpcReimport)
-            .Should().BeTrue();
-        originatingNpcReimport!.FormKey.Should().Be(originatingNpc.FormKey);
+            .ShouldBeTrue();
+        originatingNpcReimport!.FormKey.ShouldBe(originatingNpc.FormKey);
     }
 
     [Theory, MutagenAutoData]
@@ -212,16 +211,16 @@ public class DataFolderAwarenessTests
             .FromPath(modPath)
             .Construct();
 
-        mod.Npcs.Should().HaveCount(3);
+        mod.Npcs.ShouldHaveCount(3);
         mod.Npcs.TryGetValue(normalNpc.FormKey, out var normalNpcReimport)
-            .Should().BeTrue();
-        normalNpcReimport!.FormKey.Should().Be(normalNpc.FormKey);
+            .ShouldBeTrue();
+        normalNpcReimport!.FormKey.ShouldBe(normalNpc.FormKey);
         mod.Npcs.TryGetValue(smallNpc.FormKey, out var smallNpcReimport)
-            .Should().BeTrue();
-        smallNpcReimport!.FormKey.Should().Be(smallNpc.FormKey);
+            .ShouldBeTrue();
+        smallNpcReimport!.FormKey.ShouldBe(smallNpc.FormKey);
         mod.Npcs.TryGetValue(originatingNpc.FormKey, out var originatingNpcReimport)
-            .Should().BeTrue();
-        originatingNpcReimport!.FormKey.Should().Be(originatingNpc.FormKey);
+            .ShouldBeTrue();
+        originatingNpcReimport!.FormKey.ShouldBe(originatingNpc.FormKey);
     }
 
     [Theory, MutagenAutoData]
@@ -327,18 +326,18 @@ public class DataFolderAwarenessTests
             .WithDataFolder(dataFolder)
             .Construct();
 
-        mod.Npcs.Should().HaveCount(4);
+        mod.Npcs.ShouldHaveCount(4);
         mod.Npcs.TryGetValue(normalNpc.FormKey, out var normalNpcReimport)
-            .Should().BeTrue();
-        normalNpcReimport!.FormKey.Should().Be(normalNpc.FormKey);
+            .ShouldBeTrue();
+        normalNpcReimport!.FormKey.ShouldBe(normalNpc.FormKey);
         mod.Npcs.TryGetValue(smallNpc.FormKey, out var smallNpcReimport)
-            .Should().BeTrue();
-        smallNpcReimport!.FormKey.Should().Be(smallNpc.FormKey);
+            .ShouldBeTrue();
+        smallNpcReimport!.FormKey.ShouldBe(smallNpc.FormKey);
         mod.Npcs.TryGetValue(mediumNpc.FormKey, out var mediumNpcReimport)
-            .Should().BeTrue();
-        mediumNpcReimport!.FormKey.Should().Be(mediumNpc.FormKey);
+            .ShouldBeTrue();
+        mediumNpcReimport!.FormKey.ShouldBe(mediumNpc.FormKey);
         mod.Npcs.TryGetValue(originatingNpc.FormKey, out var originatingNpcReimport)
-            .Should().BeTrue();
-        originatingNpcReimport!.FormKey.Should().Be(originatingNpc.FormKey);
+            .ShouldBeTrue();
+        originatingNpcReimport!.FormKey.ShouldBe(originatingNpc.FormKey);
     }
 }

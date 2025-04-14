@@ -1,10 +1,10 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Shouldly;
 using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Starfield;
 using Xunit;
@@ -74,6 +74,6 @@ public class CellTest : SpotTestBase
         });
         
         var reimport = await TestStarfieldUtil.PassThrough(fileSystem, mod, existingDataFolder, spriggitFolder, otherModKey, entryPoint);
-        reimport.Cells.First().SubBlocks.First().Cells.First().Traversals!.Count.Should().Be(traversals.Count);
+        reimport.Cells.First().SubBlocks.First().Cells.First().Traversals!.Count.ShouldBe(traversals.Count);
     }
 }

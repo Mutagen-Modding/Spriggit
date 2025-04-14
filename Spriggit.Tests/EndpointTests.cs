@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
@@ -7,7 +6,7 @@ using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
-using Noggog.Testing.FileSystem;
+using Shouldly;
 using Spriggit.Core;
 using Spriggit.Yaml.Starfield;
 using Xunit;
@@ -52,10 +51,10 @@ public class EndpointTests
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
         fileSystem.File.Exists(modPath)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         var stringsFolder = Path.Combine(dataFolder, "Strings");
         fileSystem.Directory.Exists(stringsFolder)
-            .Should().BeFalse();
+            .ShouldBeFalse();
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -72,7 +71,7 @@ public class EndpointTests
     {
         try
         {
-            mod.Armors.Count.Should().Be(1);
+            mod.Armors.Count.ShouldBe(1);
             mod.UsingLocalization = true;
             armor.Name = name;
             armor.Name.Set(Language.French, frenchName);
@@ -104,22 +103,22 @@ public class EndpointTests
                 fileSystem: fileSystem,
                 streamCreator: null, cancel: CancellationToken.None);
             fileSystem.File.Exists(modPath2)
-                .Should().BeTrue();
+                .ShouldBeTrue();
             var stringsFolder = Path.Combine(dataFolder2, "Strings");
             fileSystem.Directory.Exists(stringsFolder)
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_en.STRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_fr.STRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_en.ILSTRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_fr.ILSTRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_en.DLSTRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
             fileSystem.File.Exists(Path.Combine(stringsFolder, $"{mod.ModKey.Name}_fr.DLSTRINGS"))
-                .Should().BeTrue();
+                .ShouldBeTrue();
         }
         catch (Exception e)
         {
@@ -173,28 +172,28 @@ public class EndpointTests
         var otherStringsFolder = Path.Combine(dataFolder2, "Strings");
         var path = Path.Combine(otherStringsFolder, $"{otherModKey.Name}_en.STRINGS");
         fileSystem.File.Exists(path)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{otherModKey.Name}_fr.STRINGS"))
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{otherModKey.Name}_en.ILSTRINGS"))
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{otherModKey.Name}_fr.ILSTRINGS"))
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{otherModKey.Name}_en.DLSTRINGS"))
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{otherModKey.Name}_fr.DLSTRINGS"))
-            .Should().BeTrue();
+            .ShouldBeTrue();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_en.STRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_fr.STRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_en.ILSTRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_fr.ILSTRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_en.DLSTRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
         fileSystem.File.Exists(Path.Combine(otherStringsFolder, $"{mod.ModKey.Name}_fr.DLSTRINGS"))
-            .Should().BeFalse();
+            .ShouldBeFalse();
     }
 }

@@ -1,14 +1,15 @@
 ﻿using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
+using Noggog.Testing.Extensions;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using Shouldly;
 using Spriggit.Core;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
@@ -102,7 +103,7 @@ public class ConstructEntryPointTests
                 {
                     FileSystem = fs
                 });
-            reimport.Npcs.Select(x => x.FormKey).Should().Equal(_npc.FormKey);
+            reimport.Npcs.Select(x => x.FormKey).ShouldEqual(_npc.FormKey);
         }
     }
 
@@ -114,7 +115,7 @@ public class ConstructEntryPointTests
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         await payload.PreparePluginFolder.Prepare(ident, CancellationToken.None, identFolder);
         using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().NotBeNull();
+        entryPt.ShouldNotBeNull();
         await payload.RunPassthrough(entryPt!, ident);
     }
 
@@ -124,7 +125,7 @@ public class ConstructEntryPointTests
         var ident = new PackageIdentity("Spriggit.Yaml.Skyrim", new NuGetVersion(255, 18, 0));
         using var tmp = CreateDirFor();
         using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().BeNull();
+        entryPt.ShouldBeNull();
     }
 
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE, FileSystem: TargetFileSystem.Real)]
@@ -135,7 +136,7 @@ public class ConstructEntryPointTests
         var identFolder = Path.Combine(tmp.Dir, ident.ToString());
         Directory.CreateDirectory(identFolder);
         using var entryPt = await payload.Sut.ConstructFor(tmp.Dir, ident, CancellationToken.None);
-        entryPt.Should().NotBeNull();
+        entryPt.ShouldNotBeNull();
         await payload.RunPassthrough(entryPt!, ident);
     }
 }
