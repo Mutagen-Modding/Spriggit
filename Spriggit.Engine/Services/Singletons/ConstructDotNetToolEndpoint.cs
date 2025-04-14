@@ -105,7 +105,7 @@ public class ConstructDotNetToolEndpoint
 
         return new DotNetToolEntryPoint(
             ident,
-            Log.ForContext<DotNetToolEntryPoint>(),
+            _logger.ForContext<DotNetToolEntryPoint>(),
             _processFactory,
             _pathProvider,
             _tempSourcesProvider);
