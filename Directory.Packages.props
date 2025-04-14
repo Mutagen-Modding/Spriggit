@@ -35,16 +35,16 @@
       <Version>[0.49.0-alpha.51]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization">
-      <Version>[1.30.0]</Version>
+      <Version>[1.30.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Newtonsoft">
-      <Version>[1.30.0]</Version>
+      <Version>[1.30.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.SourceGenerator">
-      <Version>[1.30.0]</Version>
+      <Version>[1.30.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Mutagen.Bethesda.Serialization.Yaml">
-      <Version>[1.30.0]</Version>
+      <Version>[1.30.1]</Version>
     </PackageVersion>
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Noggog.Autofac">
