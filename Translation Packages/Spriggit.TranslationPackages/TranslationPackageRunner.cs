@@ -58,6 +58,10 @@ public static class TranslationPackageRunner
                         throw new NotSupportedException($"Could not locate meta to run with.  Either run serialize in with a {SpriggitFileLocator.ConfigFileName} file present, or specify at least GameRelease and PackageName");
                     }
 
+                    var throwing = cmd.ErrorOnUnknown ?? true;
+                    
+                    LoggerSetup.Logger.Information("Throwing on unknown records: {Throwing}", throwing);
+
                     await entryPoint.Serialize(
                         cmd.InputPath,
                         cmd.OutputPath,
@@ -68,7 +72,7 @@ public static class TranslationPackageRunner
                         fileSystem: null,
                         streamCreator: null,
                         meta: meta.Source,
-                        throwIfUnknown: cmd.ErrorOnUnknown ?? true,
+                        throwIfUnknown: throwing,
                         CancellationToken.None);
                     
                     return 0;

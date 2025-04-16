@@ -12,6 +12,7 @@ public class ConstructDotNetToolEndpoint
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
     private readonly ProcessFactory _processFactory;
+    private readonly DebugState _debugState;
     private readonly DotNetToolTranslationPackagePathProvider _pathProvider;
     private readonly SpriggitTempSourcesProvider _tempSourcesProvider;
 
@@ -19,12 +20,14 @@ public class ConstructDotNetToolEndpoint
         ILogger logger,
         IFileSystem fileSystem,
         ProcessFactory processFactory,
+        DebugState debugState,
         DotNetToolTranslationPackagePathProvider pathProvider,
         SpriggitTempSourcesProvider tempSourcesProvider)
     {
         _logger = logger;
         _fileSystem = fileSystem;
         _processFactory = processFactory;
+        _debugState = debugState;
         _pathProvider = pathProvider;
         _tempSourcesProvider = tempSourcesProvider;
     }
@@ -65,10 +68,16 @@ public class ConstructDotNetToolEndpoint
     {
         DirectoryPath toolsPath = _pathProvider.Path(tempPath, ident);
 
-        if (!await IsToolInstalled(ident, toolsPath, cancellationToken))
+        if (_debugState.ClearNugetSources)
+        {
+            _logger.Information("In debug mode.  Forcing dotnet tool reinstall");
+        }
+        
+        if (_debugState.ClearNugetSources || !await IsToolInstalled(ident, toolsPath, cancellationToken))
         {
             try
             {
+                _logger.Information("Running DotNet Entry point install.  Clearing old path {ToolsPath}", toolsPath);
                 _fileSystem.Directory.DeleteEntireFolder(toolsPath);
                 var args = $"tool install {ident.Id} --version {ident.Version} --tool-path \"{toolsPath}\"";
                 _logger.Information("Running DotNet Entry point install with Args: {Args}", args);
