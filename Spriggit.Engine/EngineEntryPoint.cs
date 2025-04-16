@@ -35,7 +35,7 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
         DirectoryPath? dataPath, 
         KnownMaster[] knownMasters,
         GameRelease release, IWorkDropoff? workDropoff,
-        IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
+        IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, bool throwOnUnknown, CancellationToken cancel)
     {
         Exception? lastEx = null;
         foreach (var entryPt in _entryPoints)
@@ -43,8 +43,17 @@ public class EngineEntryPointWrapper : IEngineEntryPoint
             try
             {
                 await entryPt.Serialize(
-                    modPath, outputDir, dataPath, knownMasters, release, workDropoff,
-                    fileSystem, streamCreator, meta, cancel);
+                    modPath: modPath,
+                    outputDir: outputDir,
+                    dataPath: dataPath,
+                    knownMasters: knownMasters,
+                    release: release,
+                    workDropoff: workDropoff,
+                    fileSystem: fileSystem,
+                    streamCreator: streamCreator,
+                    meta: meta,
+                    throwIfUnknown: throwOnUnknown,
+                    cancel: cancel);
                 return;
             }
             catch (Exception e)

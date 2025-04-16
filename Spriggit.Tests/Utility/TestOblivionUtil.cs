@@ -45,7 +45,9 @@ public class TestOblivionUtil
             {
                 PackageName = "Spriggit.Yaml.Oblivion",
                 Version = "Test"
-            }, cancel: CancellationToken.None);
+            },
+            throwOnUnknown: true,
+            cancel: CancellationToken.None);
     }
     
     public static async Task<IOblivionModDisposableGetter> Import(

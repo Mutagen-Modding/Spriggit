@@ -68,6 +68,7 @@ public static class TranslationPackageRunner
                         fileSystem: null,
                         streamCreator: null,
                         meta: meta.Source,
+                        throwIfUnknown: cmd.ErrorOnUnknown ?? true,
                         CancellationToken.None);
                     
                     return 0;

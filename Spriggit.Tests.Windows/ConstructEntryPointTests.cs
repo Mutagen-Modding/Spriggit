@@ -84,6 +84,7 @@ public class ConstructEntryPointTests
                     Version = ident.Version.ToString(),
                     PackageName = ident.Id
                 },
+                throwIfUnknown: true,
                 CancellationToken.None);
             fs.Directory.CreateDirectory(Path.Combine(outputFolder, "deserialized"));
             var deserializeOutputFolder = Path.Combine(outputFolder, "deserialized", _mod.ModKey.FileName);

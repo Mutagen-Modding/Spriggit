@@ -25,6 +25,7 @@ public class EntryPoint : IEntryPoint
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         SpriggitSource meta,
+        bool throwOnUnknown,
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
@@ -33,7 +34,7 @@ public class EntryPoint : IEntryPoint
             .FromPath(modPath)
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
-            .ThrowIfUnknownSubrecord()
+            .ThrowIfUnknownSubrecord(shouldThrow: throwOnUnknown)
             .Construct();
         await MutagenJsonConverter.Instance.Serialize(
             modGetter,

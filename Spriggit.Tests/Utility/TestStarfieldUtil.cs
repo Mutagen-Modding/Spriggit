@@ -45,7 +45,9 @@ public class TestStarfieldUtil
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, cancel: CancellationToken.None);
+            },
+            throwOnUnknown: true,
+            cancel: CancellationToken.None);
     }
     
     public static async Task<IStarfieldModDisposableGetter> Import(

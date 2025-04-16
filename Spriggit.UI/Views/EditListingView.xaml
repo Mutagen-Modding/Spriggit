@@ -98,6 +98,11 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
+                <TextBlock Text="Other" Margin="5" FontSize="14" FontWeight="Bold" />
+                <CheckBox x:Name="UnknownRecordsCheckbox" 
+                          Margin="5,0,0,0"
+                          Content="Fail on Unknown Records"
+                          ToolTip="If an unknown record is encountered, stop converting and fail the translation.  Turning this off increases risk of data loss." />
             </StackPanel>
         </ScrollViewer>
         <Rectangle Height="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Top" >

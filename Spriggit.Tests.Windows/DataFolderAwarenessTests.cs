@@ -99,6 +99,7 @@ public class DataFolderAwarenessTests
                     Version = ident.Version.ToString(),
                     PackageName = ident.Id
                 },
+                throwIfUnknown: true,
                 CancellationToken.None);
             FileSystem.Directory.CreateDirectory(Path.Combine(outputFolder, "deserialized"));
             var deserializeOutputFolder = Path.Combine(outputFolder, "deserialized", mod.ModKey.FileName);

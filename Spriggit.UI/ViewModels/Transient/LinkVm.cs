@@ -250,6 +250,7 @@ public class LinkVm : ViewModel
                 dataPath: GetDataFolder(),
                 postSerializeChecks: true,
                 meta: meta.Value,
+                throwOnUnknown: Input.ThrowOnUnknown,
                 cancel: cancel);
             _logger.Information("Finished syncing from Mod to Git. {ModPath} -> {GitPath}", Input.ModPathPicker.TargetPath,
                 Input.GitFolderPicker.TargetPath);

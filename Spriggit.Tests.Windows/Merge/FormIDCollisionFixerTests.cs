@@ -77,6 +77,7 @@ public class FormIDCollisionFixerTests
             spriggitModPath, 
             null,
             postSerializeChecks: true,
+            throwOnUnknown: true,
             meta: meta);
 
         var fixer = container.Resolve<FormIDCollisionFixer>();
@@ -128,6 +129,7 @@ public class FormIDCollisionFixerTests
         await engine.Serialize(
             modPath, spriggitModPath, null,
             postSerializeChecks: true,
+            throwOnUnknown: true,
             meta: _meta);
 
         Commands.Stage(repo, "*");
@@ -150,6 +152,7 @@ public class FormIDCollisionFixerTests
                 modPath, spriggitModPath,
                 dataPath: null,
                 postSerializeChecks: true,
+                throwOnUnknown: true,
                 meta: _meta);
             
             Commands.Stage(repo, "*");
@@ -168,6 +171,7 @@ public class FormIDCollisionFixerTests
                 modPath, spriggitModPath,
                 dataPath: null, 
                 postSerializeChecks: true,
+                throwOnUnknown: true,
                 meta: _meta);
             
             Commands.Stage(repo, "*");

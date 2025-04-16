@@ -198,6 +198,7 @@ public class FormIDCollisionFixer
             outputFolder: spriggitModPath,
             dataPath: dataPath,
             postSerializeChecks: true,
+            throwOnUnknown: true,
             meta: meta.ToMeta());
 
         _logger.Information("Committing changes");

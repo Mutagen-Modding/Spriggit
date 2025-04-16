@@ -42,7 +42,9 @@ public class EndpointTests
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, cancel: CancellationToken.None);
+            },
+            throwOnUnknown: true,
+            cancel: CancellationToken.None);
         await entryPoint.Deserialize(inputPath: spriggitFolder,
             outputPath: modPath,
             dataPath: dataFolder,
@@ -93,7 +95,9 @@ public class EndpointTests
                 {
                     PackageName = "Spriggit.Yaml.Starfield",
                     Version = "Test"
-                }, cancel: CancellationToken.None);
+                },
+                throwOnUnknown: true,
+                cancel: CancellationToken.None);
             var modPath2 = new ModPath(Path.Combine(dataFolder2, mod.ModKey.ToString()));
             await entryPoint.Deserialize(inputPath: spriggitFolder,
                 outputPath: modPath2,
@@ -160,7 +164,9 @@ public class EndpointTests
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "Test"
-            }, cancel: CancellationToken.None);
+            },
+            throwOnUnknown: true,
+            cancel: CancellationToken.None);
         var modPath2 = Path.Combine(dataFolder2, otherModKey.ToString());
         await entryPoint.Deserialize(inputPath: spriggitFolder,
             outputPath: modPath2,

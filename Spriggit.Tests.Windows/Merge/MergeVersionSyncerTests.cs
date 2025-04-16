@@ -101,7 +101,7 @@ public class MergeVersionSyncerTests
         public async Task Serialize(ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath, 
             KnownMaster[] knownMasters,
             GameRelease release, IWorkDropoff? workDropoff,
-            IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
+            IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, bool throwOnUknown, CancellationToken cancel)
         {
             if (_isOld)
             {
@@ -179,6 +179,7 @@ public class MergeVersionSyncerTests
             GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
+            throwOnUnknown: true,
             CancellationToken.None);
         metaPersister.Persist(spriggitModPath, v1);
 
@@ -202,6 +203,7 @@ public class MergeVersionSyncerTests
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
+                throwOnUnknown: true,
                 CancellationToken.None);
             metaPersister.Persist(spriggitModPath, v1);
             
@@ -223,6 +225,7 @@ public class MergeVersionSyncerTests
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,
+                throwOnUnknown: true,
                 CancellationToken.None);
             metaPersister.Persist(spriggitModPath, v2);
             
