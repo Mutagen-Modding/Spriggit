@@ -11,4 +11,5 @@ public class LinkSettings
     public LinkSourceCategory SourceCategory { get; set; }
     public string SpriggitPackageName { get; set; } = string.Empty;
     public string SpriggitPackageVersion { get; set; } = string.Empty;
+    public bool ThrowOnUnknown { get; set; } = true;
 }

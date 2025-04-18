@@ -8,6 +8,7 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using NuGet.Packaging.Core;
+using NuGet.Versioning;
 using Serilog;
 using Spriggit.Core;
 using Spriggit.Engine.Services.Singletons;
@@ -21,7 +22,8 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
     private readonly PackageIdentity _package;
     private readonly DotNetToolTranslationPackagePathProvider _pathProvider;
     private readonly SpriggitTempSourcesProvider _tempSourcesProvider;
-
+    private readonly NuGetVersion _unknownThrowVersion = new(0, 36, 15, 0);
+    
     public DotNetToolEntryPoint(
         PackageIdentity package,
         ILogger logger,
@@ -45,22 +47,32 @@ public class DotNetToolEntryPoint : IEngineEntryPoint
 
         return string.Empty;
     }
+
+    private string GetThrowOnUnknownParam(bool throwOnUnknown)
+    {
+        if (!throwOnUnknown && _package.Version >= _unknownThrowVersion)
+        {
+            return $" -u \"False\"";
+        }
+
+        return string.Empty;
+    }
     
     private FilePath GetExePath()
     {
         DirectoryPath toolsPath = _pathProvider.Path(
             _tempSourcesProvider.SpriggitTempPath,
             _package);
-        return Path.Combine(toolsPath, $"{_package.Id}.exe");
+        return Path.Combine(toolsPath, $"{_package.Id}{(System.OperatingSystem.IsLinux() ? string.Empty : ".exe")}");
     }
     
     public async Task Serialize(ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath, KnownMaster[] knownMasters,
         GameRelease release, IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator,
-        SpriggitSource meta, CancellationToken cancel)
+        SpriggitSource meta, bool throwIfUnknown, CancellationToken cancel)
     {
         var exePath = GetExePath();
 
-        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";
+        var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}{GetThrowOnUnknownParam(throwIfUnknown)}";
         _logger.Information("Running DotNet Entry point serialize with Args: {Args}", args);
         using var processWrapper = _processFactory.Create(
             new ProcessStartInfo(exePath)

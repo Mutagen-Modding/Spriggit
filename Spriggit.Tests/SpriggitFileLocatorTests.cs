@@ -1,10 +1,8 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
-using Spriggit.Core;
+using Shouldly;
 using Spriggit.Core.Services.Singletons;
-using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
 namespace Spriggit.Tests;
@@ -22,7 +20,7 @@ public class SpriggitFileLocatorTests
         var subDir = Path.Combine(existingDir, "SubDir");
         fileSystem.Directory.CreateDirectory(subDir);
         fileLocator.LocateSpriggitConfigFile(subDir)
-            .Should().Be(spriggitPath);
+            .ShouldBe(spriggitPath);
     }
     
     [Theory, MutagenAutoData]
@@ -35,6 +33,6 @@ public class SpriggitFileLocatorTests
         fileSystem.File.Create(spriggitPath);
         var subDir = Path.Combine(existingDir, "SubDir");
         fileLocator.LocateSpriggitConfigFile(subDir)
-            .Should().Be(spriggitPath);
+            .ShouldBe(spriggitPath);
     }
 }

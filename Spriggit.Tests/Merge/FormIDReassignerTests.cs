@@ -1,8 +1,9 @@
-﻿using FluentAssertions;
-using Mutagen.Bethesda;
+﻿using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.Engine.Merge;
 using Xunit;
 
@@ -21,10 +22,10 @@ public class FormIDReassignerTests
             mod, 
             () => mod.GetNextFormKey(), 
             []);
-        mod.EnumerateMajorRecords().Should().HaveCount(2);
-        mod.Npcs.RecordCache.Count.Should().Be(2);
-        mod.Npcs.RecordCache.ContainsKey(n1.FormKey).Should().BeTrue();
-        mod.Npcs.RecordCache.ContainsKey(n2.FormKey).Should().BeTrue();
+        mod.EnumerateMajorRecords().ShouldHaveCount(2);
+        mod.Npcs.RecordCache.Count.ShouldBe(2);
+        mod.Npcs.RecordCache.ContainsKey(n1.FormKey).ShouldBeTrue();
+        mod.Npcs.RecordCache.ContainsKey(n2.FormKey).ShouldBeTrue();
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -52,11 +53,11 @@ public class FormIDReassignerTests
             {
                 weap
             });
-        mod.EnumerateMajorRecords().Should().HaveCount(2);
-        mod.Npcs.RecordCache.Count.Should().Be(1);
-        mod.Npcs.RecordCache.ContainsKey(n1.FormKey).Should().BeTrue();
-        mod.Weapons.RecordCache.Count.Should().Be(1);
-        mod.Weapons.RecordCache.ContainsKey(weap.FormKey).Should().BeFalse();
-        mod.Weapons.RecordCache.ContainsKey(replacementFormKeyOrig).Should().BeTrue();
+        mod.EnumerateMajorRecords().ShouldHaveCount(2);
+        mod.Npcs.RecordCache.Count.ShouldBe(1);
+        mod.Npcs.RecordCache.ContainsKey(n1.FormKey).ShouldBeTrue();
+        mod.Weapons.RecordCache.Count.ShouldBe(1);
+        mod.Weapons.RecordCache.ContainsKey(weap.FormKey).ShouldBeFalse();
+        mod.Weapons.RecordCache.ContainsKey(replacementFormKeyOrig).ShouldBeTrue();
     }
 }

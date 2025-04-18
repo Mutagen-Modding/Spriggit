@@ -55,6 +55,8 @@ public class LinkInputVm : ViewModel
 
     [Reactive] public string Version { get; set; } = string.Empty;
 
+    [Reactive] public bool ThrowOnUnknown { get; set; } = true;
+
     [Reactive] public LinkSourceCategory SourceCategory { get; set; } = LinkSourceCategory.Yaml;
 
     private readonly ObservableAsPropertyHelper<bool> _inError;
@@ -183,6 +185,7 @@ public class LinkInputVm : ViewModel
         SourceCategory = settings.SourceCategory;
         Release = settings.GameRelease;
         DataFolderPicker.TargetPath = settings.DataFolderPath;
+        ThrowOnUnknown = settings.ThrowOnUnknown;
         
         // Needs to go last to drive config reading
         GitFolderPicker.TargetPath = settings.GitPath;
@@ -198,7 +201,8 @@ public class LinkInputVm : ViewModel
             SpriggitPackageVersion = Version,
             SourceCategory = SourceCategory,
             GameRelease = Release,
-            DataFolderPath = DataFolderPicker.TargetPath
+            DataFolderPath = DataFolderPicker.TargetPath,
+            ThrowOnUnknown = ThrowOnUnknown,
         };
     }
 

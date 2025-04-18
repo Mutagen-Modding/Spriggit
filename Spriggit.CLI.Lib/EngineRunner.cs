@@ -57,6 +57,9 @@ public static class EngineRunner
     {
         LoggerSetup.Logger.Information("Command to serialize");
 
+        var throwing = serializeCommand.ErrorOnUnknown ?? true;
+        LoggerSetup.Logger.Information("Throwing on unknown records: {Throwing}", throwing);
+
         var meta = SerializeCommandMetaExtractor.ExtractSpriggitMeta(serializeCommand);
 
         var modPath = SerializeCommandMetaExtractor.ExtractModPath(serializeCommand);
@@ -70,6 +73,7 @@ public static class EngineRunner
                 entryPt: entryPoint,
                 postSerializeChecks: serializeCommand.Check,
                 meta: meta,
+                throwOnUnknown: throwing,
                 cancel: CancellationToken.None); 
         return 0;
     }

@@ -1,6 +1,5 @@
 ﻿using System.IO.Abstractions;
 using DynamicData;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins.Records;
@@ -8,9 +7,10 @@ using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.CLI.Lib.Commands.Sort;
 using Xunit;
-using HeadData = Mutagen.Bethesda.Skyrim.HeadData;
 using MorphGroup = Mutagen.Bethesda.Fallout4.MorphGroup;
 using Npc = Mutagen.Bethesda.Skyrim.Npc;
 using NpcFaceMorph = Mutagen.Bethesda.Starfield.NpcFaceMorph;
@@ -84,7 +84,7 @@ public class SortTests
         var modPath2 = Path.Combine(existingDir2, skyrimMod.ModKey.FileName);
 
         sortSkyrim.HasWorkToDo(modPath, GameRelease.SkyrimSE, [], null)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         await sortSkyrim.Run(modPath, GameRelease.SkyrimSE, modPath2, [], null);
 
         using var reimport = SkyrimMod.Create(SkyrimRelease.SkyrimSE)
@@ -96,8 +96,7 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .Should()
-            .Equal("Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz");
         reimport.Quests.Records.Select(x => x.VirtualMachineAdapter)
             .NotNull()
             .SelectMany(x => x.Aliases)
@@ -105,8 +104,7 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .Should()
-            .Equal("Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz");
     }
     
     [Theory, MutagenModAutoData(GameRelease.Fallout4)]
@@ -160,7 +158,7 @@ public class SortTests
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
         sort.HasWorkToDo(modPath, GameRelease.Fallout4, [], null)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         await sort.Run(modPath, GameRelease.Fallout4, modPath2, [], null);
 
         using var reimport = Fallout4Mod.Create(Fallout4Release.Fallout4)
@@ -177,8 +175,7 @@ public class SortTests
             .NotNull()
             .SelectMany(x => x.MorphGroups)
             .Select(x => x.Name)
-            .Should()
-            .Equal("Abc", "Xyz", "Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz", "Abc", "Xyz");
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -259,7 +256,7 @@ public class SortTests
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
         sort.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         await sort.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
@@ -278,13 +275,11 @@ public class SortTests
             .NotNull()
             .SelectMany(x => x.Chargen?.MorphGroups ?? [])
             .Select(x => x.Name)
-            .Should()
-            .Equal("Abc", "Xyz", "Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz", "Abc", "Xyz");
         reimport.Npcs.Records.SelectMany(x => x.FaceMorphs)
             .SelectMany(x => x.MorphGroups)
             .Select(x => x.MorphGroup)
-            .Should()
-            .Equal("Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz");
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -320,7 +315,7 @@ public class SortTests
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
         sort.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         await sort.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
@@ -331,8 +326,7 @@ public class SortTests
             .Construct();
         reimport.Npcs.Records.SelectMany(x => x.MorphBlends)
             .Select(x => x.BlendName)
-            .Should()
-            .Equal("Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz");
     }
     
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
@@ -375,7 +369,7 @@ public class SortTests
         var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
 
         sortStarfield.HasWorkToDo(modPath, GameRelease.Starfield, [], null)
-            .Should().BeTrue();
+            .ShouldBeTrue();
         await sortStarfield.Run(modPath, GameRelease.Starfield, modPath2, [], null);
 
         using var reimport = StarfieldMod.Create(StarfieldRelease.Starfield)
@@ -389,7 +383,6 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .Should()
-            .Equal("Abc", "Xyz");
+            .ShouldEqual("Abc", "Xyz");
     }
 }

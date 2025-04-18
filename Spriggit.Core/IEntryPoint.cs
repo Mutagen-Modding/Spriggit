@@ -19,6 +19,7 @@ public interface IEntryPoint
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         SpriggitSource meta,
+        bool throwIfUnknown,
         CancellationToken cancel);
 
     public Task Deserialize(

@@ -1,15 +1,15 @@
 ﻿using System.IO.Abstractions;
 using Autofac;
-using FluentAssertions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.Core;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
@@ -77,6 +77,7 @@ public class FormIDCollisionFixerTests
             spriggitModPath, 
             null,
             postSerializeChecks: true,
+            throwOnUnknown: true,
             meta: meta);
 
         var fixer = container.Resolve<FormIDCollisionFixer>();
@@ -99,8 +100,8 @@ public class FormIDCollisionFixerTests
             source: meta.Source);
 
         var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.SkyrimSE);
-        reimport.EnumerateMajorRecords().Should().HaveCount(1);
-        reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
+        reimport.EnumerateMajorRecords().ShouldHaveCount(1);
+        reimport.Npcs.First().FormKey.ShouldBe(n1.FormKey);
     }
 
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE, TargetFileSystem.Real)]
@@ -128,6 +129,7 @@ public class FormIDCollisionFixerTests
         await engine.Serialize(
             modPath, spriggitModPath, null,
             postSerializeChecks: true,
+            throwOnUnknown: true,
             meta: _meta);
 
         Commands.Stage(repo, "*");
@@ -150,6 +152,7 @@ public class FormIDCollisionFixerTests
                 modPath, spriggitModPath,
                 dataPath: null,
                 postSerializeChecks: true,
+                throwOnUnknown: true,
                 meta: _meta);
             
             Commands.Stage(repo, "*");
@@ -168,6 +171,7 @@ public class FormIDCollisionFixerTests
                 modPath, spriggitModPath,
                 dataPath: null, 
                 postSerializeChecks: true,
+                throwOnUnknown: true,
                 meta: _meta);
             
             Commands.Stage(repo, "*");
@@ -186,7 +190,7 @@ public class FormIDCollisionFixerTests
             meta: new SpriggitModKeyMeta(_meta.Source, GameRelease.SkyrimSE, mod.ModKey));
 
         var metaPath = Path.Combine(spriggitModPath, SpriggitExternalMetaPersister.FileName);
-        File.Exists(metaPath).Should().BeTrue();
+        File.Exists(metaPath).ShouldBeTrue();
         
         var modFolder2 = Path.Combine(tmp.Dir, "ModFolder2");
         var modPath2 = Path.Combine(modFolder2, mod.ModKey.FileName);
@@ -200,12 +204,11 @@ public class FormIDCollisionFixerTests
             source: _meta.Source);
         
         var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.SkyrimSE);
-        reimport.EnumerateMajorRecords().Should().HaveCount(3);
+        reimport.EnumerateMajorRecords().ShouldHaveCount(3);
         reimport.Armors.Select(x => x.FormKey)
-            .Should().Equal(armor.FormKey);
-        reimport.Npcs.Count.Should().Be(1);
-        reimport.Weapons.Count.Should().Be(1);
-        reimport.Npcs.First().FormKey.Should()
-            .NotBe(reimport.Weapons.First().FormKey);
+            .ShouldEqual(armor.FormKey);
+        reimport.Npcs.Count.ShouldBe(1);
+        reimport.Weapons.Count.ShouldBe(1);
+        reimport.Npcs.First().FormKey.ShouldNotBe(reimport.Weapons.First().FormKey);
     }
 }

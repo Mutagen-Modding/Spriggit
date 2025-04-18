@@ -1,10 +1,10 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Oblivion;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Shouldly;
 using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Oblivion;
 using Xunit;
@@ -37,6 +37,6 @@ public class OblivionWorldspaceTopcell
         };
         
         var reimport = await TestOblivionUtil.PassThrough(fileSystem, mod, existingDataFolder, spriggitFolder, otherModKey, entryPoint);
-        reimport.Worldspaces.First().TopCell!.Temporary.Select(x => x.EditorID).First().Should().Be(someEdid);
+        reimport.Worldspaces.First().TopCell!.Temporary.Select(x => x.EditorID).First().ShouldBe(someEdid);
     }
 }

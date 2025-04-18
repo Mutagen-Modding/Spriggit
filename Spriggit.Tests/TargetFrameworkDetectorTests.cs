@@ -1,8 +1,7 @@
 using System.IO.Abstractions;
-using FluentAssertions;
 using Noggog;
 using Noggog.Testing.AutoFixture;
-using Spriggit.Engine;
+using Shouldly;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
@@ -16,7 +15,7 @@ public class TargetFrameworkDetectorTests
         DirectoryPath existingDir,
         TargetFrameworkDirLocator sut)
     {
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().BeNull();
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBeNull();
     }
     
     [Theory, DefaultAutoData]
@@ -27,7 +26,7 @@ public class TargetFrameworkDetectorTests
     {
         var someFramework = new DirectoryPath(Path.Combine(existingDir, "lib", "netstandard2.0"));
         fileSystem.Directory.CreateDirectory(someFramework);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(someFramework);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(someFramework);
     }
 
     [Theory, DefaultAutoData]
@@ -40,7 +39,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(five);
         var six = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(six);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(six);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(six);
     }
 
     [Theory, DefaultAutoData]
@@ -53,7 +52,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(five);
         var six = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(six);
-        sut.GetTargetFrameworkDir(existingDir, "net5.0").Should().Be(five);
+        sut.GetTargetFrameworkDir(existingDir, "net5.0").ShouldBe(five);
     }
 
     [Theory, DefaultAutoData]
@@ -66,7 +65,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var net = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(net);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(net);
     }
     
     [Theory, DefaultAutoData]
@@ -79,7 +78,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var standard = new DirectoryPath(Path.Combine(existingDir, "lib", "netstandard2.0"));
         fileSystem.Directory.CreateDirectory(standard);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(standard);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(standard);
     }
     
     [Theory, DefaultAutoData]
@@ -92,7 +91,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var net = new DirectoryPath(Path.Combine(existingDir, "lib", "net6.0"));
         fileSystem.Directory.CreateDirectory(net);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(net);
     }
     
     [Theory, DefaultAutoData]
@@ -105,7 +104,7 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(net);
         var windows = new DirectoryPath(Path.Combine(existingDir, "lib", "net7.0-windows"));
         fileSystem.Directory.CreateDirectory(windows);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(net);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(net);
     }
     
     [Theory, DefaultAutoData]
@@ -118,6 +117,6 @@ public class TargetFrameworkDetectorTests
         fileSystem.Directory.CreateDirectory(framework);
         var unknown = new DirectoryPath(Path.Combine(existingDir, "lib", "MonoAndroid10"));
         fileSystem.Directory.CreateDirectory(unknown);
-        sut.GetTargetFrameworkDir(existingDir, "net7.0").Should().Be(framework);
+        sut.GetTargetFrameworkDir(existingDir, "net7.0").ShouldBe(framework);
     }
 }

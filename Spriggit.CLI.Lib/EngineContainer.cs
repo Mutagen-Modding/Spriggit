@@ -22,7 +22,6 @@ namespace Spriggit.CLI.Lib;
 [Register(typeof(SpriggitFileLocator))]
 [Register(typeof(TargetFrameworkDirLocator))]
 [Register(typeof(CurrentVersionsProvider))]
-[Register(typeof(ConstructAssemblyLoadedEntryPoint))]
 [Register(typeof(ConstructDotNetToolEndpoint))]
 [Register(typeof(GetFrameworkType))]
 [Register(typeof(PreparePluginFolder))]

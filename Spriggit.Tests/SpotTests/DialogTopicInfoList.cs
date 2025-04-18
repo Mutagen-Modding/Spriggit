@@ -1,11 +1,11 @@
 using System.IO.Abstractions;
-using DynamicData;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Noggog.Testing.Extensions;
+using Shouldly;
 using Spriggit.Tests.Utility;
 using Spriggit.Yaml.Starfield;
 using Xunit;
@@ -36,22 +36,22 @@ public class DialogTopicInfoList : SpotTestBase
 
         var reimport = await TestStarfieldUtil.PassThrough(fileSystem, mod, dataFolder, spriggitFolder, otherModKey, entryPoint);
 
-        reimport.EnumerateMajorRecords().Should().HaveCount(4);
-        reimport.Quests.Count.Should().Be(1);
+        reimport.EnumerateMajorRecords().ShouldHaveCount(4);
+        reimport.Quests.Count.ShouldBe(1);
         var reimportQuest = reimport.Quests.First();
-        reimportQuest.DialogTopics.Count.Should().Be(1);
+        reimportQuest.DialogTopics.Count.ShouldBe(1);
         var reimportTopic = reimportQuest.DialogTopics.First();
-        reimportTopic.Responses.Count.Should().Be(2);
+        reimportTopic.Responses.Count.ShouldBe(2);
         var reimportResps = reimportTopic.Responses.First();
-        reimportResps.Responses.Count.Should().Be(1);
+        reimportResps.Responses.Count.ShouldBe(1);
         var reimportResp = reimportResps.Responses.First();
-        reimportResp.Edits.Should().Be("Edits");
+        reimportResp.Edits.ShouldBe("Edits");
         var reimportResps2 = reimportTopic.Responses.Last();
-        reimportResps.Responses.Count.Should().Be(1);
+        reimportResps.Responses.Count.ShouldBe(1);
         var reimportResp2 = reimportResps2.Responses.First();
-        reimportResp2.Edits.Should().Be("Edits2");
-        reimportTopic.TopicInfoList.Should().NotBeNull();
-        reimportTopic.TopicInfoList.Should().HaveCount(1);
-        reimportTopic.TopicInfoList!.First().FormKey.ID.Should().Be(resps.FormKey.ID);
+        reimportResp2.Edits.ShouldBe("Edits2");
+        reimportTopic.TopicInfoList.ShouldNotBeNull();
+        reimportTopic.TopicInfoList.ShouldHaveCount(1);
+        reimportTopic.TopicInfoList!.First().FormKey.ID.ShouldBe(resps.FormKey.ID);
     }
 }

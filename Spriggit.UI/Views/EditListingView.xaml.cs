@@ -51,6 +51,8 @@ public partial class EditListingView
                 .DisposeWith(disp);
             this.Bind(ViewModel, x => x.LinkInput.CreateSpriggitConfigCommand, x => x.CreateSpriggitConfigButton.Command)
                 .DisposeWith(disp);
+            this.Bind(ViewModel, x => x.LinkInput.ThrowOnUnknown, x => x.UnknownRecordsCheckbox.IsChecked)
+                .DisposeWith(disp);
             this.WhenAnyValue(x => x.ViewModel)
                 .Select(x => x is EditLinkVm ? "Apply" : "Add")
                 .BindTo(this, x => x.AddButtonText.Text)

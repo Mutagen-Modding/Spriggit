@@ -30,6 +30,7 @@ public class SpriggitEngine(
         DirectoryPath outputFolder, 
         DirectoryPath? dataPath,
         bool postSerializeChecks,
+        bool throwOnUnknown,
         IEngineEntryPoint? entryPt = default,
         SpriggitMeta? meta = default,
         CancellationToken? cancel = default)
@@ -74,6 +75,7 @@ public class SpriggitEngine(
             workDropoff: workDropoff,
             streamCreator: createStream,
             meta: source,
+            throwIfUnknown: throwOnUnknown,
             cancel: cancel.Value);
         metaPersister.Persist(
             outputFolder, 

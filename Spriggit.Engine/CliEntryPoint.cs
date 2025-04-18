@@ -52,6 +52,7 @@ public class CliEntryPoint : IEntryPoint
         KnownMaster[] knownMasters,
         GameRelease release,
         IWorkDropoff? workDropoff, IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta,
+        bool throwOnUnknown,
         CancellationToken cancel)
     {
         var args = $"serialize -i \"{modPath.Path.Path}\" -o \"{outputDir.Path}\" -g {release} -p {_package.Id} -v {_package.Version.ToString().TrimStringFromEnd(".0")}{GetDataPathParam(dataPath)}";

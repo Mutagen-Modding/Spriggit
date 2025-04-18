@@ -198,6 +198,6 @@ public class MergeVersionSyncer
         await newEntryPoint.Serialize(modPath, spriggitPath, dataFolder,
             knownMasters: knownMasters,
             newExternalMeta.Release,
-            null, null, null, newExternalMeta.Source, cancel: CancellationToken.None);
+            null, null, null, newExternalMeta.Source, throwIfUnknown: true, cancel: CancellationToken.None);
     }
 }

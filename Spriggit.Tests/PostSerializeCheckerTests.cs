@@ -61,7 +61,8 @@ public class PostSerializeCheckerTests
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "1.2.3"
-            });
+            },
+            throwOnUnknown: true);
         
         await sut.Checker.Check(
             mod: modPath,
@@ -111,7 +112,8 @@ public class PostSerializeCheckerTests
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "1.2.3"
-            });
+            },
+            throwOnUnknown: true);
         
         mod.Books.Clear();
         mod.WriteToBinary(modPath, new BinaryWriteParameters()
@@ -169,7 +171,8 @@ public class PostSerializeCheckerTests
             {
                 PackageName = "Spriggit.Yaml.Starfield",
                 Version = "1.2.3"
-            });
+            },
+            throwOnUnknown: true);
 
         mod.Books.AddNew();
         mod.WriteToBinary(modPath, new BinaryWriteParameters()

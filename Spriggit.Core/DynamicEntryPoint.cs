@@ -7,11 +7,11 @@ using Noggog.WorkEngine;
 
 namespace Spriggit.Core;
 
-public class DynamicEntryPoint : IEntryPoint
+public class LegacyDynamicEntryPoint : IEntryPoint
 {
     private object _wrappedEndPoint;
 
-    public DynamicEntryPoint(object wrappedEndPoint)
+    public LegacyDynamicEntryPoint(object wrappedEndPoint)
     {
         _wrappedEndPoint = wrappedEndPoint;
     }
@@ -26,6 +26,7 @@ public class DynamicEntryPoint : IEntryPoint
         IFileSystem? fileSystem,
         ICreateStream? streamCreator, 
         SpriggitSource meta, 
+        bool throwIfUnknown,
         CancellationToken cancel)
     {
         var serializeMethod = _wrappedEndPoint.GetType().GetMethods().FirstOrDefault(m => m.Name == "Serialize")!;

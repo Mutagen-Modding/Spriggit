@@ -24,6 +24,7 @@ public class EntryPoint : IEntryPoint
         IFileSystem? fileSystem,
         ICreateStream? streamCreator,
         SpriggitSource meta,
+        bool throwOnUnknown,
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
@@ -36,7 +37,7 @@ public class EntryPoint : IEntryPoint
             .WithKnownMasters(
                 knownMasters.Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
                     .ToArray())
-            .ThrowIfUnknownSubrecord()
+            .ThrowIfUnknownSubrecord(shouldThrow: throwOnUnknown)
             .Construct();
         
         await MutagenYamlConverter.Instance.Serialize(

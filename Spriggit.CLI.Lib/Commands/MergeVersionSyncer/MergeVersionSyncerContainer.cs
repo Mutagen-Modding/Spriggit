@@ -15,7 +15,6 @@ namespace Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
 [Register(typeof(EntryPointCache), typeof(IEntryPointCache))]
 [Register(typeof(ConstructEntryPoint))]
 [Register(typeof(NugetDownloader))]
-[Register(typeof(ConstructAssemblyLoadedEntryPoint))]
 [Register(typeof(ConstructDotNetToolEndpoint))]
 [Register(typeof(FindTargetFramework))]
 [Register(typeof(TargetFrameworkDirLocator))]

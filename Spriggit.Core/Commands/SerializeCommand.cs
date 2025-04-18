@@ -56,4 +56,9 @@ public class SerializeCommand
         HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)",
         Required = false)]
     public string? DataFolder { get; set; }
+
+    [Option('u', "ErrorOnUnknown",
+        HelpText = "Whether to error on unknown fields.  Liklihood of data loss is higher if turned off.",
+        Required = false)]
+    public bool? ErrorOnUnknown { get; set; }
 }

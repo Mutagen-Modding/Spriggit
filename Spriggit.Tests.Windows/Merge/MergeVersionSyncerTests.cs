@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
@@ -9,6 +8,7 @@ using Noggog;
 using Noggog.IO;
 using Noggog.Testing.AutoFixture;
 using Noggog.WorkEngine;
+using Shouldly;
 using Spriggit.Core;
 using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
@@ -82,7 +82,7 @@ public class MergeVersionSyncerTests
     //
     //     var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.Skyrim, fileSystem: fileSystem);
     //     reimport.EnumerateMajorRecords().Should().HaveCount(1);
-    //     reimport.Npcs.First().FormKey.Should().Be(n1.FormKey);
+    //     reimport.Npcs.First().FormKey.ShouldBe(n1.FormKey);
     // }
     
     public class FakeEntryPoint : IEntryPoint
@@ -101,15 +101,15 @@ public class MergeVersionSyncerTests
         public async Task Serialize(ModPath modPath, DirectoryPath outputDir, DirectoryPath? dataPath, 
             KnownMaster[] knownMasters,
             GameRelease release, IWorkDropoff? workDropoff,
-            IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, CancellationToken cancel)
+            IFileSystem? fileSystem, ICreateStream? streamCreator, SpriggitSource meta, bool throwOnUknown, CancellationToken cancel)
         {
             if (_isOld)
             {
                 throw new NotImplementedException();
             }
             fileSystem = fileSystem.GetOrDefault();
-            modPath.ModKey.FileName.Should().Be(_modKey.FileName);
-            fileSystem.File.ReadAllText(modPath).Should().Be("OldContent");
+            modPath.ModKey.FileName.ShouldBe(_modKey.FileName);
+            fileSystem.File.ReadAllText(modPath).ShouldBe("OldContent");
             fileSystem.File.WriteAllText(Path.Combine(outputDir, "Testing123"), "NewContent");
         }
 
@@ -123,8 +123,8 @@ public class MergeVersionSyncerTests
                 throw new NotImplementedException();
             }
             fileSystem = fileSystem.GetOrDefault();
-            fileSystem.Directory.Exists(inputPath).Should().BeTrue();
-            Path.GetFileName(outputPath).Should().Be(_modKey.FileName);
+            fileSystem.Directory.Exists(inputPath).ShouldBeTrue();
+            Path.GetFileName(outputPath).ShouldBe(_modKey.FileName);
             fileSystem.File.WriteAllText(outputPath, "OldContent");
         }
     }
@@ -179,6 +179,7 @@ public class MergeVersionSyncerTests
             GameRelease.SkyrimSE,
             null, null, null,
             v1.Source,
+            throwOnUnknown: true,
             CancellationToken.None);
         metaPersister.Persist(spriggitModPath, v1);
 
@@ -202,6 +203,7 @@ public class MergeVersionSyncerTests
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v1.Source,
+                throwOnUnknown: true,
                 CancellationToken.None);
             metaPersister.Persist(spriggitModPath, v1);
             
@@ -223,6 +225,7 @@ public class MergeVersionSyncerTests
                 GameRelease.SkyrimSE,
                 null, null, null,
                 v2.Source,
+                throwOnUnknown: true,
                 CancellationToken.None);
             metaPersister.Persist(spriggitModPath, v2);
             
@@ -238,6 +241,6 @@ public class MergeVersionSyncerTests
             spriggitModPath: spriggitModPath,
             dataFolder: null);
 
-        File.ReadAllText(Path.Combine(spriggitModPath, "Testing123")).Should().Be("NewContent");
+        File.ReadAllText(Path.Combine(spriggitModPath, "Testing123")).ShouldBe("NewContent");
     }
 }

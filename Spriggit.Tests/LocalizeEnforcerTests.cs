@@ -1,11 +1,11 @@
 ﻿using System.IO.Abstractions;
-using FluentAssertions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Oblivion;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
+using Shouldly;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
 using SkyrimNpc = Mutagen.Bethesda.Skyrim.Npc;
@@ -70,7 +70,7 @@ public class LocalizeEnforcerTests
             {
                 FileSystem = fileSystem
             });
-        reimport.UsingLocalization.Should().Be(false);
+        reimport.UsingLocalization.ShouldBe(false);
     }
     
     [Theory, MutagenModAutoData]
@@ -93,7 +93,7 @@ public class LocalizeEnforcerTests
             {
                 FileSystem = fileSystem
             });
-        reimport.UsingLocalization.Should().Be(true);
+        reimport.UsingLocalization.ShouldBe(true);
     }
     
     [Theory, MutagenModAutoData]
@@ -116,7 +116,7 @@ public class LocalizeEnforcerTests
             {
                 FileSystem = fileSystem
             });
-        reimport.UsingLocalization.Should().Be(true);
+        reimport.UsingLocalization.ShouldBe(true);
     }
     
     [Theory, MutagenModAutoData]
@@ -139,6 +139,6 @@ public class LocalizeEnforcerTests
             {
                 FileSystem = fileSystem
             });
-        reimport.UsingLocalization.Should().Be(false);
+        reimport.UsingLocalization.ShouldBe(false);
     }
 }
