@@ -7,11 +7,9 @@
         <ProjectReference Include="..\Spriggit.Core\Spriggit.Core.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="McMaster.NETCore.Plugins"/>
         <PackageReference Include="Mutagen.Bethesda"/>
         <PackageReference Include="Noggog.GitRepository"/>
         <PackageReference Include="Noggog.SourceGenerators"/>
-        <PackageReference Include="Noggog.Testing"/>
         <PackageReference Include="NuGet.Build.Tasks"/>
         <PackageReference Include="NuGet.PackageManagement"/>
         <PackageReference Include="NuGet.Protocol"/>
