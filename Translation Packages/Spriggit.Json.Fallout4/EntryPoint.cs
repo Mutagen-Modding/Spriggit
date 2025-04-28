@@ -8,6 +8,7 @@ using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
+using Spriggit.TranslationPackages;
 
 namespace Spriggit.Json.Fallout4;
 
@@ -65,14 +66,7 @@ public class EntryPoint : IEntryPoint
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
-            .WithRecordCount(RecordCountOption.Iterate)
-            .WithModKeySync(ModKeyOption.CorrectToPath)
-            .WithMastersListContent(MastersListContentOption.NoCheck)
-            .WithMastersListOrdering(MastersListOrderingOption.NoCheck)
-            .NoFormIDUniquenessCheck()
-            .NoFormIDCompactnessCheck()
-            .NoCheckIfLowerRangeDisallowed()
-            .NoNullFormIDStandardization()
+            .AddNonOpinionatedWriteOptions()
             .WriteAsync();
     }
 

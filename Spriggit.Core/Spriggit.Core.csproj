@@ -15,7 +15,7 @@
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="Noggog.CSharpExt" />
-        <PackageReference Include="Mutagen.Bethesda.Kernel" />
+        <PackageReference Include="Mutagen.Bethesda.Core" />
         <PackageReference Include="CommandLineParser" />
         <PackageReference Include="Noggog.SourceGenerators" />
         <PackageReference Include="Serilog" />
