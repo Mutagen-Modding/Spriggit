@@ -5,6 +5,7 @@ using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
 using Serilog;
+using Spriggit.Core;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
@@ -211,8 +212,8 @@ public class SortStarfield : ISort
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
             .WithKnownMasters(knownMasters)
-            .NoModKeySync()
             .WithFileSystem(_fileSystem)
+            .AddNonOpinionatedWriteOptions()
             .WriteAsync();
     }
 

@@ -5,6 +5,7 @@ using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using Serilog;
+using Spriggit.Core;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
@@ -106,8 +107,8 @@ public class SortSkyrim : ISort
             .ToPath(outputPath)
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
-            .NoModKeySync()
             .WithFileSystem(_fileSystem)
+            .AddNonOpinionatedWriteOptions()
             .WriteAsync();
     }
 

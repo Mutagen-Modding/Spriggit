@@ -5,6 +5,7 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Serilog;
+using Spriggit.Core;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
@@ -154,7 +155,7 @@ public class SortFallout4 : ISort
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataFolder)
             .WithFileSystem(_fileSystem)
-            .NoModKeySync()
+            .AddNonOpinionatedWriteOptions()
             .WriteAsync();
     }
 

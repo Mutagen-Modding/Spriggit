@@ -2,7 +2,7 @@
 using Mutagen.Bethesda.Plugins.Binary.Translations;
 using Mutagen.Bethesda.Plugins.Records;
 
-namespace Spriggit.TranslationPackages;
+namespace Spriggit.Core;
 
 public static class WriteBuilderSpecialization
 {
