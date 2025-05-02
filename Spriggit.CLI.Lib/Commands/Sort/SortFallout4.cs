@@ -144,11 +144,6 @@ public class SortFallout4 : ISort
         SortVirtualMachineAdapter(mod);
         SortMorphGroups(mod);
 
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
         outputPath.Path.Directory?.Create(_fileSystem);
         await mod.BeginWrite
             .ToPath(outputPath)

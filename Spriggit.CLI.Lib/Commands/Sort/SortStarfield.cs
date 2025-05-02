@@ -201,11 +201,6 @@ public class SortStarfield : ISort
         SortMorphGroups(mod);
         SortMorphBlends(mod);
 
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
         outputPath.Path.Directory?.Create(_fileSystem);
         await mod.BeginWrite
             .ToPath(outputPath)

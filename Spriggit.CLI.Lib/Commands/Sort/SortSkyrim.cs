@@ -97,11 +97,6 @@ public class SortSkyrim : ISort
             .Construct();
         SortVirtualMachineAdapter(mod);
 
-        foreach (var maj in mod.EnumerateMajorRecords())
-        {
-            maj.IsCompressed = false;
-        }
-        
         outputPath.Path.Directory?.Create(_fileSystem);
         await mod.BeginWrite
             .ToPath(outputPath)
