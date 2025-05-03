@@ -1,43 +1,19 @@
-﻿using System.IO.Abstractions;
-using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Records;
-using Mutagen.Bethesda.Skyrim;
+﻿using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using Serilog;
-using Spriggit.Core;
 
-namespace Spriggit.CLI.Lib.Commands.Sort;
+namespace Spriggit.CLI.Lib.Commands.Sort.Services.Skyrim;
 
-public class SortSkyrim : ISort
+public class SortVirtualMachineAdapters : ISortSomething<ISkyrimMod, ISkyrimModGetter>
 {
     private readonly ILogger _logger;
-    private readonly IFileSystem _fileSystem;
 
-    public SortSkyrim(
-        ILogger logger,
-        IFileSystem fileSystem)
+    public SortVirtualMachineAdapters(ILogger logger)
     {
         _logger = logger;
-        _fileSystem = fileSystem;
     }
     
-    public bool HasWorkToDo(
-        ModPath path,
-        GameRelease release,
-        KeyedMasterStyle[] knownMasters,
-        DirectoryPath? dataFolder)
-    {
-        using var mod = SkyrimMod.Create(release.ToSkyrimRelease())
-            .FromPath(path)
-            .WithFileSystem(_fileSystem)
-            .Construct();
-        if (VirtualMachineAdaptersHaveWorkToDo(mod)) return true;
-
-        return false;
-    }
-
-    private bool VirtualMachineAdaptersHaveWorkToDo(ISkyrimModDisposableGetter mod)
+    public bool HasWorkToDo(ISkyrimModGetter mod)
     {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapterGetter>()
@@ -83,31 +59,7 @@ public class SortSkyrim : ISort
         return false;
     }
 
-    public async Task Run(
-        ModPath path,
-        GameRelease release, 
-        ModPath outputPath,
-        KeyedMasterStyle[] knownMasters,
-        DirectoryPath? dataFolder)
-    {
-        var mod = SkyrimMod.Create(release.ToSkyrimRelease())
-            .FromPath(path)
-            .WithFileSystem(_fileSystem)
-            .Mutable()
-            .Construct();
-        SortVirtualMachineAdapter(mod);
-
-        outputPath.Path.Directory?.Create(_fileSystem);
-        await mod.BeginWrite
-            .ToPath(outputPath)
-            .WithLoadOrderFromHeaderMasters()
-            .WithDataFolder(dataFolder)
-            .WithFileSystem(_fileSystem)
-            .AddNonOpinionatedWriteOptions()
-            .WriteAsync();
-    }
-
-    private void SortVirtualMachineAdapter(ISkyrimMod mod)
+    public void DoWork(ISkyrimMod mod)
     {
         foreach (var hasVM in mod
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
