@@ -1,7 +1,7 @@
-using System.IO.Abstractions;
+using Autofac;
 using CommandLine;
 using Mutagen.Bethesda;
-using Spriggit.Engine.Services.Singletons;
+using Spriggit.CLI.Lib.Commands.Sort.Services;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
 
@@ -29,15 +29,17 @@ public class SortCommand
         Required = false)]
     public string? KnownMasterLocation { get; set; }
 
-    private static SortRunnerContainer GetContainer()
+    private static SortCommandRunner GetService()
     {
-        return new SortRunnerContainer(new FileSystem(), LoggerSetup.Logger);
+        var builder = new ContainerBuilder();
+        builder.RegisterModule<SortModule>();
+        var container = builder.Build();
+        return container.Resolve<SortCommandRunner>();
     }
     
     public async Task<int> Run()
     {
-        await GetContainer()
-            .Resolve().Value
+        await GetService()
             .Run(this);
         return 0;
     }

@@ -6,10 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Noggog.Autofac" />
         <PackageReference Include="Noggog.CSharpExt" />
         <PackageReference Include="CommandLineParser" />
         <PackageReference Include="Serilog.Sinks.Console" />
-        <PackageReference Include="StrongInject" />
     </ItemGroup>
 
     <ItemGroup>

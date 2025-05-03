@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using Autofac;
 using DynamicData;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
@@ -8,12 +9,18 @@ using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.Testing.Extensions;
+using Serilog;
+using Serilog.Core;
 using Shouldly;
 using Spriggit.CLI.Lib.Commands.Sort;
+using Spriggit.CLI.Lib.Commands.Sort.Services.Fallout4;
+using Spriggit.CLI.Lib.Commands.Sort.Services.Skyrim;
+using Spriggit.CLI.Lib.Commands.Sort.Services.Starfield;
 using Xunit;
 using MorphGroup = Mutagen.Bethesda.Fallout4.MorphGroup;
 using Npc = Mutagen.Bethesda.Skyrim.Npc;
 using NpcFaceMorph = Mutagen.Bethesda.Starfield.NpcFaceMorph;
+using PerkAbilityEffect = Mutagen.Bethesda.Fallout4.PerkAbilityEffect;
 using Quest = Mutagen.Bethesda.Skyrim.Quest;
 using QuestFragmentAlias = Mutagen.Bethesda.Skyrim.QuestFragmentAlias;
 using ScriptBoolProperty = Mutagen.Bethesda.Skyrim.ScriptBoolProperty;
@@ -25,7 +32,16 @@ namespace Spriggit.Tests;
 
 public class SortTests
 {
-    [Theory, MutagenModAutoData]
+    public class SortTestModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterModule<SortModule>();
+            builder.RegisterInstance(Logger.None).As<ILogger>();
+        }
+    }
+    
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.SkyrimSE)]
     public async Task VirtualMachineAdapter(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
@@ -107,7 +123,7 @@ public class SortTests
             .ShouldEqual("Abc", "Xyz");
     }
     
-    [Theory, MutagenModAutoData(GameRelease.Fallout4)]
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Fallout4)]
     public async Task FalloutMorphGroups(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
@@ -178,7 +194,7 @@ public class SortTests
             .ShouldEqual("Abc", "Xyz", "Abc", "Xyz");
     }
     
-    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
     public async Task StarfieldMorphGroups(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
@@ -282,7 +298,7 @@ public class SortTests
             .ShouldEqual("Abc", "Xyz");
     }
     
-    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
     public async Task StarfieldMorphBlends(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
@@ -329,7 +345,52 @@ public class SortTests
             .ShouldEqual("Abc", "Xyz");
     }
     
-    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Fallout4)]
+    public async Task PerkSort(
+        IFileSystem fileSystem,
+        DirectoryPath existingDir,
+        DirectoryPath existingDir2,
+        Fallout4Mod mod,
+        Mutagen.Bethesda.Fallout4.Perk perk,
+        SortFallout4 sort)
+    {
+        perk.Effects.Add(new []
+        {
+            new PerkAbilityEffect()
+            {
+                Priority = 5,
+            },
+            new PerkAbilityEffect()
+            {
+                Priority = 4,
+            }
+        });
+
+        var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
+
+        await mod.BeginWrite
+            .ToPath(modPath)
+            .WithLoadOrderFromHeaderMasters()
+            .WithNoDataFolder()
+            .WithFileSystem(fileSystem)
+            .WriteAsync();
+
+        var modPath2 = Path.Combine(existingDir2, mod.ModKey.FileName);
+
+        sort.HasWorkToDo(modPath, GameRelease.Fallout4, [], null)
+            .ShouldBeTrue();
+        await sort.Run(modPath, GameRelease.Fallout4, modPath2, [], null);
+
+        using var reimport = Fallout4Mod.Create(Fallout4Release.Fallout4)
+            .FromPath(modPath2)
+            .WithFileSystem(fileSystem)
+            .Construct();
+        reimport.Perks.Records.SelectMany(x => x.Effects)
+            .Select(x => x.Priority)
+            .ShouldEqual(4, 5);
+    }
+
+    [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
     public async Task SpecificStarfieldTest(
         IFileSystem fileSystem,
         DirectoryPath existingDir,
