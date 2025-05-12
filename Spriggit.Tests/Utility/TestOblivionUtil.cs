@@ -65,11 +65,11 @@ public class TestOblivionUtil
             knownMasters: [],
             fileSystem: fileSystem,
             streamCreator: null, cancel: CancellationToken.None);
-        var reimport = OblivionMod.CreateFromBinaryOverlay(modPath2,
-            BinaryReadParameters.Default with
-            {
-                FileSystem = fileSystem
-            });
+        var reimport = OblivionMod
+            .Create(OblivionRelease.Oblivion)
+            .FromPath(modPath2)
+            .WithFileSystem(fileSystem)
+            .Construct();
         return reimport;
     }
 }

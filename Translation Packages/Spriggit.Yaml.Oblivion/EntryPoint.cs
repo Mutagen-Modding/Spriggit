@@ -29,7 +29,7 @@ public class EntryPoint : IEntryPoint
     {
         fileSystem = fileSystem.GetOrDefault();
         using var modGetter = OblivionMod
-            .Create
+            .Create(release.ToOblivionRelease())
             .FromPath(modPath)
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
