@@ -9,28 +9,28 @@
         </PackageVersion>
         <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
         <PackageVersion Include="Mutagen.Bethesda">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Core">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Kernel">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Skyrim">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Oblivion">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Fallout4">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Starfield">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Testing">
-            <Version>[0.51.0-alpha.3]</Version>
+            <Version>[0.50.2]</Version>
         </PackageVersion>
         <PackageVersion Include="Mutagen.Bethesda.Serialization">
             <Version>[1.36.0]</Version>
