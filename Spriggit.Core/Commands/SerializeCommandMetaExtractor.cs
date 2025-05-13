@@ -32,7 +32,7 @@ public static class SerializeCommandMetaExtractor
         SpriggitMeta? meta;
         if (serializeCommand.GameRelease == null || serializeCommand.PackageName.IsNullOrWhitespace())
         {
-            if (serializeCommand.PackageVersion != null)
+            if (!serializeCommand.PackageVersion.IsNullOrWhitespace())
             {
                 throw new ArgumentException(
                     "Cannot specify version without also specifying GameRelease and PackageName");
@@ -41,6 +41,10 @@ public static class SerializeCommandMetaExtractor
         }
         else
         {
+            if (!serializeCommand.PackageVersion.IsNullOrWhitespace())
+            {
+                throw new ArgumentException("PackageVersion needs to be set if GameRelease or PackageName are.");
+            }
             meta = new SpriggitMeta(
                 new SpriggitSource()
                 {
