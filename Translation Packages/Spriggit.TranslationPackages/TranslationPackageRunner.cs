@@ -30,6 +30,7 @@ public static class TranslationPackageRunner
                     var spriggitFileLocator = new SpriggitFileLocatorContainer(new FileSystem(), LoggerSetup.Logger).Resolve().Value;
                     var spriggitFile = spriggitFileLocator.LocateAndParse(cmd.InputPath);
 
+                    LoggerSetup.Logger.Information("Starting deserialization from {InputPath} to {OutputPath}", cmd.InputPath, cmd.OutputPath);
                     await entryPoint.Deserialize(
                         cmd.InputPath,
                         cmd.OutputPath,
@@ -39,6 +40,7 @@ public static class TranslationPackageRunner
                         fileSystem: null,
                         streamCreator: null,
                         CancellationToken.None);
+                    LoggerSetup.Logger.Information("Finished deserializing");
                     return 0;
                 },
                 async (SerializeCommand cmd) =>
@@ -62,6 +64,7 @@ public static class TranslationPackageRunner
                     
                     LoggerSetup.Logger.Information("Throwing on unknown records: {Throwing}", throwing);
 
+                    LoggerSetup.Logger.Information("Starting serialization from {InputPath} to {OutputPath}", cmd.InputPath, cmd.OutputPath);
                     await entryPoint.Serialize(
                         cmd.InputPath,
                         cmd.OutputPath,
@@ -75,6 +78,7 @@ public static class TranslationPackageRunner
                         throwIfUnknown: throwing,
                         CancellationToken.None);
                     
+                    LoggerSetup.Logger.Information("Finished serializing");
                     return 0;
                 },
                 async _ => -1);
