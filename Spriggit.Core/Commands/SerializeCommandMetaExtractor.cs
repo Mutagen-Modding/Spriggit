@@ -41,7 +41,7 @@ public static class SerializeCommandMetaExtractor
         }
         else
         {
-            if (!serializeCommand.PackageVersion.IsNullOrWhitespace())
+            if (serializeCommand.PackageVersion.IsNullOrWhitespace())
             {
                 throw new ArgumentException("PackageVersion needs to be set if GameRelease or PackageName are.");
             }
