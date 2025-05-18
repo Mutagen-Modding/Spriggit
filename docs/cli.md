@@ -20,10 +20,11 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-i` | `--InputPath` | Required | Path to the Bethesda plugin (esp/esm) |
 | `-o` | `--OutputPath` | Required | Dedicated folder to export mod as its text representation |
 | `-g` | `--GameRelease` | Semi-Optional | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
-| `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion |
+| `-p` | `--PackageName` | Semi-Optional | Spriggit serialization nuget package name to use for conversion.  Required if no `.spriggit` file is found. |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
 | `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
+| `-u` | `--ErrorOnUnknown` | Optional | (default True).  If on, will error out if any unknown records that are encountered |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
 !!! bug "Must Have Dedicated Folder"
