@@ -27,6 +27,18 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-u` | `--ErrorOnUnknown` | Optional | (default True).  If on, will error out if any unknown records that are encountered |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
+The valid list of GameReleases are listed [here](https://github.com/Mutagen-Modding/Mutagen/blob/dev/Mutagen.Bethesda.Kernel/GameRelease.cs) but are generally as follows:
+
+- Oblivion
+- OblivionRE
+- SkyrimLE
+- SkyrimSE
+- SkyrimVR
+- Fallout4
+- Fallout4VR
+- SkyrimSEGog
+- Starfield
+
 !!! bug "Must Have Dedicated Folder"
     Make sure the output path is pointed to a folder which is -wholly- dedicated to containing Spriggit content.   [More Info](backups.md)
 
