@@ -27,6 +27,12 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-u` | `--ErrorOnUnknown` | Optional | (default True).  If on, will error out if any unknown records that are encountered |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 
+!!! bug "Must Have Dedicated Folder"
+    Make sure the output path is pointed to a folder which is -wholly- dedicated to containing Spriggit content.   [More Info](backups.md)
+
+!!! bug "Starfield"
+    Starfield must supply [Master Style Input](#master-style-input)
+	
 The valid list of GameReleases are listed [here](https://github.com/Mutagen-Modding/Mutagen/blob/dev/Mutagen.Bethesda.Kernel/GameRelease.cs) but are generally as follows:
 
 - Oblivion
@@ -39,12 +45,9 @@ The valid list of GameReleases are listed [here](https://github.com/Mutagen-Modd
 - SkyrimSEGog
 - Starfield
 
-!!! bug "Must Have Dedicated Folder"
-    Make sure the output path is pointed to a folder which is -wholly- dedicated to containing Spriggit content.   [More Info](backups.md)
+`PackageName` and `PackageVersion` are both driven by what [Translation Package](translation-packages.md) you want to use to do the translation.  `Spriggit.Yaml` and `Spriggit.Json` are special in that their [official nuget listings](https://www.nuget.org/packages/Spriggit.Yaml.Skyrim) have `.[Game Name]` suffixes which are not required to specify as it can be inferred from the GameRelease parameter.   For any non-official Spriggit package, you'll need to specify the entire package name.
 
-!!! bug "Starfield"
-    Starfield must supply [Master Style Input](#master-style-input)
-	
+
 ## Deserialize | Convert To Plugin
 `deserialize`, `convert-to-plugin`, `create-plugin`
 
