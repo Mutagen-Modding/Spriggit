@@ -45,8 +45,7 @@ The valid list of GameReleases are listed [here](https://github.com/Mutagen-Modd
 - SkyrimSEGog
 - Starfield
 
-`PackageName` and `PackageVersion` are both driven by what [Translation Package](translation-packages.md) you want to use to do the translation.  `Spriggit.Yaml` and `Spriggit.Json` are special in that their [official nuget listings](https://www.nuget.org/packages/Spriggit.Yaml.Skyrim) have `.[Game Name]` suffixes which are not required to specify as it can be inferred from the GameRelease parameter.   For any non-official Spriggit package, you'll need to specify the entire package name.
-
+`PackageName` and `PackageVersion` are both driven by what [Translation Package](translation-packages.md) you want to use to do the translation.  Each translation is a NuGet package with a name and a version, which you specify in the appropriate fields.  For the built in Spriggit Translation Packages `Spriggit.Yaml` and `Spriggit.Json`, the `.[GameName]` suffix can be omitted, as it's implied by the GameRelease parameter.   For non-standard 3rd party packages, the full NuGet package name is required.
 
 ## Deserialize | Convert To Plugin
 `deserialize`, `convert-to-plugin`, `create-plugin`

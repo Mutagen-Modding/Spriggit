@@ -1,6 +1,8 @@
 # Spriggit Translation Packages
 The logic for actually doing the translation is not housed or packaged directly with the CLI or UI.   Rather, the logic exists in NuGet packages that are downloaded and then used to do the translation.
 
+These are typically `Spriggit.Yaml` and `Spriggit.Json`, which are the two suites of Translation Packages that the Spriggit project itself provides.  A NuGet listing for one of them can be seen [here](https://www.nuget.org/packages/Spriggit.Yaml.Skyrim).
+
 ## Mechanics
 When Spriggit is asked to do a serialization from a Bethesda plugin file to text format, it takes the supplied Nuget package name and version and downloads that package.  It then uses the libraries within that package to do the translations.
 
