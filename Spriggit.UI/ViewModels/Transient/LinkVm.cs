@@ -227,7 +227,11 @@ public class LinkVm : ViewModel
         if (!Input.NeedsDataFolder) return null;
         var path = Input.DataFolderPicker.TargetPath;
         if (!path.IsNullOrWhitespace()) return path;
-        return GameLocations.GetDataFolder(Input.Release);
+        if (GameLocations.TryGetDataFolder(Input.Release, out var dataFolder))
+        {
+            return dataFolder;
+        }
+        return null;
     }
 
     private async Task SyncToGit(CancellationToken cancel)
