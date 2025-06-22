@@ -446,4 +446,11 @@ public class SortTests
             .Select(x => x.Name)
             .ShouldEqual("Abc", "Xyz");
     }
+
+    [Fact]
+    public void InstantiationTest()
+    {
+        var service = SortCommand.GetService();
+        service.ShouldNotBeNull();
+    }
 }
