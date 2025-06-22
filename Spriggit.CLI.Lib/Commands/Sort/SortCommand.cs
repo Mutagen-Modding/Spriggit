@@ -1,6 +1,8 @@
+using System.IO.Abstractions;
 using Autofac;
 using CommandLine;
 using Mutagen.Bethesda;
+using Serilog;
 using Spriggit.CLI.Lib.Commands.Sort.Services;
 
 namespace Spriggit.CLI.Lib.Commands.Sort;
@@ -20,7 +22,7 @@ public class SortCommand
     public GameRelease GameRelease { get; set; }
 
     [Option('d', "DataFolder",
-        HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)",
+        HelpText = "Path to the data folder to look to for mod files.  (Only required for separated master games, like Starfield)   ",
         Required = false)]
     public string? DataFolder { get; set; }
 
@@ -29,10 +31,14 @@ public class SortCommand
         Required = false)]
     public string? KnownMasterLocation { get; set; }
 
-    private static SortCommandRunner GetService()
+    internal static SortCommandRunner GetService()
     {
         var builder = new ContainerBuilder();
         builder.RegisterModule<SortModule>();
+        builder.RegisterInstance(new FileSystem())
+            .As<IFileSystem>();
+        builder.RegisterInstance(LoggerSetup.Logger)
+            .As<ILogger>();
         var container = builder.Build();
         return container.Resolve<SortCommandRunner>();
     }
