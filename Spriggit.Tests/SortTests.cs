@@ -112,7 +112,7 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .ShouldEqual("Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz");
         reimport.Quests.Records.Select(x => x.VirtualMachineAdapter)
             .NotNull()
             .SelectMany(x => x.Aliases)
@@ -120,7 +120,7 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .ShouldEqual("Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz");
     }
     
     [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Fallout4)]
@@ -191,7 +191,7 @@ public class SortTests
             .NotNull()
             .SelectMany(x => x.MorphGroups)
             .Select(x => x.Name)
-            .ShouldEqual("Abc", "Xyz", "Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz", "Abc", "Xyz");
     }
     
     [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
@@ -291,11 +291,11 @@ public class SortTests
             .NotNull()
             .SelectMany(x => x.Chargen?.MorphGroups ?? [])
             .Select(x => x.Name)
-            .ShouldEqual("Abc", "Xyz", "Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz", "Abc", "Xyz");
         reimport.Npcs.Records.SelectMany(x => x.FaceMorphs)
             .SelectMany(x => x.MorphGroups)
             .Select(x => x.MorphGroup)
-            .ShouldEqual("Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz");
     }
     
     [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
@@ -342,7 +342,7 @@ public class SortTests
             .Construct();
         reimport.Npcs.Records.SelectMany(x => x.MorphBlends)
             .Select(x => x.BlendName)
-            .ShouldEqual("Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz");
     }
     
     [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Fallout4)]
@@ -387,7 +387,7 @@ public class SortTests
             .Construct();
         reimport.Perks.Records.SelectMany(x => x.Effects)
             .Select(x => x.Priority)
-            .ShouldEqual(4, 5);
+            .ShouldEqualEnumerable(4, 5);
     }
 
     [Theory, SpriggitContainerAutoData<SortTestModule>(GameRelease.Starfield)]
@@ -444,7 +444,7 @@ public class SortTests
             .SelectMany(x => x.Scripts)
             .SelectMany(x => x.Properties)
             .Select(x => x.Name)
-            .ShouldEqual("Abc", "Xyz");
+            .ShouldEqualEnumerable("Abc", "Xyz");
     }
 
     [Fact]

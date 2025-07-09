@@ -104,7 +104,7 @@ public class ConstructEntryPointTests
                 {
                     FileSystem = fs
                 });
-            reimport.Npcs.Select(x => x.FormKey).ShouldEqual(_npc.FormKey);
+            reimport.Npcs.Select(x => x.FormKey).ShouldEqualEnumerable(_npc.FormKey);
         }
     }
 
