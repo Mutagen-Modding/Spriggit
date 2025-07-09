@@ -33,6 +33,6 @@ public class FormIDCollisionDetectorTests
         mod.Weapons.Add(weap);
         sut.LocateCollisions(mod)
             .Keys
-            .ShouldEqual(n1.FormKey);
+            .ShouldEqualEnumerable(n1.FormKey);
     }
 }

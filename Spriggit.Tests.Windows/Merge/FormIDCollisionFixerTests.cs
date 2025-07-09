@@ -206,7 +206,7 @@ public class FormIDCollisionFixerTests
         var reimport = SkyrimMod.CreateFromBinary(modPath2, SkyrimRelease.SkyrimSE);
         reimport.EnumerateMajorRecords().ShouldHaveCount(3);
         reimport.Armors.Select(x => x.FormKey)
-            .ShouldEqual(armor.FormKey);
+            .ShouldEqualEnumerable(armor.FormKey);
         reimport.Npcs.Count.ShouldBe(1);
         reimport.Weapons.Count.ShouldBe(1);
         reimport.Npcs.First().FormKey.ShouldNotBe(reimport.Weapons.First().FormKey);
