@@ -12,7 +12,7 @@ public static class MergeVersionSyncerRunner
     
     public static async Task<int> Run(MergeVersionSyncerCommand command)
     {
-        LoggerSetup.Logger.Information("Command to handle FormID Collisions");
+        LoggerSetup.Logger.Information("Command to handle Merging Versions");
 
         await GetContainer(new DebugState { ClearNugetSources = command.Debug })
             .Resolve().Value
