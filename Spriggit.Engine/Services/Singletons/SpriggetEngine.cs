@@ -145,7 +145,11 @@ public class SpriggitEngine(
 
         if (localize != null)
         {
-            localizeEnforcer.Localize(localize.Value, tempOutput, meta.Release);
+            localizeEnforcer.Localize(
+                localize.Value,
+                tempOutput, 
+                meta.Release,
+                knownMasters: spriggitFile?.KnownMasters ?? []);
         }
     
         var dir = outputFile.Directory;
