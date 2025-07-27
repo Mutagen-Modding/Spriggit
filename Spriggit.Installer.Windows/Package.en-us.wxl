@@ -1,0 +1,14 @@
+﻿<!--
+This file contains the declaration of all the localizable strings.
+-->
+<WixLocalization xmlns="http://wixtoolset.org/schemas/v4/wxl" Culture="en-US">
+
+  <String Id="DowngradeError" Value="A newer version of [ProductName] is already installed." />
+  
+  <!-- Path Options Dialog Strings -->
+  <String Id="PathOptionsTitle" Value="Environment Variables" />
+  <String Id="PathOptionsDescription" Value="Configure how Spriggit integrates with your system environment." />
+  <String Id="AddToPathCheckBox" Value="Add Spriggit to the user PATH" />
+  <String Id="PathExplanation" Value="This allows you to run 'Spriggit.CLI.exe' commands from any command prompt or terminal window." />
+
+</WixLocalization>

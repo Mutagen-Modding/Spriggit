@@ -1,0 +1,20 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="CLI" Directory="INSTALLFOLDER">
+      <Component Id="SpriggitCLIExe" Guid="{F5D80F8A-8356-46AE-B764-BC3D618C0C83}">
+          <File Source="win-x64\publish\Spriggit.CLI.exe" KeyPath="yes" />
+          <File Source="win-x64\publish\Spriggit.CLI.Lib.pdb" />
+          <File Source="win-x64\publish\Spriggit.CLI.Lib.xml" />
+          <File Source="win-x64\publish\Spriggit.CLI.pdb" />
+          <File Source="win-x64\publish\Spriggit.CLI.xml" />
+          <File Source="win-x64\publish\Spriggit.Core.pdb" />
+          <File Source="win-x64\publish\Spriggit.Core.xml" />
+          <File Source="win-x64\publish\Spriggit.Engine.pdb" />
+          <File Source="win-x64\publish\Spriggit.Engine.xml" />
+          <File Source="win-x64\publish\NuGet.props" />
+          <File Source="win-x64\publish\NuGet.targets" />
+          <File Source="win-x64\publish\git2-3f4182d.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
