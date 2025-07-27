@@ -30,7 +30,7 @@ public class LocalizeEnforcerTests
         });
         Assert.Throws<ArgumentException>(() =>
         {
-            sut.Localize(localize: true, modPath, mod.GameRelease);
+            sut.Localize(localize: true, modPath, mod.GameRelease, knownMasters: null);
         });
     }
     
@@ -47,7 +47,7 @@ public class LocalizeEnforcerTests
         {
             FileSystem = fileSystem
         });
-        sut.Localize(localize: false, modPath, mod.GameRelease);
+        sut.Localize(localize: false, modPath, mod.GameRelease, knownMasters: null);
     }
     
     [Theory, MutagenModAutoData]
@@ -64,7 +64,7 @@ public class LocalizeEnforcerTests
         {
             FileSystem = fileSystem
         });
-        sut.Localize(localize: false, modPath, mod.GameRelease);
+        sut.Localize(localize: false, modPath, mod.GameRelease, knownMasters: null);
         using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, 
             new BinaryReadParameters()
             {
@@ -87,7 +87,7 @@ public class LocalizeEnforcerTests
         {
             FileSystem = fileSystem
         });
-        sut.Localize(localize: true, modPath, mod.GameRelease);
+        sut.Localize(localize: true, modPath, mod.GameRelease, knownMasters: null);
         using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease,
             new BinaryReadParameters()
             {
@@ -110,7 +110,7 @@ public class LocalizeEnforcerTests
         {
             FileSystem = fileSystem
         });
-        sut.Localize(localize: true, modPath, mod.GameRelease);
+        sut.Localize(localize: true, modPath, mod.GameRelease, knownMasters: null);
         using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease,
             new BinaryReadParameters()
             {
@@ -133,7 +133,7 @@ public class LocalizeEnforcerTests
         {
             FileSystem = fileSystem
         });
-        sut.Localize(localize: false, modPath, mod.GameRelease);
+        sut.Localize(localize: false, modPath, mod.GameRelease, knownMasters: null);
         using var reimport = SkyrimMod.CreateFromBinaryOverlay(modPath, mod.SkyrimRelease, 
             new BinaryReadParameters()
             {
