@@ -5,11 +5,13 @@ using Loqui;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Plugins.Order;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 using Noggog.IO;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.Engine.Merge;
@@ -22,6 +24,7 @@ public class FormIDCollisionFixer
     private readonly SpriggitEngine _spriggitEngine;
     private readonly GetMetaToUse _getMetaToUse;
     private readonly GitFolderLocator _gitFolderLocator;
+    private readonly SpriggitFileLocator _spriggitFileLocator;
     private readonly FormIDCollisionDetector _detector;
 
     public FormIDCollisionFixer(
@@ -31,6 +34,7 @@ public class FormIDCollisionFixer
         SpriggitEngine spriggitEngine,
         GetMetaToUse getMetaToUse,
         GitFolderLocator gitFolderLocator,
+        SpriggitFileLocator spriggitFileLocator,
         FormIDCollisionDetector detector)
     {
         _logger = logger;
@@ -39,6 +43,7 @@ public class FormIDCollisionFixer
         _spriggitEngine = spriggitEngine;
         _getMetaToUse = getMetaToUse;
         _gitFolderLocator = gitFolderLocator;
+        _spriggitFileLocator = spriggitFileLocator;
         _detector = detector;
     }
 
@@ -91,11 +96,28 @@ public class FormIDCollisionFixer
             dataPath: dataPath,
             backupDays: 0,
             localize: null);
+        
+        var spriggitFile = _spriggitFileLocator.LocateAndParse(spriggitModPath);
 
-        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
+        KeyedMasterStyle[]? keyedMasterStyles = spriggitFile?.KnownMasters
+            .Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
+            .ToArray();
+        LoadOrder<IModMasterStyledGetter>? masterFlagsLookup =
+            keyedMasterStyles == null ? null : new LoadOrder<IModMasterStyledGetter>(keyedMasterStyles);
+
+        var readParams = new BinaryReadParameters()
         {
-            FileSystem = _fileSystem
-        });
+            FileSystem = _fileSystem,
+            MasterFlagsLookup = masterFlagsLookup,
+        };
+        
+        var writeParams = new BinaryWriteParameters()
+        {
+            FileSystem = _fileSystem,
+            MasterFlagsLookup = masterFlagsLookup,
+        };
+        
+        var origMergedMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, readParams);
         
         // ToDo
         // Swap to more official mutagen call
@@ -178,10 +200,7 @@ public class FormIDCollisionFixer
             backupDays: 0,
             localize: null);
 
-        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, new BinaryReadParameters()
-        {
-            FileSystem = _fileSystem
-        });
+        var branchMod = ModInstantiator<TMod>.Importer(origMergedModPath.Path, meta.Release, readParams);
 
         _logger.Information("Executing reassignment");
         _reassigner.Reassign<TMod, TModGetter>(
@@ -190,7 +209,7 @@ public class FormIDCollisionFixer
             toReassign);
         
         _logger.Information("Writing reassigned mod to {Path}", origMergedModPath.Path);
-        branchMod.WriteToBinary(origMergedModPath.Path);
+        branchMod.WriteToBinary(origMergedModPath.Path, writeParams);
         
         _logger.Information("Serializing mod to {Path}", spriggitModPath);
         await _spriggitEngine.Serialize(
@@ -228,10 +247,7 @@ public class FormIDCollisionFixer
             backupDays: 0,
             localize: null);
 
-        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, new BinaryReadParameters()
-        {
-            FileSystem = _fileSystem
-        });
+        var newMergedMod = ModInstantiator<TMod>.Importer(newMergedModPath.Path, meta.Release, readParams);
 
         var newCollisions = _detector.LocateCollisions(newMergedMod);
         if (newCollisions.Count != 0)
