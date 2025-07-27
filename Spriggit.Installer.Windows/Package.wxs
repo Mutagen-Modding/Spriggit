@@ -18,9 +18,12 @@
         <UIRef Id="WixUI_InstallDir" />
         <UIRef Id="WixUI_Common" />
 
-        <Feature Id="Main">
-            <ComponentGroupRef Id="CLI" />
-            <ComponentGroupRef Id="PathEnvironment" />
+        <Feature Id="Main" Description="!(loc.CLIFeatureDescription)" Title="!(loc.CLIFeatureTitle)">
+            <ComponentGroupRef Id="CLI" Primary="true" />
+            <ComponentGroupRef Id="PathEnvironment" Primary="false" />
+        </Feature>
+        <Feature Id="UI" Description="!(loc.UIFeatureDescription)" Title="!(loc.UIFeatureTitle)">
+            
         </Feature>
     </Package>
 </Wix>

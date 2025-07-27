@@ -97,6 +97,7 @@
       <Version>1.4.4</Version>
     </PackageVersion>
     <PackageVersion Include="TestableIO.System.IO.Abstractions.Wrappers" Version="22.0.15" />
+    <PackageVersion Include="WixToolset.UI.wixext" Version="6.0.1" />
     <PackageVersion Include="xunit">
       <Version>2.9.3</Version>
     </PackageVersion>
