@@ -9,6 +9,8 @@
     <String Id="PathExplanation" Value="This allows you to run 'Spriggit.CLI.exe' commands from any command prompt or terminal window." />
     <String Id="CLIFeatureTitle" Value="Command Line" />
     <String Id="CLIFeatureDescription" Value="Contains the command line version of Spriggit. The CLI is fully featured but must be used from a command prompt." />
+    <String Id="PathFeatureTitle" Value="Add to PATH" />
+    <String Id="PathFeatureDescription" Value="Adds Spriggit to the system PATH environment variable, allowing you to run commands from any location." />
     <String Id="UIFeatureTitle" Value="Graphical User Interface" />
     <String Id="UIFeatureDescription" Value="Contains the Spriggit Graphical User Interface, useful for those who like a UI as opposed to command line." />
 
