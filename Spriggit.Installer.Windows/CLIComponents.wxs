@@ -2,7 +2,7 @@
   <Fragment>
     <ComponentGroup Id="CLI" Directory="INSTALLFOLDER">
       <Component Id="SpriggitCLIExe" Guid="{F5D80F8A-8356-46AE-B764-BC3D618C0C83}">
-          <RegistryValue Root="HKCU" Key="Software\Mutagen Modding\Spriggit" Name="Installed" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+          <RegistryValue Root="HKCU" Key="Software\Spriggit" Name="Installed" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
           <File Source="win-x64\publish\Spriggit.CLI.exe" />
           <File Source="win-x64\publish\Spriggit.CLI.Lib.pdb" />
           <File Source="win-x64\publish\Spriggit.CLI.Lib.xml" />

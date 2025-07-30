@@ -15,4 +15,7 @@
   <ItemGroup>
     <PackageReference Include="WixToolset.UI.wixext" />
   </ItemGroup>
+    <PropertyGroup>
+        <SuppressIces>ICE91,ICE69,ICE90</SuppressIces>
+    </PropertyGroup>
 </Project>

@@ -1,7 +1,7 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
 >
-    <Package Id="Spriggit.Installer.Windows" Name="Spriggit" Manufacturer="Mutagen Modding" Version="0.38.6" Scope="perUser">
+    <Package Id="SpriggitInstaller" Name="Spriggit" Manufacturer="Mutagen Modding" Version="0.38.6" Scope="perUser">
         <Property Id="ApplicationFolderName" Value="Spriggit" />
         <Property Id="WixAppFolder" Value="Spriggit" />
         <Property Id="SuppressICEs" Value="ICE91" />
@@ -16,7 +16,7 @@
                 InstallDirectory="INSTALLFOLDER"
         />
 
-        <Feature Id="Main" Description="!(loc.CLIFeatureDescription)" Title="!(loc.CLIFeatureTitle)" ConfigurableDirectory="INSTALLFOLDER">
+        <Feature Id="Main" Description="!(loc.CLIFeatureDescription)" Title="!(loc.CLIFeatureTitle)" ConfigurableDirectory="INSTALLFOLDER" AllowAbsent="false">
             <ComponentGroupRef Id="CLI" Primary="true" />
             <ComponentRef Id="RemoveFilesComponent" />
             <Feature Id="AddToPath" Description="!(loc.PathFeatureDescription)" Title="!(loc.PathFeatureTitle)">
@@ -24,7 +24,8 @@
             </Feature>
         </Feature>
         <Feature Id="UI" Description="!(loc.UIFeatureDescription)" Title="!(loc.UIFeatureTitle)" ConfigurableDirectory="INSTALLFOLDER">
-            
+            <ComponentGroupRef Id="UI" Primary="false" />
+            <ComponentRef Id="SpriggitShortcut" />
         </Feature>
     </Package>
 </Wix>
