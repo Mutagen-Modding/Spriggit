@@ -60,4 +60,48 @@ public class FormIDReassignerTests
         mod.Weapons.RecordCache.ContainsKey(weap.FormKey).ShouldBeFalse();
         mod.Weapons.RecordCache.ContainsKey(replacementFormKeyOrig).ShouldBeTrue();
     }
+    
+    [Theory, MutagenModAutoData(GameRelease.Starfield)]
+    public void ReassignNested(
+        StarfieldMod mod,
+        Npc n1,
+        Npc n2,
+        FormIDReassigner sut)
+    {
+        var scene = new Scene(n1.FormKey, StarfieldRelease.Starfield);
+        var quest = new Quest(n2.FormKey, StarfieldRelease.Starfield)
+        {
+            Scenes = [scene]
+        };
+        mod.Quests.Add(quest);
+
+        FormKey replacementFormKeyOrig = mod.GetNextFormKey();
+        FormKey replacementFormKeyOrig2 = mod.GetNextFormKey();
+        FormKey replacementFormKey = replacementFormKeyOrig;
+        
+        sut.Reassign<IStarfieldMod, IStarfieldModGetter>(
+            mod,
+            () =>
+            {
+                var toReturn = replacementFormKey;
+                replacementFormKey = replacementFormKeyOrig2;
+                return toReturn;
+            }, 
+            new IFormLinkIdentifier[]
+            {
+                quest,
+                scene,
+            });
+        mod.EnumerateMajorRecords().ShouldHaveCount(4);
+        mod.Npcs.RecordCache.Count.ShouldBe(2);
+        mod.Npcs.RecordCache.ContainsKey(n1.FormKey).ShouldBeTrue();
+        mod.Npcs.RecordCache.ContainsKey(n2.FormKey).ShouldBeTrue();
+        mod.Quests.RecordCache.Count.ShouldBe(1);
+        mod.Quests.RecordCache.ContainsKey(quest.FormKey).ShouldBeFalse();
+        mod.Quests.RecordCache.ContainsKey(replacementFormKeyOrig).ShouldBeTrue();
+        var questReimport = mod.Quests.Records.First();
+        questReimport.Scenes.Count.ShouldBe(1);
+        questReimport.Scenes.Select(x => x.FormKey).Contains(scene.FormKey).ShouldBeFalse();
+        questReimport.Scenes.Select(x => x.FormKey).Contains(replacementFormKeyOrig2).ShouldBeTrue();
+    }
 }
