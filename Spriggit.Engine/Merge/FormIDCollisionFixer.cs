@@ -142,13 +142,8 @@ public class FormIDCollisionFixer
             }
         }
 
-        _logger.Information("Reassigning:");
         var toReassign = collisions.SelectMany(x => x.Value)
-            .Select(x =>
-            {
-                _logger.Information($"  {x.FormKey} ({x.EditorID})");
-                return x.ToFormLinkInformation();
-            })
+            .Select(x => x.ToFormLinkInformation())
             .ToArray();
 
         var gitRootPath = _gitFolderLocator.Get(spriggitModPath);
