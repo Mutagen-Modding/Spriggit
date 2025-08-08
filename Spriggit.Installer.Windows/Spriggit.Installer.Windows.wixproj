@@ -17,5 +17,9 @@
   </ItemGroup>
     <PropertyGroup>
         <SuppressIces>ICE91,ICE69,ICE90</SuppressIces>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
+
+    <Target Name="Pack"></Target>
 </Project>
