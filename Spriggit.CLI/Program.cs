@@ -31,7 +31,7 @@ try
             async (MergeVersionSyncerCommand cmd) => await MergeVersionSyncerRunner.Run(cmd),
             async (StandardizeCommand cmd) => await StandardizeRunner.Run(cmd),
             async (SortCommand cmd) => await cmd.Run(),
-            async _ => -1);
+            async _ => 1);
 }
 catch (Exception ex)
 {

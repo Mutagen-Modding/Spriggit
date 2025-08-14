@@ -146,12 +146,6 @@ public class FormIDCollisionFixer
             .Select(x => x.ToFormLinkInformation())
             .ToArray();
 
-        _logger.Information("Reassigning:");
-        foreach (var id in toReassign)
-        {
-            _logger.Information($"  {id}");
-        }
-
         var gitRootPath = _gitFolderLocator.Get(spriggitModPath);
         
         _logger.Information("Creating repo at {Path}", gitRootPath);
