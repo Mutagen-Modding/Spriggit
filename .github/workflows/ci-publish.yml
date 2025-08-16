@@ -131,6 +131,9 @@ jobs:
     - name: Pack CLI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r win-x64 -p:PublishSingleFile=True --self-contained True
+    - name: Pack Windows Installer
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      run: dotnet publish "Spriggit.Installer.Windows/Spriggit.Installer.Windows.csproj" --configuration Release -r win-x64
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: |
@@ -162,6 +165,13 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         file: SpriggitCLI.zip
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.event.release.tag_name }}
+    - name: Publish Windows Installer to Github
+      if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
+      uses: svenstaro/upload-release-action@v2
+      with:
+        file: Spriggit.Installer.msi
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event.release.tag_name }}
     - name: Print Packages
