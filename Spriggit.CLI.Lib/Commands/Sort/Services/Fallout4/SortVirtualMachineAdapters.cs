@@ -36,6 +36,11 @@ public class SortVirtualMachineAdapters : ISortSomething<IFallout4Mod, IFallout4
             if (HasOutOfOrderScript(script)) return true;
         }
 
+        if (vm is IVirtualMachineAdapterIndexedGetter indexedAdapter)
+        {
+            if (HasOutOfOrderScript(indexedAdapter.ScriptFragments?.Script)) return true;
+        }
+
         if (vm is IQuestAdapter questAdapter)
         {
             if (HasOutOfOrderScript(questAdapter.Script)) return true;
@@ -76,9 +81,18 @@ public class SortVirtualMachineAdapters : ISortSomething<IFallout4Mod, IFallout4
                      .EnumerateMajorRecords<IHaveVirtualMachineAdapter>())
         {
             if (hasVM.VirtualMachineAdapter is not {} vm) continue;
+            
             foreach (var script in vm.Scripts)
             {
                 ProcessScript(script);
+            }
+            
+            if (hasVM.VirtualMachineAdapter is IVirtualMachineAdapterIndexed indexedAdapter)
+            {
+                if (indexedAdapter.ScriptFragments is { } frags)
+                {
+                    ProcessScript(frags.Script);
+                }
             }
             
             if (vm is IQuestAdapter questAdapter)
