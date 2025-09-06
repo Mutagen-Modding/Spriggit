@@ -167,6 +167,12 @@ jobs:
     - name: Print Packages
       run: |
         ls out/*.nupkg
+    - name: Release CLI winget package
+      uses: vedantmgoyal9/winget-releaser@main
+      with:
+        identifier: MutagenModding.Spriggit.CLI
+        installers-regex: '.\SpriggitCLI.zip'
+        token: ${{ secrets.WINGET_TOKEN }}
     - name: Publish to Nuget.org
       run: dotnet nuget push out/**/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
   
