@@ -1,0 +1,25 @@
+﻿<Project Sdk="WixToolset.Sdk/6.0.1">
+  <ItemGroup>
+    <ProjectReference Include="..\Spriggit.CLI\Spriggit.CLI.csproj">
+      <SetProperty>CopyLocalLockFileAssemblies=true</SetProperty>
+    </ProjectReference>
+    <ProjectReference Include="..\Spriggit.UI\Spriggit.UI.csproj">
+      <Name>Spriggit.UI</Name>
+      <Project>{3d0f2999-8e79-4cac-9804-971efc6eda21}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" />
+  </ItemGroup>
+    <PropertyGroup>
+        <SuppressIces>ICE91,ICE69,ICE90</SuppressIces>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <Target Name="Pack"></Target>
+</Project>

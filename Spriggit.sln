@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.Tests.Windows", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spriggit.TranslationPackages", "Translation Packages\Spriggit.TranslationPackages\Spriggit.TranslationPackages.csproj", "{666126D1-1689-43AF-9946-14F83A833B72}"
 EndProject
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "Spriggit.Installer.Windows", "Spriggit.Installer.Windows\Spriggit.Installer.Windows.wixproj", "{DCCAAC61-F98D-465D-A36F-62BFE520DB72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{666126D1-1689-43AF-9946-14F83A833B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{666126D1-1689-43AF-9946-14F83A833B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{666126D1-1689-43AF-9946-14F83A833B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCCAAC61-F98D-465D-A36F-62BFE520DB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCCAAC61-F98D-465D-A36F-62BFE520DB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCCAAC61-F98D-465D-A36F-62BFE520DB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCCAAC61-F98D-465D-A36F-62BFE520DB72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
