@@ -65,8 +65,9 @@ nav:
   - .spriggit File: spriggit-file.md
   - Translation Packages: translation-packages.md
   - Merge Conflicts: merge-conflicts.md
-  - Troubleshooting: 
+  - Troubleshooting:
     - Backups: backups.md
     - Unexpected Records: unexpected-records.md
     - Bad Target Folder: bad-target-folder.md
+    - Filename Too Long: filename-too-long.md
     - Backwards Compatibility With Alpha Versions: alpha-backwards-compatibility.md
