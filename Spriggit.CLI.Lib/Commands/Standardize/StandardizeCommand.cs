@@ -2,7 +2,7 @@
 using Mutagen.Bethesda;
 using Noggog;
 
-namespace Spriggit.CLI.Lib.Commands;
+namespace Spriggit.CLI.Lib.Commands.Standardize;
 
 [Verb("standardize", HelpText = "Testing command to attempt to standardize a mod for binary comparison")]
 public class StandardizeCommand

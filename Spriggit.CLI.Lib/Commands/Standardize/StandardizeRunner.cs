@@ -1,16 +1,13 @@
 ﻿using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Analysis;
 using Mutagen.Bethesda.Plugins.Binary.Headers;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Binary.Processing;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
-using Mutagen.Bethesda.Plugins.Meta;
 using Noggog;
 using Noggog.IO;
-using Spriggit.CLI.Lib.Commands;
 
-namespace Spriggit.CLI.Lib;
+namespace Spriggit.CLI.Lib.Commands.Standardize;
 
 public static class StandardizeRunner
 {

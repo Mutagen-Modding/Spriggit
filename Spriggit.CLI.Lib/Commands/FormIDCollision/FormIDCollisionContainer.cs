@@ -4,13 +4,12 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
-using Spriggit.Core;
 using Spriggit.Core.Services.Singletons;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 
-namespace Spriggit.CLI.Lib;
+namespace Spriggit.CLI.Lib.Commands.FormIDCollision;
 
 [Register(typeof(FormIDReassigner))]
 [Register(typeof(FormIDCollisionDetector))]
