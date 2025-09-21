@@ -75,6 +75,27 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 	
 [:octicons-arrow-right-24: Backups](backups.md)
 
+## Upgrade Spriggit Version
+`upgrade`
+
+This command upgrades existing Spriggit files to a newer package version. It deserializes the mod files using the current version, updates the spriggit-meta.json to the specified version, and re-serializes the files with the new translation package.
+
+### Typical
+`.\Path\To\Spriggit.CLI.exe upgrade -p "C:\MyGitRepository\SomeMod.esp\" -v "1.2.3"`
+
+### Parameters
+| Short | Long | Required | Description |
+| ---- | ---- | ---- | ---- |
+| `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
+| `-v` | `--PackageVersion` | Required | Spriggit serialization nuget package version to upgrade to |
+| `-d` | `--DataFolder` | Semi-Optional | Path to the data folder for reference. [Read More](#master-style-input) |
+
+!!! warning "Backup Recommended"
+    It's recommended to backup your Spriggit files before upgrading, as the process involves deserializing and re-serializing your mod data.
+
+!!! bug "Starfield"
+    Starfield must supply [Master Style Input](#master-style-input)
+
 ## FormID Collision Fixing
 `formid-collision`
 
