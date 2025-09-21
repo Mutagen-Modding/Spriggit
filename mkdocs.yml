@@ -64,6 +64,8 @@ nav:
   - Command Line Interface: cli.md
   - .spriggit File: spriggit-file.md
   - Translation Packages: translation-packages.md
+  - Best Practices:
+    - Upgrade Spriggit Versions: upgrade-practices.md
   - Merge Conflicts: merge-conflicts.md
   - Troubleshooting:
     - Backups: backups.md
