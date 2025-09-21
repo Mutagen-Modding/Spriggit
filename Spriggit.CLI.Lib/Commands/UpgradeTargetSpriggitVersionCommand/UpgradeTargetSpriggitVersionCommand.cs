@@ -14,7 +14,7 @@ public class UpgradeTargetSpriggitVersionCommand
     public string? DataFolder { get; set; }
 
     [Option('v', "PackageVersion",
-        HelpText = "Spriggit serialization nuget package version to change to.  Null will upgrade to latest.",
-        Required = false)]
-    public string? PackageVersion { get; set; } = string.Empty;
+        HelpText = "Spriggit serialization nuget package version to change to",
+        Required = true)]
+    public string PackageVersion { get; set; } = string.Empty;
 }

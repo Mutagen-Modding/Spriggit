@@ -53,6 +53,12 @@ public class UpgradeTargetSpriggitVersionRunner
             return 1;
         }
 
+        if (string.IsNullOrEmpty(command.PackageVersion))
+        {
+            _logger.Error("No specific version provided");
+            return 1;
+        }
+
         // Deserialize the mod files first
         _logger.Information("Deserializing mod files from {SpriggitPath}", command.SpriggitPath);
 
@@ -67,21 +73,13 @@ public class UpgradeTargetSpriggitVersionRunner
             backupDays: 0,
             localize: null,
             cancel: CancellationToken.None);
+        
+        _logger.Information("Updating spriggit-meta.json to version {Version}", command.PackageVersion);
 
-        // Update the spriggit-meta.json file if a specific version was provided
-        if (!string.IsNullOrEmpty(command.PackageVersion))
+        if (!_metaUpdater.UpdateMetaVersion(command.SpriggitPath, command.PackageVersion))
         {
-            _logger.Information("Updating spriggit-meta.json to version {Version}", command.PackageVersion);
-
-            if (!_metaUpdater.UpdateMetaVersion(command.SpriggitPath, command.PackageVersion))
-            {
-                _logger.Error("Failed to update spriggit-meta.json version");
-                return 1;
-            }
-        }
-        else
-        {
-            _logger.Information("No specific version provided, will upgrade to latest during serialization");
+            _logger.Error("Failed to update spriggit-meta.json version");
+            return 1;
         }
 
         // Serialize the mod files back with the new version
