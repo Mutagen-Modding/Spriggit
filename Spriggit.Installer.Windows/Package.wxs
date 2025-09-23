@@ -1,0 +1,31 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+    xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
+>
+    <Package Id="SpriggitInstaller" Name="Spriggit" Manufacturer="Mutagen Modding" Version="0.38.6" Scope="perUser">
+        <Property Id="ApplicationFolderName" Value="Spriggit" />
+        <Property Id="WixAppFolder" Value="Spriggit" />
+        <Property Id="SuppressICEs" Value="ICE91" />
+        <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)..\LICENSE.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)..\SpriggitDialog.png" />
+        
+        <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+        <MediaTemplate EmbedCab="true" />
+
+        <ui:WixUI
+                Id="WixUI_FeatureTree"
+                InstallDirectory="INSTALLFOLDER"
+        />
+
+        <Feature Id="Main" Description="!(loc.CLIFeatureDescription)" Title="!(loc.CLIFeatureTitle)" ConfigurableDirectory="INSTALLFOLDER" AllowAbsent="false">
+            <ComponentGroupRef Id="CLI" Primary="true" />
+            <ComponentRef Id="RemoveFilesComponent" />
+            <Feature Id="AddToPath" Description="!(loc.PathFeatureDescription)" Title="!(loc.PathFeatureTitle)">
+                <ComponentGroupRef Id="PathEnvironment" Primary="true" />
+            </Feature>
+        </Feature>
+        <Feature Id="UI" Description="!(loc.UIFeatureDescription)" Title="!(loc.UIFeatureTitle)" ConfigurableDirectory="INSTALLFOLDER">
+            <ComponentGroupRef Id="UI" Primary="false" />
+            <ComponentRef Id="SpriggitShortcut" />
+        </Feature>
+    </Package>
+</Wix>

@@ -1,0 +1,17 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Fragment>
+        <StandardDirectory Id="LocalAppDataFolder">
+            <Directory Id="INSTALLFOLDER" Name="!(bind.Property.ProductName)" />
+        </StandardDirectory>
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="SPRIGGITSTARTMENUFOLDER" Name="Spriggit" />
+        </StandardDirectory>
+
+        <Component Id="RemoveFilesComponent" Directory="INSTALLFOLDER" Guid="{79117B80-84BC-4615-8207-FD077DC67ECD}">
+            <RegistryValue Root="HKCU" Key="Software\Mutagen Modding\Spriggit" Name="Installed" Type="integer" Value="1" KeyPath="true" />
+            <RemoveFile Id="RemoveInstallFolder" Directory="INSTALLFOLDER" On="uninstall" Name="*" />
+            <RemoveFolder Id="RemoveInstallFolderDir" Directory="INSTALLFOLDER" On="uninstall" />
+        </Component>
+    </Fragment>
+</Wix>

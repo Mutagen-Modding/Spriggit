@@ -1,0 +1,25 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Fragment>
+        <ComponentGroup Id="UI" Directory="INSTALLFOLDER">
+            <Component Id="SpriggitUIExe" Guid="{6E169807-104A-4D7F-A29B-486BFC1E6E39}">
+                <RegistryValue Root="HKCU" Key="Software\Mutagen Modding\Spriggit" Name="UIInstalled" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+                <File Id="Spriggit.exe" Source="win-x64\publish\Spriggit.exe" />
+                <File Source="win-x64\publish\D3DCompiler_47_cor3.dll" />
+                <File Source="win-x64\publish\PenImc_cor3.dll" />
+                <File Source="win-x64\publish\PresentationNative_cor3.dll" />
+                <File Source="win-x64\publish\Spriggit.pdb" />
+                <File Source="win-x64\publish\Spriggit.xml" />
+                <File Source="win-x64\publish\vcruntime140_cor3.dll" />
+                <File Source="win-x64\publish\wpfgfx_cor3.dll" />
+            </Component>
+        </ComponentGroup>
+
+        <DirectoryRef Id="SPRIGGITSTARTMENUFOLDER">
+            <Component Id="SpriggitShortcut" Guid="{9223DFBC-8AE7-44A5-AB99-80FE7CC1A778}">
+                <Shortcut Id="SpriggitStartMenuShortcut" Name="Spriggit" Target="[#Spriggit.exe]" WorkingDirectory="INSTALLFOLDER" />
+                <RegistryValue Root="HKCU" Key="Software\Mutagen Modding\Spriggit" Name="UIStartMenuShortcut" Type="string" Value="[SPRIGGITSTARTMENUFOLDER]" KeyPath="true" />
+                <RemoveFolder On="uninstall" Id="CleanUpSpriggitShortcut" Directory="SPRIGGITSTARTMENUFOLDER" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+</Wix>
