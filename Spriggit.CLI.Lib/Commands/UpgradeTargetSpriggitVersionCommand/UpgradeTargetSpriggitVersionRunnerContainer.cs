@@ -1,5 +1,6 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda.Plugins.IO.DI;
+using Noggog.GitRepository;
 using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
@@ -24,6 +25,8 @@ namespace Spriggit.CLI.Lib.Commands.UpgradeTargetSpriggitVersionCommand;
 [Register(typeof(PreparePluginFolder))]
 [Register(typeof(PluginPublisher))]
 [Register(typeof(GitFolderLocator))]
+[Register(typeof(GitRepositoryFactory), typeof(IGitRepositoryFactory))]
+[Register(typeof(GitOperations))]
 [Register(typeof(PackageVersioningChecker))]
 [Register(typeof(ProcessFactory))]
 [Register(typeof(ConstructCliEndpoint))]

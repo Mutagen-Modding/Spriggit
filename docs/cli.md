@@ -89,9 +89,13 @@ This command upgrades existing Spriggit files to a newer package version. It des
 | `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
 | `-v` | `--PackageVersion` | Required | Spriggit serialization nuget package version to upgrade to |
 | `-d` | `--DataFolder` | Semi-Optional | Path to the data folder for reference. [Read More](#master-style-input) |
+| `-s` | `--SkipGitOperations` | Optional | Skip git operations (don't check for uncommitted changes or auto-commit) |
 
 !!! warning "Backup Recommended"
     It's recommended to backup your Spriggit files before upgrading, as the process involves deserializing and re-serializing your mod data.
+
+!!! tip "Git Integration"
+    By default, the upgrade command checks for uncommitted changes before starting and automatically commits the upgrade changes when complete. Use `--SkipGitOperations` to disable this behavior if you want to manage git operations manually.
 
 !!! bug "Starfield"
     Starfield must supply [Master Style Input](#master-style-input)

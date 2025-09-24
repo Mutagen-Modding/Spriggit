@@ -12,6 +12,7 @@ using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
 using Spriggit.CLI.Lib.Commands.UpgradeTargetSpriggitVersionCommand;
 using Spriggit.Core;
+using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 using Xunit;
 
@@ -190,4 +191,141 @@ public class UpgradeTargetSpriggitVersionRunnerTests
     //         Arg.Any<SpriggitMeta>(),
     //         Arg.Any<CancellationToken?>());
     // }
+
+    #region Git Operations Tests
+
+    [Theory, MutagenAutoData]
+    public async Task Execute_WithGitOperationsEnabled_ChecksForUncommittedChanges(
+        UpgradeTargetSpriggitVersionCommand command,
+        DirectoryPath existingSpriggitPath,
+        ModKey modKey,
+        IFileSystem fileSystem,
+        SpriggitExternalMetaPersister persister,
+        [Frozen] GitOperations gitOperations,
+        [Frozen] ILogger logger,
+        [Frozen] ISpriggitEngine engine,
+        UpgradeTargetSpriggitVersionRunner sut)
+    {
+        // Arrange
+        command.SkipGitOperations = false;
+        command.PackageVersion = "0.40.0";
+        command.SpriggitPath = existingSpriggitPath;
+
+        var originalMeta = new SpriggitModKeyMeta(
+            new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
+            GameRelease.Starfield,
+            modKey);
+
+        persister.Persist(existingSpriggitPath, originalMeta);
+        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(false);
+        gitOperations.CommitChanges(command.SpriggitPath, Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
+
+        // Act
+        var result = await sut.Execute(command);
+
+        // Assert
+        result.ShouldBe(0);
+        await gitOperations.Received(1).HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>());
+        await gitOperations.Received(1).CommitChanges(command.SpriggitPath, $"Upgrade translation package to version {command.PackageVersion}", Arg.Any<CancellationToken>());
+    }
+
+    [Theory, MutagenAutoData]
+    public async Task Execute_WithUncommittedChanges_ReturnsErrorAndDoesNotProceed(
+        UpgradeTargetSpriggitVersionCommand command,
+        [Frozen] GitOperations gitOperations,
+        [Frozen] ILogger logger,
+        [Frozen] ISpriggitEngine engine,
+        UpgradeTargetSpriggitVersionRunner sut)
+    {
+        // Arrange
+        command.SkipGitOperations = false;
+        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(true);
+
+        // Act
+        var result = await sut.Execute(command);
+
+        // Assert
+        result.ShouldBe(1);
+        logger.Received(1).Error("Git repository has uncommitted changes. Please commit or stash your changes before upgrading Spriggit version.");
+
+        // Verify engine methods were never called
+        await engine.DidNotReceive().Deserialize(Arg.Any<string>(), Arg.Any<FilePath>(), Arg.Any<DirectoryPath?>(), Arg.Any<uint>(), Arg.Any<bool?>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitSource?>(), Arg.Any<CancellationToken?>());
+        await engine.DidNotReceive().Serialize(Arg.Any<ModPath>(), Arg.Any<DirectoryPath>(), Arg.Any<DirectoryPath?>(), Arg.Any<bool>(), Arg.Any<bool>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitMeta?>(), Arg.Any<CancellationToken?>());
+    }
+
+    [Theory, MutagenAutoData]
+    public async Task Execute_WithGitOperationsDisabled_SkipsGitChecksAndCommit(
+        UpgradeTargetSpriggitVersionCommand command,
+        DirectoryPath existingSpriggitPath,
+        ModKey modKey,
+        IFileSystem fileSystem,
+        SpriggitExternalMetaPersister persister,
+        [Frozen] GitOperations gitOperations,
+        [Frozen] ILogger logger,
+        [Frozen] ISpriggitEngine engine,
+        UpgradeTargetSpriggitVersionRunner sut)
+    {
+        // Arrange
+        command.SkipGitOperations = true;
+        command.PackageVersion = "0.40.0";
+        command.SpriggitPath = existingSpriggitPath;
+
+        var originalMeta = new SpriggitModKeyMeta(
+            new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
+            GameRelease.Starfield,
+            modKey);
+
+        persister.Persist(existingSpriggitPath, originalMeta);
+
+        // Act
+        var result = await sut.Execute(command);
+
+        // Assert
+        result.ShouldBe(0);
+
+        // Verify git operations were never called
+        await gitOperations.DidNotReceive().HasUncommittedChanges(Arg.Any<string>(), Arg.Any<CancellationToken>());
+        await gitOperations.DidNotReceive().CommitChanges(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+
+        // Verify upgrade still proceeded normally
+        await engine.Received(1).Deserialize(Arg.Any<string>(), Arg.Any<FilePath>(), Arg.Any<DirectoryPath?>(), Arg.Any<uint>(), Arg.Any<bool?>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitSource?>(), Arg.Any<CancellationToken?>());
+        await engine.Received(1).Serialize(Arg.Any<ModPath>(), Arg.Any<DirectoryPath>(), Arg.Any<DirectoryPath?>(), Arg.Any<bool>(), Arg.Any<bool>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitMeta?>(), Arg.Any<CancellationToken?>());
+    }
+
+    [Theory, MutagenAutoData]
+    public async Task Execute_WithCommitFailure_LogsWarningButStillSucceeds(
+        UpgradeTargetSpriggitVersionCommand command,
+        DirectoryPath existingSpriggitPath,
+        ModKey modKey,
+        IFileSystem fileSystem,
+        SpriggitExternalMetaPersister persister,
+        [Frozen] GitOperations gitOperations,
+        [Frozen] ILogger logger,
+        [Frozen] ISpriggitEngine engine,
+        UpgradeTargetSpriggitVersionRunner sut)
+    {
+        // Arrange
+        command.SkipGitOperations = false;
+        command.PackageVersion = "0.40.0";
+        command.SpriggitPath = existingSpriggitPath;
+
+        var originalMeta = new SpriggitModKeyMeta(
+            new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
+            GameRelease.Starfield,
+            modKey);
+
+        persister.Persist(existingSpriggitPath, originalMeta);
+        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(false);
+        gitOperations.CommitChanges(command.SpriggitPath, Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false); // Commit fails
+
+        // Act
+        var result = await sut.Execute(command);
+
+        // Assert
+        result.ShouldBe(0); // Should still succeed even if commit fails
+        logger.Received(1).Warning("Failed to commit changes automatically. Please commit manually.");
+        logger.Received(1).Information("Successfully upgraded spriggit version and re-serialized mod files");
+    }
+
+    #endregion
 }

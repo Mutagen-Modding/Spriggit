@@ -17,4 +17,9 @@ public class UpgradeTargetSpriggitVersionCommand
         HelpText = "Spriggit serialization nuget package version to change to",
         Required = true)]
     public string PackageVersion { get; set; } = string.Empty;
+
+    [Option('s', "SkipGitOperations",
+        HelpText = "Skip git operations (don't check for uncommitted changes or auto-commit)",
+        Required = false)]
+    public bool SkipGitOperations { get; set; } = false;
 }

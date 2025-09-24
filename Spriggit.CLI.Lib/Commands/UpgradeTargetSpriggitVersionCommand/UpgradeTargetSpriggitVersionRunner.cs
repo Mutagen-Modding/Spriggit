@@ -12,6 +12,7 @@ public class UpgradeTargetSpriggitVersionRunner
     private readonly SpriggitMetaUpdater _metaUpdater;
     private readonly IFileSystem _fileSystem;
     private readonly SpriggitExternalMetaPersister _metaPersister;
+    private readonly GitOperations _gitOperations;
     private readonly ILogger _logger;
 
     public UpgradeTargetSpriggitVersionRunner(
@@ -19,12 +20,14 @@ public class UpgradeTargetSpriggitVersionRunner
         SpriggitMetaUpdater metaUpdater,
         IFileSystem fileSystem,
         SpriggitExternalMetaPersister metaPersister,
+        GitOperations gitOperations,
         ILogger logger)
     {
         _engine = engine;
         _metaUpdater = metaUpdater;
         _fileSystem = fileSystem;
         _metaPersister = metaPersister;
+        _gitOperations = gitOperations;
         _logger = logger;
     }
 
@@ -46,6 +49,13 @@ public class UpgradeTargetSpriggitVersionRunner
 
     public async Task<int> Execute(UpgradeTargetSpriggitVersionCommand command)
     {
+        // Check for uncommitted changes before starting (unless git operations are skipped)
+        if (!command.SkipGitOperations && await _gitOperations.HasUncommittedChanges(command.SpriggitPath))
+        {
+            _logger.Error("Git repository has uncommitted changes. Please commit or stash your changes before upgrading Spriggit version.");
+            return 1;
+        }
+
         var originalMeta = _metaPersister.TryParseEmbeddedMeta(command.SpriggitPath);
         if (originalMeta == null)
         {
@@ -109,6 +119,21 @@ public class UpgradeTargetSpriggitVersionRunner
             cancel: CancellationToken.None);
 
         _logger.Information("Successfully upgraded spriggit version and re-serialized mod files");
+
+        // Automatically commit the changes (unless git operations are skipped)
+        if (!command.SkipGitOperations)
+        {
+            var commitMessage = $"Upgrade translation package to version {command.PackageVersion}";
+            if (await _gitOperations.CommitChanges(command.SpriggitPath, commitMessage))
+            {
+                _logger.Information("Changes committed successfully");
+            }
+            else
+            {
+                _logger.Warning("Failed to commit changes automatically. Please commit manually.");
+            }
+        }
+
         return 0;
     }
 }
