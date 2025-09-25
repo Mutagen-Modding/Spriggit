@@ -74,3 +74,25 @@ dotnet test -v normal
 - Each serialization creates a `.spriggit` metadata file tracking the package version used
 - Starfield requires "Master Style Input" - either DataFolder parameter or Known Masters in .spriggit file
 - Pre-build targets clear local NuGet cache for translation packages to ensure fresh downloads during development
+
+## Development Best Practices
+
+**Always build and run tests after implementing changes to confirm correctness:**
+
+```bash
+# After making any code changes, always:
+# 1. Build to check for compilation errors
+dotnet build
+
+# 2. Run relevant tests to verify functionality
+dotnet test
+
+# 3. Run specific tests for the area you changed
+dotnet test --filter "YourTestClassName"
+```
+
+This is critical to ensure:
+- Code compiles without errors
+- New functionality works as expected
+- Existing functionality hasn't been broken by changes
+- Tests themselves are correctly written and can execute
