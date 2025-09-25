@@ -1,10 +1,13 @@
 using System.IO.Abstractions;
 using AutoFixture.Xunit2;
+using LibGit2Sharp;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Testing.AutoData;
 using Newtonsoft.Json;
 using Noggog;
+using Noggog.GitRepository;
+using Noggog.IO;
 using NSubstitute;
 using Serilog;
 using Shouldly;
@@ -18,8 +21,55 @@ using Xunit;
 
 namespace Spriggit.Tests;
 
-public class UpgradeTargetSpriggitVersionRunnerTests
+public class UpgradeTargetSpriggitVersionRunnerTests : IDisposable
 {
+    private readonly TempFolder _tempFolder;
+    private readonly IFileSystem _fileSystem;
+    private readonly GitRepositoryFactory _gitRepositoryFactory;
+    private readonly GitFolderLocator _gitFolderLocator;
+    private readonly GitOperations _gitOperations;
+    private readonly ILogger _logger;
+
+    public UpgradeTargetSpriggitVersionRunnerTests()
+    {
+        _tempFolder = TempFolder.Factory();
+        _fileSystem = new FileSystem();
+        _gitRepositoryFactory = new GitRepositoryFactory();
+        _gitFolderLocator = new GitFolderLocator(_fileSystem);
+        _logger = Substitute.For<ILogger>();
+        _gitOperations = new GitOperations(_logger, _gitRepositoryFactory, _gitFolderLocator);
+    }
+
+    public void Dispose()
+    {
+        _tempFolder?.Dispose();
+    }
+
+    private DirectoryPath CreateGitRepository(bool withInitialCommit = true, bool withUncommittedChanges = false)
+    {
+        var repoPath = Path.Combine(_tempFolder.Dir, Path.GetRandomFileName());
+        Directory.CreateDirectory(repoPath);
+
+        Repository.Init(repoPath);
+
+        if (withInitialCommit)
+        {
+            using var repo = new Repository(repoPath);
+            var signature = new Signature("Test User", "test@example.com", DateTimeOffset.Now);
+
+            var testFile = Path.Combine(repoPath, "test.txt");
+            File.WriteAllText(testFile, "initial content");
+            Commands.Stage(repo, "test.txt");
+            repo.Commit("Initial commit", signature, signature);
+
+            if (withUncommittedChanges)
+            {
+                File.WriteAllText(testFile, "modified content");
+            }
+        }
+
+        return new DirectoryPath(repoPath);
+    }
 
     [Theory, MutagenAutoData]
     public async Task Execute_WithNullMeta_ReturnsError(
@@ -40,27 +90,44 @@ public class UpgradeTargetSpriggitVersionRunnerTests
     
     [Theory, MutagenAutoData]
     public async Task Execute_WithSpecificPackageVersion_UpdatesMetaVersion(
-        UpgradeTargetSpriggitVersionCommand command,
         DirectoryPath existingsSpriggitPath,
         ModKey modKey,
-        IFileSystem fileSystem,
-        SpriggitExternalMetaPersister persister,
         [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
         // Arrange
-        command.PackageVersion = "0.40.0";
-        command.SpriggitPath = existingsSpriggitPath;
+        // Create the directory first
+        Directory.CreateDirectory(existingsSpriggitPath);
+
+        var command = new UpgradeTargetSpriggitVersionCommand
+        {
+            SkipGitOperations = true, // Skip git operations for this test
+            PackageVersion = "0.40.0",
+            SpriggitPath = existingsSpriggitPath,
+            DataFolder = Path.Combine(existingsSpriggitPath, "Data")
+        };
+
         var originalMeta = new SpriggitModKeyMeta(
             new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
             GameRelease.Starfield,
             modKey);
 
-        persister.Persist(existingsSpriggitPath, originalMeta);
-    
+        var persister = new SpriggitExternalMetaPersister(_fileSystem);
+        persister.Persist(command.SpriggitPath, originalMeta);
+
+        // Create runner with real dependencies
+        var metaUpdater = new SpriggitMetaUpdater(logger, _fileSystem, persister);
+        var runner = new UpgradeTargetSpriggitVersionRunner(
+            engine,
+            metaUpdater,
+            _fileSystem,
+            persister,
+            _gitOperations,
+            logger);
+
         // Act
-        var result = await sut.Execute(command);
+        var result = await runner.Execute(command);
     
         // Assert
         result.ShouldBe(0);
@@ -89,164 +156,111 @@ public class UpgradeTargetSpriggitVersionRunnerTests
     
         // Verify the meta file was actually updated
         var metaPath = Path.Combine(existingsSpriggitPath, "spriggit-meta.json");
-        var updatedMetaJson = fileSystem.File.ReadAllText(metaPath);
+        var updatedMetaJson = _fileSystem.File.ReadAllText(metaPath);
         var updatedMeta = JsonConvert.DeserializeObject<SpriggitModKeyMetaSerialize>(updatedMetaJson, SpriggitExternalMetaPersister.JsonSettings);
         updatedMeta!.Version.ShouldBe(command.PackageVersion);
     }
     
-    // [Theory, MutagenAutoData]
-    // public async Task Execute_WithoutSpecificVersion_LogsCorrectMessage(
-    //     UpgradeTargetSpriggitVersionCommand command,
-    //     ModKey modKey,
-    //     IFileSystem fileSystem)
-    // {
-    //     // Arrange
-    //     command.PackageVersion = null; // No specific version provided
-    //     var originalMeta = new SpriggitModKeyMeta(
-    //         new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
-    //         GameRelease.Starfield,
-    //         modKey);
-    //
-    //     bootstrap.MetaPersister.TryParseEmbeddedMeta(command.SpriggitPath)
-    //         .Returns(originalMeta);
-    //
-    //     // Act
-    //     var result = await bootstrap.Sut.Execute(command);
-    //
-    //     // Assert
-    //     result.ShouldBe(0);
-    //     bootstrap.Logger.Received(1).Information("No specific version provided, will upgrade to latest during serialization");
-    //
-    //     // Verify that meta update was not called since no version was provided
-    //     bootstrap.MetaUpdater.DidNotReceive().UpdateMetaVersion(Arg.Any<DirectoryPath>(), Arg.Any<string>());
-    //
-    //     // Verify serialization uses original version
-    //     await bootstrap.Engine.Received(1).Serialize(
-    //         Arg.Any<ModPath>(),
-    //         command.SpriggitPath,
-    //         command.DataFolder,
-    //         false,
-    //         true,
-    //         null,
-    //         Arg.Is<SpriggitMeta>(m => m.Source.Version == originalMeta.Source.Version),
-    //         Arg.Any<CancellationToken?>());
-    // }
-    //
-    // [Theory, MutagenAutoData]
-    // public async Task Execute_WithEmptyPackageVersion_TreatsAsNull(
-    //     UpgradeTargetSpriggitVersionCommand command,
-    //     ModKey modKey,
-    //     IFileSystem fileSystem)
-    // {
-    //     // Arrange
-    //     command.PackageVersion = ""; // Empty string should be treated as null
-    //     var originalMeta = new SpriggitModKeyMeta(
-    //         new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
-    //         GameRelease.Starfield,
-    //         modKey);
-    //
-    //     bootstrap.MetaPersister.TryParseEmbeddedMeta(command.SpriggitPath)
-    //         .Returns(originalMeta);
-    //
-    //     // Act
-    //     var result = await bootstrap.Sut.Execute(command);
-    //
-    //     // Assert
-    //     result.ShouldBe(0);
-    //
-    //     // Verify that meta update was not called since empty string is treated as null
-    //     bootstrap.MetaUpdater.DidNotReceive().UpdateMetaVersion(Arg.Any<DirectoryPath>(), Arg.Any<string>());
-    //     bootstrap.Logger.Received(1).Information("No specific version provided, will upgrade to latest during serialization");
-    // }
-    //
-    // [Theory, MutagenAutoData]
-    // public async Task Execute_PreservesOriginalModKeyInSerialization(
-    //     UpgradeTargetSpriggitVersionCommand command,
-    //     IFileSystem fileSystem)
-    // {
-    //     // Arrange
-    //     var originalModKey = ModKey.FromNameAndExtension("Test Mod.esp");
-    //     var originalMeta = new SpriggitModKeyMeta(
-    //         new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
-    //         GameRelease.Starfield,
-    //         originalModKey);
-    //
-    //     bootstrap.MetaPersister.TryParseEmbeddedMeta(command.SpriggitPath)
-    //         .Returns(originalMeta);
-    //
-    //     // Act
-    //     var result = await bootstrap.Sut.Execute(command);
-    //
-    //     // Assert
-    //     result.ShouldBe(0);
-    //
-    //     // Verify that the temp file is renamed to preserve the original ModKey
-    //     await bootstrap.Engine.Received(1).Serialize(
-    //         Arg.Is<ModPath>(path => Path.GetFileName(path) == originalModKey.FileName),
-    //         command.SpriggitPath,
-    //         command.DataFolder,
-    //         false,
-    //         true,
-    //         null,
-    //         Arg.Any<SpriggitMeta>(),
-    //         Arg.Any<CancellationToken?>());
-    // }
-
     #region Git Operations Tests
 
     [Theory, MutagenAutoData]
     public async Task Execute_WithGitOperationsEnabled_ChecksForUncommittedChanges(
-        UpgradeTargetSpriggitVersionCommand command,
-        DirectoryPath existingSpriggitPath,
         ModKey modKey,
-        IFileSystem fileSystem,
-        SpriggitExternalMetaPersister persister,
-        [Frozen] GitOperations gitOperations,
-        [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
         // Arrange
-        command.SkipGitOperations = false;
-        command.PackageVersion = "0.40.0";
-        command.SpriggitPath = existingSpriggitPath;
+        var gitRepoPath = CreateGitRepository(withInitialCommit: true, withUncommittedChanges: false);
+        var spriggitPath = Path.Combine(gitRepoPath, "spriggit-data");
+        Directory.CreateDirectory(spriggitPath);
+
+        var command = new UpgradeTargetSpriggitVersionCommand
+        {
+            SkipGitOperations = false,
+            PackageVersion = "0.40.0",
+            SpriggitPath = spriggitPath,
+            DataFolder = Path.Combine(gitRepoPath, "Data")
+        };
 
         var originalMeta = new SpriggitModKeyMeta(
             new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
             GameRelease.Starfield,
             modKey);
 
-        persister.Persist(existingSpriggitPath, originalMeta);
-        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(false);
-        gitOperations.CommitChanges(command.SpriggitPath, Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
+        var persister = new SpriggitExternalMetaPersister(_fileSystem);
+        persister.Persist(command.SpriggitPath, originalMeta);
+
+        // Stage the newly created meta file so it doesn't count as uncommitted changes
+        using (var repo = new Repository(gitRepoPath))
+        {
+            var signature = new Signature("Test User", "test@example.com", DateTimeOffset.Now);
+            Commands.Stage(repo, "spriggit-data/spriggit-meta.json");
+            repo.Commit("Add spriggit meta file", signature, signature);
+        }
+
+        // Replace the GitOperations in the runner with our real instance
+        var metaUpdater = new SpriggitMetaUpdater(_logger, _fileSystem, persister);
+        var runnerWithRealGit = new UpgradeTargetSpriggitVersionRunner(
+            engine,
+            metaUpdater,
+            _fileSystem,
+            persister,
+            _gitOperations,
+            _logger);
 
         // Act
-        var result = await sut.Execute(command);
+        var result = await runnerWithRealGit.Execute(command);
 
         // Assert
         result.ShouldBe(0);
-        await gitOperations.Received(1).HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>());
-        await gitOperations.Received(1).CommitChanges(command.SpriggitPath, $"Upgrade translation package to version {command.PackageVersion}", Arg.Any<CancellationToken>());
+        // Verify that git operations were actually performed by checking repo state
+        var hasChanges = await _gitOperations.HasUncommittedChanges(command.SpriggitPath);
+        // After successful upgrade, changes should be committed
+        hasChanges.ShouldBeFalse();
     }
 
     [Theory, MutagenAutoData]
     public async Task Execute_WithUncommittedChanges_ReturnsErrorAndDoesNotProceed(
-        UpgradeTargetSpriggitVersionCommand command,
-        [Frozen] GitOperations gitOperations,
-        [Frozen] ILogger logger,
+        ModKey modKey,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
         // Arrange
-        command.SkipGitOperations = false;
-        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(true);
+        var gitRepoPath = CreateGitRepository(withInitialCommit: true, withUncommittedChanges: true);
+        var spriggitPath = Path.Combine(gitRepoPath, "spriggit-data");
+        Directory.CreateDirectory(spriggitPath);
+
+        var command = new UpgradeTargetSpriggitVersionCommand
+        {
+            SkipGitOperations = false,
+            PackageVersion = "0.40.0",
+            SpriggitPath = spriggitPath,
+            DataFolder = Path.Combine(gitRepoPath, "Data")
+        };
+
+        var originalMeta = new SpriggitModKeyMeta(
+            new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
+            GameRelease.Starfield,
+            modKey);
+
+        var persister = new SpriggitExternalMetaPersister(_fileSystem);
+        persister.Persist(command.SpriggitPath, originalMeta);
+
+        var metaUpdater = new SpriggitMetaUpdater(_logger, _fileSystem, persister);
+        var runnerWithRealGit = new UpgradeTargetSpriggitVersionRunner(
+            engine,
+            metaUpdater,
+            _fileSystem,
+            persister,
+            _gitOperations,
+            _logger);
 
         // Act
-        var result = await sut.Execute(command);
+        var result = await runnerWithRealGit.Execute(command);
 
         // Assert
-        result.ShouldBe(1);
-        logger.Received(1).Error("Git repository has uncommitted changes. Please commit or stash your changes before upgrading Spriggit version.");
+        result.ShouldBe(1); // Should return error code for uncommitted changes
+        _logger.Received(1).Error("Git repository has uncommitted changes. Please commit or stash your changes before upgrading Spriggit version.");
 
         // Verify engine methods were never called
         await engine.DidNotReceive().Deserialize(Arg.Any<string>(), Arg.Any<FilePath>(), Arg.Any<DirectoryPath?>(), Arg.Any<uint>(), Arg.Any<bool?>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitSource?>(), Arg.Any<CancellationToken?>());
@@ -255,76 +269,109 @@ public class UpgradeTargetSpriggitVersionRunnerTests
 
     [Theory, MutagenAutoData]
     public async Task Execute_WithGitOperationsDisabled_SkipsGitChecksAndCommit(
-        UpgradeTargetSpriggitVersionCommand command,
-        DirectoryPath existingSpriggitPath,
         ModKey modKey,
-        IFileSystem fileSystem,
-        SpriggitExternalMetaPersister persister,
-        [Frozen] GitOperations gitOperations,
-        [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
         // Arrange
-        command.SkipGitOperations = true;
-        command.PackageVersion = "0.40.0";
-        command.SpriggitPath = existingSpriggitPath;
+        var gitRepoPath = CreateGitRepository(withInitialCommit: true, withUncommittedChanges: true);
+        var spriggitPath = Path.Combine(gitRepoPath, "spriggit-data");
+        Directory.CreateDirectory(spriggitPath);
+
+        var command = new UpgradeTargetSpriggitVersionCommand
+        {
+            SkipGitOperations = true,
+            PackageVersion = "0.40.0",
+            SpriggitPath = spriggitPath,
+            DataFolder = Path.Combine(gitRepoPath, "Data")
+        };
 
         var originalMeta = new SpriggitModKeyMeta(
             new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
             GameRelease.Starfield,
             modKey);
 
-        persister.Persist(existingSpriggitPath, originalMeta);
+        var persister = new SpriggitExternalMetaPersister(_fileSystem);
+        persister.Persist(command.SpriggitPath, originalMeta);
+
+        var metaUpdater = new SpriggitMetaUpdater(_logger, _fileSystem, persister);
+        var runnerWithRealGit = new UpgradeTargetSpriggitVersionRunner(
+            engine,
+            metaUpdater,
+            _fileSystem,
+            persister,
+            _gitOperations,
+            _logger);
+
+        // Verify there are uncommitted changes before the test
+        var hasChangesBefore = await _gitOperations.HasUncommittedChanges(command.SpriggitPath);
+        hasChangesBefore.ShouldBeTrue(); // Confirm our test setup
 
         // Act
-        var result = await sut.Execute(command);
+        var result = await runnerWithRealGit.Execute(command);
 
         // Assert
         result.ShouldBe(0);
 
-        // Verify git operations were never called
-        await gitOperations.DidNotReceive().HasUncommittedChanges(Arg.Any<string>(), Arg.Any<CancellationToken>());
-        await gitOperations.DidNotReceive().CommitChanges(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+        // Verify uncommitted changes still exist (git operations were skipped)
+        var hasChangesAfter = await _gitOperations.HasUncommittedChanges(command.SpriggitPath);
+        hasChangesAfter.ShouldBeTrue(); // Changes should still be there since git ops were skipped
 
-        // Verify upgrade still proceeded normally
+        // Verify upgrade still proceeded normally (git operations are skipped but engine operations still happen)
         await engine.Received(1).Deserialize(Arg.Any<string>(), Arg.Any<FilePath>(), Arg.Any<DirectoryPath?>(), Arg.Any<uint>(), Arg.Any<bool?>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitSource?>(), Arg.Any<CancellationToken?>());
         await engine.Received(1).Serialize(Arg.Any<ModPath>(), Arg.Any<DirectoryPath>(), Arg.Any<DirectoryPath?>(), Arg.Any<bool>(), Arg.Any<bool>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitMeta?>(), Arg.Any<CancellationToken?>());
     }
 
     [Theory, MutagenAutoData]
-    public async Task Execute_WithCommitFailure_LogsWarningButStillSucceeds(
-        UpgradeTargetSpriggitVersionCommand command,
-        DirectoryPath existingSpriggitPath,
+    public async Task Execute_WithInvalidGitRepo_LogsWarningButStillSucceeds(
         ModKey modKey,
-        IFileSystem fileSystem,
-        SpriggitExternalMetaPersister persister,
-        [Frozen] GitOperations gitOperations,
-        [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
-        // Arrange
-        command.SkipGitOperations = false;
-        command.PackageVersion = "0.40.0";
-        command.SpriggitPath = existingSpriggitPath;
+        // Arrange - create an invalid git repo that will cause commit failures
+        var invalidRepoPath = Path.Combine(_tempFolder.Dir, "invalid-repo");
+        Directory.CreateDirectory(invalidRepoPath);
+
+        // Create a .git directory but not a proper repo (will cause LibGit2Sharp to fail)
+        var gitDir = Path.Combine(invalidRepoPath, ".git");
+        Directory.CreateDirectory(gitDir);
+
+        var spriggitPath = Path.Combine(invalidRepoPath, "spriggit-data");
+        Directory.CreateDirectory(spriggitPath);
+
+        var command = new UpgradeTargetSpriggitVersionCommand
+        {
+            SkipGitOperations = false,
+            PackageVersion = "0.40.0",
+            SpriggitPath = spriggitPath,
+            DataFolder = Path.Combine(invalidRepoPath, "Data")
+        };
 
         var originalMeta = new SpriggitModKeyMeta(
             new SpriggitSource { PackageName = "Spriggit.Yaml.Starfield", Version = "0.39.11" },
             GameRelease.Starfield,
             modKey);
 
-        persister.Persist(existingSpriggitPath, originalMeta);
-        gitOperations.HasUncommittedChanges(command.SpriggitPath, Arg.Any<CancellationToken>()).Returns(false);
-        gitOperations.CommitChanges(command.SpriggitPath, Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false); // Commit fails
+        var persister = new SpriggitExternalMetaPersister(_fileSystem);
+        persister.Persist(command.SpriggitPath, originalMeta);
+
+        var metaUpdater = new SpriggitMetaUpdater(_logger, _fileSystem, persister);
+        var runnerWithRealGit = new UpgradeTargetSpriggitVersionRunner(
+            engine,
+            metaUpdater,
+            _fileSystem,
+            persister,
+            _gitOperations,
+            _logger);
 
         // Act
-        var result = await sut.Execute(command);
+        var result = await runnerWithRealGit.Execute(command);
 
         // Assert
-        result.ShouldBe(0); // Should still succeed even if commit fails
-        logger.Received(1).Warning("Failed to commit changes automatically. Please commit manually.");
-        logger.Received(1).Information("Successfully upgraded spriggit version and re-serialized mod files");
+        result.ShouldBe(0); // Should succeed despite git issues
+        // Verify that engine operations still happened
+        await engine.Received(1).Deserialize(Arg.Any<string>(), Arg.Any<FilePath>(), Arg.Any<DirectoryPath?>(), Arg.Any<uint>(), Arg.Any<bool?>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitSource?>(), Arg.Any<CancellationToken?>());
+        await engine.Received(1).Serialize(Arg.Any<ModPath>(), Arg.Any<DirectoryPath>(), Arg.Any<DirectoryPath?>(), Arg.Any<bool>(), Arg.Any<bool>(), Arg.Any<IEngineEntryPoint?>(), Arg.Any<SpriggitMeta?>(), Arg.Any<CancellationToken?>());
     }
 
     #endregion

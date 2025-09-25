@@ -77,22 +77,44 @@ dotnet test -v normal
 
 ## Development Best Practices
 
-**Always build and run tests after implementing changes to confirm correctness:**
+**CRITICAL: Always build and run tests after implementing changes to confirm correctness:**
 
 ```bash
-# After making any code changes, always:
+# After making any code changes, ALWAYS follow these steps in order:
+
 # 1. Build to check for compilation errors
 dotnet build
 
-# 2. Run relevant tests to verify functionality
-dotnet test
-
-# 3. Run specific tests for the area you changed
+# 2. Run ALL relevant tests (not just one) to verify functionality
 dotnet test --filter "YourTestClassName"
+
+# 3. Verify that ALL tests pass - any failing tests indicate incomplete work
+# 4. If tests fail, fix them before claiming the work is complete
+# 5. Never consider work "successful" when tests are failing
 ```
+
+**Test Verification Requirements:**
+- **ALL tests in the affected area must pass** - partial success is not success
+- **Run the full test suite for the component you're working on**, not just individual tests
+- **Fix failing tests immediately** - do not ignore or postpone test failures
+- **Verify tests both compile AND pass execution** - compilation success alone is not sufficient
+- **Test failures indicate incomplete or incorrect implementation** - address the root cause
+
+**Common Mistakes to Avoid:**
+- ❌ Only running one test and assuming others work
+- ❌ Ignoring test failures and claiming success
+- ❌ Only checking that code compiles without verifying runtime behavior
+- ❌ Making assumptions about test state without verifying
+
+**Correct Approach:**
+- ✅ Run complete test suite for the area being modified
+- ✅ Ensure 100% of relevant tests pass before completing work
+- ✅ Fix any failing tests as part of the implementation task
+- ✅ Verify both compilation and runtime test execution success
 
 This is critical to ensure:
 - Code compiles without errors
 - New functionality works as expected
 - Existing functionality hasn't been broken by changes
 - Tests themselves are correctly written and can execute
+- **All functionality is actually working, not just appearing to work**
