@@ -75,6 +75,59 @@ dotnet test -v normal
 - Starfield requires "Master Style Input" - either DataFolder parameter or Known Masters in .spriggit file
 - Pre-build targets clear local NuGet cache for translation packages to ensure fresh downloads during development
 
+## Accessing Source Generator Generated Files
+
+The translation packages use Mutagen.Bethesda.Serialization.SourceGenerator to generate serialization code for all Bethesda game records. By default, these generated files exist only during compilation and are not accessible on disk.
+
+### Enabling Generated File Access
+
+All translation package projects have been configured with MSBuild properties to write generated files to disk:
+
+```xml
+<PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>GeneratedFiles</CompilerGeneratedFilesOutputPath>
+</PropertyGroup>
+```
+
+### Generated File Structure
+
+After building a translation package, generated files are available in the `GeneratedFiles/` folder:
+
+```
+Translation Packages/Spriggit.Yaml.Starfield/GeneratedFiles/
+├── Mutagen.Bethesda.Serialization.SourceGenerator/
+│   └── Mutagen.Bethesda.Serialization.SourceGenerator.Serialization.SerializationSourceGenerator/
+│       ├── Perk_Serializations.g.cs
+│       ├── MutagenYamlConverter_StarfieldMod_MixIns.g.cs
+│       ├── Armor_Serializations.g.cs
+│       ├── Weapon_Serializations.g.cs
+│       └── [2000+ other record type serialization files]
+└── Noggog.SourceGenerators/
+    └── [Assembly version files]
+```
+
+### Key Generated Files
+
+- **`[RecordType]_Serializations.g.cs`**: Complete serialization/deserialization logic for each game record type
+- **`MutagenYamlConverter_[Game]Mod_MixIns.g.cs`**: Extension methods for the main converter classes
+- **Individual record serializers**: Each Bethesda record type (Perk, Armor, Weapon, Quest, etc.) gets its own serialization file
+
+### Usage Notes
+
+- Generated files are automatically excluded from source control via `.gitignore`
+- Files are regenerated on each build to reflect any changes in the source generator
+- Useful for debugging serialization issues or understanding how records are processed
+- All generated code includes comprehensive error handling and cancellation support
+
+### Example Generated Code Structure
+
+Each record serialization file contains:
+- `Serialize<TKernel, TWriteObject>()` - Writes record to YAML/JSON
+- `Deserialize<TReadObject>()` - Reads record from YAML/JSON
+- `HasSerializationItems()` - Determines if record needs serialization
+- `DeserializeInto<TReadObject>()` - Deserializes into existing object
+
 ## Development Best Practices
 
 **CRITICAL: Always build and run tests after implementing changes to confirm correctness:**

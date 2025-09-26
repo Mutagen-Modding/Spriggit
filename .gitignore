@@ -402,3 +402,6 @@ Spriggit.CLI/Properties/launchSettings.json
 # Claude Code files
 CLAUDE.md
 .claude
+
+# Source generator output files
+**/GeneratedFiles/
