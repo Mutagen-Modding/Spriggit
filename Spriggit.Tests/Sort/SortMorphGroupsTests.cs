@@ -3,6 +3,7 @@ using Autofac;
 using DynamicData;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
+using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
@@ -41,34 +42,35 @@ public class SortMorphGroupsTests
         Mutagen.Bethesda.Fallout4.Race race,
         SortFallout4 sort)
     {
-        race.HeadData!.Male = new Mutagen.Bethesda.Fallout4.HeadData()
-        {
-            MorphGroups = new ExtendedList<MorphGroup>()
+        race.HeadData = new GenderedItem<HeadData?>(
+            male: new Mutagen.Bethesda.Fallout4.HeadData()
             {
-                new MorphGroup()
+                MorphGroups = new ExtendedList<MorphGroup>()
                 {
-                    Name = "Xyz",
-                },
-                new MorphGroup()
-                {
-                    Name = "Abc",
+                    new MorphGroup()
+                    {
+                        Name = "Xyz",
+                    },
+                    new MorphGroup()
+                    {
+                        Name = "Abc",
+                    }
                 }
-            }
-        };
-        race.HeadData!.Female = new Mutagen.Bethesda.Fallout4.HeadData()
-        {
-            MorphGroups = new ExtendedList<MorphGroup>()
+            },
+            female: new Mutagen.Bethesda.Fallout4.HeadData()
             {
-                new MorphGroup()
+                MorphGroups = new ExtendedList<MorphGroup>()
                 {
-                    Name = "Xyz",
-                },
-                new MorphGroup()
-                {
-                    Name = "Abc",
+                    new MorphGroup()
+                    {
+                        Name = "Xyz",
+                    },
+                    new MorphGroup()
+                    {
+                        Name = "Abc",
+                    }
                 }
-            }
-        };
+            });
 
         var modPath = Path.Combine(existingDir, mod.ModKey.FileName);
 
@@ -116,40 +118,42 @@ public class SortMorphGroupsTests
         {
             race.BipedObjects[(Mutagen.Bethesda.Starfield.BipedObject)key] = new();
         }
-        race.ChargenAndSkintones!.Male = new ChargenAndSkintones()
-        {
-            Chargen = new Chargen()
+
+        race.ChargenAndSkintones = new GenderedItem<ChargenAndSkintones?>(
+            male: new ChargenAndSkintones()
             {
-                MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
+                Chargen = new Chargen()
                 {
-                    new Mutagen.Bethesda.Starfield.MorphGroup()
+                    MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
                     {
-                        Name = "Xyz",
-                    },
-                    new Mutagen.Bethesda.Starfield.MorphGroup()
-                    {
-                        Name = "Abc",
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Xyz",
+                        },
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Abc",
+                        }
                     }
                 }
-            }
-        };
-        race.ChargenAndSkintones!.Female = new ChargenAndSkintones()
-        {
-            Chargen = new Chargen()
+            },
+            female: new ChargenAndSkintones()
             {
-                MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
+                Chargen = new Chargen()
                 {
-                    new Mutagen.Bethesda.Starfield.MorphGroup()
+                    MorphGroups = new ExtendedList<Mutagen.Bethesda.Starfield.MorphGroup>()
                     {
-                        Name = "Xyz",
-                    },
-                    new Mutagen.Bethesda.Starfield.MorphGroup()
-                    {
-                        Name = "Abc",
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Xyz",
+                        },
+                        new Mutagen.Bethesda.Starfield.MorphGroup()
+                        {
+                            Name = "Abc",
+                        }
                     }
                 }
-            }
-        };
+            });
 
         npc.FaceMorphs.Add(new Mutagen.Bethesda.Starfield.NpcFaceMorph()
         {
