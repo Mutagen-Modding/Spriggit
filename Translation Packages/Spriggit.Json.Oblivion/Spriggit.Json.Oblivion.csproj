@@ -31,4 +31,9 @@
         <ProjectReference Include="..\Spriggit.TranslationPackages\Spriggit.TranslationPackages.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="GeneratedFiles/**" />
+        <None Remove="GeneratedFiles/**" />
+    </ItemGroup>
+
 </Project>
