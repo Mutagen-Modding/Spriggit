@@ -37,52 +37,8 @@ public class NpcTests
         var initialBlendNames = npc.MorphBlends.Select(mb => mb.BlendName).ToArray();
         initialBlendNames.ShouldBe(new[] { "ZBlend", "ABlend", "MBlend" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esm");
-
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.Starfield,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Starfield",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = StarfieldMod.CreateFromBinary(deserializedModPath, StarfieldRelease.Starfield, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
         var deserializedNpc = deserializedMod.Npcs.First();
         var sortedBlendNames = deserializedNpc.MorphBlends.Select(mb => mb.BlendName).ToArray();
@@ -114,52 +70,8 @@ public class NpcTests
         var initialMorphGroupNames = npc.FaceMorphs[0].MorphGroups.Select(mg => mg.MorphGroup).ToArray();
         initialMorphGroupNames.ShouldBe(new[] { "Xyz", "Abc", "Mno" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esm");
-
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.Starfield,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Starfield",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = StarfieldMod.CreateFromBinary(deserializedModPath, StarfieldRelease.Starfield, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
         var deserializedNpc = deserializedMod.Npcs.First();
         var sortedMorphGroupNames = deserializedNpc.FaceMorphs[0].MorphGroups.Select(mg => mg.MorphGroup).ToArray();

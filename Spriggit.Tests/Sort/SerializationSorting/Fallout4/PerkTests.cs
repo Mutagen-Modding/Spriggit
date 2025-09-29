@@ -21,7 +21,7 @@ public class PerkTests
     [Theory, MutagenModAutoData(GameRelease.Fallout4)]
     public async Task Fallout4Perk_SortsCorrectlyThroughSerialization(
         IFileSystem fileSystem,
-        DirectoryPath tempDir,
+        DirectoryPath existingTempDir,
         Fallout4EntryPoint entryPoint,
         Fallout4Mod mod)
     {
@@ -44,52 +44,10 @@ public class PerkTests
         var initialPriorities = perk.Effects.Select(e => e.Priority).ToList();
         initialPriorities.ShouldBe(new[] { (byte)5, (byte)4, (byte)7 });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
 
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.Fallout4,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Fallout4",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = Fallout4Mod.CreateFromBinary(deserializedModPath, Fallout4Release.Fallout4, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Verify sorting worked correctly
 
         var deserializedPerk = deserializedMod.Perks.First();
         var sortedPriorities = deserializedPerk.Effects.Select(e => e.Priority).ToList();

@@ -18,10 +18,11 @@ namespace Spriggit.Tests.Sort.SerializationSorting.Fallout4;
 /// </summary>
 public class LocationTests
 {
+
     [Theory, MutagenModAutoData(GameRelease.Fallout4)]
     public async Task Fallout4Location_SortsCorrectlyThroughSerialization(
         IFileSystem fileSystem,
-        DirectoryPath tempDir,
+        DirectoryPath existingTempDir,
         Fallout4EntryPoint entryPoint,
         Fallout4Mod mod)
     {
@@ -47,55 +48,93 @@ public class LocationTests
         var initialGrids = location.PersistentActorReferencesAdded.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
         initialGrids.ShouldBe(new[] { "2,1", "1,2" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
 
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.Fallout4,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Fallout4",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = Fallout4Mod.CreateFromBinary(deserializedModPath, Fallout4Release.Fallout4, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
-
+        // Verify sorting worked correctly
         var deserializedLocation = deserializedMod.Locations.First();
         var sortedGrids = deserializedLocation.PersistentActorReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+
+        // References should now be sorted by Grid.X, then Grid.Y
+        sortedGrids.ShouldBe(new[] { "1,2", "2,1" });
+    }
+
+
+    [Theory, MutagenModAutoData(GameRelease.Fallout4)]
+    public async Task Fallout4Location_LocationRefTypeReferences_SortsCorrectlyThroughSerialization(
+        IFileSystem fileSystem,
+        DirectoryPath existingTempDir,
+        Fallout4EntryPoint entryPoint,
+        Fallout4Mod mod)
+    {
+        // Create a new location to avoid FormKey conflicts
+        var location = mod.Locations.AddNew("TestLocation");
+        location.LocationRefTypeReferencesAdded = new Noggog.ExtendedList<Mutagen.Bethesda.Fallout4.LocationRefTypeReference>();
+
+        // Add references in unsorted order (should sort by Grid.X, Grid.Y, Ref.FormKey, Location.FormKey)
+        location.LocationRefTypeReferencesAdded.Add(new Mutagen.Bethesda.Fallout4.LocationRefTypeReference()
+        {
+            Grid = new P2Int16(2, 1),
+            Ref = new FormKey(mod.ModKey, 0x789).ToLink<Mutagen.Bethesda.Fallout4.IPlacedGetter>(),
+            Location = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Fallout4.IComplexLocationGetter>()
+        });
+        location.LocationRefTypeReferencesAdded.Add(new Mutagen.Bethesda.Fallout4.LocationRefTypeReference()
+        {
+            Grid = new P2Int16(1, 2),
+            Ref = new FormKey(mod.ModKey, 0x123).ToLink<Mutagen.Bethesda.Fallout4.IPlacedGetter>(),
+            Location = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Fallout4.IComplexLocationGetter>()
+        });
+
+        // Verify initial order is NOT sorted
+        var initialGrids = location.LocationRefTypeReferencesAdded.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+        initialGrids.ShouldBe(new[] { "2,1", "1,2" });
+
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
+
+        // Verify sorting worked correctly
+        var deserializedLocation = deserializedMod.Locations.First();
+        var sortedGrids = deserializedLocation.LocationRefTypeReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+
+        // References should now be sorted by Grid.X, then Grid.Y
+        sortedGrids.ShouldBe(new[] { "1,2", "2,1" });
+    }
+
+    [Theory, MutagenModAutoData(GameRelease.Fallout4)]
+    public async Task Fallout4Location_EnableParentReferences_SortsCorrectlyThroughSerialization(
+        IFileSystem fileSystem,
+        DirectoryPath existingTempDir,
+        Fallout4EntryPoint entryPoint,
+        Fallout4Mod mod)
+    {
+        // Create a new location to avoid FormKey conflicts
+        var location = mod.Locations.AddNew("TestLocation");
+        location.EnableParentReferencesAdded = new Noggog.ExtendedList<Mutagen.Bethesda.Fallout4.EnableParentReference>();
+
+        // Add references in unsorted order (should sort by Grid.X, Grid.Y, Ref.FormKey, Actor.FormKey)
+        location.EnableParentReferencesAdded.Add(new Mutagen.Bethesda.Fallout4.EnableParentReference()
+        {
+            Grid = new P2Int16(2, 1),
+            Ref = new FormKey(mod.ModKey, 0x789).ToLink<Mutagen.Bethesda.Fallout4.IPlacedGetter>(),
+            Actor = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Fallout4.IPlacedNpcGetter>()
+        });
+        location.EnableParentReferencesAdded.Add(new Mutagen.Bethesda.Fallout4.EnableParentReference()
+        {
+            Grid = new P2Int16(1, 2),
+            Ref = new FormKey(mod.ModKey, 0x123).ToLink<Mutagen.Bethesda.Fallout4.IPlacedGetter>(),
+            Actor = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Fallout4.IPlacedNpcGetter>()
+        });
+
+        // Verify initial order is NOT sorted
+        var initialGrids = location.EnableParentReferencesAdded.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+        initialGrids.ShouldBe(new[] { "2,1", "1,2" });
+
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
+
+        // Verify sorting worked correctly
+        var deserializedLocation = deserializedMod.Locations.First();
+        var sortedGrids = deserializedLocation.EnableParentReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
 
         // References should now be sorted by Grid.X, then Grid.Y
         sortedGrids.ShouldBe(new[] { "1,2", "2,1" });

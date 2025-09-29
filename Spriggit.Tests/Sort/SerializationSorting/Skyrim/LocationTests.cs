@@ -21,7 +21,7 @@ public class LocationTests
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE)]
     public async Task SkyrimLocation_SortsCorrectlyThroughSerialization(
         IFileSystem fileSystem,
-        DirectoryPath tempDir,
+        DirectoryPath existingTempDir,
         SkyrimEntryPoint entryPoint,
         SkyrimMod mod)
     {
@@ -56,53 +56,10 @@ public class LocationTests
         // Also verify we have the right number of references
         location.PersistentActorReferencesAdded.Count.ShouldBe(3);
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
 
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.SkyrimSE,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Skyrim",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = SkyrimMod.CreateFromBinary(deserializedModPath, SkyrimRelease.SkyrimSE, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
-
+        // Verify sorting worked correctly
         var deserializedLocation = deserializedMod.Locations.First();
         var sortedGrids = deserializedLocation.PersistentActorReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
 
@@ -117,7 +74,7 @@ public class LocationTests
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE)]
     public async Task SkyrimLocation_NullReferences_HandledCorrectlyThroughSerialization(
         IFileSystem fileSystem,
-        DirectoryPath tempDir,
+        DirectoryPath existingTempDir,
         SkyrimEntryPoint entryPoint,
         SkyrimMod mod)
     {
@@ -126,13 +83,12 @@ public class LocationTests
         // Don't set PersistentActorReferencesAdded - leave it null
 
         // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
+        var modPath = Path.Combine(existingTempDir.Path, mod.ModKey.FileName);
+        var spriggitPath = Path.Combine(existingTempDir.Path, "spriggit");
+        var deserializedModPath = Path.Combine(existingTempDir.Path, "deserialized.esp");
 
         // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+                mod.WriteToBinary(modPath, new BinaryWriteParameters()
         {
             FileSystem = fileSystem
         });
@@ -182,7 +138,7 @@ public class LocationTests
     [Theory, MutagenModAutoData(GameRelease.SkyrimSE)]
     public async Task SkyrimLocation_SingleReference_NoSortingNeededThroughSerialization(
         IFileSystem fileSystem,
-        DirectoryPath tempDir,
+        DirectoryPath existingTempDir,
         SkyrimEntryPoint entryPoint,
         SkyrimMod mod)
     {
@@ -202,13 +158,12 @@ public class LocationTests
         location.PersistentActorReferencesAdded.Count.ShouldBe(1);
 
         // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
+        var modPath = Path.Combine(existingTempDir.Path, mod.ModKey.FileName);
+        var spriggitPath = Path.Combine(existingTempDir.Path, "spriggit");
+        var deserializedModPath = Path.Combine(existingTempDir.Path, "deserialized.esp");
 
         // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
+                mod.WriteToBinary(modPath, new BinaryWriteParameters()
         {
             FileSystem = fileSystem
         });
@@ -258,5 +213,86 @@ public class LocationTests
         var reference = deserializedLocation.PersistentActorReferencesAdded.First();
         reference.Grid.X.ShouldBe((short)5);
         reference.Grid.Y.ShouldBe((short)3);
+    }
+
+
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE)]
+    public async Task SkyrimLocation_LocationRefTypeReferences_SortsCorrectlyThroughSerialization(
+        IFileSystem fileSystem,
+        DirectoryPath existingTempDir,
+        SkyrimEntryPoint entryPoint,
+        SkyrimMod mod)
+    {
+        // Create a new location to avoid FormKey conflicts
+        var location = mod.Locations.AddNew("TestLocation");
+        location.LocationRefTypeReferencesAdded = new Noggog.ExtendedList<Mutagen.Bethesda.Skyrim.LocationRefTypeReference>();
+
+        // Add references in unsorted order (should sort by Grid.X, Grid.Y, Ref.FormKey, Location.FormKey)
+        location.LocationRefTypeReferencesAdded.Add(new Mutagen.Bethesda.Skyrim.LocationRefTypeReference()
+        {
+            Grid = new P2Int16(2, 1),
+            Ref = new FormKey(mod.ModKey, 0x789).ToLink<Mutagen.Bethesda.Skyrim.IPlacedGetter>(),
+            Location = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Skyrim.IComplexLocationGetter>()
+        });
+        location.LocationRefTypeReferencesAdded.Add(new Mutagen.Bethesda.Skyrim.LocationRefTypeReference()
+        {
+            Grid = new P2Int16(1, 2),
+            Ref = new FormKey(mod.ModKey, 0x123).ToLink<Mutagen.Bethesda.Skyrim.IPlacedGetter>(),
+            Location = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Skyrim.IComplexLocationGetter>()
+        });
+
+        // Verify initial order is NOT sorted
+        var initialGrids = location.LocationRefTypeReferencesAdded.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+        initialGrids.ShouldBe(new[] { "2,1", "1,2" });
+
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
+
+        // Verify sorting worked correctly
+        var deserializedLocation = deserializedMod.Locations.First();
+        var sortedGrids = deserializedLocation.LocationRefTypeReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+
+        // References should now be sorted by Grid.X, then Grid.Y
+        sortedGrids.ShouldBe(new[] { "1,2", "2,1" });
+    }
+
+    [Theory, MutagenModAutoData(GameRelease.SkyrimSE)]
+    public async Task SkyrimLocation_EnableParentReferences_SortsCorrectlyThroughSerialization(
+        IFileSystem fileSystem,
+        DirectoryPath existingTempDir,
+        SkyrimEntryPoint entryPoint,
+        SkyrimMod mod)
+    {
+        // Create a new location to avoid FormKey conflicts
+        var location = mod.Locations.AddNew("TestLocation");
+        location.EnableParentReferencesAdded = new Noggog.ExtendedList<Mutagen.Bethesda.Skyrim.EnableParentReference>();
+
+        // Add references in unsorted order (should sort by Grid.X, Grid.Y, Ref.FormKey, Actor.FormKey)
+        location.EnableParentReferencesAdded.Add(new Mutagen.Bethesda.Skyrim.EnableParentReference()
+        {
+            Grid = new P2Int16(2, 1),
+            Ref = new FormKey(mod.ModKey, 0x789).ToLink<Mutagen.Bethesda.Skyrim.IPlacedGetter>(),
+            Actor = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Skyrim.IPlacedNpcGetter>()
+        });
+        location.EnableParentReferencesAdded.Add(new Mutagen.Bethesda.Skyrim.EnableParentReference()
+        {
+            Grid = new P2Int16(1, 2),
+            Ref = new FormKey(mod.ModKey, 0x123).ToLink<Mutagen.Bethesda.Skyrim.IPlacedGetter>(),
+            Actor = new FormKey(mod.ModKey, 0x456).ToLink<Mutagen.Bethesda.Skyrim.IPlacedNpcGetter>()
+        });
+
+        // Verify initial order is NOT sorted
+        var initialGrids = location.EnableParentReferencesAdded.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+        initialGrids.ShouldBe(new[] { "2,1", "1,2" });
+
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, existingTempDir, entryPoint, fileSystem);
+
+        // Verify sorting worked correctly
+        var deserializedLocation = deserializedMod.Locations.First();
+        var sortedGrids = deserializedLocation.EnableParentReferencesAdded?.Select(r => $"{r.Grid.X},{r.Grid.Y}").ToArray();
+
+        // References should now be sorted by Grid.X, then Grid.Y
+        sortedGrids.ShouldBe(new[] { "1,2", "2,1" });
     }
 }

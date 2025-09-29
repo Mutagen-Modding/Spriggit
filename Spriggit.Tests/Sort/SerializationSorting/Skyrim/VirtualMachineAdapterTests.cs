@@ -43,52 +43,8 @@ public class VirtualMachineAdapterTests
         var initialPropertyNames = quest.VirtualMachineAdapter.Scripts[0].Properties.Select(p => p.Name).ToArray();
         initialPropertyNames.ShouldBe(new[] { "ZProperty", "AProperty", "MProperty", "BProperty" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
-
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.SkyrimSE,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Skyrim",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = SkyrimMod.CreateFromBinary(deserializedModPath, SkyrimRelease.SkyrimSE, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
         var deserializedQuest = deserializedMod.Quests.First();
         var sortedPropertyNames = deserializedQuest.VirtualMachineAdapter?.Scripts[0].Properties.Select(p => p.Name).ToArray();
@@ -120,52 +76,8 @@ public class VirtualMachineAdapterTests
         var initialPropertyNames = npc.VirtualMachineAdapter.Scripts[0].Properties.Select(p => p.Name).ToArray();
         initialPropertyNames.ShouldBe(new[] { "Xyz", "Abc" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
-
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.SkyrimSE,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Skyrim",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = SkyrimMod.CreateFromBinary(deserializedModPath, SkyrimRelease.SkyrimSE, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
         var deserializedNpc = deserializedMod.Npcs.First();
         var sortedPropertyNames = deserializedNpc.VirtualMachineAdapter?.Scripts[0].Properties.Select(p => p.Name).ToArray();
@@ -204,52 +116,8 @@ public class VirtualMachineAdapterTests
         var initialPropertyNames = quest.VirtualMachineAdapter.Aliases[0].Scripts[0].Properties.Select(p => p.Name).ToArray();
         initialPropertyNames.ShouldBe(new[] { "Xyz", "Abc" });
 
-        // Paths for serialization cycle
-        var modPath = Path.Combine(tempDir.Path, mod.ModKey.FileName);
-        var spriggitPath = Path.Combine(tempDir.Path, "spriggit");
-        var deserializedModPath = Path.Combine(tempDir.Path, "deserialized.esp");
-
-        // Create directories and write original mod to disk
-        fileSystem.Directory.CreateDirectory(tempDir);
-        mod.WriteToBinary(modPath, new BinaryWriteParameters()
-        {
-            FileSystem = fileSystem
-        });
-
-        // Serialize with Spriggit
-        await entryPoint.Serialize(
-            modPath: modPath,
-            outputDir: spriggitPath,
-            dataPath: null,
-            knownMasters: [],
-            release: GameRelease.SkyrimSE,
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None,
-            meta: new SpriggitSource()
-            {
-                PackageName = "Spriggit.Yaml.Skyrim",
-                Version = "1.0.0"
-            },
-            throwOnUnknown: false);
-
-        // Deserialize back to mod file
-        await entryPoint.Deserialize(
-            inputPath: spriggitPath,
-            outputPath: deserializedModPath,
-            dataPath: null,
-            knownMasters: [],
-            fileSystem: fileSystem,
-            workDropoff: null,
-            streamCreator: null,
-            cancel: CancellationToken.None);
-
-        // Read the deserialized mod and verify sorting
-        var deserializedMod = SkyrimMod.CreateFromBinary(deserializedModPath, SkyrimRelease.SkyrimSE, new BinaryReadParameters()
-        {
-            FileSystem = fileSystem
-        });
+        // Perform serialization cycle and get deserialized mod
+        var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
         var deserializedQuest = deserializedMod.Quests.First();
         var sortedPropertyNames = deserializedQuest.VirtualMachineAdapter?.Aliases[0].Scripts[0].Properties.Select(p => p.Name).ToArray();

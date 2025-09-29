@@ -77,6 +77,21 @@ public class LocationCustomization : ICustomize<ILocationGetter>
             .ThenByField(x => x.Grid.Y)
             .ThenByField(x => x.Actor.FormKey)
             .ThenByField(x => x.Location.FormKey);
+        builder.SortList(x => x.UniqueActorReferencesAdded)
+            .ByField(x => x.Ref.FormKey)
+            .ThenByField(x => x.Actor.FormKey)
+            .ThenByField(x => x.Actor.FormKey)
+            .ThenByField(x => x.Location.FormKey);
+        builder.SortList(x => x.LocationRefTypeReferencesAdded)
+            .ByField(x => x.Grid.X)
+            .ThenByField(x => x.Grid.Y)
+            .ThenByField(x => x.Ref.FormKey)
+            .ThenByField(x => x.Location.FormKey);
+        builder.SortList(x => x.EnableParentReferencesAdded)
+            .ByField(x => x.Grid.X)
+            .ThenByField(x => x.Grid.Y)
+            .ThenByField(x => x.Ref.FormKey)
+            .ThenByField(x => x.Actor.FormKey);
     }
 }
 
