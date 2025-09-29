@@ -2,7 +2,7 @@ using Shouldly;
 using Spriggit.CLI.Lib.Commands.Sort;
 using Xunit;
 
-namespace Spriggit.Tests.Sort;
+namespace Spriggit.Tests.Sort.CliSorting;
 
 public class SortCommandTests
 {

@@ -57,3 +57,39 @@ public class WorldspaceCustomization : ICustomize<IWorldspaceGetter>
         builder.EmbedRecordsInSameFile(x => x.TopCell);
     }
 }
+
+public class ScriptEntryCustomization : ICustomize<IScriptEntryGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IScriptEntryGetter> builder)
+    {
+        builder.SortList(x => x.Properties)
+            .ByField(x => x.Name);
+    }
+}
+
+public class NpcCustomization : ICustomize<INpcGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<INpcGetter> builder)
+    {
+        builder.SortList(x => x.MorphBlends)
+            .ByField(x => x.BlendName);
+    }
+}
+
+public class NpcFaceMorphCustomization : ICustomize<INpcFaceMorphGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<INpcFaceMorphGetter> builder)
+    {
+        builder.SortList(x => x.MorphGroups)
+            .ByField(x => x.MorphGroup);
+    }
+}
+
+public class ChargenCustomization : ICustomize<IChargenGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IChargenGetter> builder)
+    {
+        builder.SortList(x => x.MorphGroups)
+            .ByField(x => x.Name);
+    }
+}

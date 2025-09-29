@@ -2,7 +2,6 @@ using System.IO.Abstractions;
 using Autofac;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
-using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.Testing.Extensions;
 using Serilog;
@@ -13,7 +12,7 @@ using Spriggit.CLI.Lib.Commands.Sort.Services.Fallout4;
 using Xunit;
 using PerkAbilityEffect = Mutagen.Bethesda.Fallout4.PerkAbilityEffect;
 
-namespace Spriggit.Tests.Sort;
+namespace Spriggit.Tests.Sort.CliSorting;
 
 public class SortPerksTests
 {

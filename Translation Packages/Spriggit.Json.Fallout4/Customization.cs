@@ -59,3 +59,33 @@ public class WorldspaceCustomization : ICustomize<IWorldspaceGetter>
         builder.EmbedRecordsInSameFile(x => x.TopCell);
     }
 }
+
+public class PerkCustomization : ICustomize<IPerkGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IPerkGetter> builder)
+    {
+        builder.SortList(x => x.Effects)
+            .ByField(x => x.Priority);
+    }
+}
+
+public class LocationCustomization : ICustomize<ILocationGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<ILocationGetter> builder)
+    {
+        builder.SortList(x => x.PersistentActorReferencesAdded)
+            .ByField(x => x.Grid.X)
+            .ThenByField(x => x.Grid.Y)
+            .ThenByField(x => x.Actor.FormKey)
+            .ThenByField(x => x.Location.FormKey);
+    }
+}
+
+public class ScriptEntryCustomization : ICustomize<IScriptEntryGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IScriptEntryGetter> builder)
+    {
+        builder.SortList(x => x.Properties)
+            .ByField(x => x.Name);
+    }
+}

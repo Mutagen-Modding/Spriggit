@@ -1,11 +1,9 @@
 using System.IO.Abstractions;
 using Autofac;
-using DynamicData;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Starfield;
-using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.Testing.Extensions;
 using Serilog;
@@ -20,7 +18,7 @@ using ChargenAndSkintones = Mutagen.Bethesda.Starfield.ChargenAndSkintones;
 using Chargen = Mutagen.Bethesda.Starfield.Chargen;
 using NpcMorphGroup = Mutagen.Bethesda.Starfield.NpcMorphGroup;
 
-namespace Spriggit.Tests.Sort;
+namespace Spriggit.Tests.Sort.CliSorting;
 
 public class SortMorphGroupsTests
 {

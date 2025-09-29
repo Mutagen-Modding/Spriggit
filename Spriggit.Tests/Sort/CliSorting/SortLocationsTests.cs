@@ -1,14 +1,14 @@
 using Mutagen.Bethesda;
+using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
-using Mutagen.Bethesda.Fallout4;
 using Noggog;
 using Shouldly;
 using Xunit;
 using SkyrimSortLocations = Spriggit.CLI.Lib.Commands.Sort.Services.Skyrim.SortLocations;
 using Fallout4SortLocations = Spriggit.CLI.Lib.Commands.Sort.Services.Fallout4.SortLocations;
 
-namespace Spriggit.Tests.Sort;
+namespace Spriggit.Tests.Sort.CliSorting;
 
 public class SortLocationsTests
 {

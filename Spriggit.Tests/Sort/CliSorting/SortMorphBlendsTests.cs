@@ -2,7 +2,6 @@ using System.IO.Abstractions;
 using Autofac;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Starfield;
-using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Noggog.Testing.Extensions;
 using Serilog;
@@ -12,7 +11,7 @@ using Spriggit.CLI.Lib.Commands.Sort;
 using Spriggit.CLI.Lib.Commands.Sort.Services.Starfield;
 using Xunit;
 
-namespace Spriggit.Tests.Sort;
+namespace Spriggit.Tests.Sort.CliSorting;
 
 public class SortMorphBlendsTests
 {
