@@ -4,7 +4,6 @@ using Spriggit.CLI.Lib;
 using Spriggit.CLI.Lib.Commands;
 using Spriggit.CLI.Lib.Commands.FormIDCollision;
 using Spriggit.CLI.Lib.Commands.MergeVersionSyncer;
-using Spriggit.CLI.Lib.Commands.Sort;
 using Spriggit.CLI.Lib.Commands.Standardize;
 using Spriggit.CLI.Lib.Commands.UpgradeTargetSpriggitVersionCommand;
 using Spriggit.Core;
@@ -26,7 +25,6 @@ try
             typeof(FormIDCollisionCommand),
             typeof(MergeVersionSyncerCommand),
             typeof(StandardizeCommand),
-            typeof(SortCommand),
             typeof(UpgradeTargetSpriggitVersionCommand))
         .MapResult(
             async (DeserializeCommand cmd) => await EngineRunner.Run(cmd, null),
@@ -34,7 +32,6 @@ try
             async (FormIDCollisionCommand cmd) => await FormIDCollisionRunner.Run(cmd),
             async (MergeVersionSyncerCommand cmd) => await MergeVersionSyncerRunner.Run(cmd),
             async (StandardizeCommand cmd) => await StandardizeRunner.Run(cmd),
-            async (SortCommand cmd) => await cmd.Run(),
             async (UpgradeTargetSpriggitVersionCommand cmd) => await UpgradeTargetSpriggitVersionRunner.Run(cmd),
             async _ => 1);
 }
