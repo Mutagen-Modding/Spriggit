@@ -26,8 +26,8 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_css:
   - stylesheets/extra.css
@@ -64,6 +64,7 @@ nav:
   - Command Line Interface: cli.md
   - .spriggit File: spriggit-file.md
   - Translation Packages: translation-packages.md
+  - Sorting: sorting.md
   - Best Practices:
     - Upgrade Spriggit Versions: upgrade-practices.md
   - Merge Conflicts: merge-conflicts.md
