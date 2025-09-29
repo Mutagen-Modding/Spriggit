@@ -77,6 +77,14 @@ public class NpcCustomization : ICustomize<INpcGetter>
     {
         builder.SortList(x => x.MorphBlends)
             .ByField(x => x.BlendName);
+        builder.SortList(x => x.ActorEffect)
+            .ByField(x => x.FormKey);
+        builder.SortList(x => x.Factions)
+            .ByField(x => x.Faction.FormKey)
+            .ThenByField(x => x.Rank);
+        builder.SortList(x => x.Items)
+            .ByField(x => x.Item.Item.FormKey)
+            .ThenByField(x => x.Item.Count);
     }
 }
 
