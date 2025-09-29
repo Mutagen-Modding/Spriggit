@@ -47,6 +47,10 @@ public class CellCustomization : ICustomize<ICellGetter>
         builder.EmbedRecordsInSameFile(x => x.Temporary)
             .EmbedRecordsInSameFile(x => x.Persistent)
             .EmbedRecordsInSameFile(x => x.NavigationMeshes);
+        builder.SortList(x => x.Persistent)
+            .ByField(x => x.FormKey);
+        builder.SortList(x => x.Temporary)
+            .ByField(x => x.FormKey);
     }
 }
 
@@ -91,5 +95,15 @@ public class ChargenCustomization : ICustomize<IChargenGetter>
     {
         builder.SortList(x => x.MorphGroups)
             .ByField(x => x.Name);
+    }
+}
+
+public class ImpactDataSetCustomization : ICustomize<IImpactDataSetGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IImpactDataSetGetter> builder)
+    {
+        builder.SortList(x => x.Impacts)
+            .ByField(x => x.Material.FormKey)
+            .ThenByField(x => x.Impact.FormKey);
     }
 }
