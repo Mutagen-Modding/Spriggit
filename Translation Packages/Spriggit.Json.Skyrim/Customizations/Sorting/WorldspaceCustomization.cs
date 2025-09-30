@@ -1,7 +1,7 @@
 using Mutagen.Bethesda.Serialization.Customizations;
 using Mutagen.Bethesda.Skyrim;
 
-namespace Spriggit.Json.Skyrim;
+namespace Spriggit.Json.Skyrim.Customizations.Sorting;
 
 public class WorldspaceCustomization : ICustomize<IWorldspaceGetter>
 {

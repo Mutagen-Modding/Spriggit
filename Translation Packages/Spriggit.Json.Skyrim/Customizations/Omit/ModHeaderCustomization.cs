@@ -1,7 +1,7 @@
 using Mutagen.Bethesda.Serialization.Customizations;
 using Mutagen.Bethesda.Skyrim;
 
-namespace Spriggit.Json.Skyrim;
+namespace Spriggit.Json.Skyrim.Customizations.Omit;
 
 public class ModHeaderCustomization : ICustomize<ISkyrimModHeaderGetter>
 {

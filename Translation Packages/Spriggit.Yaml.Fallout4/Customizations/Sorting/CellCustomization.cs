@@ -1,7 +1,7 @@
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Serialization.Customizations;
 
-namespace Spriggit.Yaml.Fallout4;
+namespace Spriggit.Yaml.Fallout4.Customizations.Sorting;
 
 public class CellCustomization : ICustomize<ICellGetter>
 {

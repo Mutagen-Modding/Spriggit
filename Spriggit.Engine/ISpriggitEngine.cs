@@ -1,10 +1,8 @@
 using Mutagen.Bethesda.Plugins;
 using Noggog;
-using Noggog.IO;
 using Spriggit.Core;
-using Spriggit.Engine;
 
-namespace Spriggit.Engine.Services.Singletons;
+namespace Spriggit.Engine;
 
 public interface ISpriggitEngine
 {

@@ -1,7 +1,7 @@
 using Mutagen.Bethesda.Serialization.Customizations;
 using Mutagen.Bethesda.Starfield;
 
-namespace Spriggit.Yaml.Starfield;
+namespace Spriggit.Yaml.Starfield.Customizations.Sorting;
 
 public class ScriptEntryCustomization : ICustomize<IScriptEntryGetter>
 {

@@ -6,6 +6,7 @@ using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
 using Spriggit.Core.Services.Singletons;
+using Spriggit.Engine;
 using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;

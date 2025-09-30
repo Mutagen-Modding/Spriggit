@@ -2,6 +2,7 @@ using System.IO.Abstractions;
 using Noggog.IO;
 using Serilog;
 using Spriggit.Core;
+using Spriggit.Engine;
 using Spriggit.Engine.Services.Singletons;
 
 namespace Spriggit.CLI.Lib.Commands.UpgradeTargetSpriggitVersionCommand;
