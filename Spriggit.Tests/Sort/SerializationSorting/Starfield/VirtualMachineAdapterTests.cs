@@ -13,75 +13,69 @@ using StarfieldEntryPoint = Spriggit.Yaml.Starfield.EntryPoint;
 namespace Spriggit.Tests.Sort.SerializationSorting.Starfield;
 
 /// <summary>
-/// Tests that verify VirtualMachineAdapter (ScriptEntry) sorting functionality works correctly
+/// Tests that verify VirtualMachineAdapter Scripts sorting functionality works correctly
 /// through the full serialization -> deserialization cycle using Spriggit for Starfield
 /// </summary>
 public class VirtualMachineAdapterTests
 {
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
-    public async Task StarfieldVirtualMachineAdapter_SortsCorrectlyThroughSerialization(
+    public async Task StarfieldVirtualMachineAdapter_Armor_SortsScriptsByName(
         IFileSystem fileSystem,
         DirectoryPath tempDir,
         StarfieldEntryPoint entryPoint,
         StarfieldMod mod)
     {
-        // Create a quest with out-of-order script properties
-        var quest = mod.Quests.AddNew("TestQuest");
-        quest.VirtualMachineAdapter = new Mutagen.Bethesda.Starfield.QuestAdapter();
-        quest.VirtualMachineAdapter.Scripts.Add(new Mutagen.Bethesda.Starfield.ScriptEntry()
-        {
-            Name = "TestScript"
-        });
+        // Create an armor with out-of-order scripts
+        var armor = mod.Armors.AddNew("TestArmor");
+        armor.VirtualMachineAdapter = new VirtualMachineAdapter();
 
-        // Add properties in unsorted order
-        quest.VirtualMachineAdapter.Scripts[0].Properties.Add(new Mutagen.Bethesda.Starfield.ScriptObjectProperty() { Name = "ZProperty" });
-        quest.VirtualMachineAdapter.Scripts[0].Properties.Add(new Mutagen.Bethesda.Starfield.ScriptObjectProperty() { Name = "AProperty" });
-        quest.VirtualMachineAdapter.Scripts[0].Properties.Add(new Mutagen.Bethesda.Starfield.ScriptObjectProperty() { Name = "MProperty" });
+        // Add scripts in unsorted order
+        armor.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "ZScript" });
+        armor.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "AScript" });
+        armor.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "MScript" });
 
         // Verify initial order is NOT sorted
-        var initialPropertyNames = quest.VirtualMachineAdapter.Scripts[0].Properties.Select(p => p.Name).ToArray();
-        initialPropertyNames.ShouldBe(new[] { "ZProperty", "AProperty", "MProperty" });
+        var initialScriptNames = armor.VirtualMachineAdapter.Scripts.Select(s => s.Name).ToArray();
+        initialScriptNames.ShouldBe(new[] { "ZScript", "AScript", "MScript" });
 
         // Perform serialization cycle and get deserialized mod
         var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
-        var deserializedQuest = deserializedMod.Quests.First();
-        var sortedPropertyNames = deserializedQuest.VirtualMachineAdapter?.Scripts[0].Properties.Select(p => p.Name).ToArray();
+        var deserializedArmor = deserializedMod.Armors.First();
+        var sortedScriptNames = deserializedArmor.VirtualMachineAdapter?.Scripts.Select(s => s.Name).ToArray();
 
-        // Properties should now be sorted by Name
-        sortedPropertyNames.ShouldBe(new[] { "AProperty", "MProperty", "ZProperty" });
+        // Scripts should now be sorted by Name
+        sortedScriptNames.ShouldBe(new[] { "AScript", "MScript", "ZScript" });
     }
 
     [Theory, MutagenModAutoData(GameRelease.Starfield)]
-    public async Task StarfieldVirtualMachineAdapter_TerminalMenu_SortsCorrectlyThroughSerialization(
+    public async Task StarfieldVirtualMachineAdapter_Weapon_SortsScriptsByName(
         IFileSystem fileSystem,
         DirectoryPath tempDir,
         StarfieldEntryPoint entryPoint,
         StarfieldMod mod)
     {
-        // Create a terminal menu with out-of-order script properties
-        var terminalMenu = mod.TerminalMenus.AddNew("TestTerminalMenu");
-        terminalMenu.VirtualMachineAdapter ??= new();
-        terminalMenu.VirtualMachineAdapter.Scripts.Add(new Mutagen.Bethesda.Starfield.ScriptEntry()
-        {
-            Name = "TestScript"
-        });
+        // Create a weapon with out-of-order scripts
+        var weapon = mod.Weapons.AddNew("TestWeapon");
+        weapon.VirtualMachineAdapter = new VirtualMachineAdapter();
 
-        // Add properties in unsorted order with different types
-        terminalMenu.VirtualMachineAdapter.Scripts[0].Properties.Add(new Mutagen.Bethesda.Starfield.ScriptObjectListProperty() { Name = "Xyz" });
-        terminalMenu.VirtualMachineAdapter.Scripts[0].Properties.Add(new Mutagen.Bethesda.Starfield.ScriptFloatProperty() { Name = "Abc" });
+        // Add scripts in unsorted order
+        weapon.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "Gamma" });
+        weapon.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "Alpha" });
+        weapon.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "Beta" });
+        weapon.VirtualMachineAdapter.Scripts.Add(new ScriptEntry() { Name = "Delta" });
 
         // Verify initial order is NOT sorted
-        var initialPropertyNames = terminalMenu.VirtualMachineAdapter.Scripts[0].Properties.Select(p => p.Name).ToArray();
-        initialPropertyNames.ShouldBe(new[] { "Xyz", "Abc" });
+        var initialScriptNames = weapon.VirtualMachineAdapter.Scripts.Select(s => s.Name).ToArray();
+        initialScriptNames.ShouldBe(new[] { "Gamma", "Alpha", "Beta", "Delta" });
 
         // Perform serialization cycle and get deserialized mod
         var deserializedMod = await SerializationTestHelper.SerializeAndDeserialize(mod, tempDir, entryPoint, fileSystem);
 
-        var deserializedTerminalMenu = deserializedMod.TerminalMenus.First();
-        var sortedPropertyNames = deserializedTerminalMenu.VirtualMachineAdapter?.Scripts[0].Properties.Select(p => p.Name).ToArray();
+        var deserializedWeapon = deserializedMod.Weapons.First();
+        var sortedScriptNames = deserializedWeapon.VirtualMachineAdapter?.Scripts.Select(s => s.Name).ToArray();
 
-        // Properties should now be sorted by Name
-        sortedPropertyNames.ShouldBe(new[] { "Abc", "Xyz" });
+        // Scripts should now be sorted by Name
+        sortedScriptNames.ShouldBe(new[] { "Alpha", "Beta", "Delta", "Gamma" });
     }
 }

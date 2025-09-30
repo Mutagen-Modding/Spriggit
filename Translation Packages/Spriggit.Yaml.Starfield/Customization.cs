@@ -115,3 +115,21 @@ public class ImpactDataSetCustomization : ICustomize<IImpactDataSetGetter>
             .ThenByField(x => x.Impact.FormKey);
     }
 }
+
+public class VirtualMachineAdapterCustomization : ICustomize<IAVirtualMachineAdapterGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IAVirtualMachineAdapterGetter> builder)
+    {
+        builder.SortList(x => x.Scripts)
+            .ByField(x => x.Name);
+    }
+}
+
+public class QuestAdapterCustomization : ICustomize<IQuestAdapterGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IQuestAdapterGetter> builder)
+    {
+        builder.SortList(x => x.Fragments)
+            .ByField(x => x.Stage);
+    }
+}

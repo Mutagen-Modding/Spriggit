@@ -135,3 +135,21 @@ public class NpcCustomization : ICustomize<INpcGetter>
             .ByField(x => x.AttackEvent);
     }
 }
+
+public class VirtualMachineAdapterCustomization : ICustomize<IAVirtualMachineAdapterGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IAVirtualMachineAdapterGetter> builder)
+    {
+        builder.SortList(x => x.Scripts)
+            .ByField(x => x.Name);
+    }
+}
+
+public class QuestAdapterCustomization : ICustomize<IQuestAdapterGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IQuestAdapterGetter> builder)
+    {
+        builder.SortList(x => x.Fragments)
+            .ByField(x => x.Stage);
+    }
+}

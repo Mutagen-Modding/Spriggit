@@ -75,6 +75,12 @@ dotnet test -v normal
 - Starfield requires "Master Style Input" - either DataFolder parameter or Known Masters in .spriggit file
 - Pre-build targets clear local NuGet cache for translation packages to ensure fresh downloads during development
 
+### File System Operations
+- **NEVER redirect to `nul`** - On Windows, `2>nul` creates unwanted files that Git tracks
+- Use proper null redirection: `2>/dev/null` (works on Windows with bash)
+- For temporary files, use `.claude/` subfolder or designated temp directories that are gitignored
+- Example: `ls directory 2>/dev/null || echo "Not found"` instead of `dir directory 2>nul`
+
 ## Accessing Source Generator Generated Files
 
 The translation packages use Mutagen.Bethesda.Serialization.SourceGenerator to generate serialization code for all Bethesda game records. By default, these generated files exist only during compilation and are not accessible on disk.
