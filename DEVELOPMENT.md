@@ -147,8 +147,8 @@ dotnet build
 # 2. Run ALL relevant tests (not just one) to verify functionality
 dotnet test --filter "YourTestClassName"
 
-# 3. Verify that ALL tests pass - any failing tests indicate incomplete work
-# 4. If tests fail, fix them before claiming the work is complete
+# 3. If tests fail, fix them before claiming the work is complete
+# 4. After targeted tests fail, then run ALL tests. Any failing tests indicate regression
 # 5. Never consider work "successful" when tests are failing
 ```
 
@@ -158,6 +158,7 @@ dotnet test --filter "YourTestClassName"
 - **Fix failing tests immediately** - do not ignore or postpone test failures
 - **Verify tests both compile AND pass execution** - compilation success alone is not sufficient
 - **Test failures indicate incomplete or incorrect implementation** - address the root cause
+- **Test unrelated to current feature indicate regression** - address the root cause
 
 **Common Mistakes to Avoid:**
 - ❌ Only running one test and assuming others work
