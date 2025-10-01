@@ -11,6 +11,7 @@ public class Customization : ICustomize
             .OmitLastModifiedData()
             .OmitTimestampData()
             .OmitUnknownGroupData()
+            .OmitUnusedConditionDataFields()
             .FilePerRecord();
     }
 }
