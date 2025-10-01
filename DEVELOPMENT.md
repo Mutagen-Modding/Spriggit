@@ -133,8 +133,20 @@ Each record serialization file contains:
 - `Deserialize<TReadObject>()` - Reads record from YAML/JSON
 - `HasSerializationItems()` - Determines if record needs serialization
 - `DeserializeInto<TReadObject>()` - Deserializes into existing object
+    
+## Development Workflow
 
-## Development Best Practices
+### Code Quality
+- `dotnet format` required before commits (CI will fail without it)
+- Line endings: CRLF for .NET projects per .editorconfig
+
+### File System Operations
+- **NEVER redirect to `nul`** - On Windows, `2>nul` creates unwanted files that Git tracks
+- Use proper null redirection: `2>/dev/null` (works on Windows with bash)
+- For temporary files, use `.claude/` subfolder or designated temp directories that are gitignored
+- Example: `ls directory 2>/dev/null || echo "Not found"` instead of `dir directory 2>nul`
+
+### Best Practices
 
 **CRITICAL: Always build and run tests after implementing changes to confirm correctness:**
 
