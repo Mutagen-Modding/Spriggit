@@ -23,7 +23,7 @@ public class SpriggitEngine(
     PluginBackupCreator pluginBackupCreator,
     IModFilesMover modFilesMover,
     LocalizeEnforcer localizeEnforcer,
-    PostSerializeChecker postSerializeChecker)
+    PostSerializeChecker postSerializeChecker) : ISpriggitEngine
 {
     public async Task Serialize(
         ModPath bethesdaPluginPath, 

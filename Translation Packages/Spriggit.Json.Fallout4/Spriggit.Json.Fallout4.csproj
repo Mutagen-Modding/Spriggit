@@ -13,6 +13,8 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<RootNamespace>Spriggit.Json.Fallout4</RootNamespace>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>GeneratedFiles</CompilerGeneratedFilesOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,6 +29,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Spriggit.Core\Spriggit.Core.csproj" />
 		<ProjectReference Include="..\Spriggit.TranslationPackages\Spriggit.TranslationPackages.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="GeneratedFiles/**" />
+		<None Remove="GeneratedFiles/**" />
 	</ItemGroup>
 
 </Project>

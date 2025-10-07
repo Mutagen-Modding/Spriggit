@@ -4,17 +4,24 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Mutagen.Bethesda.Skyrim"/>
+        <PackageReference Include="Mutagen.Bethesda.Fallout4"/>
         <PackageReference Include="Mutagen.Bethesda.Starfield"/>
         <PackageReference Include="Mutagen.Bethesda.Testing"/>
         <PackageReference Include="Noggog.Testing"/>
         <PackageReference Include="xunit"/>
         <PackageReference Include="xunit.runner.console"/>
-        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.runner.visualstudio">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Spriggit.CLI.Lib\Spriggit.CLI.Lib.csproj" />
         <ProjectReference Include="..\Spriggit.Engine\Spriggit.Engine.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Skyrim\Spriggit.Yaml.Skyrim.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Fallout4\Spriggit.Yaml.Fallout4.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Oblivion\Spriggit.Yaml.Oblivion.csproj"/>
     </ItemGroup>

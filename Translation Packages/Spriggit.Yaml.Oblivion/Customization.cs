@@ -10,6 +10,8 @@ public class Customization : ICustomize
         builder
             .OmitLastModifiedData()
             .OmitTimestampData()
+            .OmitUnknownGroupData()
+            .OmitUnusedConditionDataFields()
             .FilePerRecord();
     }
 }
@@ -30,6 +32,10 @@ public class CellCustomization : ICustomize<ICellGetter>
         builder.EmbedRecordsInSameFile(x => x.Temporary)
             .EmbedRecordsInSameFile(x => x.Persistent)
             .EmbedRecordsInSameFile(x => x.Landscape);
+        builder.SortList(x => x.Persistent)
+            .ByField(x => x.FormKey);
+        builder.SortList(x => x.Temporary)
+            .ByField(x => x.FormKey);
     }
 }
 

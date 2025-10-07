@@ -75,6 +75,31 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 	
 [:octicons-arrow-right-24: Backups](backups.md)
 
+## Upgrade Spriggit Version
+`upgrade`
+
+This command upgrades existing Spriggit files to a newer package version. It deserializes the mod files using the current version, updates the spriggit-meta.json to the specified version, and re-serializes the files with the new translation package.
+
+### Typical
+`.\Path\To\Spriggit.CLI.exe upgrade -p "C:\MyGitRepository\SomeMod.esp\" -v "1.2.3"`
+
+### Parameters
+| Short | Long | Required | Description |
+| ---- | ---- | ---- | ---- |
+| `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
+| `-v` | `--PackageVersion` | Required | Spriggit serialization nuget package version to upgrade to |
+| `-d` | `--DataFolder` | Semi-Optional | Path to the data folder for reference. [Read More](#master-style-input) |
+| `-s` | `--SkipGitOperations` | Optional | Skip git operations (don't check for uncommitted changes or auto-commit) |
+
+!!! warning "Backup Recommended"
+    It's recommended to backup your Spriggit files before upgrading, as the process involves deserializing and re-serializing your mod data.
+
+!!! tip "Git Integration"
+    By default, the upgrade command checks for uncommitted changes before starting and automatically commits the upgrade changes when complete. Use `--SkipGitOperations` to disable this behavior if you want to manage git operations manually.
+
+!!! bug "Starfield"
+    Starfield must supply [Master Style Input](#master-style-input)
+
 ## FormID Collision Fixing
 `formid-collision`
 
@@ -93,31 +118,6 @@ This command helps detangle colliding FormIDs that result after a Git Merge.
 | ---- | ---- | ---- | ---- |
 | `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
 | `-d` | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
-
-
-## Pipeline commands
-
-These are a collection of commands with the goal of helping transform mods in a way that help reduce "noise" or otherwise customize things during serialization.
-
-They typically work in a "pipeline" where the first should be run with the original mod as input, and then output to a temporary location for the next one to read in as input.
-
-The final capstone should then be the `serialize` command once all the other customization are done.
-
-### Script Property Sorting
-`sort-script-properties`
-
-This command helps derandomize script properties, which often change order randomly after edits in the CK
-
-#### Typical
-`.\Path\To\Spriggit.CLI.exe sort-script-properties -i "C:\MyGitRepository\SomeMod.esp" -o "Some\Temp\Path\SomeMod.esp"`
-
-#### Parameters
-| Short | Long | Required | Description |
-| ---- | ---- | ---- | ---- |
-| `-i` | `--InputPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
-| `-o` | `--OutputPath` | Required | Path to export the mod with the properties sorted |
-| `-g` | `--GameRelease` | Semi-Optional | Game release that the plugin is related to.  Required if no `.spriggit` file is found. |
-| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 
 ## Master Style Input
 Newer games, like Starfield, require extra inputs in order to translate.  These games need information from the source files of every master they list in a way that older games do not.  As such, you either need to provide:
