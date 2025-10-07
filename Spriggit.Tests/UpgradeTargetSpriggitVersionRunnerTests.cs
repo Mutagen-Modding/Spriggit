@@ -89,14 +89,16 @@ public class UpgradeTargetSpriggitVersionRunnerTests : IDisposable
             command.SpriggitPath);
     }
     
-    [Theory, MutagenAutoData(FileSystem: TargetFileSystem.Real)]
+    [Theory, MutagenAutoData]
     public async Task Execute_WithSpecificPackageVersion_UpdatesMetaVersion(
-        DirectoryPath existingSpriggitPath,
         ModKey modKey,
         [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
+        var existingSpriggitPath = Path.Combine(_tempFolder.Dir, nameof(Execute_WithSpecificPackageVersion_UpdatesMetaVersion));
+        Directory.CreateDirectory(existingSpriggitPath);
+
         var command = new UpgradeTargetSpriggitVersionCommand
         {
             SkipGitOperations = true, // Skip git operations for this test
