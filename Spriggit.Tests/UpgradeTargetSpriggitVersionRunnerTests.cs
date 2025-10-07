@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Noggog;
 using Noggog.GitRepository;
 using Noggog.IO;
+using Noggog.Testing.AutoFixture;
 using NSubstitute;
 using Serilog;
 using Shouldly;
@@ -88,24 +89,20 @@ public class UpgradeTargetSpriggitVersionRunnerTests : IDisposable
             command.SpriggitPath);
     }
     
-    [Theory, MutagenAutoData]
+    [Theory, MutagenAutoData(FileSystem: TargetFileSystem.Real)]
     public async Task Execute_WithSpecificPackageVersion_UpdatesMetaVersion(
-        DirectoryPath existingsSpriggitPath,
+        DirectoryPath existingSpriggitPath,
         ModKey modKey,
         [Frozen] ILogger logger,
         [Frozen] ISpriggitEngine engine,
         UpgradeTargetSpriggitVersionRunner sut)
     {
-        // Arrange
-        // Create the directory first
-        Directory.CreateDirectory(existingsSpriggitPath);
-
         var command = new UpgradeTargetSpriggitVersionCommand
         {
             SkipGitOperations = true, // Skip git operations for this test
             PackageVersion = "0.40.0",
-            SpriggitPath = existingsSpriggitPath,
-            DataFolder = Path.Combine(existingsSpriggitPath, "Data")
+            SpriggitPath = existingSpriggitPath,
+            DataFolder = Path.Combine(existingSpriggitPath, "Data")
         };
 
         var originalMeta = new SpriggitModKeyMeta(
@@ -155,7 +152,7 @@ public class UpgradeTargetSpriggitVersionRunnerTests : IDisposable
             Arg.Any<CancellationToken?>());
     
         // Verify the meta file was actually updated
-        var metaPath = Path.Combine(existingsSpriggitPath, "spriggit-meta.json");
+        var metaPath = Path.Combine(existingSpriggitPath, "spriggit-meta.json");
         var updatedMetaJson = _fileSystem.File.ReadAllText(metaPath);
         var updatedMeta = JsonConvert.DeserializeObject<SpriggitModKeyMetaSerialize>(updatedMetaJson, SpriggitExternalMetaPersister.JsonSettings);
         updatedMeta!.Version.ShouldBe(command.PackageVersion);
