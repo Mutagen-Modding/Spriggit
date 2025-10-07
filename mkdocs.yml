@@ -64,10 +64,12 @@ nav:
   - Command Line Interface: cli.md
   - .spriggit File: spriggit-file.md
   - Translation Packages: translation-packages.md
-  - Sorting: sorting.md
   - Best Practices:
     - Upgrade Spriggit Versions: upgrade-practices.md
   - Merge Conflicts: merge-conflicts.md
+  - Mutations:
+    - Sorting: sorting.md
+    - Omissions: omissions.md
   - Troubleshooting:
     - Backups: backups.md
     - Unexpected Records: unexpected-records.md
