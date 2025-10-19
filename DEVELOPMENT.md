@@ -19,7 +19,9 @@ The solution follows a layered architecture:
 
 The system uses a plugin architecture where translation logic is distributed as NuGet packages rather than being embedded in the CLI/UI, allowing for versioned translations and backward compatibility.
 
-## Build Commands
+## Development Commands
+
+### Building
 
 ```bash
 # Build entire solution
@@ -35,7 +37,7 @@ dotnet build -c Release
 dotnet pack
 ```
 
-## Test Commands
+### Testing
 
 ```bash
 # Run all tests
@@ -47,6 +49,22 @@ dotnet test Spriggit.Tests/Spriggit.Tests.csproj
 # Run with verbose output
 dotnet test -v normal
 ```
+
+### Releases
+- Create release tags using semantic versioning format: `<major>.<minor>.<patch>`
+- Always include the patch number, even if it's zero (e.g., `3.1.0`, not `3.1`)
+- **Do not prefix with `v`** (e.g., use `3.1.0`, not `v3.1.0`)
+- This format is required for GitVersion compatibility
+
+#### Creating GitHub Release Drafts
+1. Find the last release tag: `git tag --sort=-version:refname`
+2. Get commits since last release: `git log --oneline <last-tag>..HEAD`
+3. Construct release notes by categorizing commits:
+   - **Enhancements**: New features, performance improvements, major changes
+   - **Bug Fixes**: Bug fixes and corrections
+   - **Testing & Documentation**: Test additions, documentation updates
+4. Create draft release: `gh release create <version> --draft --title "<version>" --notes "<release-notes>" --target main`
+5. Include full changelog link: `**Full Changelog**: https://github.com/Mutagen-Modding/Spriggit/compare/<last-tag>...<new-tag>`
 
 ## Project Structure
 
