@@ -14,6 +14,7 @@ on:
 
 jobs:
   activity-short-circuit:
+    if: github.repository == 'Mutagen-Modding/Spriggit'
     runs-on: ubuntu-latest
     outputs:
       same_sha: ${{ steps.check.outputs.same_sha }}
