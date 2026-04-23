@@ -163,7 +163,7 @@ public class LinkInputVm : ViewModel
                     new SpriggitMeta(
                         new SpriggitSource()
                         {
-                            PackageName = PackageName,
+                            PackageName = package.Value,
                             Version = Version
                         },
                         Release),
