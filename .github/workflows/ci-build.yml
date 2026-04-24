@@ -27,19 +27,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         sln:
-          - Spriggit.sln
-          - Spriggit.Linux.sln
+          - Spriggit.slnx
+          - Spriggit.Linux.slnx
         exclude:
           - os: ubuntu-latest
-            sln: Spriggit.sln
-          - os: ubuntu-latest
-            sln: Spriggit.Tests.Windows.sln
+            sln: Spriggit.slnx
           - os: macos-latest
-            sln: Spriggit.sln
-          - os: macos-latest
-            sln: Spriggit.Tests.Windows.sln
+            sln: Spriggit.slnx
           - os: windows-latest
-            sln: Spriggit.Linux.sln
+            sln: Spriggit.Linux.slnx
           
     steps:
     - uses: actions/checkout@v4

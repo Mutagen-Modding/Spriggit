@@ -14,6 +14,7 @@ on:
 
 jobs:
   activity-short-circuit:
+    if: github.repository == 'Mutagen-Modding/Spriggit'
     runs-on: ubuntu-latest
     outputs:
       same_sha: ${{ steps.check.outputs.same_sha }}
@@ -50,19 +51,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         sln:
-          - Spriggit.sln
-          - Spriggit.Linux.sln
+          - Spriggit.slnx
+          - Spriggit.Linux.slnx
         exclude:
           - os: ubuntu-latest
-            sln: Spriggit.sln
-          - os: ubuntu-latest
-            sln: Spriggit.Tests.Windows.sln
+            sln: Spriggit.slnx
           - os: macos-latest
-            sln: Spriggit.sln
-          - os: macos-latest
-            sln: Spriggit.Tests.Windows.sln
+            sln: Spriggit.slnx
           - os: windows-latest
-            sln: Spriggit.Linux.sln
+            sln: Spriggit.Linux.slnx
           
     steps:
     - uses: actions/checkout@v4
@@ -115,13 +112,13 @@ jobs:
       uses: gittools/actions/gitversion/execute@v3.0.3
     - name: Install dependencies
       run: |
-        dotnet clean Spriggit.sln -c Release && dotnet nuget locals all --clear
-        dotnet restore Spriggit.sln
+        dotnet clean Spriggit.slnx -c Release && dotnet nuget locals all --clear
+        dotnet restore Spriggit.slnx
     - name: Build
-      run: dotnet build Spriggit.sln -c Release --no-restore /p:GeneratePackageOnBuild=false
+      run: dotnet build Spriggit.slnx -c Release --no-restore /p:GeneratePackageOnBuild=false
     - name: Pack
       run: |
-        dotnet pack Spriggit.sln -c Release --no-build --no-restore -o out --include-symbols -p:SymbolPackageFormat=snupkg
+        dotnet pack Spriggit.slnx -c Release --no-build --no-restore -o out --include-symbols -p:SymbolPackageFormat=snupkg
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && github.event_name == 'release' }}
       run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true

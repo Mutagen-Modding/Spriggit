@@ -126,11 +126,11 @@ public class LinkVm : ViewModel
 
         SyncToModCommand = ReactiveCommand.Create<Unit>(
             execute: _ => { },
-            canRun.ObserveOnGui());
+            canRun.ObserveOnRxAppGui());
         CancelSyncToModCommand = ReactiveCommand.Create(
             () => { },
             canExecute: this.WhenAnyValue(x => x.State).Select(x => x == SyncState.Mod)
-                .ObserveOnGui());
+                .ObserveOnRxAppGui());
         WrapTranslation(
             SyncToModCommand.EndingExecution(),
             CancelSyncToModCommand.EndingExecution(),
@@ -143,11 +143,11 @@ public class LinkVm : ViewModel
                 canRun,
                 Input.ModPathPicker.WhenAnyValue(x => x.Exists),
                 (r, e) => r && e)
-                .ObserveOnGui());
+                .ObserveOnRxAppGui());
         CancelSyncToGitCommand = ReactiveCommand.Create(
             () => { },
             canExecute: this.WhenAnyValue(x => x.State).Select(x => x == SyncState.Git)
-                .ObserveOnGui());
+                .ObserveOnRxAppGui());
         WrapTranslation(
             SyncToGitCommand.EndingExecution(),
             CancelSyncToGitCommand.EndingExecution(),

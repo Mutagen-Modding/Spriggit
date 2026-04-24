@@ -10,6 +10,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
+using Noggog.Reactive;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -27,24 +28,11 @@ public class LinkInputVm : ViewModel
 {
     private readonly WriteSpriggitConfig _writeSpriggitConfig;
 
-    public PathPickerVM ModPathPicker { get; } = new()
-    {
-        ExistCheckOption = PathPickerVM.CheckOptions.On,
-        PathType = PathPickerVM.PathTypeOptions.File
-    };
-    
-    public PathPickerVM GitFolderPicker { get; } = new()
-    {
-        PathType = PathPickerVM.PathTypeOptions.Folder,
-        ExistCheckOption = PathPickerVM.CheckOptions.Off,
-        MissingIsError = false,
-    };
-    
-    public PathPickerVM DataFolderPicker { get; } = new()
-    {
-        PathType = PathPickerVM.PathTypeOptions.Folder,
-        ExistCheckOption = PathPickerVM.CheckOptions.IfPathNotEmpty
-    };
+    public PathPickerVM ModPathPicker { get; }
+
+    public PathPickerVM GitFolderPicker { get; }
+
+    public PathPickerVM DataFolderPicker { get; }
 
     [Reactive] public GameRelease Release { get; set; } = GameRelease.SkyrimSE;
 
@@ -79,11 +67,28 @@ public class LinkInputVm : ViewModel
     public LinkInputVm(
         ILogger logger,
         INavigateTo navigateTo,
+        ISchedulerProvider schedulerProvider,
         WriteSpriggitConfig writeSpriggitConfig,
         SpriggitFileLocator locator,
         LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {
         _writeSpriggitConfig = writeSpriggitConfig;
+        ModPathPicker = new PathPickerVM(schedulerProvider)
+        {
+            ExistCheckOption = PathPickerVM.CheckOptions.On,
+            PathType = PathPickerVM.PathTypeOptions.File,
+        };
+        GitFolderPicker = new PathPickerVM(schedulerProvider)
+        {
+            PathType = PathPickerVM.PathTypeOptions.Folder,
+            ExistCheckOption = PathPickerVM.CheckOptions.Off,
+            MissingIsError = false,
+        };
+        DataFolderPicker = new PathPickerVM(schedulerProvider)
+        {
+            PathType = PathPickerVM.PathTypeOptions.Folder,
+            ExistCheckOption = PathPickerVM.CheckOptions.IfPathNotEmpty,
+        };
         ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp,.esl,.esm"));
 
         _inError = Observable.CombineLatest(
@@ -163,7 +168,7 @@ public class LinkInputVm : ViewModel
                     new SpriggitMeta(
                         new SpriggitSource()
                         {
-                            PackageName = PackageName,
+                            PackageName = package.Value,
                             Version = Version
                         },
                         Release),
@@ -174,7 +179,7 @@ public class LinkInputVm : ViewModel
 
         _needsDataFolder = this.WhenAnyValue(x => x.Release)
             .Select(x => x == GameRelease.Starfield)
-            .ToGuiProperty(this, nameof(NeedsDataFolder));
+            .ToRxAppGuiProperty(this, nameof(NeedsDataFolder));
     }
 
     public void Absorb(LinkSettings settings)

@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+  </Folder>
+  <Folder Name="/Translation Packages/">
+    <Project Path="Translation Packages/Spriggit.Json.Fallout4/Spriggit.Json.Fallout4.csproj" />
+    <Project Path="Translation Packages/Spriggit.Json.Oblivion/Spriggit.Json.Oblivion.csproj" />
+    <Project Path="Translation Packages/Spriggit.Json.Skyrim/Spriggit.Json.Skyrim.csproj" />
+    <Project Path="Translation Packages/Spriggit.Json.Starfield/Spriggit.Json.Starfield.csproj" />
+    <Project Path="Translation Packages/Spriggit.Yaml.Fallout4/Spriggit.Yaml.Fallout4.csproj" />
+    <Project Path="Translation Packages/Spriggit.Yaml.Oblivion/Spriggit.Yaml.Oblivion.csproj" />
+    <Project Path="Translation Packages/Spriggit.Yaml.Skyrim/Spriggit.Yaml.Skyrim.csproj" />
+    <Project Path="Translation Packages/Spriggit.Yaml.Starfield/Spriggit.Yaml.Starfield.csproj" />
+  </Folder>
+  <Project Path="Spriggit.CLI/Spriggit.CLI.csproj" />
+  <Project Path="Spriggit.Core/Spriggit.Core.csproj" />
+  <Project Path="Spriggit.Engine/Spriggit.Engine.csproj" />
+  <Project Path="Spriggit.Tests/Spriggit.Tests.csproj" />
+</Solution>
