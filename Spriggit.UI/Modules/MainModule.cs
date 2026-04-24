@@ -2,6 +2,7 @@
 using Autofac;
 using Noggog.Autofac;
 using Noggog.Processes.DI;
+using Noggog.WPF;
 using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
 using Spriggit.UI.ViewModels.Singletons;
@@ -16,6 +17,9 @@ public class MainModule : Autofac.Module
         builder.RegisterModule<EngineModule>();
 
         builder.RegisterType<FileSystem>().As<IFileSystem>()
+            .SingleInstance();
+        builder.RegisterType<SchedulerProvider>()
+            .AsImplementedInterfaces()
             .SingleInstance();
         builder.RegisterType<ProcessFactory>()
             .AsImplementedInterfaces()
