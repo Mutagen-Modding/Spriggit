@@ -1,21 +1,44 @@
-﻿using Mutagen.Bethesda;
+using System.Linq;
+using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
 
 namespace Spriggit.Core;
 
 public record SpriggitFile(
     SpriggitMeta? Meta,
-    KnownMaster[] KnownMasters);
+    KnownMaster[] KnownMasters)
+{
+    public override string ToString()
+    {
+        return $"{nameof(SpriggitFile)} {{ {nameof(Meta)} = {Meta?.ToString() ?? "null"}, " +
+               $"{nameof(KnownMasters)} = {FormatKnownMasters(KnownMasters)} }}";
+    }
+
+    internal static string FormatKnownMasters(KnownMaster[]? knownMasters)
+    {
+        if (knownMasters == null) return "null";
+        return $"[{string.Join(", ", knownMasters.Select(x => x.ToString()))}]";
+    }
+}
 
 public record KnownMaster(
-    ModKey ModKey, 
+    ModKey ModKey,
     MasterStyle Style);
-    
+
 public record SpriggitFileSerialize(
-    string? PackageName, 
-    string? Version, 
+    string? PackageName,
+    string? Version,
     GameRelease? Release,
-    KnownMaster[]? KnownMasters);
+    KnownMaster[]? KnownMasters)
+{
+    public override string ToString()
+    {
+        return $"{nameof(SpriggitFileSerialize)} {{ {nameof(PackageName)} = {PackageName ?? "null"}, " +
+               $"{nameof(Version)} = {Version ?? "null"}, " +
+               $"{nameof(Release)} = {Release?.ToString() ?? "null"}, " +
+               $"{nameof(KnownMasters)} = {SpriggitFile.FormatKnownMasters(KnownMasters)} }}";
+    }
+}
 
 public record SpriggitMeta(SpriggitSource Source, GameRelease Release);
 
