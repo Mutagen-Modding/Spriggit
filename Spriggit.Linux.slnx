@@ -12,11 +12,13 @@
     <Project Path="Translation Packages/Spriggit.Json.Oblivion/Spriggit.Json.Oblivion.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Skyrim/Spriggit.Json.Skyrim.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Starfield/Spriggit.Json.Starfield.csproj" />
+    <Project Path="Translation Packages/Spriggit.TranslationPackages/Spriggit.TranslationPackages.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Fallout4/Spriggit.Yaml.Fallout4.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Oblivion/Spriggit.Yaml.Oblivion.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Skyrim/Spriggit.Yaml.Skyrim.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Starfield/Spriggit.Yaml.Starfield.csproj" />
   </Folder>
+  <Project Path="Spriggit.CLI.Lib/Spriggit.CLI.Lib.csproj" />
   <Project Path="Spriggit.CLI/Spriggit.CLI.csproj" />
   <Project Path="Spriggit.Core/Spriggit.Core.csproj" />
   <Project Path="Spriggit.Engine/Spriggit.Engine.csproj" />
