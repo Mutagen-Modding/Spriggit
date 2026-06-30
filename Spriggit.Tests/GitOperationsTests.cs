@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using LibGit2Sharp;
-using Noggog;
 using Noggog.GitRepository;
 using Noggog.IO;
 using NSubstitute;

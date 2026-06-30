@@ -1,15 +1,12 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Binary.Parameters;
-using Mutagen.Bethesda.Serialization.Utility;
 using Mutagen.Bethesda.Serialization.Yaml;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
-using Spriggit.TranslationPackages;
 
 namespace Spriggit.Yaml.Skyrim;
 

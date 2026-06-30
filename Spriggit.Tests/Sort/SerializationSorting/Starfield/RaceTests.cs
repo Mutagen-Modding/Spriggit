@@ -1,13 +1,10 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Starfield;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Shouldly;
-using Spriggit.Core;
 using Xunit;
 using StarfieldEntryPoint = Spriggit.Yaml.Starfield.EntryPoint;
 

@@ -1,12 +1,9 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
-using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Testing.AutoData;
 using Noggog;
 using Shouldly;
-using Spriggit.Core;
 using Xunit;
 using Fallout4EntryPoint = Spriggit.Yaml.Fallout4.EntryPoint;
 

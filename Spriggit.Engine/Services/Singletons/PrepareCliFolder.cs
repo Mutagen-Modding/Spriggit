@@ -1,5 +1,4 @@
-﻿using System.IO.Abstractions;
-using Noggog;
+﻿using Noggog;
 using Noggog.IO;
 using NuGet.Versioning;
 

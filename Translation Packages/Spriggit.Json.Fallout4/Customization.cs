@@ -1,4 +1,3 @@
-using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Serialization.Customizations;
 
 namespace Spriggit.Json.Fallout4;
