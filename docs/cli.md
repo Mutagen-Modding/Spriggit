@@ -37,6 +37,7 @@ The valid list of GameReleases are listed [here](https://github.com/Mutagen-Modd
 
 - Oblivion
 - OblivionRE
+- Fallout3
 - SkyrimLE
 - SkyrimSE
 - SkyrimVR
