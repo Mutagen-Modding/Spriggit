@@ -8,11 +8,13 @@
     <File Path="LICENSE" />
   </Folder>
   <Folder Name="/Translation Packages/">
+    <Project Path="Translation Packages/Spriggit.Json.Fallout3/Spriggit.Json.Fallout3.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Fallout4/Spriggit.Json.Fallout4.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Oblivion/Spriggit.Json.Oblivion.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Skyrim/Spriggit.Json.Skyrim.csproj" />
     <Project Path="Translation Packages/Spriggit.Json.Starfield/Spriggit.Json.Starfield.csproj" />
     <Project Path="Translation Packages/Spriggit.TranslationPackages/Spriggit.TranslationPackages.csproj" />
+    <Project Path="Translation Packages/Spriggit.Yaml.Fallout3/Spriggit.Yaml.Fallout3.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Fallout4/Spriggit.Yaml.Fallout4.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Oblivion/Spriggit.Yaml.Oblivion.csproj" />
     <Project Path="Translation Packages/Spriggit.Yaml.Skyrim/Spriggit.Yaml.Skyrim.csproj" />
