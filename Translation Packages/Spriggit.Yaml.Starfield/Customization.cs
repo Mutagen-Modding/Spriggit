@@ -1,5 +1,4 @@
 ﻿using Mutagen.Bethesda.Serialization.Customizations;
-using Mutagen.Bethesda.Starfield;
 
 namespace Spriggit.Yaml.Starfield;
 

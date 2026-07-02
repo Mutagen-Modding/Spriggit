@@ -1,0 +1,48 @@
+using Mutagen.Bethesda.Fallout3;
+using Mutagen.Bethesda.Serialization.Customizations;
+
+namespace Spriggit.Yaml.Fallout3;
+
+public class Customization : ICustomize
+{
+    public void Customize(ICustomizationBuilder builder)
+    {
+        builder
+            .OmitLastModifiedData()
+            .OmitTimestampData()
+            .OmitUnknownGroupData()
+            .OmitUnusedConditionDataFields()
+            .FilePerRecord();
+    }
+}
+
+public class ModHeaderStatsCustomization : ICustomize<IModStatsGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IModStatsGetter> builder)
+    {
+        builder.Omit(x => x.NextFormID);
+        builder.Omit(x => x.NumRecords);
+    }
+}
+
+public class CellCustomization : ICustomize<ICellGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<ICellGetter> builder)
+    {
+        builder.EmbedRecordsInSameFile(x => x.Temporary)
+            .EmbedRecordsInSameFile(x => x.Persistent)
+            .EmbedRecordsInSameFile(x => x.Landscape);
+        builder.SortList(x => x.Persistent)
+            .ByField(x => x.FormKey);
+        builder.SortList(x => x.Temporary)
+            .ByField(x => x.FormKey);
+    }
+}
+
+public class WorldspaceCustomization : ICustomize<IWorldspaceGetter>
+{
+    public void CustomizeFor(ICustomizationBuilder<IWorldspaceGetter> builder)
+    {
+        builder.EmbedRecordsInSameFile(x => x.TopCell);
+    }
+}

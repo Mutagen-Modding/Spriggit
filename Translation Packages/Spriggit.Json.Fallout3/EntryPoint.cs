@@ -1,20 +1,22 @@
 using System.IO.Abstractions;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Plugins.Records;
-using Mutagen.Bethesda.Serialization.Yaml;
-using Mutagen.Bethesda.Starfield;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Serialization.Newtonsoft;
+using Mutagen.Bethesda.Serialization.Utility;
+using Mutagen.Bethesda.Fallout3;
 using Noggog;
 using Noggog.IO;
 using Noggog.WorkEngine;
 using Spriggit.Core;
+using Spriggit.TranslationPackages;
 
-namespace Spriggit.Yaml.Starfield;
+namespace Spriggit.Json.Fallout3;
 
 public class EntryPoint : IEntryPoint
 {
     public async Task Serialize(
-        ModPath modPath, 
+        ModPath modPath,
         DirectoryPath outputDir,
         DirectoryPath? dataPath,
         KnownMaster[] knownMasters,
@@ -27,19 +29,14 @@ public class EntryPoint : IEntryPoint
         CancellationToken cancel)
     {
         fileSystem = fileSystem.GetOrDefault();
-        using var modGetter = StarfieldMod
-            .Create(release.ToStarfieldRelease())
+        using var modGetter = Fallout3Mod
+            .Create(release.ToFallout3Release())
             .FromPath(modPath)
-            .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
-            .WithKnownMasters(
-                knownMasters.Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
-                    .ToArray())
             .ThrowIfUnknownSubrecord(shouldThrow: throwOnUnknown)
             .Construct();
-        
-        await MutagenYamlConverter.Instance.Serialize(
+        await MutagenJsonConverter.Instance.Serialize(
             modGetter,
             outputDir,
             workDropoff: workDropoff,
@@ -48,7 +45,7 @@ public class EntryPoint : IEntryPoint
             extraMeta: meta,
             cancel: cancel);
     }
- 
+
     public async Task Deserialize(
         string inputPath,
         string outputPath,
@@ -59,7 +56,7 @@ public class EntryPoint : IEntryPoint
         ICreateStream? streamCreator,
         CancellationToken cancel)
     {
-        var mod = await MutagenYamlConverter.Instance.Deserialize(
+        var mod = await MutagenJsonConverter.Instance.Deserialize(
             inputPath,
             workDropoff: workDropoff,
             fileSystem: fileSystem,
@@ -70,12 +67,9 @@ public class EntryPoint : IEntryPoint
             .WithLoadOrderFromHeaderMasters()
             .WithDataFolder(dataPath)
             .WithFileSystem(fileSystem)
-            .WithKnownMasters(
-                knownMasters.Select(x => new KeyedMasterStyle(x.ModKey, x.Style))
-                    .ToArray())
             .AddNonOpinionatedWriteOptions()
             .WriteAsync();
     }
 
-    private static readonly Mutagen.Bethesda.Serialization.Yaml.YamlSerializationReaderKernel ReaderKernel = new();
+    private static readonly Mutagen.Bethesda.Serialization.Newtonsoft.NewtonsoftJsonSerializationReaderKernel ReaderKernel = new();
 }

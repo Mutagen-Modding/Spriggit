@@ -1,6 +1,5 @@
 ﻿using Mutagen.Bethesda;
 using Noggog;
-using NuGet.Configuration;
 using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;

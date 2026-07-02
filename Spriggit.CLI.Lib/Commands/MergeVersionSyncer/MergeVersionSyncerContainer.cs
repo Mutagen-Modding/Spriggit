@@ -3,9 +3,7 @@ using Noggog.IO;
 using Noggog.Processes.DI;
 using Noggog.WorkEngine;
 using Serilog;
-using Spriggit.Core;
 using Spriggit.Core.Services.Singletons;
-using Spriggit.Engine.Merge;
 using Spriggit.Engine.Services.Singletons;
 using StrongInject;
 

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
@@ -24,6 +24,7 @@
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Fallout4\Spriggit.Yaml.Fallout4.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Starfield\Spriggit.Yaml.Starfield.csproj"/>
         <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Oblivion\Spriggit.Yaml.Oblivion.csproj"/>
+        <ProjectReference Include="..\Translation Packages\Spriggit.Yaml.Fallout3\Spriggit.Yaml.Fallout3.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -33,6 +34,11 @@
         <BuildAction>Compile</BuildAction>
       </Compile>
       <Compile Update="Utility\TestOblivionUtil.cs">
+        <CodeLanguage>cs</CodeLanguage>
+        <DefaultPackFolder>content</DefaultPackFolder>
+        <BuildAction>Compile</BuildAction>
+      </Compile>
+      <Compile Update="Utility\TestFallout3Util.cs">
         <CodeLanguage>cs</CodeLanguage>
         <DefaultPackFolder>content</DefaultPackFolder>
         <BuildAction>Compile</BuildAction>

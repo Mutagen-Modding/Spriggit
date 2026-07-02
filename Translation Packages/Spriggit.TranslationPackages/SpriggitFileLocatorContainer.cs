@@ -1,6 +1,5 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
-using Spriggit.Core;
 using Spriggit.Core.Services.Singletons;
 using StrongInject;
 
