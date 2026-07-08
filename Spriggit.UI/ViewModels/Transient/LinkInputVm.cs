@@ -11,6 +11,7 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Starfield;
 using Noggog;
 using Noggog.Reactive;
+using Noggog.UI;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -68,28 +69,29 @@ public class LinkInputVm : ViewModel
         ILogger logger,
         INavigateTo navigateTo,
         ISchedulerProvider schedulerProvider,
+        IPathPickerDialogProvider dialogProvider,
         WriteSpriggitConfig writeSpriggitConfig,
         SpriggitFileLocator locator,
         LinkSourceCategoryToPackageName linkSourceCategoryToPackageName)
     {
         _writeSpriggitConfig = writeSpriggitConfig;
-        ModPathPicker = new PathPickerVM(schedulerProvider)
+        ModPathPicker = new PathPickerVM(schedulerProvider, dialogProvider)
         {
             ExistCheckOption = PathPickerVM.CheckOptions.On,
             PathType = PathPickerVM.PathTypeOptions.File,
         };
-        GitFolderPicker = new PathPickerVM(schedulerProvider)
+        GitFolderPicker = new PathPickerVM(schedulerProvider, dialogProvider)
         {
             PathType = PathPickerVM.PathTypeOptions.Folder,
             ExistCheckOption = PathPickerVM.CheckOptions.Off,
             MissingIsError = false,
         };
-        DataFolderPicker = new PathPickerVM(schedulerProvider)
+        DataFolderPicker = new PathPickerVM(schedulerProvider, dialogProvider)
         {
             PathType = PathPickerVM.PathTypeOptions.Folder,
             ExistCheckOption = PathPickerVM.CheckOptions.IfPathNotEmpty,
         };
-        ModPathPicker.Filters.Add(new CommonFileDialogFilter("Plugin", ".esp,.esl,.esm"));
+        ModPathPicker.Filters.Add(new DialogFileFilter("Plugin", ".esp,.esl,.esm"));
 
         _inError = Observable.CombineLatest(
                 this.WhenAnyValue(x => x.ModPathPicker.InError),
@@ -106,12 +108,12 @@ public class LinkInputVm : ViewModel
             .ToProperty(this, nameof(SpriggitConfigPath));
 
         var spriggitConfig = this.WhenAnyValue(x => x.SpriggitConfigPath)
-            .ObserveOn(RxApp.TaskpoolScheduler)
+            .ObserveOn(RxSchedulers.TaskpoolScheduler)
             .Select(path =>
             {
                 return locator.Parse(path);
             })
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .Replay(1)
             .RefCount();
 

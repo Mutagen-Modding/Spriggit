@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using Mutagen.Bethesda.Installs;
 using Noggog;
+using Noggog.UI;
 using Noggog.WPF;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -191,7 +192,7 @@ public class LinkVm : ViewModel
             .WithLatestFrom(this.WhenAnyValue(x => x.Syncing), (_, x) => x)
             .Where(x => !x)
             .Do(_ => State = state)
-            .ObserveOn(RxApp.TaskpoolScheduler)
+            .ObserveOn(RxSchedulers.TaskpoolScheduler)
             .Select(_ =>
             {
                 return Observable.Create<Unit>(async (o) =>
@@ -216,7 +217,7 @@ public class LinkVm : ViewModel
                 });
             })
             .Switch()
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .Do(_ => State = SyncState.None)
             .Subscribe()
             .DisposeWith(this);

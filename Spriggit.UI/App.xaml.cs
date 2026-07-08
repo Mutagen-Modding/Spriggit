@@ -4,6 +4,7 @@ using Autofac;
 using CommandLine;
 using Microsoft.VisualBasic.Logging;
 using Noggog.IO;
+using ReactiveUI.Builder;
 using Serilog;
 using Spriggit.CLI;
 using Spriggit.CLI.Lib;
@@ -21,6 +22,12 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        // ReactiveUI 23+ requires explicit initialization via the builder pattern.
+        RxAppBuilder.CreateReactiveUIBuilder()
+            .WithCoreServices()
+            .WithWpf()
+            .BuildApp();
 
         if (RunCommandLineIfAppropriate(e))
         {
