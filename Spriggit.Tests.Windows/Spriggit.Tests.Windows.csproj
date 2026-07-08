@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+        <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

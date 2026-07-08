@@ -2,6 +2,7 @@
 using Autofac;
 using Noggog.Autofac;
 using Noggog.Processes.DI;
+using Noggog.UI;
 using Noggog.WPF;
 using Spriggit.UI.Services;
 using Spriggit.UI.Settings;
@@ -19,6 +20,9 @@ public class MainModule : Autofac.Module
         builder.RegisterType<FileSystem>().As<IFileSystem>()
             .SingleInstance();
         builder.RegisterType<SchedulerProvider>()
+            .AsImplementedInterfaces()
+            .SingleInstance();
+        builder.RegisterType<WpfPathPickerDialogProvider>()
             .AsImplementedInterfaces()
             .SingleInstance();
         builder.RegisterType<ProcessFactory>()

@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using Noggog;
 using ReactiveUI;
 using Spriggit.UI.ViewModels.Transient;
 
