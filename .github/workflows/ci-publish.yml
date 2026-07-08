@@ -128,25 +128,25 @@ jobs:
         dotnet pack Spriggit.slnx -c Release --no-build --no-restore -o out --include-symbols -p:SymbolPackageFormat=snupkg
     - name: Pack GUI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
-      run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true
+      run: dotnet publish "Spriggit.UI/Spriggit.UI.csproj" --configuration Release -p:PublishSingleFile=true -o gui-publish
     - name: Pack Linux CLI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
-      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r linux-x64 -p:PublishSingleFile=True -p:PackAsTool=false --self-contained True
+      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r linux-x64 -p:PublishSingleFile=True -p:PackAsTool=false --self-contained True -o linux-cli-publish
     - name: Pack CLI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
-      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r win-x64 -p:PublishSingleFile=True -p:PackAsTool=false --self-contained True
+      run: dotnet publish "Spriggit.CLI/Spriggit.CLI.csproj" --configuration Release -r win-x64 -p:PublishSingleFile=True -p:PackAsTool=false --self-contained True -o cli-publish
     - name: Archive GUI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
       run: |
-        powershell Compress-Archive Spriggit.UI/bin/Release/net9.0/win-x64/publish/* Spriggit.zip
+        powershell Compress-Archive gui-publish/* Spriggit.zip
     - name: Archive Linux CLI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net9.0/linux-x64/publish/* SpriggitLinuxCLI.zip
+        powershell Compress-Archive linux-cli-publish/* SpriggitLinuxCLI.zip
     - name: Archive CLI
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
       run: |
-        powershell Compress-Archive Spriggit.CLI/bin/Release/net9.0/win-x64/publish/* SpriggitCLI.zip
+        powershell Compress-Archive cli-publish/* SpriggitCLI.zip
     - name: Publish GUI to Github
       if: ${{ success() && !github.event.release.prerelease && env.RELEASE_TAG != '' }}
       uses: svenstaro/upload-release-action@v2
