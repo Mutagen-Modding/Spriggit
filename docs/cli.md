@@ -23,6 +23,8 @@ This converts from a Bethesda Plugin mod to Yaml, and puts it in your Git Reposi
 | `-p` | `--PackageName` | Semi-Optional | Spriggit serialization nuget package name to use for conversion.  Required if no `.spriggit` file is found. |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
+| `-m` | `--ModKey` | Optional | ModKey override.  If left blank, the input file name is used |
+| `-c` | `--Check` | Optional | (default True).  Checks some basic correctness after serialization.  Not extensive. |
 | `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 | `-u` | `--ErrorOnUnknown` | Optional | (default True).  If on, will error out if any unknown records that are encountered |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
@@ -64,6 +66,7 @@ This converts from a folder in your Git Repository to a Bethesda Plugin.
 | `-p` | `--PackageName` | Optional | Spriggit serialization nuget package name to use for conversion.  Leave blank to auto detect |
 | `-v` | `--PackageVersion` | Optional | Spriggit serialization nuget package version to use for conversion.  Leave blank to auto detect |
 | `-t` | `--Threads` | Optional | Maximum number of threads to use |
+| `-l` | `--Localized` | Optional | Forces the build to be localized if true, or unlocalized if false.  If missing, the mod's flags determine localization. |
 | `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
 |      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
 | `-b` | `--BackupDays` | Optional | Days to keep backup plugins in the temp folder (default 30) |
@@ -119,6 +122,41 @@ This command helps detangle colliding FormIDs that result after a Git Merge.
 | ---- | ---- | ---- | ---- |
 | `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
 | `-d` | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
+
+## Merge Version Syncer
+`merge-version-syncer`
+
+This command is run after a Git merge to reconcile differing Spriggit versions between the two merge parents, re-serializing the files to a single consistent version.
+
+[:octicons-arrow-right-24: Merge Conflicts](merge-conflicts.md)
+
+### Typical
+`.\Path\To\Spriggit.CLI.exe merge-version-syncer -p "C:\MyGitRepository\SomeMod.esp\"`
+
+### Parameters
+| Short | Long | Required | Description |
+| ---- | ---- | ---- | ---- |
+| `-p` | `--SpriggitPath` | Required | Path to the Bethesda plugin folder as its Spriggit text representation |
+| `-d` | `--DataFolder` | Semi-Optional | Provides a path to the data folder for reference.  [Read More](#master-style-input)  |
+|      | `--Debug` | Optional | Set up for debug mode, including resetting nuget caches |
+
+## Standardize
+`standardize`
+
+!!! warning "Advanced / Testing Command"
+    This is a testing utility used to standardize a plugin for binary comparison.  It is not part of the typical serialize/deserialize workflow, and most users will not need it.
+
+This reads a Bethesda plugin and writes out a standardized (record-sorted) copy, which is useful when diffing two plugins at the binary level.
+
+### Typical
+`.\Path\To\Spriggit.CLI.exe standardize -i "C:\Games\...\SomeMod.esp" -o "C:\SomeMod.standardized.esp" -g SkyrimSE`
+
+### Parameters
+| Short | Long | Required | Description |
+| ---- | ---- | ---- | ---- |
+| `-i` | `--InputPath` | Required | Path to the Bethesda plugin (esp/esm) |
+| `-o` | `--OutputPath` | Required | Path to output the standardized Bethesda plugin |
+| `-g` | `--GameRelease` | Required | Game release that the plugin is related to |
 
 ## Master Style Input
 Newer games, like Starfield, require extra inputs in order to translate.  These games need information from the source files of every master they list in a way that older games do not.  As such, you either need to provide:
